@@ -1,0 +1,71 @@
+{% load i18n %}
+{% load static %}
+
+
+{% for item in menu %}
+<li class="nav-item
+           {% if forloop.first %}active{% endif %}
+           {% if item.has_childs %}dropdown{% endif %}
+           {% if item.childs_count > 9 %}megamenu{% endif %}">
+    <a class="nav-link
+              {% if item.has_childs %}dropdown_toggle{% endif %}
+              {% if not forloop.counter0 %}pl-lg-2{% endif %}"
+       href={% if subitem.link %}"{{ subitem.get_link}}"{% else %}"#"{% endif %}
+            {% if item.has_childs %}data-toggle="dropdown" aria-expanded="false"{% endif %}>
+            <span>{{ item.name }}</span>
+            {% if item.get_childs %}
+            <svg class="icon icon-xs">
+                <use xlink:href="{% static 'svg/sprite.svg' %}#it-expand"></use>
+            </svg>
+            {% endif %}
+    </a>
+    {% if item.get_childs %}
+    <div class="dropdown-menu">
+
+        {% comment %}
+        {% if item.childs_count > 9 %}
+        <!-- head-->
+        <div class="col-12 pb-2">
+            <h3 style="margin: .5em 18px;" class="it-heading-megacolumn no_toc">{{ item.name }}</h3>
+        </div>
+        {% endif %}
+        {% endcomment %}
+
+        <div class="row p-3">
+            <div class="col-md-auto ">
+                <div class="link-list-wrapper">
+                    <ul class="link-list">
+                        {% for subitem in item.get_childs %}
+
+            {% if not subitem.link or subitem.inherited_content %}
+            {% if not forloop.first %}
+                    </ul> <!-- link-list -->
+                </div> <!-- link-list-wrapper -->
+            </div>
+
+            <div class="col-md-auto ">
+                <div class="link-list-wrapper">
+                    <ul class="link-list">
+            {% endif %}
+            {% endif %}
+                            {% if not subitem.link %}
+                            <li>
+                                <h3 class="no_toc" id="heading">{{ subitem.name }}</h3>
+                            </li>
+                            {% else %}
+                            <li>
+                                <a class="list-item" href="{{ subitem.link}}">
+                                    <span class="text-dark">{{ subitem.name }}</span>
+                                </a>
+                            </li>
+                            {% endif %}
+
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</li>
+{% endfor %}

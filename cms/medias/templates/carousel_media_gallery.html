@@ -1,0 +1,21 @@
+{% if media_items %}
+<div class="it-carousel-wrapper it-carousel-landscape-abstract-two-cols it-full-carousel">
+    <div class="it-carousel-all owl-carousel it-img-card it-big-img">
+        {% for item in media_items %}
+        <div class="it-single-slide-wrapper">
+            <div class="card-wrapper">
+                <div class="card card-img no-after">
+                    <div class="img-responsive-wrapper">
+                        <div class="img-responsive">
+                            <div class="img-wrapper">
+                                <img src="{{ item.media.get_media_path }}" title="{{ item.media.title }}" alt="{{ item.media.title }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}

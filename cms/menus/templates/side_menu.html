@@ -1,0 +1,27 @@
+{% load i18n %}
+{% load static %}
+
+
+{% for item in menu %}
+<li style="list-style: none" {% if item.get_childs %}class="mt-2 mb-4"{% endif %}>
+    {% if item.get_childs %}
+    <b>
+    {% endif %}
+    <a href={% if item.link %}"{{ item.link }}"{% else %}"#"{% endif %}>
+        <span>{{ item.name }}</span>
+    </a>
+    {% if item.get_childs %}
+    </b>
+    </li>
+        {% for child in item.get_childs %}
+        <li style="list-style: none">
+        <a class="list-item" href="{{ child.link}}">
+            <span class="text-dark">{{ child.name }}</span>
+        </a>
+        </li>
+        {% endfor %}
+    {% endif %}
+{% if not item.get_childs %}
+</li>
+{% endif %}
+{% endfor %}

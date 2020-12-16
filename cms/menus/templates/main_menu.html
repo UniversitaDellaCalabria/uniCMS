@@ -1,0 +1,87 @@
+{% load i18n %}
+{% load static %}
+
+
+{% for item in menu %}
+<li class="nav-item
+           {% if forloop.first %}active{% endif %}
+           {% if item.has_childs %}dropdown{% endif %}
+           {% if item.childs_count > 1 %}megamenu{% endif %}">
+    <a class="nav-link
+              {% if item.has_childs %}dropdown_toggle{% endif %}
+              {% if not forloop.counter0 %}pl-lg-2{% endif %}"
+       href={% if subitem.link %}"{{ subitem.get_link}}"{% else %}"#"{% endif %}
+            {% if item.has_childs %}data-toggle="dropdown" aria-expanded="false"{% endif %}>
+            <span>{{ item.name }}</span>
+            {% if item.get_childs %}
+            <svg class="icon icon-xs">
+                <use xlink:href="{% static 'svg/sprite.svg' %}#it-expand"></use>
+            </svg>
+            {% endif %}
+    </a>
+    {% if item.get_childs %}
+    <div class="dropdown-menu">
+        <div class="row p-md-3 p-0">
+            {% for child in item.get_childs %}
+
+                {% if child.has_childs %}
+
+                <!-- If previous item hasn't got childs, close col div -->
+                {% ifchanged child.has_childs %}
+                    {% if not forloop.first %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endifchanged %}
+
+                <!-- Render a full col div -->
+                <div class="col-md-auto ">
+                    <div class="link-list-wrapper">
+                        <ul class="link-list">
+                            <li>
+                                <b>
+                                    <a class="list-item" href="{{ child.link}}">
+                                        <span class="text-dark">{{ child.name }}</span>
+                                    </a>
+                                </b>
+                            </li>
+                            {% for subchild in child.get_childs %}
+                            <li>
+                                <a class="list-item py-0 sub" href="{{ subchild.link}}">
+                                    <span class="text-dark">{{ subchild.name }}</span>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <!-- If current item hasn't got childs, render a stack-->
+                {% else %}
+
+                    <!-- If previous item has child, render new col, else add items in stack -->
+                    {% ifchanged child.has_childs %}
+                    <div class="col-md-auto ">
+                        <div class="link-list-wrapper">
+                            <ul class="link-list">
+                    {% endifchanged %}
+                                <li>
+                                    <a class="list-item" href="{{ child.link}}">
+                                        <span class="text-dark">{{ child.name }}</span>
+                                    </a>
+                                </li>
+
+                    <!-- If last, close col -->
+                    {% if forloop.last %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endif %}
+
+            {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</li>
+{% endfor %}

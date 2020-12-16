@@ -1,0 +1,83 @@
+{% load i18n %}
+{% load static %}
+
+<div class="col-2">
+    <div class="it-header-slim-wrapper-content">
+
+        <div class="nav-item dropdown">
+            
+             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">
+                <div class="it-access-top-wrapper">
+                    <svg class="icon icon-md icon-dark">
+                        <use xlink:href="{% static 'svg/sprite.svg' %}#it-burger"></use>
+                    </svg>
+                    
+                    <span class="m-2">
+                        {% trans "Editorial Board Menu" %} - <b>{{ request.user }}</b>
+                    </span>
+                        
+                </div>
+            </a>
+            
+            <div class="dropdown-menu">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="link-list-wrapper">
+                            <ul class="link-list">
+                                <li>
+                                    <a class="list-item" href="{% url 'admin:index' %}">
+                                      <svg class="icon icon-md icon-dark">
+                                        <use xlink:href="{% static 'svg/sprite.svg' %}#it-settings"></use>
+                                      </svg>  
+                                        <span class="m-2">{% trans "Editorial Board Backend" %}</span>
+                                    </a>
+                                    <hr>
+                                </li>
+                                <li>
+                                    <a class="list-item" 
+                                       onclick="javascript: axios.get('{{ webpath.get_full_path }}?draft_view_mode').then(function(response){location.reload();});">
+                                      <svg class="icon icon-md icon-dark">
+                                        {% if request.session.draft_view_mode %}
+                                        <use xlink:href="{% static 'svg/sprite.svg' %}#it-password-visible"></use>
+                                        {% else %}
+                                        <use xlink:href="{% static 'svg/sprite.svg' %}#it-password-invisible"></use>
+                                        {% endif %}
+                                      </svg>  
+                                        <span class="m-2">{% trans "Draft Navigation Mode" %}</span>
+                                    </a>
+                                    <hr>
+                                </li>
+                                <li>
+                                    <a class="list-item"
+                                       onclick="javascript: axios.get('{{ webpath.get_full_path }}?show_template_blocks_sections').then(function(response){location.reload();});">
+                                      <svg class="icon icon-md icon-dark">
+                                        {% if request.session.show_template_blocks_sections %}
+                                        <use xlink:href="{% static 'svg/sprite.svg' %}#it-password-visible"></use>
+                                        {% else %}
+                                        <use xlink:href="{% static 'svg/sprite.svg' %}#it-password-invisible"></use>
+                                        {% endif %}
+                                      </svg> 
+                                        <span class="m-2">{% trans "Show/Hide section blocks" %}</span>
+                                    </a>
+                                    <hr>
+                                </li>
+                                
+                                <li>
+                                    <a class="list-item" href="{% url 'admin:logout' %}">
+                                      <svg class="icon icon-md icon-dark">
+                                        <use xlink:href="{% static 'svg/sprite.svg' %}#it-close-circle"></use>
+                                      </svg> 
+                                        <span class="m-2">{% trans "Logout" %}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+
+    </div>
+</div>

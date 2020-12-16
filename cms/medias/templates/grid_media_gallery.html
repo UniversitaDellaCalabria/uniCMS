@@ -1,0 +1,21 @@
+{% if media_items %}
+<div class="it-grid-list-wrapper">
+    <div class="grid-row">
+        {% for item in media_items %}
+        <div class="col-6 col-lg-4">
+            <div class="it-grid-item-wrapper">
+                <a href="#">
+                    <div class="img-responsive-wrapper">
+                        <div class="img-responsive">
+                            <div class="img-wrapper">
+                                <img src="{{ item.media.get_media_path }}" title="{{ item.media.title }}" alt="{{ item.media.title }}">
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
