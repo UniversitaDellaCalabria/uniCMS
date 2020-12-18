@@ -30,8 +30,8 @@ class JSONBlock(AbstractBlock):
         self.content = json.loads(content)
 
 
-class PublicationContentPlaceholder(HtmlBlock):
+class PublicationContentPlaceholderBlock(HtmlBlock):
     """
-    Publication PlaceHolder 
+    Publication PlaceHolder
     """
     pass
