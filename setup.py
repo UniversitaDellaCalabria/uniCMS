@@ -9,7 +9,7 @@ _pkg_name = 'cms'
 
 setup(
     name="unicms",
-    version='0.2.2',
+    version='0.2.3',
     description="uniCMS is a Django Web Content Management System",
     author='Giuseppe De Marco, Francesco Filicetti',
     author_email='giuseppe.demarco@unical.it, francesco.filicetti@unical.it',

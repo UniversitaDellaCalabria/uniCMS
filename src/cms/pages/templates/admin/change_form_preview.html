@@ -1,0 +1,13 @@
+{% extends 'admin/change_form.html' %}
+
+{% load i18n %}
+
+{% block submit_buttons_bottom %}
+    {{ block.super }}
+    <div class="submit-row">
+        <input style="background: #c8c679;" 
+               type="submit" value="{% trans 'Duplicate as a Draft' %}" name="_save_draft">
+        <input style="background: #79c8ab;" 
+               type="submit" value="Preview" name="_preview">
+    </div>
+{% endblock %}

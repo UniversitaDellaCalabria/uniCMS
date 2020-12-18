@@ -25,10 +25,11 @@ def get_unicms_templates():
         for dir_path in td.template_dirs:
             node = f'{dir_path}/{CMS_TEMPLATE_PATH_PREFIX}'
             if not is_dir_usefull(node): continue
-            for i in ('pages', 'blocks'):
+            for i in ('pages', 'blocks', 'admin'):
                 node2 = f'{node}{i}'
                 node_els = [node, f'{i}/']
                 if not is_dir_usefull(node2): continue
+                if 'django/contrib/admin' in node: continue
                 elements = [(node_els[0], node_els[1], e)
                             for e in os.listdir(node2)
                             if re.findall('.html$', e)]

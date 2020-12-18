@@ -37,12 +37,16 @@ class Command(BaseCommand):
             if options['renew'] and os.path.isdir(CMS_TEMPLATES_FOLDER):
                 shutil.rmtree(CMS_TEMPLATES_FOLDER)
             if not os.path.isdir(CMS_TEMPLATES_FOLDER):
-                os.mkdir(f'{CMS_TEMPLATES_FOLDER}')
-                os.mkdir(f'{CMS_TEMPLATES_FOLDER}/blocks')
-                os.mkdir(f'{CMS_TEMPLATES_FOLDER}/pages')
-            
+                os.makedirs(f'{CMS_TEMPLATES_FOLDER}')
+                os.makedirs(f'{CMS_TEMPLATES_FOLDER}/blocks')
+                os.makedirs(f'{CMS_TEMPLATES_FOLDER}/pages')
+            if not os.path.isdir('templates/admin'):
+                os.makedirs('templates/admin')
             for i in get_unicms_templates():
-                dest = f"{CMS_TEMPLATES_FOLDER}/{''.join(i[1:])}"
+                if i[1] == 'admin/':
+                    dest = f"templates/{''.join(i[1:])}"
+                else:
+                    dest = f"{CMS_TEMPLATES_FOLDER}/{''.join(i[1:])}"
                 src = ''.join(i)
                 print(f'Copying {src} -> {dest}')
                 os.symlink(src, dest)
