@@ -125,7 +125,7 @@ CMS_TEMPLATE_BLOCK_SECTIONS = (
                               )
 
 CMS_BLOCK_TYPES = (
-                   ('cms.templates.blocks.NullBlock', 'Null Block'),
+                   ('cms.templates.blocks.PublicationContentPlaceholderBlock', 'Publication Content Placeholder'),
                    ('cms.templates.blocks.HtmlBlock', 'HTML Block'),
                    ('cms.templates.blocks.JSONBlock', 'JSON Block'),
 )

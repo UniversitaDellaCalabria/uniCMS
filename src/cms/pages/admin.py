@@ -76,6 +76,7 @@ class PageAdmin(AbstractCreatedModifiedBy, nested_admin.NestedModelAdmin):
     readonly_fields = ('created_by', 'modified_by', 'draft_of')
     inlines       = (PageMenuInline,
                      PageCarouselInline, PageBlockInline, 
+                     PagePublicationInline,
                      PageRelatedInline, PageLinkInline)
     actions = AbstractPreviewableAdmin.actions + [make_page_draft,]
     raw_id_fields = ['webpath', 'base_template']

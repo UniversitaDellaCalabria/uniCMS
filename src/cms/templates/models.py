@@ -76,6 +76,8 @@ class PageTemplate(TimeStampedModel, ActivableModel):
                                      blank=False, null=False,
                                      choices=CMS_PAGE_TEMPLATES or \
                                      (('', 'No templates found'),))
+    image = models.ImageField(upload_to="images/page_templates_previews",
+                              null=True, blank=True, max_length=512)
     note = models.TextField(null=True, blank=True,
                             help_text=_("Editorial Board Notes, "
                                         "not visible by public."))
@@ -83,6 +85,15 @@ class PageTemplate(TimeStampedModel, ActivableModel):
     class Meta:
         ordering = ['name']
         verbose_name_plural = _("Page Templates")
+
+    def image_as_html(self):
+        res = ""
+        try:
+            res = f'<img width=280 src="{self.image.url}"/>'
+        except ValueError as e:
+            # *** ValueError: The 'image' attribute has no file associated with it.
+            res = f"{settings.STATIC_URL}images/no-image.jpg"
+        return mark_safe(res)
 
     def __str__(self):
         return '{} ({})'.format(self.name, self.template_file)
@@ -100,10 +111,21 @@ class TemplateBlock(AbstractPageBlock):
     content = models.TextField(help_text=_("according to the "
                                            "block template schema"),
                                blank=True, null=True)
-    
+    image = models.ImageField(upload_to="images/block_templates_previews",
+                              null=True, blank=True, max_length=512)
+
     class Meta:
         ordering = ['name']
         verbose_name_plural = _("Template Blocks")
+
+    def image_as_html(self):
+        res = ""
+        try:
+            res = f'<img width=240 src="{self.image.url}"/>'
+        except ValueError as e:
+            # *** ValueError: The 'image' attribute has no file associated with it.
+            res = f"{settings.STATIC_URL}images/no-image.jpg"
+        return mark_safe(res)
 
     def __str__(self):
         return self.name if self.name else self.path
@@ -121,7 +143,7 @@ class PageTemplateBlock(TimeStampedModel,
                                            "section in the template where "
                                            "this block would be rendered."),
                                choices=CMS_TEMPLATE_BLOCK_SECTIONS)
-    
+
     @property
     def type(self):
         return self.block.type

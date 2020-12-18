@@ -6,9 +6,10 @@ from . models import *
 
 @admin.register(PageTemplate)
 class PageTemplateAdmin(admin.ModelAdmin):
-    list_display  = ('name', 'template_file', 'created', 'is_active')
-    search_fields   = ('name', 'template_file',)
-    inlines       = (PageTemplateBlockInline,)
+    list_display = ('name', 'template_file', 'created', 'is_active',
+                    'image_as_html')
+    search_fields = ('name', 'template_file',)
+    inlines = (PageTemplateBlockInline,)
 
 
 # @admin.register(PageTemplateBlock)
@@ -20,6 +21,7 @@ class PageTemplateBlockAdmin(admin.ModelAdmin):
 
 @admin.register(TemplateBlock)
 class TemplateBlockAdmin(admin.ModelAdmin):
-    list_display  = ('name', 'description', 'type', 'is_active')
+    list_display  = ('name', 'description', 'type', 'is_active',
+                     'image_as_html')
     search_fields   = ('name',)
     list_filter = ('type',)

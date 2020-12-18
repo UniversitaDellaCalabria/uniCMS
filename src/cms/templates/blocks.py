@@ -15,7 +15,7 @@ class AbstractBlock(object):
         return mark_safe(self.content)
 
 
-class NullBlock(AbstractBlock):
+class PublicationContentPlaceholder(AbstractBlock):
     """
     clean up the inheritance from a parent page
     """

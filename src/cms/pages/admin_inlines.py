@@ -11,14 +11,14 @@ class PageInline(admin.TabularInline):
     classes = ['collapse']
 
 
-class PageLinkInline(nested_admin.NestedStackedInline):
+class PageLinkInline(nested_admin.NestedTabularInline):
     model = PageLink
     extra = 0
     classes = ['collapse']
     sortable_field_name = "order"
 
 
-class PageRelatedInline(nested_admin.NestedStackedInline):
+class PageRelatedInline(nested_admin.NestedTabularInline):
     model = PageRelated
     fk_name = 'page'
     autocomplete_fields = ('related_page',)
@@ -27,21 +27,21 @@ class PageRelatedInline(nested_admin.NestedStackedInline):
     sortable_field_name = "order"
 
 
-class PageBlockInline(nested_admin.NestedStackedInline):
+class PageBlockInline(nested_admin.NestedTabularInline):
     model = PageBlock
     extra = 0
     raw_id_fields = ('block',)
     sortable_field_name = "order"
 
 
-class PagePublicationInline(nested_admin.NestedStackedInline):
+class PagePublicationInline(nested_admin.NestedTabularInline):
     model = PagePublication
     extra = 0
     raw_id_fields = ('publication',)
     sortable_field_name = "order"
 
 
-class PageCarouselInline(nested_admin.NestedStackedInline):
+class PageCarouselInline(nested_admin.NestedTabularInline):
     model = PageCarousel
     extra = 0
     classes = ['collapse']
@@ -49,7 +49,7 @@ class PageCarouselInline(nested_admin.NestedStackedInline):
     sortable_field_name = "order"
     
 
-class PageMenuInline(nested_admin.NestedStackedInline):
+class PageMenuInline(nested_admin.NestedTabularInline):
     model = PageMenu
     extra = 0
     classes = ['collapse']
