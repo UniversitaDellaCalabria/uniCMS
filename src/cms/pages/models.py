@@ -197,7 +197,7 @@ class PageRelated(TimeStampedModel, SortableModel, ActivableModel):
         return '{} {}'.format(self.page, self.related_page)
 
 
-class PageLink(TimeStampedModel):
+class PageLink(TimeStampedModel, SortableModel):
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     name = models.CharField(max_length=256, null=False, blank=False)
@@ -208,6 +208,22 @@ class PageLink(TimeStampedModel):
 
     def __str__(self):
         return '{} {}'.format(self.page, self.name)
+
+
+class PagePublication(TimeStampedModel, SortableModel, ActivableModel):
+    page = models.ForeignKey(Page, null=False, blank=False,
+                             related_name='container_page',
+                             on_delete=models.CASCADE)
+    publication = models.ForeignKey('cmspublications.Publication', 
+                                    null=False, blank=False,
+                                    on_delete=models.CASCADE,
+                                    related_name="publication_content")
+
+    class Meta:
+        verbose_name_plural = _("Publication Contents")
+
+    def __str__(self):
+        return '{} {}'.format(self.page, self.publication)
 
 
 class Category(TimeStampedModel, CreatedModifiedBy):
@@ -227,11 +243,6 @@ class Category(TimeStampedModel, CreatedModifiedBy):
 
     def __str__(self):
         return self.name
-    
-    # now handled with hooks
-    # def delete(self, *args, **kwargs):
-        # remove_file(self.image.url)
-        # super(self.cls, self).delete(*args, **kwargs)
 
     def image_as_html(self):
         res = ""

@@ -66,7 +66,7 @@ make_page_draft.short_description = _("Make page Draft")
 
 
 @admin.register(Page)
-class PageAdmin(AbstractCreatedModifiedBy):
+class PageAdmin(AbstractCreatedModifiedBy, nested_admin.NestedModelAdmin):
     search_fields = ('name',)
     list_display  = ('webpath', 'name',
                      'date_start', 'date_end',
