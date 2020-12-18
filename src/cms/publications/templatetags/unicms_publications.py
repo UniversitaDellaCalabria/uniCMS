@@ -10,7 +10,7 @@ from django.utils.safestring import SafeString
 from cms.contexts.decorators import detect_language
 from cms.contexts.utils import handle_faulty_templates
 from cms.pages.models import Category, PagePublication
-from cms.publications.models import PublicationContext
+from cms.publications.models import Publication, PublicationContext
 
 
 logger = logging.getLogger(__name__)
@@ -123,7 +123,7 @@ def load_publication_content_placeholder(context, template,
 
         for i in zip(ph, pubs):
             if block.__class__.__name__ == i[0].type.split('.')[-1]:
-                data = {'page_publication': i[1]}
+                data = {'publication': i[1].publication}
                 return handle_faulty_templates(template, data, name=_func_name)
 
 
