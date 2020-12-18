@@ -15,19 +15,13 @@ class AbstractBlock(object):
         return mark_safe(self.content)
 
 
-class PublicationContentPlaceholder(AbstractBlock):
-    """
-    clean up the inheritance from a parent page
-    """
-    pass
-
-
 class HtmlBlock(AbstractBlock):
     def render(self):
         template = Template(self.content)
         context = Context({'request': self.request,
                            'webpath': self.webpath,
-                           'page': self.page})
+                           'page': self.page,
+                           'block': self})
         return template.render(context)
 
 
@@ -35,3 +29,9 @@ class JSONBlock(AbstractBlock):
     def __init__(self, content=''):
         self.content = json.loads(content)
 
+
+class PublicationContentPlaceholder(HtmlBlock):
+    """
+    Publication PlaceHolder 
+    """
+    pass
