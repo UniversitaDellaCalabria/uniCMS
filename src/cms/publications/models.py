@@ -20,30 +20,30 @@ class AbstractPublication(TimeStampedModel, ActivableModel):
     CONTENT_TYPES = (('markdown', 'markdown'),
                      ('html', 'html'))
 
-    title   = models.CharField(max_length=256,
-                               null=False, blank=False,
-                               help_text=_("Heading, Headline"))
+    title = models.CharField(max_length=256,
+                             null=False, blank=False,
+                             help_text=_("Heading, Headline"))
 
-    subheading        = models.TextField(max_length=1024,
-                                         null=True,blank=True,
-                                         help_text=_("Strap line (press)"))
-    content           =  models.TextField(null=True,blank=True,
-                                          help_text=_('Content'))
-    content_type     = models.CharField(choices=CONTENT_TYPES,
-                                        null=False, blank=False,
-                                        max_length=33,
-                                        default='markdown')
+    subheading = models.TextField(max_length=1024,
+                                  null=True,blank=True,
+                                  help_text=_("Strap line (press)"))
+    content =  models.TextField(null=True,blank=True,
+                                help_text=_('Content'))
+    content_type = models.CharField(choices=CONTENT_TYPES,
+                                    null=False, blank=False,
+                                    max_length=33,
+                                    default='markdown')
     presentation_image = models.ForeignKey(Media, null=True, blank=True,
                                            on_delete=models.CASCADE)
-    state             = models.CharField(choices=PAGE_STATES,
-                                         max_length=33,
-                                         default='draft')
-    date_start        = models.DateTimeField()
-    date_end          = models.DateTimeField()
-    category          = models.ManyToManyField('cmspages.Category')
+    state = models.CharField(choices=PAGE_STATES, 
+                             max_length=33,
+                             default='draft')
+    date_start = models.DateTimeField()
+    date_end = models.DateTimeField()
+    category = models.ManyToManyField('cmspages.Category')
 
-    note    = models.TextField(null=True,blank=True,
-                               help_text=_('Editorial Board notes'))
+    note = models.TextField(null=True,blank=True,
+                            help_text=_('Editorial Board notes'))
 
     class Meta:
         abstract = True
@@ -289,7 +289,7 @@ class PublicationAttachment(TimeStampedModel, SortableModel, ActivableModel,
 
 class PublicationLocalization(TimeStampedModel, ActivableModel,
                               CreatedModifiedBy):
-    title   = models.CharField(max_length=256,
+    title = models.CharField(max_length=256,
                                null=False, blank=False,
                                help_text=_("Heading, Headline"))
     publication = models.ForeignKey(Publication,
@@ -301,7 +301,7 @@ class PublicationLocalization(TimeStampedModel, ActivableModel,
     subheading = models.TextField(max_length=1024,
                                   null=True,blank=True,
                                   help_text=_("Strap line (press)"))
-    content =  models.TextField(null=True,blank=True,
+    content = models.TextField(null=True,blank=True,
                                         help_text=_('Content'))
     class Meta:
         verbose_name_plural = _("Publication Localizations")

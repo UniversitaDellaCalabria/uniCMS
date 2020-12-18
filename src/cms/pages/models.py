@@ -22,6 +22,7 @@ from cms.templates.models import (CMS_TEMPLATE_BLOCK_SECTIONS,
                                   SortableModel,
                                   TimeStampedModel)
 
+from itertools import chain
 from taggit.managers import TaggableManager
 
 
@@ -94,29 +95,21 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                           **query_params).\
                                    order_by('section', 'order').\
                                    values_list('order', 'block__pk')
-        template_blocks = self.base_template.\
-                            pagetemplateblock_set.\
-                            filter(**query_params).\
-                            order_by('section', 'order').\
-                            values_list('order', 'block__pk')
         excluded_blocks = PageBlock.objects.filter(page=self,
                                                    is_active=False).\
                                    values_list('block__pk', flat=True)
-        order_pk = []
-        # CHECK concurrent ordering sorting
-        for i in blocks:
-            order_pk.append(i)
-        for i in template_blocks:
-            # check if a template blocks has not been disabled in the page
-            if i[1] not in excluded_blocks:
-                order_pk.append(i)
-        ordered = sorted(order_pk)
-        unique = []
-        for i in ordered:
-            if i[1] not in unique:
-                unique.append(i)
+        template_blocks = self.base_template.\
+                            pagetemplateblock_set.\
+                            filter(**query_params).\
+                            exclude(pk__in=[i[1] for i in blocks]).\
+                            order_by('section', 'order').\
+                            values_list('order', 'block__pk')
+        order_pk = set()
+        for i in chain(blocks, template_blocks):
+            order_pk.add(i)
+        ordered = sorted(list(order_pk))
         final_blocks = [TemplateBlock.objects.get(pk=v)
-                        for k,v in unique]
+                        for k,v in ordered]
         return final_blocks
 
 
