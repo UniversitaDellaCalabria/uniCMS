@@ -7,7 +7,7 @@ Welcome to uniCMS's documentation!
 ==================================
 
 This project aims to exemplify the design of a common University Web Portal.
-You'll find an simplified generalization of all
+You'll find a simplified generalization of all
 the entities that usually make up a Content Management System (CMS).
 
 This platform was built on top of Django Framework, with few specialized libraries as well.
