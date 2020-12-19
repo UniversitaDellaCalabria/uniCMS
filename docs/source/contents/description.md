@@ -1,27 +1,48 @@
 Description
 -----------
 
-#### Djangoer notes
+#### Djangoer urls
 
-uniCMS urls are managed with `cms.context`, entirely through admin interface. 
-We can even load third-party django applications, it's necessary to take into account that you should configured your django urls
+uniCMS urls are managed with `cms.context` entirely through admin interface. 
+We can even load third-party django applications, it's necessary to take into account that you should your django urls
 paths before defining uniCMS ones, otherwise uniCMS will intercept them and with a good chance will 
 return to the user a page of 404. You can even set `CMS_PATH_PREFIX` to a desidered value, eg: `portale/`, to 
 restrict uniCMS url matching to a specified namespace.
+
+This is and example of your project urls.py 
+````
+if 'cms.contexts' in settings.INSTALLED_APPS:
+    urlpatterns += path('', 
+                        include(('cms.contexts.urls', 'cms'), 
+                                 namespace="unicms"), 
+                        name="unicms"),
+
+if 'cms.api' in settings.INSTALLED_APPS:
+    urlpatterns += path('', 
+                        include(('cms.api.urls', 'cms'), 
+                                namespace="unicms_api"), 
+                        name="unicms_api"),
+
+
+if 'cms.search' in settings.INSTALLED_APPS:
+    urlpatterns += path('', 
+                        include(('cms.search.urls', 'cms_search'), 
+                                namespace="unicms_search"), 
+                        name="unicms_search"),
+````
 
 
 #### Django models
 
 This project is composed by the following applications:
-- websites, where multiple sites can be defined.
-- cms.contexts, where webpaths and EditorialBoard Users and Permissions can be defined
-- cms.templates, where multiple page templates and page blocks can be managed
-- cms.medias, specialized app for management, upload and navigation of media files.
-- cms.menus, specialized app for navigation bar creation and management.
-- cms.carousels, specialized app for Carousel and Slider creation and management.
-- cms.pages, where Editorial boards can create Pages.
-- cms.publications, where Editorial boards publish contents in one or more WebPath.
-- cms.search, MongoDB Search Engine and management commands.
+- *cms.contexts*, where websites, webpaths and EditorialBoard Users and Permissions can be defined
+- *cms.templates*, where multiple page templates and page blocks can be managed
+- *cms.medias*, specialized app for management, upload and navigation of media files.
+- *cms.menus*, specialized app for navigation bar creation and management.
+- *cms.carousels*, specialized app for Carousel and Slider creation and management.
+- *cms.pages*, where Editorial boards can create Pages.
+- *cms.publications*, where Editorial boards publish contents in one or more WebPath.
+- *cms.search*, MongoDB Search Engine and management commands.
 
 The module `cms.contexts` defines the multiple website management (multi contexts) we have adopted.
 Each context mail ches a Path and a web page, it's nothing more than a
