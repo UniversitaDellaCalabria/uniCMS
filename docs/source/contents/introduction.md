@@ -11,7 +11,9 @@ uniCMS have few base components
 - **Carousels**, image sliders ... Yes, they are a basic component of the modern web
 - **Pages**, each webpath loads a page and this is a container of blocks
 - **Publications**, what we use to say __posts__
-- **Handlers**, a way to intercept http requests and show a different behaviour from a Page. Think about the **List** and **View** resources of News pertaining to a context (WebPath)
+- **Handlers**, a way to intercept http requests and show a different behaviour from a Page. 
+Think about the **List** and **View** resources of News pertaining to a context (WebPath)
+
 
 #### How to think in uniCMS
 

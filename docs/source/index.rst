@@ -25,15 +25,15 @@ young IT guys that think that a nowadays CMS should be:
 - Secure by default
 - Scalable
 
-unlike other CMS-like django project uniCMS is intended for both end users 
+unlike other Django's CMS, uniCMS is intended for both end users 
 and smart developers, creating a website with uniCMS does not require any development skills.
 
 uniCMS was born as a result of the need to renew the web portal of the 
 University of Calabria, after taking a look at the offer of free and open CMS 
-and strong of our experience, we decided to develop it with Django, to equip it **with batteries**.
+and strong of our experience, we decided to develop it with Django and equip it **with batteries** as well.
 
 If you agree with us feel free to participate in its development or simply use it and 
-give us your feedbacks, we are people who like to listen and share!
+give us your feedbacks, we are people who like to share!
 
 
 .. toctree::
@@ -60,7 +60,7 @@ give us your feedbacks, we are people who like to listen and share!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Developer task:
+   :caption: Developer's
 
    contents/developer.md
 
