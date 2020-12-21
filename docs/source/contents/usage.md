@@ -1,6 +1,29 @@
 Common Tasks
 ------------
 
+#### Permissions
+
+````
+CMS_CONTEXT_PERMISSIONS = (('1', _('can edit created by him/her in his/her context')),
+                           ('2', _('can edit all pages in his/her context')),
+                           ('3', _('can edit all pages in his/her context and descendants')),
+                           ('4', _('can translate all pages in his/her context')),
+                           ('5', _('can translate all pages in his/her context and descendants')),
+                           ('6', _('can publish created by him/her in his/her context')),
+                           ('7', _('can publish all pages in his/her context')),
+                           ('8', _('can publish all pages in his/her context and descendants')),
+                           )
+````
+
+#### i18n
+
+*Menus*, *Carousels*, *Publications* and *Categories* can also be localized in one or many languages via Web 
+Backend, if a client browser have a Spanish localization the rendering system will render all the spanish
+localized block, if they occour, otherwise it will switch to default
+language.
+
+All the gettext values defined in our static html template will be handled as django localization use to do.
+
 #### Page Blocks
 
 A configurable object that would be rendered in a specified section of the page (as defined in its base template).
@@ -86,46 +109,6 @@ Each menu items can have three kinds of links: url, page, publication.
 Each menu items can get additional contents (`inherited_contents`) from a publication, this means that
 a presentation url, or a subheading or whatever belonging to a publication can be made accessible during a 
 menu items representation. Think about presentati in images, additional links ...
-
-
-#### Urls
-
-All the urls that matches the namespace configured in the `urls.py` of the master project
-will be handled by uniCMS. uniCMS can match two kind of resources:
-
-1. WebPath (Context) corresponsing at a single Page (Home page and its childs)
-2. Application Handlers, an example would be Pubblication List and Views resources
-
-for these latter uniCMS uses some reserved words, as prefix, to deal with specialized url routings.
-in the settings file we would configure these. See [Handlers](#handlers) for example.
-
-See `cms.contexts.settings` as example.
-See `cms.contexts.views.cms_dispatcher` to see how an http request is intercepted and handled by uniCMS to know if use an Handler or a Standard Page as response.
-
-
-#### Post Pre Save Hooks
-
-By default Pages and Publications call pre and post save hooks.
-Django signals are registered in `cms.contexts.signals`.
-In `settings.py` we can register as many as desidered hooks to one or more 
-models, Django signals will load them on each pre/post save/delete event.
-
-````
-CMS_HOOKS = {
-    'Publication': {
-        'PRESAVE': [],
-        'POSTSAVE': ['cms.search.hooks.publication_se_insert',],
-        'PREDELETE': ['cms.search.hooks.searchengine_entry_remove',],
-        'POSTDELETE': []
-    },
-    'Page': {
-        'PRESAVE': [],
-        'POSTSAVE': ['cms.search.hooks.page_se_insert',],
-        'PREDELETE': ['cms.search.hooks.searchengine_entry_remove',],
-        'POSTDELETE': []
-    }
-}
-```` 
 
 
 #### Api

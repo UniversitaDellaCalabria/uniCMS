@@ -20,7 +20,7 @@ young IT guys that think that a nowadays CMS should be:
 - **Multi Web Site** management
 - **MongoDB FullText Search** engine with management commands
 - Able to **Localize in many languages** its entries, by default
-- Able to handle Editorial Board workflows and permissions by contexts
+- Able to handle Editorial Board workflows (WiP) and permissions by contexts
 - Able to handle huge loads, Cached approach based on Redis TTL
 - Secure by default
 - Scalable
@@ -30,7 +30,7 @@ and smart developers, creating a website with uniCMS does not require any develo
 
 uniCMS was born as a result of the need to renew the web portal of the 
 University of Calabria, after taking a look at the offer of free and open CMS 
-and strong of our experience, we decided to develop it with Django, to equip it **with batteries**!
+and strong of our experience, we decided to develop it with Django, to equip it **with batteries**.
 
 If you agree with us feel free to participate in its development or simply use it and 
 give us your feedbacks, we are people who like to listen and share!
