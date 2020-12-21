@@ -1,7 +1,7 @@
 Description
 -----------
 
-#### Djangoer urls
+#### Urls
 
 uniCMS urls are managed with `cms.context` entirely through admin interface. 
 We can even load third-party django applications, it's necessary to take into account that you should your django urls
@@ -32,17 +32,17 @@ if 'cms.search' in settings.INSTALLED_APPS:
 ````
 
 
-#### Django models
+#### Models
 
 This project is composed by the following applications:
-- *cms.contexts*, where websites, webpaths and EditorialBoard Users and Permissions can be defined
-- *cms.templates*, where multiple page templates and page blocks can be managed
-- *cms.medias*, specialized app for management, upload and navigation of media files.
-- *cms.menus*, specialized app for navigation bar creation and management.
-- *cms.carousels*, specialized app for Carousel and Slider creation and management.
-- *cms.pages*, where Editorial boards can create Pages.
-- *cms.publications*, where Editorial boards publish contents in one or more WebPath.
-- *cms.search*, MongoDB Search Engine and management commands.
+- **cms.contexts**, where websites, webpaths and EditorialBoard Users and Permissions can be defined
+- **cms.templates**, where multiple page templates and page blocks can be managed
+- **cms.medias**, specialized app for management, upload and navigation of media files.
+- **cms.menus**, specialized app for navigation bar creation and management.
+- **cms.carousels**, specialized app for Carousel and Slider creation and management.
+- **cms.pages**, where Editorial boards can create Pages.
+- **cms.publications**, where Editorial boards publish contents in one or more WebPath.
+- **cms.search**, MongoDB Search Engine and management commands.
 
 The module `cms.contexts` defines the multiple website management (multi contexts) we have adopted.
 Each context mail ches a Path and a web page, it's nothing more than a
@@ -55,15 +55,6 @@ HTML base template. This means that a page is a block container, in which we can
 define many blocks with different order. For every page we must define
 to which context (webpath) it belong to and also the template that we want to adopt for HTML rendering.
 Nothing prevents us from using something other than HTML, it's just python, you know.
-
-#### i18n
-
-*Menus*, *Carousels*, *Publications* and *Categories* can also be localized in one or many languages via Web 
-Backend, if a client browser have a Spanish localization the rendering system will render all the spanish
-localized block, if they occour, otherwise it will switch to default
-language.
-
-All the gettext values defined in our static html template will be handled as django localization use to do.
 
 #### Permissions
 
@@ -79,3 +70,11 @@ CMS_CONTEXT_PERMISSIONS = (('1', _('can edit created by him/her in his/her conte
                            )
 ````
 
+#### i18n
+
+*Menus*, *Carousels*, *Publications* and *Categories* can also be localized in one or many languages via Web 
+Backend, if a client browser have a Spanish localization the rendering system will render all the spanish
+localized block, if they occour, otherwise it will switch to default
+language.
+
+All the gettext values defined in our static html template will be handled as django localization use to do.

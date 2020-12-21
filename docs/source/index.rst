@@ -3,32 +3,55 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to uniCMS's documentation!
+Welcome to uniCMS's Documentation
 ==================================
 
-This project aims to exemplify the design of a common University Web Portal.
-You'll find a simplified generalization of all
-the entities that usually make up a Content Management System (CMS).
+uniCMS is a Web Content Management System built on top of **Django Framework**, wrote by 
+young IT guys that think that a nowadays CMS should be:
 
-This platform was built on top of Django Framework, with few specialized libraries as well.
-The final goal is to achieve as much as possible, writing as 
-little code as possible and working even less, when possibile.
+- Loaded with a ready to use Template:
+    - Mobile ready
+    - SEO convenient
+    - Bootstrap compliant
+    - Pluggable as a Django application
+- Highly oriented to a logic of content reuse, any entry can be reused - or only in pieces - in different contexts, as you like and with many strategies
+- **OpenAPIv3** (OAS3)
+- Able to use many RDBMS engines, agile schema migrations ops as Django wonderfully does
+- **Multi Web Site** management
+- **MongoDB FullText Search** engine with management commands
+- Able to **Localize in many languages** its entries, by default
+- Able to handle Editorial Board workflows and permissions by contexts
+- Able to handle huge loads, Cached approach based on Redis TTL
+- Secure by default
+- Scalable
 
-.. image:: images/home_portale.png
+unlike other CMS-like django project uniCMS is intended for both end users 
+and smart developers, creating a website with uniCMS does not require any development skills.
+
+uniCMS was born as a result of the need to renew the web portal of the 
+University of Calabria, after taking a look at the offer of free and open CMS 
+and strong of our experience, we decided to develop it with Django, to equip it **with batteries**!
+
+If you agree with us feel free to participate in its development or simply use it and 
+give us your feedbacks, we are people who like to listen and share!
+
 
 .. toctree::
    :maxdepth: 2
    :caption: Introduction
 
    contents/introduction.md
+   contents/why.md
    contents/description.md
    
 .. toctree::
    :maxdepth: 2
-   :caption: Installation and Configuration:
+   :caption: Getting started
 
    contents/setup.md
-
+   contents/templates.rst
+   contents/search_engine.md
+   
 .. toctree::
    :maxdepth: 2
    :caption: Usage

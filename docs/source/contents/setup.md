@@ -141,8 +141,3 @@ Create your fulltext indexes. Default_language is italian by default.
 ````
 ./manage.py cms_search_create_mongo_index -default_language english
 ````
-
-#### Example project
-
-Probably the quickest way to get started is to run a platform 
-demonstration starting with a project with few basic pages.
