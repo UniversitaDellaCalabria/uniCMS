@@ -14,7 +14,7 @@ young IT guys that think that a nowadays CMS should be:
     - SEO convenient
     - Bootstrap compliant
     - Pluggable as a Django application
-- Highly oriented to a logic of content reuse, any entry can be reused - or only in pieces - in different contexts, as you like and with many strategies
+- Highly oriented to a logic of content reuse, entries can be reused - or only in pieces - in different contexts, as you like and with many strategies
 - **OpenAPIv3** (OAS3)
 - Able to use many RDBMS engines, agile schema migrations ops as Django wonderfully does
 - **Multi Web Site** management
@@ -42,7 +42,7 @@ give us your feedbacks, we are people who like to listen and share!
 
    contents/introduction.md
    contents/why.md
-   contents/description.md
+   contents/how_it_works.md
    
 .. toctree::
    :maxdepth: 2

@@ -33,7 +33,7 @@ Go to `/admin` and submit the superuser credential to start putting some data in
 
 If you want to share your example data
 ````
-./manage.py dumpdata --exclude auth.permission --exclude contenttypes --exclude sessions --exclude admin --indent 2 > ../dumps/cms.json
+./manage.py dumpdata --exclude auth.permission --exclude accounts --exclude contenttypes --exclude sessions --exclude admin --indent 2 > ../dumps/cms.json
 ````
 
 #### Redis (Cache)
