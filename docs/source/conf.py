@@ -34,7 +34,7 @@ extensions = ['sphinxcontrib.images', 'recommonmark']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates/unical_template']
-html_logo = "_static/logo_unical.png"
+html_logo = "_static/unical_logo.svg"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

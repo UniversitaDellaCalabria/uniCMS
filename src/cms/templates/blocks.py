@@ -3,8 +3,8 @@ import json
 from django.template import Context, Template
 from django.utils.safestring import mark_safe
 
-from cms.publications.templatetags.unicms_publications import load_publication_content_placeholder
-
+from cms.pages.templatetags.unicms_pages import (load_link_placeholder,
+                                                 load_publication_content_placeholder)
 
 class AbstractBlock(object):
     abtract = True
@@ -50,3 +50,22 @@ class PublicationContentPlaceholderBlock(JSONBlock):
         return load_publication_content_placeholder(context=context,
                                                     publication_id=publication_id,
                                                     template=template)
+
+
+class LinkPlaceholderBlock(JSONBlock):
+    """
+    Link PlaceHolder
+    """
+    def render(self):
+        aspect_ratio = self.content.get('aspect_ratio', '16by9')
+        template = self.content.get('template', '')
+        url = self.content.get('url', None)
+        if not template: return ''
+        context = Context({'request': self.request,
+                           'webpath': self.webpath,
+                           'page': self.page,
+                           'block': self})
+        return load_link_placeholder(context=context,
+                                     aspect_ratio=aspect_ratio,
+                                     template=template,
+                                     url=url)

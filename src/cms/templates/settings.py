@@ -125,9 +125,10 @@ CMS_TEMPLATE_BLOCK_SECTIONS = (
                               )
 
 CMS_BLOCK_TYPES = (
-                   ('cms.templates.blocks.PublicationContentPlaceholderBlock', 'Publication Content Placeholder'),
                    ('cms.templates.blocks.HtmlBlock', 'HTML Block'),
                    ('cms.templates.blocks.JSONBlock', 'JSON Block'),
+                   ('cms.templates.blocks.LinkPlaceholderBlock', 'Link Placeholder Block'),
+                   ('cms.templates.blocks.PublicationContentPlaceholderBlock', 'Publication Content Placeholder Block'),
 )
 
 CMS_TEMPLATES_FOLDER = f'{BASE_DIR}/templates/unicms'
