@@ -12,7 +12,8 @@ class AbstractBlock(object):
     def __init__(self, **kwargs):
         for k,v in kwargs.items():
             setattr(self, k, v)
-
+        self._rendered = False
+        
     def render(self):
         return mark_safe(self.content)
 

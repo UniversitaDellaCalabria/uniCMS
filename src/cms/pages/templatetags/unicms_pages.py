@@ -17,6 +17,13 @@ logger = logging.getLogger(__name__)
 register = template.Library()
 
 
+def _get_placeholder_by_typestring(page, placeholder_type_str):
+    blocks = page.get_blocks()
+
+    ph = [i for i in blocks if i.type == placeholder_type_str]
+    return ph
+
+
 @register.simple_tag(takes_context=True)
 def load_blocks(context, section=None):
     request = context['request']
@@ -80,27 +87,29 @@ def load_publication_content_placeholder(context, template,
         return handle_faulty_templates(template, data, name=_func_name)
 
     else:
-        pubs = PagePublication.objects.filter(page=page,
-                                              is_active=True).\
-                                        order_by('order')
-        for i in pubs:
-            i.publication.translate_as(lang=language)
-
-        blocks = page.get_blocks()
-        # page_blocks = PageBlock.objects.filter(block__pk__in=[i.pk for i in blocks]).\
-                                        # order_by('order')
-        ph = [i for i in blocks
-              if i.type == \
-              'cms.templates.blocks.PublicationContentPlaceholderBlock']
-
+        pubs = page.get_publications()
+        
+        ph = _get_placeholder_by_typestring(page, 
+                'cms.templates.blocks.PublicationContentPlaceholderBlock')
+        
         if not ph:
             _msg = '{} doesn\'t have any page publications'.format(_log_msg)
             logger.warning(_msg)
             return ''
-
-        for i in zip(ph, pubs):
+        
+        ph_pubs = [i for i in zip(ph, pubs)]
+        for i in ph_pubs:
+            pub = i[1].publication
             if block.__class__.__name__ == i[0].type.split('.')[-1]:
-                data = {'publication': i[1].publication}
+                # already rendered
+                if getattr(pub, '_published', False): 
+                    continue
+                
+                # i18n
+                pub.translate_as(lang=language)
+                
+                data = {'publication': pub}
+                pub._published = True
                 return handle_faulty_templates(template, data, name=_func_name)
 
 
@@ -136,10 +145,15 @@ def load_link_placeholder(context, template,
             logger.warning(_msg)
             return ''
 
-
-        links = PageLink.objects.filter(page=page).order_by('order')
+        links = page.get_links()
         for i in zip(ph, links):
+            link = i[1]
             if block.__class__.__name__ == i[0].type.split('.')[-1]:
+                # already rendered
+                if getattr(link, '_published', False): 
+                    continue
                 data = {'aspect_ratio': aspect_ratio,
-                        'link': i[1].url,}
+                        'link': link.url,}
+                link._published = True
+                
             return handle_faulty_templates(template, data, name=_func_name)

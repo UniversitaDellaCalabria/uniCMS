@@ -88,6 +88,11 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
 
 
     def get_blocks(self, section=None):
+        # something that caches ...
+        if hasattr(self, f'_blocks_{section}'):
+            return getattr(self, f'_blocks_{section}')
+        #
+        
         query_params = dict(is_active=True)
         if section:
             query_params['section'] = section
@@ -108,10 +113,38 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         for i in chain(blocks, template_blocks):
             order_pk.add(i)
         ordered = sorted(list(order_pk))
-        final_blocks = [TemplateBlock.objects.get(pk=v)
-                        for k,v in ordered]
-        return final_blocks
+        _blocks = [TemplateBlock.objects.get(pk=v)
+                   for k,v in ordered]
+        
+        # cache result ...
+        setattr(self, f'_blocks_{section}', _blocks)
+        
+        return _blocks
 
+
+    def get_blocks_placeholders(self):
+        blocks = self.get_blocks()
+        placeholders = [block for block in blocks 
+                       if 'PlaceHolderBlock' in 
+                       [i.__name__ 
+                        for i in import_string(block.type).__bases__]]
+        return placeholders
+                       
+
+    def get_publications(self):
+        if getattr(self, '_pubs', None):
+            return self._pubs
+        self._pubs = PagePublication.objects.filter(page=self,
+                                                    is_active=True).\
+                                                    order_by('order')
+        return self._pubs
+
+    def get_links(self):
+        if getattr(self, '_links', None):
+            return self._links
+        self._links = PageLink.objects.filter(page=self).\
+                                              order_by('order')
+        return self._links
 
     def delete(self, *args, **kwargs):
         PageRelated.objects.filter(related_page=self).delete()
@@ -130,6 +163,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
 
     def get_category_img(self):
         return [i.image_as_html() for i in self.category.all()]
+
 
     def __str__(self):
         return '{} {}'.format(self.name, self.state)
