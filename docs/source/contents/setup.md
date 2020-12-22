@@ -33,7 +33,7 @@ Go to `/admin` and submit the superuser credential to start putting some data in
 
 If you want to share your example data
 ````
-./manage.py dumpdata --exclude auth.permission --exclude contenttypes --exclude sessions --exclude admin --indent 2 > ../dumps/cms.json
+./manage.py dumpdata --exclude auth.permission --exclude accounts --exclude contenttypes --exclude sessions --exclude admin --indent 2 > ../dumps/cms.json
 ````
 
 #### Redis (Cache)
@@ -141,8 +141,3 @@ Create your fulltext indexes. Default_language is italian by default.
 ````
 ./manage.py cms_search_create_mongo_index -default_language english
 ````
-
-#### Example project
-
-Probably the quickest way to get started is to run a platform 
-demonstration starting with a project with few basic pages.

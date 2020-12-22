@@ -1,6 +1,73 @@
 Developer's
-------------
+-----------
 
+#### Urls
+
+uniCMS urls are managed with `cms.context` entirely through admin interface. 
+We can even load third-party django applications, it's necessary to take into account that you should your django urls
+paths before defining uniCMS ones, otherwise uniCMS will intercept them and with a good chance will 
+return to the user a page of 404. You can even set `CMS_PATH_PREFIX` to a desidered value, eg: `portale/`, to 
+restrict uniCMS url matching to a specified namespace.
+
+This is and example of your project urls.py 
+````
+if 'cms.contexts' in settings.INSTALLED_APPS:
+    urlpatterns += path('', 
+                        include(('cms.contexts.urls', 'cms'), 
+                                 namespace="unicms"), 
+                        name="unicms"),
+
+if 'cms.api' in settings.INSTALLED_APPS:
+    urlpatterns += path('', 
+                        include(('cms.api.urls', 'cms'), 
+                                namespace="unicms_api"), 
+                        name="unicms_api"),
+
+
+if 'cms.search' in settings.INSTALLED_APPS:
+    urlpatterns += path('', 
+                        include(('cms.search.urls', 'cms_search'), 
+                                namespace="unicms_search"), 
+                        name="unicms_search"),
+````
+
+All the urls that matches the namespace configured in the `urls.py` of the master project
+will be handled by uniCMS. uniCMS can match two kind of resources:
+
+1. WebPath (Context) corresponsing at a single Page (Home page and its childs)
+2. Application Handlers, an example would be Pubblication List and View resources
+
+for these latter uniCMS uses some reserved words, as prefix, to deal with specialized url routings.
+in the settings file we would configure these. See [Handlers](#handlers) for example.
+
+See `cms.contexts.settings` as example.
+See `cms.contexts.views.cms_dispatcher` to see how an http request is intercepted and 
+handled by uniCMS to know if use an Handler or a Standard Page as response.
+
+
+#### Post Pre Save Hooks
+
+By default Pages and Publications call pre and post save hooks.
+Django signals are registered in `cms.contexts.signals`.
+In `settings.py` we can register as many as desidered hooks to one or more 
+models, Django signals will load them on each pre/post save/delete event.
+
+````
+CMS_HOOKS = {
+    'Publication': {
+        'PRESAVE': [],
+        'POSTSAVE': ['cms.search.hooks.publication_se_insert',],
+        'PREDELETE': ['cms.search.hooks.searchengine_entry_remove',],
+        'POSTDELETE': []
+    },
+    'Page': {
+        'PRESAVE': [],
+        'POSTSAVE': ['cms.search.hooks.page_se_insert',],
+        'PREDELETE': ['cms.search.hooks.searchengine_entry_remove',],
+        'POSTDELETE': []
+    }
+}
+```` 
 
 
 #### Template tags
