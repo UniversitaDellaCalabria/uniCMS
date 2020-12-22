@@ -1,14 +1,14 @@
 Introduction
 ------------
 
-for a conscious and correct use of uniCMS we must familiarize 
+For a correct use of uniCMS we must familiarize 
 ourselves with the following components:
 
 - **Web Sites**, fully qualified doman name to answer for
 - **Contexts**, WebPaths like `/offices` and `/offices/employees` 
-- **Page templates**, with a selectable html template through UI
-- **Block templates**, elements that renders things whitin one or many pages. In this category there are also the PlaceHolder Blocks that fill external contents in their space, like publications previews
-- **Navigation Bars**, menu, footers, lists of things that can optionally fetch elements from Publications (titles, body, images ...) to enrich its entries
+- **Page templates**, with a selectable html template file through UI
+- **Block templates**, elements that renders things whitin one or many pages. There are also the PlaceHolder Blocks that fill external contents in their space, like publications previews
+- **Navigation Bars**, menu, footers, lists of things that can optionally fetch elements from Publications (titles, body, images ...) to enrich entries
 - **Carousels**, image sliders ... Yes, they are a basic component of the modern web
 - **Pages**, each webpath loads a page and this is a container of blocks
 - **Publications**, what we use to say __posts__
