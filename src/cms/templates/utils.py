@@ -43,5 +43,6 @@ def import_string_block(block, request, page, webpath):
     obj = import_string(block.type)(content=block.content,
                                     request=request,
                                     page=page,
-                                    webpath=webpath)
+                                    webpath=webpath,
+                                    block=block)
     return obj

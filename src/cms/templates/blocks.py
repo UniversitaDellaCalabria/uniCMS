@@ -33,9 +33,16 @@ class JSONBlock(AbstractBlock):
         self.request = kwargs['request']
         self.webpath = kwargs['webpath']
         self.page = kwargs['page']
+        self.block = kwargs['block']
 
 
-class PublicationContentPlaceholderBlock(JSONBlock):
+class PlaceHolderBlock(JSONBlock):
+    """
+    """
+    pass
+
+
+class PublicationContentPlaceholderBlock(PlaceHolderBlock):
     """
     Publication PlaceHolder
     """
@@ -52,7 +59,7 @@ class PublicationContentPlaceholderBlock(JSONBlock):
                                                     template=template)
 
 
-class LinkPlaceholderBlock(JSONBlock):
+class LinkPlaceholderBlock(PlaceHolderBlock):
     """
     Link PlaceHolder
     """

@@ -7,10 +7,9 @@ from django.utils import timezone
 from django.utils.module_loading import import_string
 from django.utils.safestring import SafeString
 
-from cms.contexts.decorators import detect_language
 from cms.contexts.utils import handle_faulty_templates
-from cms.pages.models import Category, PagePublication
-from cms.publications.models import Publication, PublicationContext
+from cms.pages.models import Category
+from cms.publications.models import PublicationContext
 
 
 logger = logging.getLogger(__name__)

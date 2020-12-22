@@ -8,8 +8,8 @@ from django.utils.safestring import SafeString
 
 from cms.contexts.decorators import detect_language
 from cms.contexts.utils import handle_faulty_templates
-from cms.pages.models import Category, PageLink
-from cms.publications.models import PublicationContext
+from cms.pages.models import Category, PageBlock, PageLink, PagePublication
+from cms.publications.models import Publication, PublicationContext
 from cms.templates.utils import import_string_block
 
 
@@ -87,6 +87,8 @@ def load_publication_content_placeholder(context, template,
             i.publication.translate_as(lang=language)
 
         blocks = page.get_blocks()
+        # page_blocks = PageBlock.objects.filter(block__pk__in=[i.pk for i in blocks]).\
+                                        # order_by('order')
         ph = [i for i in blocks
               if i.type == \
               'cms.templates.blocks.PublicationContentPlaceholderBlock']
