@@ -33,7 +33,7 @@ uniCMS was born as a result of the need to renew the web portal of the
 University of Calabria, after taking a look at the offer of free and open CMS 
 and strong of our experience, we decided to develop it with Django and equip it **with batteries** as well.
 
-If you agree with us feel free to participate in its development or simply use it and 
+If you agree with us feel free to participate in its development or simply 
 give us your feedbacks, we are people who like to share!
 
 
