@@ -15,10 +15,10 @@ http requests are handled by a pure Django view called **cms.contexts.views.cms_
 It will
 
 1. check if website exists
-2. check if **request.get_full_path()** matches on of the Handlers loaded in **settings.py**. 
+2. check if **request.get_full_path()** matches one of the Handlers loaded in **settings.py**. 
     - If Yes -> return **handler.as_view()**
     - Else: continue
-3. check if **request.get_full_path()** matches to a published page
+3. check if **request.get_full_path()** matches a published page
     - If Yes -> return **render(request, page.base_template.template_file, context)**
     - Else: `raise 404()`
 
@@ -31,9 +31,9 @@ WebPath, also called Contexts
 In this section is described how the WebPath works and how they can be configured.
 
 - path value matching
-- child path
+- child path behaviour
 - the role of **.get_full_path()**
-- some use cases and strategies: third-party url, webpath aliasi, intheritance by its childs
+- some use cases and strategies: third-party url, webpath aliases, intheritance by webpath childs
 
 
 NavigationBars, also called Menus
@@ -46,7 +46,7 @@ In this section is described how the Menu can be built.
 - Menu object
 - MenuItem objects
 - How a MenuItem can inherit contents from a publication
-- Render an Interactive Menu in a HTML template, examples from the demo project
+- Render an Interactive Menu in a HTML template, references to uniCMS's' Teamplates documentation
 
 
 Publications and Handlers

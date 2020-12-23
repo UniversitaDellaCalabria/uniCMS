@@ -12,7 +12,7 @@ ourselves with the following components:
 - **Carousels**, image sliders ... They are a basic components of the modern web so we desided to specialized them as well
 - **Pages**, each webpath loads a page that's a modular container of page blocks
 - **Publications**, what we use to say __posts__
-- **Handlers**, they intercepts http requests showing to users a different behaviour from a standard Page., linked to a specific WebPath.
+- **Handlers**, they intercepts http requests showing to users a different behaviour from a standard Page, linked to a specific WebPath.
   Think about the **List** and **View** resources of News pertaining to a context (WebPath) or 
   a way to integrate a third party Django app in uniCMS.
 
