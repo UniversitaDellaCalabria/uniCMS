@@ -14,9 +14,9 @@ young IT guys that think that a nowadays CMS should be:
     - SEO convenient
     - Bootstrap compliant
     - Pluggable as a Django application
-- Highly oriented to a logic of content reuse, entries can be reused - or only in pieces - in different contexts, as you like and with many strategies
+- Highly oriented to a logic of content reuse, entries can be reused - entirely or only in pieces - in different contexts
 - **OpenAPIv3** (OAS3) compliant
-- Able to use many RDBMS engines, agile schema migrations as Django wonderfully does
+- Able to use many RDBMS engines with agile schema migrations as Django already does
 - **Multi Web Site** management
 - **MongoDB FullText Search** engine with management commands (CLI)
 - Able to **localize its entries in many languages**

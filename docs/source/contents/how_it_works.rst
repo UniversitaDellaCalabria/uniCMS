@@ -157,7 +157,7 @@ A page can have the following childs elements:
 
 - PAGE NAVIGATION BARS 
 - PAGE CAROUSELS
-- PAGE BLOCKS, that extends or disable those inherited from the page template
+- PAGE BLOCKS, extends or disable those inherited from the Page Template
 - PUBLICATION CONTENTS
 - RELATED PAGES
 - RELATED LINKS
