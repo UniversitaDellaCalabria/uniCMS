@@ -49,19 +49,51 @@ Pages, Blocks and Placeholders
 
 Pages inherit Template Pages, these latter have a base html template file and 
 a bunch of template blocks. Blocks can be of different kind, like the 
-simplest one, called HTMLBlock that anything is that a Text Field that takes 
-a Django compatible templates. This means that in a HTMLBlock we can load 
+simplest one, called HTMLBlock that's a Text Field that takes 
+a raw html with django's template statements as well. This means that in a HTMLBlock we can load 
 template tags and use Django Template filters and statements.
 
 Furthermore, there are specialized blocks which are none other than 
-HTMLBlock which load django template tags within their content.
+HTMLBlock which load django *templatetags* within their content. Example:
+
+.. code-block:: html
+
+    {% load unicms_blocks %}
+    <div class="row negative-mt-5 mb-3" >
+        <div class="col-12 col-md-3">
+            <div class="section-title-label px-3 py-1">
+                <h3>Unical <span class="super-bold">world</span></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-9">
+            {% load_publications_preview template="publications_preview_v3.html" %}
+        </div>
+        <div class="col-12 col-lg-3">
+            {% include "unical_portale_agenda.html" %}
+        </div>
+    </div>
+
+
 
 A Page Template would be subdivided in section each of them where a Django 
-templatetag called **load_blocks** will fill contents.
+templatetag called **load_blocks** will fill contents. Example:
 
-Placeholders are a different kind of blocks, each one for many kind of application.
-We have, for example, PublicationPlaceholderBlock that's a block that will be filled 
-by related publication to a page. Let's suppose to distribute 4 pub placeholder in a page, 
+.. code-block:: html
+
+    <!-- Breadcrumbs -->
+    {% block breadcrumbs %}
+        {% load_blocks section="breadcrumbs" %}
+    {% endblock breadcrumbs %}
+    <!-- end Breadcrumbs -->
+
+
+Placeholders are a different kind of blocks, each one for many kind of applications.
+We have, for example, **PublicationPlaceholderBlock** that's a block that will be filled 
+by related publication to a page. Let's suppose to distribute 
+four publication placeholder in a page, 
 and then we configure 4 publication to belong to the same page. Then we'll have
 that each publication will be rendered in the Handler Blocks in this way:
 
@@ -77,4 +109,26 @@ that each publication will be rendered in the Handler Blocks in this way:
 +------------+-----------------+------------------------------+
 
 
+This means that the placeholder space will be filled by the publications 
+related to a page, according to its ordering, the first placeholder 
+will render the first content, the second the second and so on. 
+This approach allows a one-page template designer to arrange placeholders 
+without worrying about what content will be represented there. 
+The page that will inherit this uniCMS template will then define which 
+publications to import, think about the management of a 
+Home Page, where each content is selectively chosen.
+
+A page can have the following childs elements:
+
+- PAGE NAVIGATION BARS 
+- PAGE CAROUSEL 
+- PAGE BLOCK, that extends or disable which inherited from its page template
+- PUBLICATION CONTENTS
+
+
+This is a simplified page subdivided by sections that would show to us 
+how the contents can be distribuited in a Page Template.
+
+
 .. image:: ../images/page_blocks.png
+    :align: center

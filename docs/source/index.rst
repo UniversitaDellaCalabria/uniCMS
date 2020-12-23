@@ -41,7 +41,6 @@ give us your feedbacks, we are people who like to share!
    :caption: Introduction
 
    contents/introduction.md
-   contents/why.md
    contents/how_it_works.md
    
 .. toctree::
@@ -63,6 +62,12 @@ give us your feedbacks, we are people who like to share!
    :caption: Developer's
 
    contents/developer.md
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Miscellaneous
+   
+   contents/why.md
 
 
 Indices and tables
