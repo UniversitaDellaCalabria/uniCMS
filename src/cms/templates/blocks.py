@@ -13,7 +13,7 @@ class AbstractBlock(object):
         for k,v in kwargs.items():
             setattr(self, k, v)
         self._rendered = False
-        
+
     def render(self):
         return mark_safe(self.content)
 
@@ -34,7 +34,6 @@ class JSONBlock(AbstractBlock):
         self.request = kwargs['request']
         self.webpath = kwargs['webpath']
         self.page = kwargs['page']
-        self.block = kwargs['block']
 
 
 class PlaceHolderBlock(JSONBlock):
@@ -65,7 +64,6 @@ class LinkPlaceholderBlock(PlaceHolderBlock):
     Link PlaceHolder
     """
     def render(self):
-        aspect_ratio = self.content.get('aspect_ratio', '16by9')
         template = self.content.get('template', '')
         url = self.content.get('url', None)
         if not template: return ''
@@ -74,6 +72,5 @@ class LinkPlaceholderBlock(PlaceHolderBlock):
                            'page': self.page,
                            'block': self})
         return load_link_placeholder(context=context,
-                                     aspect_ratio=aspect_ratio,
                                      template=template,
                                      url=url)
