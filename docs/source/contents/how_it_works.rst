@@ -5,7 +5,7 @@ This section describes which entities and relations composes uniCMS and
 how these latter handles the HTTP Requests.
 
 
-.. image:: ../images/relations.png
+.. image:: ../images/relations_2.png
 
 
 HTTP Requests
@@ -25,6 +25,10 @@ Publications and Handlers
 *************************
 
 Publications or Posts are something that are added daily by an Editorial Board.
+
+.. image:: ../images/publication_admin_backend.png
+    :align: center
+
 We would publish some news about a specific topic and we want each of following things as well:
 
 - create a menu item that links to a specific post
@@ -130,5 +134,5 @@ This is a simplified page subdivided by sections that would show to us
 how the contents can be distribuited in a Page Template.
 
 
-.. image:: ../images/page_blocks.png
+.. image:: ../images/page_blocks_2.png
     :align: center
