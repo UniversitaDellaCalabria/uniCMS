@@ -57,10 +57,11 @@ Publications or Posts are something that are added daily by an Editorial Board.
 .. image:: ../images/publication_admin_backend.png
     :align: center
 
-We would publish some news about a specific topic achieving following things as well:
+We would publish some news about a specific topic, as it would be a 
+simple Web Blog, achieving following things as well:
 
 - menu items that links to a specific post
-- custom or a personalized template to show a pubblication
+- standard or custom template to show a pubblication
 - breadcrumbs manager that represent a human readable, interactive, webpath
 - page with a list of all the posts, and also filtered by category
 
@@ -68,9 +69,9 @@ If the concept of publication or post is clear to all those who have
 published at least once in their life in a WebBlog, an extra effort is 
 to understand the fact that uniCMS allows us to:
 
-- create a post and decide in which context (webpath) it would be published, in one or many place (WebPaths) 
-- manage a block, called publication_preview for example, that represent 
-  an automatic preview of all the publications that belongs to that webpath
+- create a post and decide in which context (WebPath) it would be published, in one or many place (Contexts)
+- manage a block, called *publication_preview* for example, that represent 
+  an fancy list of all the publications that belongs to that webpath
 
 Handlers will show the history of your Publications (**List**) and will 
 let the user read them (**View**).
@@ -83,10 +84,11 @@ Pages inherit Template Pages, these latter have a base html template file and op
 a bunch of template blocks. Blocks can be of different kind, like the 
 simplest one called HTMLBlock that's a Text Field that takes 
 a raw html with django's template statements as well. This means that in a HTMLBlock we can load 
-template tags and use Django Template filters and statements.
+template tags and use Django Template filters and statements, as we use to do 
+following the Official Django Documentation.
 
 Furthermore, there are specialized blocks which are none other than 
-HTMLBlock with django *templatetags* as its contents. Example:
+HTMLBlock with django *templatetags* as content. Example:
 
 .. code-block:: html
 
