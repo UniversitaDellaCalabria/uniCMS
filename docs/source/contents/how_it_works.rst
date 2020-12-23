@@ -124,10 +124,10 @@ templatetag called **load_blocks** will fill contents. Example:
 
 Placeholders are a different type of block.
 We have, for example, **PublicationPlaceholderBlock** that's a block that will be filled 
-by related publication to a page. Let's suppose to distribute 
-four publications placeholders in a page, then we link 4 publications to the same page.
+by a related publication to the page it belongs to. Let's suppose to distribute 
+four publication placeholders in a page, then we link 4 publications to the same page.
 We'll have that each publication will be rendered in the Handler Block, 
-respecting order and positioning.
+respecting order and positioning (section).
 
 +------------+-----------------+------------------------------+
 | index      | block type      | publication                  |
@@ -139,10 +139,10 @@ respecting order and positioning.
 | 2          | pub placeholder | the third ordered by "order" |
 +------------+-----------------+------------------------------+
 
-A PublicationPlaceHolder would take also a specialized template, this would 
-let users to introduce their own style, their way to specialize the representation 
+A PublicationPlaceHolder would take also a specialized template, this
+permit to users to adopt their own style, their way to specialize the representation 
 of contents taken from a publication. For example a template that takes 
-a publication object che decide how and what render from it: 
+a publication object that decide how and what render from it: 
 the title, subheading, main body content, related objects ...
 
 Finally the first placeholder 
@@ -150,7 +150,7 @@ will render the first content, the second the second one and so on.
 This approach allows a one-page template designer to arrange placeholders 
 without worrying about what content will be represented there. 
 The page that will inherit this uniCMS template will then define which 
-publications to import, which links to handle and so on. 
+publications to import, which web link to handle and so on. 
 Think about the management of a 
 Home Page, where each content is selectively chosen by publishers.
 
