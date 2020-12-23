@@ -23,6 +23,32 @@ It will
     - Else: `raise 404()`
 
 
+WebPath, also called Contexts
+*****************************
+
+[WiP]
+
+In this section is described how the WebPath works and how they can be configured.
+
+- path value matching
+- child path
+- the role of **.get_full_path()**
+- some use cases and strategies: third-party url, webpath aliasi, intheritance by its childs
+
+
+NavigationBars, also called Menus
+*********************************
+
+[WiP]
+
+In this section is described how the Menu can be built.
+
+- Menu object
+- MenuItem objects
+- How a MenuItem can inherit contents from a publication
+- Render an Interactive Menu in a HTML template, examples from the demo project
+
+
 Publications and Handlers
 *************************
 
