@@ -121,20 +121,21 @@ a publication objects che decide how and what render from: title, subheading, co
 
 Finally a placeholder space will be filled by publications 
 related to a page, according to its ordering, the first placeholder 
-will render the first content, the second the second and so on. 
+will render the first content, the second the second one and so on. 
 This approach allows a one-page template designer to arrange placeholders 
 without worrying about what content will be represented there. 
 The page that will inherit this uniCMS template will then define which 
-publications to import, think about the management of a 
-Home Page, where each content is selectively chosen.
+publications to import, which links to handle. Think about the management of a 
+Home Page, where each content is selectively chosen by publishers.
 
 A page can have the following childs elements:
 
 - PAGE NAVIGATION BARS 
-- PAGE CAROUSEL 
-- PAGE BLOCK, that extends or disable which inherited from its page template
+- PAGE CAROUSELS
+- PAGE BLOCKS, that extends or disable which inherited from its page template
 - PUBLICATION CONTENTS
-
+- RELATED PAGES
+- RELATED LINKS
 
 This is a simplified page subdivided by sections that would show to us 
 how the contents can be distribuited in a Page Template.
