@@ -126,8 +126,7 @@ We have, for example, **PublicationPlaceholderBlock** that's a block that will b
 by related publication to a page. Let's suppose to distribute 
 four publication placeholders in a page, 
 then we link 4 publication to the same page (Related Publication Contents). 
-Then we'll have that each publication will be rendered in the
- Handler Blocks in this way:
+Then we'll have that each publication will be rendered in the Handler Blocks in this way:
 
 
 +------------+-----------------+------------------------------+
