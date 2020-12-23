@@ -7,12 +7,12 @@ ourselves with the following components:
 - **Web Sites**, fully qualified doman name to answer for
 - **Contexts**, WebPaths like `/offices` and `/offices/employees` 
 - **Page templates**, with a selectable html template file through UI
-- **Block templates**, elements that renders things whitin one or many pages. There are also the PlaceHolder Blocks that fill related contents, like publications (posts)
+- **Block templates**, elements that renders things whitin one or many pages
 - **Navigation Bars**, menu, footers, lists of things that can optionally fetch elements from Publications (titles, body, images ...) to enrich its items
 - **Carousels**, image sliders ... They are a basic components of the modern web so we desided to specialized them as well
 - **Pages**, each webpath loads a page that's a modular container of page blocks
 - **Publications**, what we use to say __posts__
-- **Handlers**, they intercepts http requests showing to users a different behaviour from a standard Page, linked to a specific WebPath.
+- **Handlers**, they intercepts http requests showing to users a different behaviour from a standard Page
   Think about the **List** and **View** resources of News pertaining to a context (WebPath) or 
   a way to integrate a third party Django app in uniCMS.
 

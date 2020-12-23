@@ -4,10 +4,10 @@ Developer's
 #### Urls
 
 uniCMS urls are managed with `cms.context` entirely through admin interface. 
-We can even load third-party django applications, it's necessary to take into account that you should your django urls
-paths before defining uniCMS ones, otherwise uniCMS will intercept them and with a good chance will 
+We can even load third-party django applications, it's necessary to take into account that you should configure your django applications urls
+before defining uniCMS ones, otherwise uniCMS will intercept them and with a good chance will 
 return to the user a page of 404. You can even set `CMS_PATH_PREFIX` to a desidered value, eg: `portale/`, to 
-restrict uniCMS url matching to a specified namespace.
+restrict uniCMS url matching to a specified root path.
 
 This is and example of your project urls.py 
 ````
@@ -31,10 +31,10 @@ if 'cms.search' in settings.INSTALLED_APPS:
                         name="unicms_search"),
 ````
 
-All the urls that matches the namespace configured in the `urls.py` of the master project
+Urls that matches the namespace configured in the `urls.py` of the master project
 will be handled by uniCMS. uniCMS can match two kind of resources:
 
-1. WebPath (Context) corresponsing at a single Page (Home page and its childs)
+1. WebPath (Context) corresponsing at a single Page (Home page and its descendants)
 2. Application Handlers, an example would be Pubblication List and View resources
 
 for these latter uniCMS uses some reserved words, as prefix, to deal with specialized url routings.
@@ -51,24 +51,21 @@ This project is composed by the following applications:
 - **cms.contexts**, where websites, webpaths and EditorialBoard Users and Permissions can be defined
 - **cms.templates**, where multiple page templates and page blocks can be managed
 - **cms.medias**, specialized app for management, upload and navigation of media files.
-- **cms.menus**, specialized app for navigation bar creation and management.
-- **cms.carousels**, specialized app for Carousel and Slider creation and management.
-- **cms.pages**, where Editorial boards can create Pages.
+- **cms.menus**, specialized app for navigation bar management.
+- **cms.carousels**, specialized app for Carousel and Slider management.
+- **cms.pages**, where we can create a Page linked to a Webpath.
 - **cms.publications**, where Editorial boards publish contents in one or more WebPath.
 - **cms.search**, MongoDB Search Engine and management commands.
 
-The module `cms.contexts` defines the multiple website management (multi contexts) we have adopted.
-Each context mail ches a Path and a web page, it's nothing more than a
-webpath. Each context has users (Editorial Board Editors) with one or more
-of the following permissions (see `cms.contexts.settings.CMS_CONTEXT_PERMISSIONS`):
+The module `cms.contexts` defines the multiple website management (multi contexts) we adopted.
+Each WebPath would have a related web page. Each context have users (Editorial Board Editors) 
+with one or more permissions (see `cms.contexts.settings.CMS_CONTEXT_PERMISSIONS`)
 
 `cms.page` and `cms.publications` are the models where we've defined how we build a Page or a Publication.
 For us, a Page, is anything else than a composition of blocks, rendered in a
 HTML base template. This means that a page is a block container, in which we can
 define many blocks with different order. For every page we must define
 to which context (webpath) it belong to and also the template that we want to adopt for HTML rendering.
-Nothing prevents us from using something other than HTML, it's just python, you know.
-
 
 
 #### Post Pre Save Hooks
@@ -91,6 +88,25 @@ CMS_HOOKS = {
         'POSTSAVE': ['cms.search.hooks.page_se_insert',],
         'PREDELETE': ['cms.search.hooks.searchengine_entry_remove',],
         'POSTDELETE': []
+    },
+    'Media': {
+        'PRESAVE': ['cms.medias.hooks.set_file_meta',
+                    'cms.medias.hooks.webp_image_optimizer'],
+        'POSTSAVE': [],
+        'PREDELETE': [],
+        'POSTDELETE': ['cms.medias.hooks.remove_file']
+    },
+    'Category': {
+        'PRESAVE': ['cms.medias.hooks.webp_image_optimizer'],
+        'POSTSAVE': [],
+        'PREDELETE': [],
+        'POSTDELETE': ['cms.medias.hooks.remove_file']
+    },
+    'PublicationAttachment': {
+        'PRESAVE': ['cms.medias.hooks.set_file_meta',],
+        'POSTSAVE': [],
+        'PREDELETE': [],
+        'POSTDELETE': []
     }
 }
 ```` 
@@ -98,12 +114,10 @@ CMS_HOOKS = {
 
 #### Template tags
 
-A cms template or a HTML page block can also adopt some of the template tags that come with uniCMS.
+A HTML template or a HTML page block can also adopt some of the template tags that come with uniCMS and Django.
 UniCMS template context takes at least the following objects:
 
 ````
-    'website': WebSite object (cms.context.models.Website)
-    'path': request.get_full_path(), eg: "/that/resource/slug-or-whatever"
     'webpath': Context object (cms.contexts.models.WebPath)
     'page': Page object (cms.pages.models.Page)
 ````
@@ -160,7 +174,7 @@ supported_languages: get settings.LANGUAGES_CODE to templates
 
 #### Handlers
 
-There are cases in which it is necessary to create specialized applications, 
+There are cases in which it's necessary to create specialized applications, 
 with templates and templatetags, detached from the pages configured within the CMS. 
 Think, for example, to `cms.publications.handlers` which manages the pages for navigating 
 publications (List) and opening a publication (View).
@@ -170,19 +184,21 @@ In this case the handlers have to be registered in `settings.py`, as follow:
 ````
 CMS_PUBLICATION_VIEW_PREFIX_PATH = 'contents/news/view/'
 CMS_PUBLICATION_LIST_PREFIX_PATH = 'contents/news/list'
+
 CMS_PUBLICATION_URL_LIST_REGEXP = f'^(?P<context>[\/a-zA-Z0-9\.\-\_]*)({CMS_PUBLICATION_LIST_PREFIX_PATH})/?$'
 CMS_PUBLICATION_URL_VIEW_REGEXP = f'^(?P<context>[\/a-zA-Z0-9\.\-\_]*)({CMS_PUBLICATION_VIEW_PREFIX_PATH})(?P<slug>[a-z0-9\-]*)'
 
-CMS_HANDLERS_PATHS = [CMS_PUBLICATION_VIEW_PREFIX_PATH,
-                      CMS_PUBLICATION_LIST_PREFIX_PATH]
 CMS_APP_REGEXP_URLPATHS = {
     'cms.publications.handlers.PublicationViewHandler' : CMS_PUBLICATION_URL_VIEW_REGEXP,
     'cms.publications.handlers.PublicationListHandler' : CMS_PUBLICATION_URL_LIST_REGEXP,
 }
+
+CMS_HANDLERS_PATHS = [CMS_PUBLICATION_VIEW_PREFIX_PATH,
+                      CMS_PUBLICATION_LIST_PREFIX_PATH]
 ````
 
 The paths defined in `CMS_HANDLERS_PATHS`  make up the list of 
-reserved words, to be considered during validation on save, in `cms.contexts.models.WebPath`. 
+reserved words to be considered during validation on save, in `cms.contexts.models.WebPath`. 
 They compose a list of reserved words that cannot be used 
 as path value in `cms.contexts.models.WebPath`.
 

@@ -31,7 +31,7 @@ cd Portale-PoC
 
 Go to `/admin` and submit superuser credentials to start working in.
 
-If you want to share your example data
+If you want to dump and share your example datas
 ````
 ./manage.py dumpdata --exclude auth.permission --exclude accounts --exclude contenttypes --exclude sessions --exclude admin --indent 2 > ../dumps/cms.json
 ````

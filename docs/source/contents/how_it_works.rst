@@ -2,7 +2,7 @@ How it works
 ------------
 
 This section describes which entities and relations composes uniCMS and 
-how these latter handles the HTTP Requests.
+how these latter handles HTTP Requests.
 
 
 .. image:: ../images/relations_2.png
@@ -11,10 +11,10 @@ how these latter handles the HTTP Requests.
 HTTP Requests
 *************
 
-http requests are handled by a pure Django view called **cms.contexts.views.cms_dispatch**.
-It will
+HTTP Requests are handled by a pure Django view called **cms.contexts.views.cms_dispatch**.
+It will:
 
-1. check if website exists
+1. check if a website exists
 2. check if **request.get_full_path()** matches one of the Handlers loaded in **settings.py**. 
     - If Yes -> return **handler.as_view()**
     - Else: continue
@@ -23,8 +23,8 @@ It will
     - Else: `raise 404()`
 
 
-WebPath, also called Contexts
-*****************************
+WebPaths
+********
 
 [WiP]
 
@@ -36,8 +36,8 @@ In this section is described how the WebPath works and how they can be configure
 - some use cases and strategies: third-party url, webpath aliases, intheritance by webpath childs
 
 
-NavigationBars, also called Menus
-*********************************
+NavigationBars and Menus
+************************
 
 [WiP]
 
@@ -60,16 +60,15 @@ Publications or Posts are something that are added daily by an Editorial Board.
 We would publish some news about a specific topic, as it would be a 
 simple Web Blog, achieving following things as well:
 
-- menu items that links to a specific post
-- standard or custom template to show a pubblication
+- standard or custom template to represent a pubblication on the screen
 - breadcrumbs manager that represent a human readable, interactive, webpath
-- page with a list of all the posts, and also filtered by category
+- page with a list of all the posts, also filtered by category
 
 If the concept of publication or post is clear to all those who have 
 published at least once in their life in a WebBlog, an extra effort is 
 to understand the fact that uniCMS allows us to:
 
-- create a post and decide in which context (WebPath) it would be published, in one or many place (Contexts)
+- create a post and decide in which context (WebPath) it would be published, in one or many places (Contexts)
 - manage a block, called *publication_preview* for example, that represent 
   an fancy list of all the publications that belongs to that webpath
 
@@ -81,9 +80,9 @@ Pages, Blocks and Placeholders
 ******************************************************
 
 Pages inherit Template Pages, these latter have a base html template file and optionally
-a bunch of template blocks. Blocks can be of different kind, like the 
+a bunch of template blocks. Blocks can be of different type, like the 
 simplest one called HTMLBlock that's a Text Field that takes 
-a raw html with django's template statements as well. This means that in a HTMLBlock we can load 
+a raw html with django's template statements. This means that in a HTMLBlock we can load 
 template tags and use Django Template filters and statements, as we use to do 
 following the Official Django Documentation.
 
@@ -111,7 +110,7 @@ HTMLBlock with django *templatetags* as content. Example:
     </div>
 
 
-A Page Template html file would be subdivided in sections, each of them where a Django 
+A Page Template html file would be subdivided in several sections, each of them where a Django 
 templatetag called **load_blocks** will fill contents. Example:
 
 .. code-block:: html
@@ -123,13 +122,12 @@ templatetag called **load_blocks** will fill contents. Example:
     <!-- end Breadcrumbs -->
 
 
-Placeholders are a different kind of blocks, each one for many kind of applications.
+Placeholders are a different type of block.
 We have, for example, **PublicationPlaceholderBlock** that's a block that will be filled 
 by related publication to a page. Let's suppose to distribute 
-four publication placeholders in a page, 
-then we link 4 publication to the same page (Related Publication Contents). 
-Then we'll have that each publication will be rendered in the Handler Blocks in this way:
-
+four publications placeholders in a page, then we link 4 publications to the same page.
+We'll have that each publication will be rendered in the Handler Block, 
+respecting order and positioning.
 
 +------------+-----------------+------------------------------+
 | index      | block type      | publication                  |
@@ -142,20 +140,21 @@ Then we'll have that each publication will be rendered in the Handler Blocks in 
 +------------+-----------------+------------------------------+
 
 A PublicationPlaceHolder would take also a specialized template, this would 
-let the users to introduce their own style and way to specialize the representation 
-of the contents taken from a publication. For example a template that takes 
-a publication objects che decide how and what render from: title, subheading, content, related objects ...
+let users to introduce their own style, their way to specialize the representation 
+of contents taken from a publication. For example a template that takes 
+a publication object che decide how and what render from it: 
+the title, subheading, main body content, related objects ...
 
-Finally a placeholder space will be filled by publications 
-related to a page, according to its ordering, the first placeholder 
+Finally the first placeholder 
 will render the first content, the second the second one and so on. 
 This approach allows a one-page template designer to arrange placeholders 
 without worrying about what content will be represented there. 
 The page that will inherit this uniCMS template will then define which 
-publications to import, which links to handle. Think about the management of a 
+publications to import, which links to handle and so on. 
+Think about the management of a 
 Home Page, where each content is selectively chosen by publishers.
 
-A page can have the following childs elements:
+A page can have the following child elements:
 
 - PAGE NAVIGATION BARS 
 - PAGE CAROUSELS

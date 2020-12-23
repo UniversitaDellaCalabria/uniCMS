@@ -1,11 +1,11 @@
 Search Engine
 -------------
 
-uniCMS uses MongoDB as search engine, it was adopted in place of others search engines like Elastic Search or Sorl, for the following reasons:
+uniCMS uses MongoDB as search engine, it was adopted in place of others search engines like Elastic Search or Sorl for the following reasons:
 
 - The documents stored are really small, few kilobytes (BSON storage)
-- collections would be populated on each creation/change/deletion event by **on_$event hooks**
-- each entry is composed following a small schema, this would reduce storage usage increasing general performances at the same time
+- Collections would be populated on creation/change/deletion events by **on_$event hooks**
+- Each entry is composed following a small schema, this would reduce storage usage, increasing general performances at the same time
 
 Technical specifications are available in [MongoDB Official Documentation](https://docs.mongodb.com/manual/core/index-text/).
 Some usage example also have been posted [here](https://code.tutsplus.com/tutorials/full-text-search-in-mongodb--cms-24835).
@@ -52,26 +52,26 @@ entry = {
 
 ##### Search Engine CLI
 
-Publication and Page models (`cms.publications.models`) configures by default some save_hooks, like the search engine indexers.
+Publication and Page models configures by default some save_hooks, like the search engine indexers.
 Search Engine indexes can be rebuilt with a management command (SE cli):
 
 ````
-./manage.py cms_search_content_sync -y 2020 -type cmspublications.Publication -d 1 -y 2020 -m 11 -show
-````
+# show all the publications of the first November 2020
+./manage.py cms_search_content_sync -type cmspublications.Publication -d 1 -y 2020 -m 11 -show
 
-Purge all the entries and renew them
-````
-# all Pages
+# Purge all the entries, renew and finally show them
 ./manage.py cms_search_content_sync -y 2020 -type cmspages.Page -purge -insert -show
 
-# everything in that year
-./manage.py cms_search_content_sync  -purge -y 2020
+# purge all the publications published in year 2020
+./manage.py cms_search_content_sync -type cmspublications.Publication  -purge -y 2020
 
-# a single month
-./manage.py cms_search_content_sync -y 2020 -type cmspublications.Publication -m 12 -y 2020 -purge -insert
+# clean up all the Publications posted in December 2020
+./manage.py cms_search_content_sync -type cmspublications.Publication -m 12 -y 2020 -purge -insert
 ````
 
-`cms_search_content_sync` rely on `settings.MODEL_TO_MONGO_MAP`:
+`cms_search_content_sync` rely on `settings.MODEL_TO_MONGO_MAP` that defines which functions 
+are involved respectively for each Model Type.
+
 ```
 MODEL_TO_MONGO_MAP = {
     'cmspages.Page': 'cms.search.models.page_to_entry',
@@ -97,4 +97,3 @@ These will not match:
 
 As we can see symbols like `+` and `-` will exlude or include words.
 Specifying "some bunch of words" will match the entire sequence.
-That's something very similar to something professional 😎.

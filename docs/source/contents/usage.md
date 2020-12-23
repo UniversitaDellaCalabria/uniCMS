@@ -34,7 +34,8 @@ Examples:
 - A Specialized Block element that take a json object in its object constructor
 
 The following descriptions covers some HTML blocks.
-As we can see the HTML blocks in uniCMS have a full support of Django templatetags and template context.
+As we can see the HTML blocks in uniCMS have a full support of Django templatetags 
+and a pure Django template context.
 
 
 *Load Image slider (Carousel) configured for the Page*
@@ -102,13 +103,13 @@ As simple as possibile, that bunch of HTML lines.
 
 #### Menu
 
-A WebPath (context) can have multiple Menus and Navigation bars, but also Footers.
-Menu can be fetched through Rest API `/api/menu/<menu_id:int>` and also updated/created through this resources.
+A WebPath can have multiple Menus and Navigation bars.
+Menu can be fetched through Rest API `/api/menu/<menu_id:int>` and also updated/created through this resource.
 
-Each menu items can have three kinds of links: url, page, publication.
-Each menu items can get additional contents (`inherited_contents`) from a publication, this means that
+Each menu item can have three kinds of links: raw url, page object or publication object.
+Each menu item can get additional contents (`inherited_contents`) from a publication, this means that
 a presentation url, or a subheading or whatever belonging to a publication can be made accessible during a 
-menu items representation. Think about presentati in images, additional links ...
+menu item representation. Think about images, additional links and things that would fill up a menu entry.
 
 
 #### Api
