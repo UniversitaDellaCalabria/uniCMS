@@ -14,25 +14,26 @@ young IT guys that think that a nowadays CMS should be:
     - SEO convenient
     - Bootstrap compliant
     - Pluggable as a Django application
-- Highly oriented to a logic of content reuse, entries can be reused - or only in pieces - in different contexts, as you like and with many strategies
-- **OpenAPIv3** (OAS3)
-- Able to use many RDBMS engines, agile schema migrations ops as Django wonderfully does
+- Highly oriented to a logic of content reuse, entries can be reused - entirely or only in pieces - in different contexts
+- **OpenAPIv3** (OAS3) compliant
+- Able to use many RDBMS engines with agile schema migrations as Django already does
 - **Multi Web Site** management
-- **MongoDB FullText Search** engine with management commands
-- Able to **Localize in many languages** its entries, by default
+- **MongoDB FullText Search** engine with management commands (CLI)
+- Able to **localize its entries in many languages**
 - Able to handle Editorial Board workflows (WiP) and permissions by contexts
 - Able to handle huge loads, Cached approach based on Redis TTL
 - Secure by default
 - Scalable
+- Pluggable, interoperable
 
-unlike other Django's CMS, uniCMS is intended for both end users 
+uniCMS is intended for both end users 
 and smart developers, creating a website with uniCMS does not require any development skills.
 
 uniCMS was born as a result of the need to renew the web portal of the 
 University of Calabria, after taking a look at the offer of free and open CMS 
 and strong of our experience, we decided to develop it with Django and equip it **with batteries** as well.
 
-If you agree with us feel free to participate in its development or simply use it and 
+If you agree with us feel free to participate in its development or simply 
 give us your feedbacks, we are people who like to share!
 
 
@@ -41,7 +42,6 @@ give us your feedbacks, we are people who like to share!
    :caption: Introduction
 
    contents/introduction.md
-   contents/why.md
    contents/how_it_works.md
    
 .. toctree::
@@ -63,6 +63,12 @@ give us your feedbacks, we are people who like to share!
    :caption: Developer's
 
    contents/developer.md
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Miscellaneous
+   
+   contents/why.md
 
 
 Indices and tables

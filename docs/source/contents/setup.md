@@ -11,7 +11,7 @@ git clone https://github.com/UniversitaDellaCalabria/Portale-PoC.git
 virtualenv -ppython3 env
 source env/bin/activate
 pip3 install -r requirements.txt
-cd unicms
+cd Portale-PoC
 ````
 
 #### Getting Started
@@ -19,8 +19,8 @@ cd unicms
 ````
 ./manage.py migrate
 
-# install your templates in settings.INSTALLED_APPS and then symlinks cms templates
-./manage.py unicms_collect_templates -renew
+# install your templates in settings.INSTALLED_APPS and then create cms templates symbolic links
+./manage.py unicms_collect_templates
 
 # if you want to load some example datas
 ./manage.py loaddata ../dumps/cms.json
@@ -29,7 +29,7 @@ cd unicms
 ./manage.py runserver
 ````
 
-Go to `/admin` and submit the superuser credential to start putting some data into the model.
+Go to `/admin` and submit superuser credentials to start working in.
 
 If you want to share your example data
 ````
@@ -38,7 +38,7 @@ If you want to share your example data
 
 #### Redis (Cache)
 
-uniCMS can cache response, these are the relevant parameters
+uniCMS can cache http responses, these are the relevant parameters:
 ````
 ################
 # Django related

@@ -4,8 +4,8 @@ Search Engine
 uniCMS uses MongoDB as search engine, it was adopted in place of others search engines like Elastic Search or Sorl, for the following reasons:
 
 - The documents stored are really small, few kilobytes (BSON storage)
-- collections would be populated on each creation/change event by on_save hooks
-- each entry is composed following a small schema, this would reduce storage usage increasing the performances at the same time
+- collections would be populated on each creation/change/deletion event by **on_$event hooks**
+- each entry is composed following a small schema, this would reduce storage usage increasing general performances at the same time
 
 Technical specifications are available in [MongoDB Official Documentation](https://docs.mongodb.com/manual/core/index-text/).
 Some usage example also have been posted [here](https://code.tutsplus.com/tutorials/full-text-search-in-mongodb--cms-24835).

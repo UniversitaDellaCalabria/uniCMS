@@ -3,7 +3,7 @@ Why we develop another CMS?
 
 #### The Goal
 
-We're searching for a limitless experience.
+We're continuosly looking for a limitless experience.
 When we choose a CMS platform we approach different products and solutions based on the functionalities they offer, with particular attention to what could then prove to be a limit of use. Starting from our use cases, here are some typical arguments that emerge when choosing a CMS.
 
 1. **Alteration of the structure of a Page**.
@@ -25,7 +25,7 @@ In normal CMS this requires access and alteration of the contents present on the
 Drupal and other CMSs cannot inherit the contents of a parent page within a child page.
 
 7. **High availability**.
-Drupal does not have native support for HA.
+Drupal and many others does not have native support for HA.
 
 
 #### What about other Django's CMS?
@@ -35,3 +35,9 @@ Wonderfull, but:
 - they still need develop skills to get a real product
 - some of them oversized during the time, with extensions and components that have made the approach and thinking behind the product non-linear
 - they outsource integration with templates too much, probably hindering the most important marketplace in the industry
+
+These not means that uniCMS is intended for dummy users, or that it won't 
+oversized in time (but we hope that we put all the needs in 
+its core) and not at last, it doesn't means that it would help some html template marketplace!
+
+It's only a Django CMS... its strong point is precisely Django!

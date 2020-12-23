@@ -45,6 +45,32 @@ See `cms.contexts.views.cms_dispatcher` to see how an http request is intercepte
 handled by uniCMS to know if use an Handler or a Standard Page as response.
 
 
+#### Models
+
+This project is composed by the following applications:
+- **cms.contexts**, where websites, webpaths and EditorialBoard Users and Permissions can be defined
+- **cms.templates**, where multiple page templates and page blocks can be managed
+- **cms.medias**, specialized app for management, upload and navigation of media files.
+- **cms.menus**, specialized app for navigation bar creation and management.
+- **cms.carousels**, specialized app for Carousel and Slider creation and management.
+- **cms.pages**, where Editorial boards can create Pages.
+- **cms.publications**, where Editorial boards publish contents in one or more WebPath.
+- **cms.search**, MongoDB Search Engine and management commands.
+
+The module `cms.contexts` defines the multiple website management (multi contexts) we have adopted.
+Each context mail ches a Path and a web page, it's nothing more than a
+webpath. Each context has users (Editorial Board Editors) with one or more
+of the following permissions (see `cms.contexts.settings.CMS_CONTEXT_PERMISSIONS`):
+
+`cms.page` and `cms.publications` are the models where we've defined how we build a Page or a Publication.
+For us, a Page, is anything else than a composition of blocks, rendered in a
+HTML base template. This means that a page is a block container, in which we can
+define many blocks with different order. For every page we must define
+to which context (webpath) it belong to and also the template that we want to adopt for HTML rendering.
+Nothing prevents us from using something other than HTML, it's just python, you know.
+
+
+
 #### Post Pre Save Hooks
 
 By default Pages and Publications call pre and post save hooks.
@@ -85,35 +111,36 @@ UniCMS template context takes at least the following objects:
 Standing on the informations taken from these objects uniCMS also adopts some other custom templatetags, as follow.
 These templatetags will also work in Page Blocks that would take, optionally, a html template as argument.
 
-`cms_templates`
-- supported_languages: get settings.LANGUAGES_CODE to templates
+###### cms_templates
+supported_languages: get settings.LANGUAGES_CODE to templates
 
-`cms_menus`
-- `load_menu`: eg, `{% load_menu section='menu-1' template="main_menu.html" %}`
+###### cms_menus
+`load_menu`: eg, `{% load_menu section='menu-1' template="main_menu.html" %}`
 
-`cms_carousels`
-- `load_carousel`: similar to `load_menu`
+###### cms_carousels
+`load_carousel`: similar to `load_menu`
 
-`cms_contexts`
-- `language_menu`: an usage example here:
+###### cms_contexts
+`language_menu`: an usage example here:
    ````
        {% language_menu as language_urls %}
        {% for lang,url in language_urls.items %}
        <li><a class="list-item" href="{{ url }}"><span>{{ lang }}</span></a></li>
        {% endfor %}
    ````
-- `breadcrumbs`: `{% breadcrumbs template="breadcrumbs.html" %}`
+###### breadcrumbs
+`{% breadcrumbs template="breadcrumbs.html" %}`
    if template argument will be absent it will rely on `breadcrumbs.html` template.
-- `call`: `{% call obj=pub method='get_url_list' category_name=cat %}`
+`call`: `{% call obj=pub method='get_url_list' category_name=cat %}`
     Call any object method and also pass to it whatever `**kwargs`.
 
-`cms_page`
-- `load_blocks`: `{% load_blocks section='slider' %}`
+###### cms_page
+`{% load_blocks section='slider' %}`
   it would be configured in the base templates and defines where the blocks would be rendered.
   it takes `section` as argument, to query/filter only the blocks that belongs to that section.
 
-`cms_publication`
-- `load_publications_preview`: `{% load_publications_preview template="publications_preview.html" %}`
+###### cms_publication
+`{% load_publications_preview template="publications_preview.html" %}`
     - additional paramenters:
         template,
         section
@@ -121,7 +148,7 @@ These templatetags will also work in Page Blocks that would take, optionally, a 
         in_evidence=False
         categories_csv="Didattica,Ricerca"
         tags_csv="eventi,ricerca"
-- `load_publication_content_placeholder`: `{% load_publication_content_placeholder template="publication_that.html" %}`
+`{% load_publication_content_placeholder template="publication_that.html" %}`
     - additional paramenters:
         template,
         section
