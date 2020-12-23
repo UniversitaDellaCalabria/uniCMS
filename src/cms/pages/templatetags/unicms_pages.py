@@ -88,26 +88,26 @@ def load_publication_content_placeholder(context, template,
 
     else:
         pubs = page.get_publications()
-        
-        ph = _get_placeholder_by_typestring(page, 
+
+        ph = _get_placeholder_by_typestring(page,
                 'cms.templates.blocks.PublicationContentPlaceholderBlock')
-        
+
         if not ph:
             _msg = '{} doesn\'t have any page publications'.format(_log_msg)
             logger.warning(_msg)
             return ''
-        
+
         ph_pubs = [i for i in zip(ph, pubs)]
         for i in ph_pubs:
             pub = i[1].publication
             if block.__class__.__name__ == i[0].type.split('.')[-1]:
                 # already rendered
-                if getattr(pub, '_published', False): 
+                if getattr(pub, '_published', False):
                     continue
-                
+
                 # i18n
                 pub.translate_as(lang=language)
-                
+
                 data = {'publication': pub}
                 pub._published = True
                 return handle_faulty_templates(template, data, name=_func_name)
@@ -115,7 +115,6 @@ def load_publication_content_placeholder(context, template,
 
 @register.simple_tag(takes_context=True)
 def load_link_placeholder(context, template,
-                          aspect_ratio,
                           url='',
                           section = None):
     _func_name = 'load_link_placeholder'
@@ -131,8 +130,7 @@ def load_link_placeholder(context, template,
 
     # url is quite arbitrary
     if url:
-        data = {'aspect_ratio': aspect_ratio,
-                'link': url,}
+        data = {'link': url,}
         return handle_faulty_templates(template, data, name=_func_name)
     else:
         blocks = page.get_blocks()
@@ -150,10 +148,9 @@ def load_link_placeholder(context, template,
             link = i[1]
             if block.__class__.__name__ == i[0].type.split('.')[-1]:
                 # already rendered
-                if getattr(link, '_published', False): 
+                if getattr(link, '_published', False):
                     continue
-                data = {'aspect_ratio': aspect_ratio,
-                        'link': link.url,}
+                data = {'link': link.url,}
                 link._published = True
-                
+
             return handle_faulty_templates(template, data, name=_func_name)

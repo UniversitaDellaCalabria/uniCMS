@@ -15,13 +15,17 @@ BASE_DIR = os.getcwd()
 
 CMS_TEMPLATE_BLOCK_SECTIONS = (
                                 ('pre-head', _('Pre-Header')),
+
                                 ('head', _('Header')),
+
                                 ('menu-1', _('Navigation Main Menu')),
                                 ('menu-2', _('Navigation Menu 2')),
                                 ('menu-3', _('Navigation Menu 3')),
                                 ('menu-4', _('Navigation Menu 4')),
-                                ('slider', _('Carousel/Slider')),
+
+                                ('banner', _('Banner/Slider')),
                                 ('slider-2', _('Carousel/Slider 2')),
+
                                 # ('1','1'),
                                 # ('2','2'),
                                 # ('3','3'),
