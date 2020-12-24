@@ -4,38 +4,34 @@ uniCMS Components
 #### Permissions
 
 ````
-CMS_CONTEXT_PERMISSIONS = (('1', _('can edit created by him/her in his/her context')),
-                           ('2', _('can edit all pages in his/her context')),
-                           ('3', _('can edit all pages in his/her context and descendants')),
-                           ('4', _('can translate all pages in his/her context')),
-                           ('5', _('can translate all pages in his/her context and descendants')),
-                           ('6', _('can publish created by him/her in his/her context')),
-                           ('7', _('can publish all pages in his/her context')),
-                           ('8', _('can publish all pages in his/her context and descendants')),
+CMS_CONTEXT_PERMISSIONS = (('1', _('provides permissions to users to edit their own context')),
+                           ('2', _('provides permissions to users to edit all pages in their own context')),
+                           ('3', _('provides permissions to users to edit all pages in their own context and descendants')),
+                           ('4', _('provides permissions to users to translate all pages in their own context')),
+                           ('5', _('provides permissions to users to translate all pages in their own context and descendants')),
+                           ('6', _('provides permissions to users to publish their own context')),
+                           ('7', _('provides permissions to users to publish all pages in their own context')),
+                           ('8', _('provides permissions to users to publish all pages in their own context and descendants')),
                            )
 ````
 
 #### i18n
 
-*Menus*, *Carousels*, *Publications* and *Categories* can also be localized in one or many languages via Web 
-Backend, if a client browser have a Spanish localization the rendering system will render all the spanish
-localized block, if they occour, otherwise it will switch to default
-language.
+*Menus*, *Carousels*, *Publications* and *Categories* can also be localized in a single or multiple languages via Web Backend. If for instance a client browser have a Spanish localization the rendering system will render all the spanish localized block, if it is present otherwise it will switch to default language.
 
-All the gettext values defined in our static html template will be handled as django localization use to do.
+All the gettext values defined in our static HTML template will be handled the same way django localization does.
 
 #### Page Blocks
 
-A configurable object that would be rendered in a specified section of the page (as defined in its base template).
-It can take a long Text as content, a json objects or whatever, it dependes by Block Type.
+A configurable object that would be rendered in a specified section of the page (as defined in the base template).
+It can take a long Text input as content, a json object or whatever given in input depending the Block Type.
 Examples:
 
-- A pure HTML renderer
-- A Specialized Block element that take a json object in its object constructor
+- Native HTML renderer
+- Customized Block element that take a json object in input for its object constructor
 
-The following descriptions covers some HTML blocks.
-As we can see the HTML blocks in uniCMS have a full support of Django templatetags 
-and a pure Django template context.
+The following description covers some of HTML blocks.
+As we can see the HTML blocks in uniCMS is fully supported by Django templatetags and the native Django template context.
 
 
 *Load Image slider (Carousel) configured for the Page*
@@ -63,9 +59,7 @@ $(document).ready(function() {
 ````
 
 *Load Publication preview in a Page*
-it widely use the load_publications_preview templatetag, this 
-template tags loads all the pubblication related to the WebPath (CMS Context) 
-of the Page.
+The load_publications_preview templatetag is widely used. This template tag loads all of the pubblication and associated stuff to its WebPath (CMS Context) of the Page.
 
 ````
 {% load unicms_blocks %}
@@ -104,12 +98,10 @@ As simple as possibile, that bunch of HTML lines.
 #### Menu
 
 A WebPath can have multiple Menus and Navigation bars.
-Menu can be fetched through Rest API `/api/menu/<menu_id:int>` and also updated/created through this resource.
+Menu can be fetched through a Rest API `/api/menu/<menu_id:int>` and also updated/created through the same.
 
-Each menu item can have three kinds of links: raw url, page object or publication object.
-Each menu item can get additional contents (`inherited_contents`) from a publication, this means that
-a presentation url, or a subheading or whatever belonging to a publication can be made accessible during a 
-menu item representation. Think about images, additional links and things that would fill up a menu entry.
+Each menu item can have three types of links: raw url, page object or publication object.
+Each menu item can get additional contents (`inherited_contents`) from the publication. This means that a presentation url, or a subheading or whatever belonging to a publication can be made accessible during the representation of the menu items. Think about images, additional links and things that would fill up a menu entry.
 
 
 #### Api
