@@ -1,5 +1,9 @@
 # uniCMS
 
+![CI build](https://travis-ci.org/UniversitaDellaCalabria/uniCMS.svg?branch=master)
+![Python version](https://img.shields.io/badge/license-Apache%202-blue.svg)
+![License](https://img.shields.io/badge/python-3.5%20%7C%203.6%20%7C%203.7%203.8%203.9-blue.svg)
+
 uniCMS is a Web Application Content Management System developed using  **Django Framework**. The project is created by a group of passionate developers who introduces bespoke design and architecture for a next generation CMS.
 
 Features and specs of uniCMS:
