@@ -11,7 +11,7 @@ git clone https://github.com/UniversitaDellaCalabria/Portale-PoC.git
 virtualenv -ppython3 env
 source env/bin/activate
 pip3 install -r requirements.txt
-cd Portale-PoC
+cd unicms
 ````
 
 #### Getting Started
