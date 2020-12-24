@@ -1,15 +1,13 @@
 Developer's
 -----------
 
-#### Urls
+#### URLs
 
-uniCMS urls are managed with `cms.context` entirely through admin interface. 
-We can even load third-party django applications, it's necessary to take into account that you should configure your django applications urls
-before defining uniCMS ones, otherwise uniCMS will intercept them and with a good chance will 
-return to the user a page of 404. You can even set `CMS_PATH_PREFIX` to a desidered value, eg: `portale/`, to 
-restrict uniCMS url matching to a specified root path.
+uniCMS URLs are fully managed with `cms.context` via admin interface. 
+It enables user to load/import third-party django applications. It's important to keep in mind that the user should configures django application URLs
+before defining uniCMS's own URLs. Otherwise uniCMS will intercept those parameters and there is a good chance that the user will hit 404 page. The user can set the environment variable `CMS_PATH_PREFIX` to a desidered path, eg: `portale/`, to restrict uniCMS URL matching to specified root path.
 
-This is and example of your project urls.py 
+Here is an example of project urls.py 
 ````
 if 'cms.contexts' in settings.INSTALLED_APPS:
     urlpatterns += path('', 
@@ -31,49 +29,38 @@ if 'cms.search' in settings.INSTALLED_APPS:
                         name="unicms_search"),
 ````
 
-Urls that matches the namespace configured in the `urls.py` of the master project
-will be handled by uniCMS. uniCMS can match two kind of resources:
+URLs that match the namespace within configuration in the `urls.py` of the the master project will be handled by uniCMS. uniCMS can match two type of resources:
 
-1. WebPath (Context) corresponsing at a single Page (Home page and its descendants)
-2. Application Handlers, an example would be Pubblication List and View resources
+1. WebPath (Context) corresponsing to a single Page (Home page and associated pages)
+2. Application Handlers, a typical example would be the Pubblication List and the View resources
 
-for these latter uniCMS uses some reserved words, as prefix, to deal with specialized url routings.
-in the settings file we would configure these. See [Handlers](#handlers) for example.
+for the latter, uniCMS uses some reserved keywords as prefix to specific URL routings.
+These configurations are typically stored in settings file. See the following [Handlers](#handlers) for instance.
 
 See `cms.contexts.settings` as example.
-See `cms.contexts.views.cms_dispatcher` to see how an http request is intercepted and 
-handled by uniCMS to know if use an Handler or a Standard Page as response.
+See `cms.contexts.views.cms_dispatcher` to figure how an HTTP request is intercepted and handled by uniCMS in order to establish if either to use a Handler or a Standard Page as response.
 
 
 #### Models
 
-This project is composed by the following applications:
+The models are implemented within the following applications:
 - **cms.contexts**, where websites, webpaths and EditorialBoard Users and Permissions can be defined
-- **cms.templates**, where multiple page templates and page blocks can be managed
-- **cms.medias**, specialized app for management, upload and navigation of media files.
-- **cms.menus**, specialized app for navigation bar management.
-- **cms.carousels**, specialized app for Carousel and Slider management.
+- **cms.templates**, where multiple page templates and blocks can be managed
+- **cms.medias**, specific app for management, upload and navigation of media files.
+- **cms.menus**, specific app for navigation bar management.
+- **cms.carousels**, specific app for Carousel and Slider management.
 - **cms.pages**, where we can create a Page linked to a Webpath.
-- **cms.publications**, where Editorial boards publish contents in one or more WebPath.
-- **cms.search**, MongoDB Search Engine and management commands.
+- **cms.publications**, where Editorial boards publish contents in one or more WebPaths.
+- **cms.search**, MongoDB Search Engine and management commands i.e. CLI.
 
-The module `cms.contexts` defines the multiple website management (multi contexts) we adopted.
-Each WebPath would have a related web page. Each context have users (Editorial Board Editors) 
-with one or more permissions (see `cms.contexts.settings.CMS_CONTEXT_PERMISSIONS`)
+The module `cms.contexts` defines the multitenancy feature. Each WebPath would have a related web pages. Each context have users (Editorial Board Editors) with single or multiple permissions (see `cms.contexts.settings.CMS_CONTEXT_PERMISSIONS`)
 
-`cms.page` and `cms.publications` are the models where we've defined how we build a Page or a Publication.
-For us, a Page, is anything else than a composition of blocks, rendered in a
-HTML base template. This means that a page is a block container, in which we can
-define many blocks with different order. For every page we must define
-to which context (webpath) it belong to and also the template that we want to adopt for HTML rendering.
+The modules `cms.page` and `cms.publications` defines how a Page or a Publication is built. A Page is nothing but a composition of blocks, rendered in a HTML base template. This means that a page is just container block where multiple block can be defined in different order and fashion. For every page we must define to context (webpath) belonging as well as the template that we wish to adopt to be rendered by HTML.
 
 
 #### Post Pre Save Hooks
 
-By default Pages and Publications call pre and post save hooks.
-Django signals are registered in `cms.contexts.signals`.
-In `settings.py` we can register as many as desidered hooks to one or more 
-models, Django signals will load them on each pre/post save/delete event.
+By default Pages and Publication calls pre and post save hooks. Django signals are registered in `cms.contexts.signals`. In `settings.py` we can register as many as desidered hooks within single or multiple models. Django signals will load them in each pre/post save/delete events.
 
 ````
 CMS_HOOKS = {
@@ -114,16 +101,14 @@ CMS_HOOKS = {
 
 #### Template tags
 
-A HTML template or a HTML page block can also adopt some of the template tags that come with uniCMS and Django.
-UniCMS template context takes at least the following objects:
+The HTML template and/or an HTML page block can also adopt some of the template tags that shipped with uniCMS and Django.UniCMS template context by default comes with the following two objects:
 
 ````
     'webpath': Context object (cms.contexts.models.WebPath)
     'page': Page object (cms.pages.models.Page)
 ````
 
-Standing on the informations taken from these objects uniCMS also adopts some other custom templatetags, as follow.
-These templatetags will also work in Page Blocks that would take, optionally, a html template as argument.
+Based on informations taken from these objects as input uniCMS adopts some additionale custom templatetags as outlined below. These templatetags will also work in Page Blocks that would take, optionally, the HTML template as parameter.
 
 ###### cms_templates
 supported_languages: get settings.LANGUAGES_CODE to templates
@@ -174,12 +159,10 @@ supported_languages: get settings.LANGUAGES_CODE to templates
 
 #### Handlers
 
-There are cases in which it's necessary to create specialized applications, 
-with templates and templatetags, detached from the pages configured within the CMS. 
-Think, for example, to `cms.publications.handlers` which manages the pages for navigating 
-publications (List) and opening a publication (View).
+There are circumstances and scenarios where is necessary to create specific applications with templates and templatetags, detached from the pages that are configured within the CMS. 
+The `cms.publications.handlers` for instance, it manages the pages for navigation of publications (List) and opening a publication (View).
 
-In this case the handlers have to be registered in `settings.py`, as follow:
+In such scenario the handlers have to be registered in `settings.py` as follow:
 
 ````
 CMS_PUBLICATION_VIEW_PREFIX_PATH = 'contents/news/view/'
@@ -197,18 +180,15 @@ CMS_HANDLERS_PATHS = [CMS_PUBLICATION_VIEW_PREFIX_PATH,
                       CMS_PUBLICATION_LIST_PREFIX_PATH]
 ````
 
-The paths defined in `CMS_HANDLERS_PATHS`  make up the list of 
-reserved words to be considered during validation on save, in `cms.contexts.models.WebPath`. 
-They compose a list of reserved words that cannot be used 
-as path value in `cms.contexts.models.WebPath`.
+The paths defined in `CMS_HANDLERS_PATHS` generates the list of reserved words to be considered during validation in `cms.contexts.models.WebPath`. Therefore, they create the list of reserved words that cannot be used as path value in `cms.contexts.models.WebPath`.
 
 
 #### Middlewares
 
 `cms.contexts.middleware.detect_language_middleware`:
    detects the browser user language checking both `?lang=` request arg 
-   and the web browser default language. It's needed to 
-   handle Menu, Carousel and Publication localizations.
+   and the web browser default language. This required to 
+   handle the Menu, Carousel and localized Publication.
 
 `cms.contexts.middleware.show_template_blocks_sections`:
    toggles, for staff users, the display of block sections in pages.

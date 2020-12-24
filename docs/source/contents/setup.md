@@ -19,7 +19,7 @@ cd Portale-PoC
 ````
 ./manage.py migrate
 
-# install your templates in settings.INSTALLED_APPS and then create cms templates symbolic links
+# install your templates in settings.INSTALLED_APPS and then create CMS template symbolic links
 ./manage.py unicms_collect_templates
 
 # if you want to load some example datas
@@ -29,16 +29,16 @@ cd Portale-PoC
 ./manage.py runserver
 ````
 
-Go to `/admin` and submit superuser credentials to start working in.
+Go to `/admin` and submit superuser credentials to start.
 
-If you want to dump and share your example datas
+If you want to dump and share your example data:
 ````
 ./manage.py dumpdata --exclude auth.permission --exclude accounts --exclude contenttypes --exclude sessions --exclude admin --indent 2 > ../dumps/cms.json
 ````
 
 #### Redis (Cache)
 
-uniCMS can cache http responses, these are the relevant parameters:
+uniCMS can cache HTTP responses based on relevant parameters outlined below:
 ````
 ################
 # Django related
@@ -90,7 +90,7 @@ systemctl enable mongod
 systemctl start mongod
 ````
 
-Create your defaults users, using mongo CLI
+Create your default users, using mongo CLI as follow:
 ````
 use admin
 db.createUser(
@@ -120,7 +120,7 @@ db.createUser(
 
 exit
 ````
-Configure connection and defaults in settings.py
+Configure connection and default settings in settings.py
 ````
 MONGO_URL = 'mongodb://10.0.3.217:27017'
 MONGO_CONNECTION_PARAMS = dict(username='admin',
@@ -137,7 +137,7 @@ MODEL_TO_MONGO_MAP = {
 ````
 
 
-Create your fulltext indexes. Default_language is italian by default.
+Create your fulltext indexes. Default_language is set to italian by default.
 ````
 ./manage.py cms_search_create_mongo_index -default_language english
 ````
