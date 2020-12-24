@@ -21,28 +21,30 @@ Features and specs of uniCMS:
 - **Multitenancy - create and manage multple web applications within single platform** 
 - **Query and search capabilities - `MongoDB FullText Search`** via CLI
 - Extensive localization with **multiple languages**
-- Able to handle Editorial Board workflows (WiP) and permissions by contexts
+- Ability to handle Editorial Board workflows (WiP) and permissions by contexts
 - High performance thanks to its cached model based on Redis TTL
 - Security by design - security by default
 - Robust enterprise and scalable
 - Plugin model and rich interoperability with multiple frameworks and technologies
 
-uniCMS is designed for both end users and developers where the developers can create their 
-own customzied web applications (CMS) without starting one from scratch and end users 
-without any development skills can setup a professional CMS platform without difficulty.
+uniCMS is designed for both end users and developers where the developers 
+can create their own customzied web applications (CMS) without starting one 
+from scratch and end users without any development skills can setup a 
+professional CMS platform without difficulty.
 
-uniCMS was created due to necessity of creation and design of a new protal for the 
-University of Calabria. After evaluation of several options, University of Calabria 
-having a strong in-house competitive and highly skilled technical team it was 
-decided to opt for the development of a brand new CMS solution based on Django framework. 
+uniCMS was created due to necessity of creation and design of a new protal 
+for the University of Calabria. After evaluation of several 
+options, University of Calabria having a strong in-house competitive 
+and highly skilled technical team it was decided to opt for the development 
+of a brand new CMS solution based on Django framework. 
 
-The entire uniCMS project code is open sourced and therefore licensed under 
-the [Apache 2.0](https://en.wikipedia.org/wiki/Apache_License).
+The entire uniCMS project code is open sourced and therefore licensed 
+under the [Apache 2.0 (https://en.wikipedia.org/wiki/Apache_License)].
 
 
 For any other information please consult the 
-[Official Documentation](https://unicms.readthedocs.io/) and feel free 
-to contribute the project or open issues.
+[Official Documentation](https://unicms.readthedocs.io/) 
+and feel free to contribute the project or open issues.
 
 
 .. toctree::

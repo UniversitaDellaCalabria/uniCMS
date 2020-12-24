@@ -1,43 +1,41 @@
-Why we develop another CMS?
+Why another CMS?
 ---------------------------
 
 #### The Goal
 
-We're continuosly looking for a limitless experience.
-When we choose a CMS platform we approach different products and solutions based on the functionalities they offer, with particular attention to what could then prove to be a limit of use. Starting from our use cases, here are some typical arguments that emerge when choosing a CMS.
+We're constantly looking for limitless experiences.
+When we are going through the selection of CMS platforms we find different and variety of products and solutions that each are based on different functionalities, depending on what they offer and designed for. And this creates huge limitations if you are looking to customize the CMS for your specific need. Starting from our use case (in a univeristy environment) below the list of some of the reasons why another CMS.
 
-1. **Alteration of the structure of a Page**.
-In Wordpress you cannot modify the structure of a page but only its content, to modify the structure we should modify its templates in php code. Usually plugins are used to additionally include iframes or js scripts because in fact this is forbidden in the publication of a new post.
+1. **Cganging the structure of pages**.
+In a CMS like Wordpress you cannot modify the structure of the page and you are limited to deal with its content only. To modify the structure you are forced to modify its template in use which requires PHP knowledge. 
 
-2. **Implementation of large-scale services**.
-Wordpress does not scale, it was designed as a personal blog therefore it does not aim to manage large volumes of traffic.
+2. **Implementation of large and scalable portals/services**.
+Wordpress does not scale, it is designed as a personal blog therefore it does not satisfy the requirements when it comes to large volumes of traffic.
 
-3. **Graphic customization (templates and structure)**.
-All platforms require highly specialized development efforts within their environment. There are (expensive) plugins that damage the users' impression of customizing graphics, but these only offer predefined assets of ordinary solutions. Even on Drupal and Joomla the market team cannot do any graphic customization without involving a development team.
+3. **Graphics customization (templates and structure)**.
+All platforms require highly specialized development efforts within their environment. There are (expensive) plugins that damage the users' impression of customizing graphics, but these only offer predefined assets of ordinary solutions. Even on Drupal and Joomla the designer cannot do any graphic customization without engaging with the development team.
 
 4. **Reuse of images in different contexts**.
-Drupal allows it only if combined with some plugins that modify the post structure and also the publication method.
+Drupal allows it only if combined with some plugins that modify the post structure and also the publication methods.
 
 5. **Moving content from one context to another**.
-In normal CMS this requires access and alteration of the contents present on the database and on the filesystem. In Drupal for example both the path on the filesystem and the information contained in the DB must be changed. in UniCMS it is possible to do this simply by referring the content to one or more webpaths.
+In a standard CMS environment this requires access and alteration of the contents present on the database and data in general. In Drupal for example both the paths defined on the filesystem and the information within the database require changes. In UniCMS it is possible to do this simply by referencing the content to one or more webpaths.
 
 6. **Content Inheritance**.
-Drupal and other CMSs cannot inherit the contents of a parent page within a child page.
+Drupal and other similar CMS cannot inherit the contents of a parent page.
 
 7. **High availability**.
 Drupal and many others does not have native support for HA.
 
 
-#### What about other Django's CMS?
+#### What about other Django based CMSs?
 
-Wonderfull, but:
+They are brilliant but:
 
-- they still need develop skills to get a real product
-- some of them oversized during the time, with extensions and components that have made the approach and thinking behind the product non-linear
-- they outsource integration with templates too much, probably hindering the most important marketplace in the industry
+- they still require development skills to build a professional CMS
+- some of them overkille/overwhelmed with numerous extensions and components that transforms the platform in a non-linear environment and it gest very messy
+- too much outsourced integration with templates, probably hindering the most important marketplace in the industry
 
-These not means that uniCMS is intended for dummy users, or that it won't 
-oversized in time (but we hope that we put all the needs in 
-its core) and not at last, it doesn't means that it would help some html template marketplace!
+This of course does not indicate that uniCMS is designed for dummy users, or that it won't get oversized in time however, the plan is to place in its core all common and necessary module which will reduce the risk of it getting overwhelmed with external components such as extensions etc.
 
-It's only a Django CMS... its strong point is precisely Django!
+Most importantly uniCMS is Django CMS... its core strenght comes precisely from Django!

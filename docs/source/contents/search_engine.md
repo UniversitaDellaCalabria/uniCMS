@@ -1,16 +1,16 @@
 Search Engine
 -------------
 
-uniCMS uses MongoDB as search engine, it was adopted in place of others search engines like Elastic Search or Sorl for the following reasons:
+uniCMS is shipped with MongoDB used as search engine and the below are some of main reasons of this choice:
 
-- The documents stored are really small, few kilobytes (BSON storage)
-- Collections would be populated on creation/change/deletion events by **on_$event hooks**
-- Each entry is composed following a small schema, this would reduce storage usage, increasing general performances at the same time
+- Relatively small size/amount of documents stored, few kilobytes (BSON storage)
+- Collections would be populated on creation/modification/deletion events by **on_$event hooks**
+- Each entry is composed following a small schema, this would reduce storage usage and increase general performances at the same time
 
 Technical specifications are available in [MongoDB Official Documentation](https://docs.mongodb.com/manual/core/index-text/).
-Some usage example also have been posted [here](https://code.tutsplus.com/tutorials/full-text-search-in-mongodb--cms-24835).
+Some usage examples are also have been posted [here](https://code.tutsplus.com/tutorials/full-text-search-in-mongodb--cms-24835).
 
-An document would be as follows (see `cms.search.models`)
+A sample document looks like (see `cms.search.models`)
 
 ````
 entry = {
@@ -52,8 +52,8 @@ entry = {
 
 ##### Search Engine CLI
 
-Publication and Page models configures by default some save_hooks, like the search engine indexers.
-Search Engine indexes can be rebuilt with a management command (SE cli):
+Publications and Page models comes automatically configured by some of default save_hooks such as the search engine indexers.
+Search Engine indexes can be rebuilt via command line interface (SE cli):
 
 ````
 # show all the publications of the first November 2020
@@ -81,19 +81,19 @@ MODEL_TO_MONGO_MAP = {
 
 ##### Search Engine Behavior
 
-Let's suppose we are searching these words upon the previous entry.
-These all matches:
+Let's suppose we are searching the following words based on our previous entries.
+
+The matching words:
 
 - "my blog"
 - "than reality"
 - "rien la reliti"
 - "my!"
 
-These will not match:
+Not matching words:
 
 - 'rien -"de plus"'
 - '"my!"'
 - '-nothing'
 
-As we can see symbols like `+` and `-` will exlude or include words.
-Specifying "some bunch of words" will match the entire sequence.
+As we can see symbols like `+` and `-` represent the inclusion or exlcusion of the words. Specifying "bunch of words" will match the entire sequence.
