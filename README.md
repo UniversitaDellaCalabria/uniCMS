@@ -25,7 +25,7 @@ uniCMS is designed for both end users and developers where the developers can cr
 
 uniCMS was created due to necessity of creation and design of a new protal for the University of Calabria. After evaluation of several options, University of Calabria having a strong in-house competitive and highly skilled technical team it was decided to opt for the development of a brand new CMS solution based on Django framework. 
 
-The entire uniCMS project code is open sourced and therefore licensed under the [Apache 2.0] (https://en.wikipedia.org/wiki/Apache_License).
+The entire uniCMS project code is open sourced and therefore licensed under the [Apache 2.0](https://en.wikipedia.org/wiki/Apache_License).
 
 
 For any other information please consult the [Official Documentation](https://unicms.readthedocs.io/) and feel free to contribute the project or open issues.

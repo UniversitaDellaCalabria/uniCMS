@@ -37,7 +37,7 @@ having a strong in-house competitive and highly skilled technical team it was
 decided to opt for the development of a brand new CMS solution based on Django framework. 
 
 The entire uniCMS project code is open sourced and therefore licensed under 
-the [Apache 2.0] (https://en.wikipedia.org/wiki/Apache_License).
+the [Apache 2.0](https://en.wikipedia.org/wiki/Apache_License).
 
 
 For any other information please consult the 
