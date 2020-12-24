@@ -15,7 +15,7 @@ Features and specs of uniCMS:
 - **Multitenancy - create and manage multple web applications within single platform** 
 - **Query and search capabilities - `MongoDB FullText Search`** via CLI
 - Extensive localization with **multiple languages**
-- Able to handle Editorial Board workflows (WiP) and permissions by contexts
+- Ability to handle Editorial Board workflows (WiP) and permissions by contexts
 - High performance thanks to its cached model based on Redis TTL
 - Security by design - security by default
 - Robust enterprise and scalable
