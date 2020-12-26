@@ -1,7 +1,7 @@
 Introduction
 ------------
 
-For the correct use of uniCMS we must familiarize ourselves with the following components:
+For the correct usage of uniCMS we must familiarize ourselves with the following components:
 
 - **Web Sites**, fully qualified domain name
 - **Contexts**, WebPaths like `/offices` and `/offices/employees` 
