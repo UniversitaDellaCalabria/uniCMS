@@ -6,7 +6,9 @@
 Welcome to uniCMS's Documentation
 ==================================
 
-uniCMS is a Web Application Content Management System developed using  **Django Framework**. The project is created by a group of passionate developers who introduces bespoke design and architecture for a next generation CMS.
+uniCMS is a Web Application Content Management System developed using  **Django Framework**. 
+The project is created by a group of passionate developers who introduces bespoke 
+design and architecture for a next generation CMS.
 
 Features and specs of uniCMS:
 
@@ -15,11 +17,11 @@ Features and specs of uniCMS:
     - SEO optimized
     - Bootstrap like design and structure
     - Plugin mode and compatibility for Django applications
-- Agile and adaptive design and logic (ah-hoc and easy customization)
+- Agile and adaptive design and logic (ad-hoc and easy customization)
 - **OpenAPIv3** (OAS3) compliant
 - Compatible with the major RDBMS engines with agile schema migrations capabilities
 - **Multitenancy - create and manage multple web applications within single platform** 
-- **Query and search capabilities - `MongoDB FullText Search`** via CLI
+- Search Engine with Query and capabilities on top of `MongoDB FullText Search`**
 - Extensive localization with **multiple languages**
 - Ability to handle Editorial Board workflows (WiP) and permissions by contexts
 - High performance thanks to its cached model based on Redis TTL
@@ -39,11 +41,11 @@ and highly skilled technical team it was decided to opt for the development
 of a brand new CMS solution based on Django framework. 
 
 The entire uniCMS project code is open sourced and therefore licensed 
-under the [Apache 2.0 (https://en.wikipedia.org/wiki/Apache_License)].
+under the `Apache 2.0 <https://en.wikipedia.org/wiki/Apache_License>`_.
 
 
 For any other information please consult the 
-[Official Documentation](https://unicms.readthedocs.io/) 
+`Official Documentation <https://unicms.readthedocs.io/>`_ 
 and feel free to contribute the project or open issues.
 
 
