@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class AbstractPreviewableAdmin(admin.ModelAdmin):
-    change_form_template = "change_form_preview.html"
+    change_form_template = "admin/change_form_preview.html"
 
     def response_change(self, request, obj):
         if "_save_draft" in request.POST:
@@ -67,6 +67,8 @@ make_page_draft.short_description = _("Make page Draft")
 
 @admin.register(Page)
 class PageAdmin(AbstractCreatedModifiedBy, nested_admin.NestedModelAdmin):
+    change_form_template = "admin/change_form_preview.html"
+    
     search_fields = ('name',)
     list_display  = ('webpath', 'name',
                      'date_start', 'date_end',
