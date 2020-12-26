@@ -2,6 +2,9 @@
 
 uniCMS is a Web Application Content Management System developed using  **Django Framework**. The project is created by a group of passionate developers who introduces bespoke design and architecture for a next generation CMS.
 
+For the installation steps with examples please consult the documentation at **/docs/source/contents/how_it_works.rst**
+
+
 Features and specs of uniCMS:
 
 - The default template shipped with:
