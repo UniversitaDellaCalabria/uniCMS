@@ -20,7 +20,7 @@ Features and specs of uniCMS:
 - Agile and adaptive design and logic (ad-hoc and easy customization)
 - **OpenAPIv3** (OAS3) compliant
 - Compatible with the major RDBMS engines with agile schema migrations capabilities
-- **Multitenancy - create and manage multple web applications within single platform** 
+- **Multitenancy - create and manage multiple web applications within single platform** 
 - Search Engine with Query and capabilities on top of `MongoDB FullText Search`**
 - Extensive localization with **multiple languages**
 - Ability to handle Editorial Board workflows (WiP) and permissions by contexts
