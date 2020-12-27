@@ -52,7 +52,9 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
     A editor/moderator can belong to one or more Context
     The same for Page Templates
     """
-    site = models.ForeignKey(WebSite, on_delete=models.CASCADE)
+    site = models.ForeignKey(WebSite, 
+                             null=True, blank=True,
+                             on_delete=models.CASCADE)
     name = models.CharField(max_length=254, blank=False, null=False)
     parent = models.ForeignKey('WebPath',
                                null=True, blank=True,
@@ -93,7 +95,7 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
     @property
     def redirect_url(self):
         if self.alias:
-            return self.alias.fullpath
+            return self.alias.get_full_path()
         return self.alias_url
 
     def get_full_path(self):
@@ -106,11 +108,15 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
         self.path = self.path if self.path[-1] == '/' else f'{self.path}/'
         self.path = sanitize_path(self.path)
         if self.parent:
+            self.site = self.parent.site
             # update fullpath
             fullpath = sanitize_path(f'{self.parent.fullpath}/{self.path}')
         else:
             fullpath = self.path
-
+        
+        if self.alias:
+            self.site = self.alias.site
+        
         for reserved_word in settings.CMS_HANDLERS_PATHS:
             if reserved_word in fullpath:
                 _msg = f'{fullpath} matches with the reserved word: {reserved_word}'

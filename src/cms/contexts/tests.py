@@ -47,4 +47,20 @@ class ContextsTest(TestCase):
         
         assert webpath.get_full_path() == sanitize_path(f'/{CMS_PATH_PREFIX}/{webpath.path}')
         
+    def test_parented_webpath(self):
+        webpath = self.create_webpath()
+        kwargs =  {'name': "Example WebPath child1",
+                   'parent': webpath,
+                   'path': 'child1/',
+                   'is_active': True}
+        webpath2 = WebPath.objects.create(**kwargs)
+        assert webpath2.get_full_path() == sanitize_path(f'/{CMS_PATH_PREFIX}/{webpath.path}/{webpath2.path}')
         
+    def test_aliased_webpath(self):
+        webpath = self.create_webpath()
+        kwargs =  {'name': "Example WebPath alias",
+                   'alias': webpath,
+                   'path': 'alias/',
+                   'is_active': True}
+        webpath2 = WebPath.objects.create(**kwargs)
+        assert webpath2.get_full_path() == sanitize_path(f'/{CMS_PATH_PREFIX}/{webpath.path}')
