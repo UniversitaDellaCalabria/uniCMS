@@ -105,17 +105,19 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
         return sanitize_path(url)
 
     def save(self, *args, **kwargs):
+        # manage aliases
+        if self.alias:
+            self.site = self.alias.site
         self.path = self.path if self.path[-1] == '/' else f'{self.path}/'
         self.path = sanitize_path(self.path)
         if self.parent:
             self.site = self.parent.site
             # update fullpath
             fullpath = sanitize_path(f'{self.parent.fullpath}/{self.path}')
+        elif self.is_alias:
+            fullpath = self.redirect_url
         else:
             fullpath = self.path
-        
-        if self.alias:
-            self.site = self.alias.site
         
         for reserved_word in settings.CMS_HANDLERS_PATHS:
             if reserved_word in fullpath:

@@ -18,8 +18,7 @@ logger = logging.getLogger(__name__)
 register = template.Library()
 
 
-def _build_breadcrumbs(webpath):
-    # webpath = context['path']
+def _build_breadcrumbs(webpath: str):
     nodes = webpath.split('/')
     if nodes[-1] == '':
         del nodes[-1]
