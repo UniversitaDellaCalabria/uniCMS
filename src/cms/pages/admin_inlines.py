@@ -11,6 +11,12 @@ class PageInline(admin.TabularInline):
     classes = ['collapse']
 
 
+class PageLocalizationInline(nested_admin.NestedStackedInline):
+    model = PageLocalization
+    extra = 0
+    classes = ['collapse']
+
+
 class PageLinkInline(nested_admin.NestedTabularInline):
     model = PageLink
     extra = 0
@@ -47,7 +53,7 @@ class PageCarouselInline(nested_admin.NestedTabularInline):
     classes = ['collapse']
     raw_id_fields = ("carousel",)
     sortable_field_name = "order"
-    
+
 
 class PageMenuInline(nested_admin.NestedTabularInline):
     model = PageMenu

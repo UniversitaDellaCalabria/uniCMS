@@ -54,7 +54,7 @@ class AbstractPublicable(models.Model):
         if self.date_end and self.date_end <= now:
             result = False
         return result
-    
+
     class Meta:
         abstract = True
 
@@ -63,6 +63,8 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
            AbstractPublicable, CreatedModifiedBy):
     name = models.CharField(max_length=160,
                             blank=False, null=False)
+    title = models.CharField(max_length=256,
+                             null=False, blank=False)
     webpath = models.ForeignKey(WebPath,
                                 on_delete=models.CASCADE,
                                 limit_choices_to={'is_active': True},)
@@ -92,7 +94,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         if hasattr(self, f'_blocks_{section}'):
             return getattr(self, f'_blocks_{section}')
         #
-        
+
         query_params = dict(is_active=True)
         if section:
             query_params['section'] = section
@@ -115,21 +117,21 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         ordered = sorted(list(order_pk))
         _blocks = [TemplateBlock.objects.get(pk=v)
                    for k,v in ordered]
-        
+
         # cache result ...
         setattr(self, f'_blocks_{section}', _blocks)
-        
+
         return _blocks
 
 
     def get_blocks_placeholders(self):
         blocks = self.get_blocks()
-        placeholders = [block for block in blocks 
-                       if 'PlaceHolderBlock' in 
-                       [i.__name__ 
+        placeholders = [block for block in blocks
+                       if 'PlaceHolderBlock' in
+                       [i.__name__
                         for i in import_string(block.type).__bases__]]
         return placeholders
-                       
+
 
     def get_publications(self):
         if getattr(self, '_pubs', None):
@@ -164,6 +166,15 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
     def get_category_img(self):
         return [i.image_as_html() for i in self.category.all()]
 
+    def translate_as(self, lang):
+        """
+        returns translation if available
+        """
+        trans = PageLocalization.objects.filter(page=self,
+                                                language=lang,
+                                                is_active=True).first()
+        if trans:
+            self.title = trans.title
 
     def __str__(self):
         return '{} {}'.format(self.name, self.state)
@@ -183,6 +194,23 @@ class PageCarousel(SectionAbstractModel, ActivableModel, SortableModel,
     def __str__(self):
         return '{} {} :{}'.format(self.page, self.carousel,
                                   self.section or '#')
+
+
+class PageLocalization(TimeStampedModel, ActivableModel,
+                       CreatedModifiedBy):
+    title = models.CharField(max_length=256,
+                               null=False, blank=False)
+    page = models.ForeignKey(Page,
+                             null=False, blank=False,
+                             on_delete=models.CASCADE)
+    language = models.CharField(choices=settings.LANGUAGES,
+                                max_length=12, null=False,blank=False,
+                                default='en')
+    class Meta:
+        verbose_name_plural = _("Page Localizations")
+
+    def __str__(self):
+        return '{} {}'.format(self.page, self.language)
 
 
 class PageMenu(SectionAbstractModel, ActivableModel, SortableModel,
@@ -248,7 +276,7 @@ class PagePublication(TimeStampedModel, SortableModel, ActivableModel):
     page = models.ForeignKey(Page, null=False, blank=False,
                              related_name='container_page',
                              on_delete=models.CASCADE)
-    publication = models.ForeignKey('cmspublications.Publication', 
+    publication = models.ForeignKey('cmspublications.Publication',
                                     null=False, blank=False,
                                     on_delete=models.CASCADE,
                                     related_name="publication_content")

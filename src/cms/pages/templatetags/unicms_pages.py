@@ -154,3 +154,11 @@ def load_link_placeholder(context, template,
                 link._published = True
 
             return handle_faulty_templates(template, data, name=_func_name)
+
+
+@register.simple_tag(takes_context=True)
+def load_page_title(context, page):
+    request = context['request']
+    language = getattr(request, 'LANGUAGE_CODE', '')
+    page.translate_as(lang=language)
+    return page.title
