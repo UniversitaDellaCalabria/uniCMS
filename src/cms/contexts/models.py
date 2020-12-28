@@ -111,7 +111,13 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
     def save(self, *args, **kwargs):
         # manage aliases
         if self.alias:
-            self.site = self.alias.site
+            self.site = self.alias.site         
+            
+        # alias or alias_url
+        if self.alias and self.alias_url:
+            self.alias = None
+        
+        # store a correct fullpath
         self.path = self.path if self.path[-1] == '/' else f'{self.path}/'
         self.path = sanitize_path(self.path)
         if self.parent:

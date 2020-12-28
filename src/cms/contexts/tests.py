@@ -73,3 +73,13 @@ class ContextsTest(TestCase):
         webpath2 = WebPath.objects.create(**kwargs)
         assert webpath2.get_full_path() == \
             sanitize_path(f'/{CMS_PATH_PREFIX}/{webpath.path}')
+        
+        assert webpath2.redirect_url == webpath.get_full_path()
+        
+        # change to a third party url
+        _url = 'http://example.org'
+        webpath2.alias_url = _url
+        webpath2.alias = None
+        assert webpath2.redirect_url == _url == webpath2.get_full_path()
+        
+        
