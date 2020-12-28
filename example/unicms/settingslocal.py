@@ -124,7 +124,7 @@ CMS_CACHE_KEY_PREFIX = 'unicms_'
 # in seconds
 CMS_CACHE_TTL = 25
 # set to 0 means infinite
-CMS_MAX_ENTRIES = 0
+CMS_CACHE_MAX_ENTRIES = 0
 # request.get_raw_uri() that matches the following would be ignored by cache ...
 CMS_CACHE_EXCLUDED_MATCHES =  ['/search?',]
 
