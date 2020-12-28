@@ -1,7 +1,7 @@
 Setup
 -----
 
-#### Prepare Environment and Installing Requirements
+#### Prepare Environment and Install Requirements
 
 ````
 apt install python3-pip
