@@ -1,6 +1,7 @@
 import logging
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
 
@@ -16,7 +17,15 @@ class ContextsTest(TestCase):
     def setUp(self):
         pass
 
- 
+    def create_user(self, **kwargs):
+        if not kwargs:
+            kwargs =  {'username': 'foo',
+                       'first_name': 'foo',
+                       'last_name': 'bar',
+                       'email': 'that@mail.org'}
+        user = get_user_model().objects.create(**kwargs)
+        return user
+
     def create_website(self, **kwargs):
         kwargs = kwargs or dict(name='example.org',
                                 domain='example.org',
@@ -38,6 +47,17 @@ class ContextsTest(TestCase):
 
         webpath = WebPath.objects.create(**kwargs)
         return webpath
+
+    def create_editorialboard_user(self, **kwargs):
+        if not kwargs:
+            webpath = self.create_webpath()
+            kwargs =  {'user': self.create_user(),
+                       'permission': '1',
+                       'webpath': self.create_webpath(),
+                       'is_active': True}
+
+        ebe = EditorialBoardEditors.objects.create(**kwargs)
+        return ebe
 
 
     def test_webpath(self):
@@ -82,4 +102,6 @@ class ContextsTest(TestCase):
         webpath2.alias = None
         assert webpath2.redirect_url == _url == webpath2.get_full_path()
         
-        
+    def test_editorialboard_user(self):
+        ebe = self.create_editorialboard_user()
+        ebe.__str__()
