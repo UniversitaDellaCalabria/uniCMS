@@ -138,4 +138,4 @@ class ContextsTest(TestCase):
         template_context = dict(request=req)
         lm = language_menu(context=template_context)
         assert lm and isinstance(lm, dict) 
-        
+    # end Template tags tests

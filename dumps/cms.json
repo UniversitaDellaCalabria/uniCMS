@@ -1,0 +1,6714 @@
+[
+{
+  "model": "accounts.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$aL1y4It24fXT$1Wk5h0sRihJB9e09LnevaV4lJukNGuZ5lno1kFXKLmY=",
+    "last_login": "2020-12-04T11:00:11.855Z",
+    "is_superuser": true,
+    "username": "wert",
+    "is_staff": true,
+    "date_joined": "2020-10-29T09:08:47.271Z",
+    "first_name": "Giuseppe",
+    "last_name": "De Marco",
+    "is_active": true,
+    "email": "that@mail.org",
+    "taxpayer_id": null,
+    "matricola_studente": null,
+    "matricola_dipendente": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$VdsaV1CyuN6i$KmQ+lOwEGhP5WGh9Kaspel/M9jfseZKMOfrVydcaKVg=",
+    "last_login": "2020-12-18T07:59:49.482Z",
+    "is_superuser": true,
+    "username": "felix",
+    "is_staff": true,
+    "date_joined": "2020-11-11T14:58:29.557Z",
+    "first_name": "Francesco",
+    "last_name": "Filicetti",
+    "is_active": true,
+    "email": "",
+    "taxpayer_id": null,
+    "matricola_studente": null,
+    "matricola_dipendente": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "taggit.tag",
+  "pk": 1,
+  "fields": {
+    "name": "home",
+    "slug": "home"
+  }
+},
+{
+  "model": "taggit.tag",
+  "pk": 2,
+  "fields": {
+    "name": "unical",
+    "slug": "unical"
+  }
+},
+{
+  "model": "taggit.tag",
+  "pk": 3,
+  "fields": {
+    "name": "didattica",
+    "slug": "didattica"
+  }
+},
+{
+  "model": "taggit.tag",
+  "pk": 4,
+  "fields": {
+    "name": "eventi",
+    "slug": "eventi"
+  }
+},
+{
+  "model": "taggit.tag",
+  "pk": 5,
+  "fields": {
+    "name": "ricerca",
+    "slug": "ricerca"
+  }
+},
+{
+  "model": "taggit.tag",
+  "pk": 6,
+  "fields": {
+    "name": "cultura",
+    "slug": "cultura"
+  }
+},
+{
+  "model": "taggit.tag",
+  "pk": 7,
+  "fields": {
+    "name": "cinema",
+    "slug": "cinema"
+  }
+},
+{
+  "model": "taggit.tag",
+  "pk": 8,
+  "fields": {
+    "name": "campus",
+    "slug": "campus"
+  }
+},
+{
+  "model": "taggit.tag",
+  "pk": 9,
+  "fields": {
+    "name": "studiare",
+    "slug": "studiare"
+  }
+},
+{
+  "model": "taggit.tag",
+  "pk": 10,
+  "fields": {
+    "name": "magnam",
+    "slug": "magnam"
+  }
+},
+{
+  "model": "taggit.tag",
+  "pk": 11,
+  "fields": {
+    "name": "motore di ricerca",
+    "slug": "motore-di-ricerca"
+  }
+},
+{
+  "model": "taggit.tag",
+  "pk": 12,
+  "fields": {
+    "name": "search",
+    "slug": "search"
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 1,
+  "fields": {
+    "tag": 1,
+    "content_type": 22,
+    "object_id": 1
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 2,
+  "fields": {
+    "tag": 2,
+    "content_type": 22,
+    "object_id": 1
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 3,
+  "fields": {
+    "tag": 3,
+    "content_type": 27,
+    "object_id": 1
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 4,
+  "fields": {
+    "tag": 4,
+    "content_type": 27,
+    "object_id": 2
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 5,
+  "fields": {
+    "tag": 5,
+    "content_type": 27,
+    "object_id": 3
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 6,
+  "fields": {
+    "tag": 2,
+    "content_type": 28,
+    "object_id": 1
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 7,
+  "fields": {
+    "tag": 2,
+    "content_type": 33,
+    "object_id": 4
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 8,
+  "fields": {
+    "tag": 2,
+    "content_type": 33,
+    "object_id": 3
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 9,
+  "fields": {
+    "tag": 2,
+    "content_type": 33,
+    "object_id": 1
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 11,
+  "fields": {
+    "tag": 2,
+    "content_type": 33,
+    "object_id": 2
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 12,
+  "fields": {
+    "tag": 4,
+    "content_type": 33,
+    "object_id": 5
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 13,
+  "fields": {
+    "tag": 6,
+    "content_type": 33,
+    "object_id": 5
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 14,
+  "fields": {
+    "tag": 7,
+    "content_type": 33,
+    "object_id": 5
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 15,
+  "fields": {
+    "tag": 4,
+    "content_type": 35,
+    "object_id": 5
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 16,
+  "fields": {
+    "tag": 6,
+    "content_type": 35,
+    "object_id": 5
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 17,
+  "fields": {
+    "tag": 7,
+    "content_type": 35,
+    "object_id": 5
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 18,
+  "fields": {
+    "tag": 8,
+    "content_type": 35,
+    "object_id": 2
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 19,
+  "fields": {
+    "tag": 5,
+    "content_type": 35,
+    "object_id": 3
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 20,
+  "fields": {
+    "tag": 9,
+    "content_type": 35,
+    "object_id": 4
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 21,
+  "fields": {
+    "tag": 9,
+    "content_type": 35,
+    "object_id": 1
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 22,
+  "fields": {
+    "tag": 2,
+    "content_type": 28,
+    "object_id": 2
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 23,
+  "fields": {
+    "tag": 2,
+    "content_type": 34,
+    "object_id": 5
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 25,
+  "fields": {
+    "tag": 2,
+    "content_type": 34,
+    "object_id": 4
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 26,
+  "fields": {
+    "tag": 2,
+    "content_type": 34,
+    "object_id": 1
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 27,
+  "fields": {
+    "tag": 2,
+    "content_type": 25,
+    "object_id": 1
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 34,
+  "fields": {
+    "tag": 2,
+    "content_type": 28,
+    "object_id": 15
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 35,
+  "fields": {
+    "tag": 2,
+    "content_type": 28,
+    "object_id": 16
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 36,
+  "fields": {
+    "tag": 2,
+    "content_type": 34,
+    "object_id": 6
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 37,
+  "fields": {
+    "tag": 2,
+    "content_type": 34,
+    "object_id": 7
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 38,
+  "fields": {
+    "tag": 2,
+    "content_type": 28,
+    "object_id": 17
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 39,
+  "fields": {
+    "tag": 2,
+    "content_type": 34,
+    "object_id": 8
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 40,
+  "fields": {
+    "tag": 2,
+    "content_type": 34,
+    "object_id": 9
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 41,
+  "fields": {
+    "tag": 2,
+    "content_type": 28,
+    "object_id": 18
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 42,
+  "fields": {
+    "tag": 2,
+    "content_type": 34,
+    "object_id": 10
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 43,
+  "fields": {
+    "tag": 2,
+    "content_type": 28,
+    "object_id": 19
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 45,
+  "fields": {
+    "tag": 11,
+    "content_type": 28,
+    "object_id": 20
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 46,
+  "fields": {
+    "tag": 12,
+    "content_type": 28,
+    "object_id": 20
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 47,
+  "fields": {
+    "tag": 2,
+    "content_type": 34,
+    "object_id": 11
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 49,
+  "fields": {
+    "tag": 2,
+    "content_type": 34,
+    "object_id": 12
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 50,
+  "fields": {
+    "tag": 2,
+    "content_type": 34,
+    "object_id": 13
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 51,
+  "fields": {
+    "tag": 2,
+    "content_type": 34,
+    "object_id": 14
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 52,
+  "fields": {
+    "tag": 2,
+    "content_type": 34,
+    "object_id": 3
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 55,
+  "fields": {
+    "tag": 2,
+    "content_type": 27,
+    "object_id": 17
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 56,
+  "fields": {
+    "tag": 2,
+    "content_type": 27,
+    "object_id": 23
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 58,
+  "fields": {
+    "tag": 2,
+    "content_type": 27,
+    "object_id": 20
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 59,
+  "fields": {
+    "tag": 2,
+    "content_type": 27,
+    "object_id": 24
+  }
+},
+{
+  "model": "cmstemplates.pagetemplate",
+  "pk": 1,
+  "fields": {
+    "created": "2020-10-29T09:12:00.088Z",
+    "modified": "2020-12-23T12:19:13.455Z",
+    "is_active": true,
+    "name": "Bootstrap Italia",
+    "template_file": "italia.html",
+    "image": "",
+    "note": ""
+  }
+},
+{
+  "model": "cmstemplates.pagetemplate",
+  "pk": 2,
+  "fields": {
+    "created": "2020-11-20T09:31:57.345Z",
+    "modified": "2020-12-11T07:27:11.653Z",
+    "is_active": true,
+    "name": "Sito dipartimento - DIMES",
+    "template_file": "dipartimento_home_v3_dimes.html",
+    "image": "",
+    "note": ""
+  }
+},
+{
+  "model": "cmstemplates.pagetemplate",
+  "pk": 6,
+  "fields": {
+    "created": "2020-12-06T15:27:09.964Z",
+    "modified": "2020-12-16T11:08:43.870Z",
+    "is_active": true,
+    "name": "Motore di Ricerca",
+    "template_file": "unical_main.html",
+    "image": "",
+    "note": ""
+  }
+},
+{
+  "model": "cmstemplates.pagetemplate",
+  "pk": 7,
+  "fields": {
+    "created": "2020-12-14T11:18:00.221Z",
+    "modified": "2020-12-22T21:12:54.990Z",
+    "is_active": true,
+    "name": "Unical - Main Template",
+    "template_file": "unical_main.html",
+    "image": "",
+    "note": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 1,
+  "fields": {
+    "created": "2020-11-18T14:57:16.531Z",
+    "modified": "2020-12-14T12:03:34.802Z",
+    "is_active": true,
+    "name": "Publications Cards",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load unicms_publications %}\r\n\r\n<div class=\"row\">\r\n   <div class=\"col\">\r\n      {% load_publications_preview template=\"publications_preview_v3.html\" %}\r\n   </div>\r\n </div>",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 2,
+  "fields": {
+    "created": "2020-11-18T15:13:34.250Z",
+    "modified": "2020-12-28T10:41:36.844Z",
+    "is_active": true,
+    "name": "Carousel - Main Banner",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load unicms_carousels %}\r\n{% load_carousel section='banner' template=\"italia_hero_slider.html\" %}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 3,
+  "fields": {
+    "created": "2020-11-18T15:13:52.548Z",
+    "modified": "2020-12-14T12:20:28.626Z",
+    "is_active": true,
+    "name": "Unical - Avvisi",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load static %}\r\n\r\n  <div class=\"row\">\r\n    <div class=\"d-none d-md-block col-md-3\">&nbsp;</div>\r\n    <div class=\"col-12 col-md-9\">\r\n      <h3 class=\"super-bold\" style=\"padding-left:24px\">\r\n         Avvisi\r\n      </h3>\r\n    </div>\r\n  </div>\r\n        <div class=\"row\">\r\n            <div class=\"col-12 col-lg-3\" style=\"margin-top: 24px\">\r\n<button type=\"button\" class=\"btn btn-grey-presta btn-block btn-lg mb-2 text-left\">Tutti gli avvisi</button>\r\n                <button type=\"button\" class=\"btn btn-grey-presta btn-block btn-lg mb-2 text-left\">URP</button>\r\n                <button type=\"button\" class=\"btn btn-grey-presta btn-block btn-lg mb-2 text-left\">Amministrazione trasparente</button>\r\n                <button type=\"button\" class=\"btn btn-grey-presta btn-block btn-lg mb-2 text-left\">Sostieni Unical</button>\r\n            </div>\r\n            <div class=\"col-12 col-lg-9\">\r\n                {% include \"unical_portale_home_avvisi_v3.html\" %}\r\n            </div>\r\n        </div>\r\n\r\n        <a href=\"#\" aria-hidden=\"true\"\r\n           data-attribute=\"back-to-top\"\r\n           class=\"back-to-top back-to-top-small\">\r\n            <svg class=\"icon icon-light\">\r\n              <use xlink:href=\"{% static 'svg/sprite.svg' %}#it-arrow-up\"></use>\r\n            </svg>\r\n        </a>",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 4,
+  "fields": {
+    "created": "2020-11-18T15:14:07.509Z",
+    "modified": "2020-12-23T07:25:56.989Z",
+    "is_active": true,
+    "name": "iFrame 16/9",
+    "description": "",
+    "type": "cms.templates.blocks.LinkPlaceholderBlock",
+    "content": "{\r\n\"template\": \"italia_iframe_16by9.html\"\r\n}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 5,
+  "fields": {
+    "created": "2020-11-18T15:45:36.383Z",
+    "modified": "2020-11-18T15:50:20.335Z",
+    "is_active": true,
+    "name": "sadasd",
+    "description": "asd",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "<h1>HAAAAAAAAAAAAAAa</h1>",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 6,
+  "fields": {
+    "created": "2020-11-20T11:52:23.855Z",
+    "modified": "2020-12-11T07:20:00.357Z",
+    "is_active": true,
+    "name": "publication-main-preview-DIPARTIMENTO",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load unicms_publications %}\r\n\r\n            <div class=\"row negative-mt-5 mb-3\" >\r\n                <div class=\"col-12 col-md-3\">\r\n                    <div class=\"section-title-label px-3 py-1\">\r\n                        <h3><span class=\"lighter\">in primo piano</span></h3>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n\r\n            <div class=\"row\">\r\n                <div class=\"col-12 col-lg-9\">\r\n                    {% load_publications_preview template=\"publications_preview_dipartimento_v3.html\" %}\r\n                </div>\r\n                <div class=\"col-12 col-lg-3\">\r\n                    {% include \"unical_portale_agenda.html\" %}\r\n                </div>\r\n            </div>",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 7,
+  "fields": {
+    "created": "2020-12-01T14:08:42.924Z",
+    "modified": "2020-12-23T12:17:47.111Z",
+    "is_active": true,
+    "name": "Main Menu",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load unicms_menus %}\r\n{% load_menu section='menu-1' template=\"unical_main_menu.html\" %}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 8,
+  "fields": {
+    "created": "2020-12-03T07:50:54.509Z",
+    "modified": "2020-12-21T22:30:45.157Z",
+    "is_active": true,
+    "name": "Placheholder Publication - Style 1",
+    "description": "",
+    "type": "cms.templates.blocks.PublicationContentPlaceholderBlock",
+    "content": "{\"template\": \"ph_publication_style_1.html\"}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 11,
+  "fields": {
+    "created": "2020-12-03T12:34:43.845Z",
+    "modified": "2020-12-16T10:39:57.740Z",
+    "is_active": true,
+    "name": "OrientaUnical Logo",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "<h1 class=\"super-bold bordeaux-unical-color\" style=\"font-size: 6rem; margin-bottom: 5px;line-height: 0.8;\">OU</h1>\r\n\r\n<p class=\"ml-1\">\r\n<b class=\"bordeaux-unical-color\">come accedere ai servizi</b>\r\n<br>\r\n<span class=\"bordeaux-unical-color super-bold\">Orienta-Unical</span>\r\n</p>",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 12,
+  "fields": {
+    "created": "2020-12-03T14:50:37.338Z",
+    "modified": "2020-12-10T10:52:13.217Z",
+    "is_active": true,
+    "name": "Publications Stacked Expanded",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load unicms_publications %}\r\n\r\n{% load_publications_preview template=\"publications_preview_stacked_big_v3.html\" %}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 14,
+  "fields": {
+    "created": "2020-12-03T15:51:10.374Z",
+    "modified": "2020-12-16T10:40:15.445Z",
+    "is_active": true,
+    "name": "HR line Bordeaux",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "<hr class=\"my-4 bordeaux-unical-bg\">",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 15,
+  "fields": {
+    "created": "2020-12-03T17:19:12.700Z",
+    "modified": "2020-12-03T17:32:06.154Z",
+    "is_active": true,
+    "name": "Menu Childs in tags (menu-2)",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load unicms_menus %}\r\n{% load_menu section=\"menu-2\" template=\"menu_tags_expanded_v3.html\" %}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 16,
+  "fields": {
+    "created": "2020-12-03T17:32:17.772Z",
+    "modified": "2020-12-03T17:32:17.772Z",
+    "is_active": true,
+    "name": "Menu Childs in tags (menu-3)",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load unicms_menus %}\r\n{% load_menu section=\"menu-3\" template=\"menu_tags_expanded_v3.html\" %}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 17,
+  "fields": {
+    "created": "2020-12-03T17:48:34.475Z",
+    "modified": "2020-12-03T17:53:16.151Z",
+    "is_active": true,
+    "name": "Futuri studenti - ammissione",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "<div class=\"mb-3\"><b>Lauree Magistrali - Bandi a.a. 2020-21</b></div>\r\n<div>\r\nLM Gestione e conservazione dei documenti digitali: graduatoria definitiva\r\n<br>\r\nLM DIMES: riapertura domande di ammissione\r\n<br>\r\nLM Ingegneria per l'ambiente e il territorio: riapertura domande di ammissione\r\n<br>\r\nLM Ingegneria Civile: riapertura domande di ammissione\r\n<br>\r\nLM DISU: immatricolazione laureati ottobre 2020\r\n<br>\r\nLM Scienza della Nutrizione: incremento posti\r\n<br>\r\nImmatricolazioni LM Economia aziendale e management: laureandi idonei in graduatoria\r\n</div>\r\n<div class=\"my-3\"><b>Bandi Corsi di laurea magistrale a ciclo unico con vincoli ministeriali/d'ateneo</b></div>\r\n\r\n<div>\r\nCONCORSO AMMISSIONE A.A. 2020/2021\r\n<br>\r\nLAUREA MAGISTRALE IN SCIENZA DELLA NUTRIZIONE\r\n<br>\r\nGRADUATORIE DEFINITIVE E GRADUATORIA BORSE DI STUDIO\r\n<br>\r\nPERCORSO IN INGLESE NUTRITIONAL SCIENCES\r\n\r\n<br>\r\n<br>\r\nBANDO DI AMMISSIONE SCIENZE DELLA FORMAZIONE PRIMARIA 2020/2021\r\n<br>\r\nGRADUATORIA DEFINITIVA SFP 2020/2021\r\n<br>\r\nPRIMO SCORRIMENTO SFP\r\n<br>\r\n3/11/2020 - SECONDO SCORRIMENTO SFP\r\n<br>\r\n<br>\r\nQ&A\r\n<br>\r\nQuando sarà possibile compilare la domanda di ammissione per l'Università della Calabria?\r\nTrovi le date di apertura/chiusura delle domande di ammissione nel bando di tuo interesse.\r\nuali sono i requisiti per l'ammissione?\r\n<br>\r\nTrovi i requisiti di ammissione per ogni corso di studi negli allegati dei singoli dipartimenti.\r\n<br>\r\nQuando saprò se sono ammesso?\r\n<br>\r\nAttendi la pubblicazione delle graduatorie, consulta le date nel Bando di Ammissione.\r\n<br>\r\nCosa dovrò fare se risulto vincitore?\r\n<br>\r\nQuanto pagherò di tasse?\r\n<br>\r\n<br>\r\nLEGGI LA GUIDA SINTETICA\r\n</div>",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 18,
+  "fields": {
+    "created": "2020-12-06T15:12:04.343Z",
+    "modified": "2020-12-23T13:45:20.622Z",
+    "is_active": true,
+    "name": "Motore di Ricerca",
+    "description": "search engine",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% include \"italia_search_engine.html\" %}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 19,
+  "fields": {
+    "created": "2020-12-10T11:44:32.833Z",
+    "modified": "2020-12-10T11:47:00.919Z",
+    "is_active": true,
+    "name": "Ufficio relazioni internazionali",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load i18n %}\r\n{% load static %}\r\n\r\n<svg class=\"icon icon-lg\">\r\n<use xlink:href=\"{% static 'svg/sprite.svg' %}#it-info-circle\"></use>\r\n</svg>\r\n<br>\r\n<b>Ufficio relazioni internazionali</b>\r\n<br>\r\n<b>Ufficio Erasmus</b>",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 20,
+  "fields": {
+    "created": "2020-12-10T11:49:50.465Z",
+    "modified": "2020-12-11T08:43:37.558Z",
+    "is_active": true,
+    "name": "Internazionale - Intro text",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "<div class=\"mt-5\">\r\n<iframe width=\"100%\" height=\"315\" src=\"https://www.youtube.com/embed/ArpMSujC8mM\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>\r\n\r\n<span class=\"bigger-font\">È il <b>Campus</b> international, con oltre <b>800 studenti</b> provenienti\r\nda 80 paesi, rogrammi di mobilità all’estero, Erasmus,\r\nMost e Dual. Passeggiando sul ponte Bucci o tra i viali\r\ndelle residenze del Campus è normale sentire tanti idiomi\r\ne incrociare culture diverse. Questo perché all’UniCal, grazie\r\nal programma UnicalAdmission, vivono\r\noltre 800 studenti provenienti da 80 Paesi; circa 600,\r\ninvece, sono quelli che partecipano, in uscita\r\no in entrata, ai programmi di m</span>\r\n</div>",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 21,
+  "fields": {
+    "created": "2020-12-11T09:10:34.593Z",
+    "modified": "2020-12-11T09:16:30.524Z",
+    "is_active": true,
+    "name": "Internazionale IMG",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "<img src=\"//test.unical.it:8000/media/medias/2020/internazionale_temsyeH.webp\" width=\"100%\" />",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 22,
+  "fields": {
+    "created": "2020-12-11T09:16:41.028Z",
+    "modified": "2020-12-11T09:19:34.966Z",
+    "is_active": true,
+    "name": "Internazionale TXT",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load static %}\r\n\r\n<div class=\"mb-5\">Per favorire l'attività di internazionalizzazione dell'Ateneo,\r\nè stato avviato un programma di scambi culturali con altre Università\r\nnel mondo, da cui sono scaturiti ad oggi oltre 240 Accordi di cooperazione\r\ngenerale o specifica e Convenzioni, stipulati con circa 220 Istituzioni partner,\r\nche hanno notevolmente accresciuto la qualità dell'offerta didattico/scientifica\r\ndell'Ateneo, oltre alla sua visibilità internazionale, e di cui attualmente beneficiano\r\ndiversi studenti e docenti.</div>\r\n\r\n<svg class=\"icon\">\r\n                                    <use xlink:href=\"{% static 'svg/sprite.svg' %}#it-files\"></use>\r\n                                  </svg> modulistica accordi",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 23,
+  "fields": {
+    "created": "2020-12-11T09:20:45.183Z",
+    "modified": "2020-12-11T09:22:48.757Z",
+    "is_active": true,
+    "name": "Internazionale Contatti page",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load static %}\r\n\r\n<div class=\"row\">\r\n<div class=\"col-12 col-md-1\">\r\n<svg class=\"icon\">\r\n                                    <use xlink:href=\"{% static 'svg/sprite.svg' %}#it-info-circle\"></use>\r\n                                  </svg>\r\n</div>\r\n\r\n<div class=\"col-12 col-md-5\">\r\n<b>Riferimenti</b>\r\n<br>\r\n9838394\r\n<br>\r\n@udniaoa li\r\n<br>\r\nufificodnnd d\r\n<br>\r\nihnnsndufnf\r\n</div>\r\n\r\n<div class=\"col-12 col-md-6\">\r\n<b>Ufficio Internazionale<br>\r\nlunedi vernedi 9/13<br>\r\nEdificio Centro residenziale</b>\r\n</div>\r\n</div>",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 24,
+  "fields": {
+    "created": "2020-12-14T09:05:15.463Z",
+    "modified": "2020-12-14T16:56:41.279Z",
+    "is_active": true,
+    "name": "Color",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "<div style=\"background: #aaa\" class=\"p-3\">block</div>",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 25,
+  "fields": {
+    "created": "2020-12-14T11:29:54.708Z",
+    "modified": "2020-12-14T11:34:26.812Z",
+    "is_active": true,
+    "name": "Unical - Agenda",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load static %}\r\n\r\n<div class=\"row\">\r\n<div class=\"col\">\r\n<div class=\"card-wrapper card-space\">\r\n            <div class=\"card card-bg no-after\">\r\n                <div class=\"card-body\">\r\n                    <h4 class=\"card-title\">\r\n                        <a style=\"text-decoration: none; color: #17324d;\" href=\"/content/posts/studiare-online-e-sempre-piu-semplice\">\r\n                            Agenda\r\n                        </a>\r\n                    </h4>\r\n\r\n                    <p class=\"card-text\">\r\n                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\r\n                    </p>\r\n\r\n                    <a href=\"#\">\r\n                        <svg class=\"icon\">\r\n                            <use xlink:href=\"/static/svg/sprite.svg#it-share\"></use>\r\n                        </svg>\r\n                    </a>\r\n                </div>\r\n            </div>\r\n        </div>\r\n       </div>\r\n        </div>",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 26,
+  "fields": {
+    "created": "2020-12-14T11:30:40.853Z",
+    "modified": "2020-12-14T11:34:55.573Z",
+    "is_active": true,
+    "name": "Unical - Social Card",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load static %}\r\n\r\n<div class=\"row\">\r\n<div class=\"col\">\r\n<div class=\"card-wrapper card-space\">\r\n            <div class=\"card card-bg no-after\">\r\n                <div class=\"card-body\">\r\n                    <h4 class=\"card-title\">\r\n                        <a style=\"text-decoration: none; color: #17324d;\" href=\"/content/posts/studiare-online-e-sempre-piu-semplice\">\r\n                            Social\r\n                        </a>\r\n                    </h4>\r\n\r\n                    <p class=\"card-text\">\r\n                       didunt ut labore et dolore magna aliqua.\r\n                    </p>\r\n\r\n                    <a href=\"#\">\r\n                        <svg class=\"icon\">\r\n                            <use xlink:href=\"/static/svg/sprite.svg#it-share\"></use>\r\n                        </svg>\r\n                    </a>\r\n                </div>\r\n            </div>\r\n        </div>\r\n            </div>\r\n        </div>",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 27,
+  "fields": {
+    "created": "2020-12-14T12:23:53.037Z",
+    "modified": "2020-12-14T12:23:53.037Z",
+    "is_active": true,
+    "name": "Unical - Home - Unical World",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "asdsadas",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 28,
+  "fields": {
+    "created": "2020-12-14T16:22:52.151Z",
+    "modified": "2020-12-14T16:35:10.066Z",
+    "is_active": true,
+    "name": "Unical - Unical World Label",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "<div class=\"mt-n5 mb-3 background-white px-3 py-2 float-left\">\r\n<h3><span class=\"lighter\">UniCal</span> <span class=\"super-bold\">world</span></h3>\r\n</div>",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 30,
+  "fields": {
+    "created": "2020-12-14T16:54:24.981Z",
+    "modified": "2020-12-28T11:40:32.314Z",
+    "is_active": true,
+    "name": "Unical - Page Title H1 lighter",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load unicms_pages %}\r\n\r\n<h1 class=\"lighter mb-5\">{% load_page_title page %}</h1>",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 31,
+  "fields": {
+    "created": "2020-12-15T11:04:35.522Z",
+    "modified": "2020-12-16T10:54:48.939Z",
+    "is_active": true,
+    "name": "Menu - Campus/Servizi/Futuri Studenti",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load unicms_menus %}\r\n\r\n{% load_menu_by_id pk=\"23\" template=\"side_menu.html\" %}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 32,
+  "fields": {
+    "created": "2020-12-16T10:43:14.490Z",
+    "modified": "2020-12-16T10:43:47.016Z",
+    "is_active": true,
+    "name": "Menu - Campus/Visita il campus",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load unicms_menus %}\r\n\r\n{% load_menu_by_id pk=\"20\" template=\"side_menu.html\" %}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 33,
+  "fields": {
+    "created": "2020-12-16T10:45:37.974Z",
+    "modified": "2020-12-16T10:45:37.974Z",
+    "is_active": true,
+    "name": "Menu - Campus/Vivere il campus",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load unicms_menus %}\r\n\r\n{% load_menu_by_id pk=\"21\" template=\"side_menu.html\" %}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 34,
+  "fields": {
+    "created": "2020-12-16T12:17:11.749Z",
+    "modified": "2020-12-21T11:43:55.158Z",
+    "is_active": true,
+    "name": "iFrame 1/1",
+    "description": "",
+    "type": "cms.templates.blocks.LinkPlaceholderBlock",
+    "content": "{\r\n\"template\": \"iframe.html\",\r\n\"aspect_ratio\": \"1by1\"\r\n}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 35,
+  "fields": {
+    "created": "2020-12-16T12:21:56.266Z",
+    "modified": "2020-12-16T12:58:07.345Z",
+    "is_active": true,
+    "name": "Unical - Breadcrumbs",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load unicms_contexts %}\r\n\r\n{% breadcrumbs webpath=webpath %}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 36,
+  "fields": {
+    "created": "2020-12-18T14:24:39.038Z",
+    "modified": "2020-12-22T15:08:44.045Z",
+    "is_active": true,
+    "name": "Placehoder - Intro text Pubblicazione",
+    "description": "",
+    "type": "cms.templates.blocks.PublicationContentPlaceholderBlock",
+    "content": "{\"template\": \"ph_publication.html\"}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 37,
+  "fields": {
+    "created": "2020-12-22T15:05:28.313Z",
+    "modified": "2020-12-22T15:05:28.313Z",
+    "is_active": true,
+    "name": "Placeholder Publication - Card 1",
+    "description": "",
+    "type": "cms.templates.blocks.PublicationContentPlaceholderBlock",
+    "content": "{\"template\": \"publication_card_big.html\"}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 38,
+  "fields": {
+    "created": "2020-12-22T15:26:13.833Z",
+    "modified": "2020-12-22T15:26:13.833Z",
+    "is_active": true,
+    "name": "Placeholder Publication - Card no image",
+    "description": "",
+    "type": "cms.templates.blocks.PublicationContentPlaceholderBlock",
+    "content": "{\"template\": \"publication_card_no_image.html\"}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 39,
+  "fields": {
+    "created": "2020-12-23T08:38:11.573Z",
+    "modified": "2020-12-23T08:38:11.573Z",
+    "is_active": true,
+    "name": "Menu Secondario Unical",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load unicms_menus %}\r\n\r\n{% load_menu section='menu-2' template=\"unical_portale_menu_secondario.html\" %}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 40,
+  "fields": {
+    "created": "2020-12-23T12:17:58.586Z",
+    "modified": "2020-12-23T12:17:58.586Z",
+    "is_active": true,
+    "name": "Main Menu - Italia",
+    "description": "",
+    "type": "cms.templates.blocks.HtmlBlock",
+    "content": "{% load unicms_menus %}\r\n{% load_menu section='menu-1' template=\"italia_main_menu.html\" %}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 41,
+  "fields": {
+    "created": "2020-12-28T12:05:34.471Z",
+    "modified": "2020-12-28T12:22:15.327Z",
+    "is_active": true,
+    "name": "Unical - Carousel",
+    "description": "",
+    "type": "cms.templates.blocks.CarouselPlaceholderBlock",
+    "content": "{\"template\" :\"italia_hero_slider.html\"}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.pagetemplateblock",
+  "pk": 5,
+  "fields": {
+    "created": "2020-11-20T09:59:33.051Z",
+    "modified": "2020-11-20T09:59:33.051Z",
+    "order": 10,
+    "is_active": true,
+    "template": 2,
+    "block": 2,
+    "section": "slider"
+  }
+},
+{
+  "model": "cmstemplates.pagetemplateblock",
+  "pk": 6,
+  "fields": {
+    "created": "2020-11-20T11:52:46.129Z",
+    "modified": "2020-11-20T11:52:46.129Z",
+    "order": 10,
+    "is_active": true,
+    "template": 2,
+    "block": 6,
+    "section": "1"
+  }
+},
+{
+  "model": "cmstemplates.pagetemplateblock",
+  "pk": 7,
+  "fields": {
+    "created": "2020-12-01T14:08:55.143Z",
+    "modified": "2020-12-23T12:19:13.456Z",
+    "order": 1,
+    "is_active": true,
+    "template": 1,
+    "block": 40,
+    "section": "menu-1"
+  }
+},
+{
+  "model": "cmstemplates.pagetemplateblock",
+  "pk": 8,
+  "fields": {
+    "created": "2020-12-01T14:59:28.480Z",
+    "modified": "2020-12-01T14:59:28.480Z",
+    "order": 10,
+    "is_active": true,
+    "template": 2,
+    "block": 7,
+    "section": "menu-1"
+  }
+},
+{
+  "model": "cmstemplates.pagetemplateblock",
+  "pk": 15,
+  "fields": {
+    "created": "2020-12-06T15:27:09.964Z",
+    "modified": "2020-12-16T11:08:43.872Z",
+    "order": 10,
+    "is_active": true,
+    "template": 6,
+    "block": 18,
+    "section": "2-center-content"
+  }
+},
+{
+  "model": "cmstemplates.pagetemplateblock",
+  "pk": 16,
+  "fields": {
+    "created": "2020-12-11T07:27:11.654Z",
+    "modified": "2020-12-11T07:27:11.654Z",
+    "order": 10,
+    "is_active": true,
+    "template": 2,
+    "block": 3,
+    "section": "2"
+  }
+},
+{
+  "model": "cmstemplates.pagetemplateblock",
+  "pk": 19,
+  "fields": {
+    "created": "2020-12-14T11:42:27.589Z",
+    "modified": "2020-12-14T16:45:09.318Z",
+    "order": 10,
+    "is_active": true,
+    "template": 7,
+    "block": 7,
+    "section": "menu-1"
+  }
+},
+{
+  "model": "cmscontexts.website",
+  "pk": 1,
+  "fields": {
+    "name": "example.com",
+    "domain": "example.com",
+    "is_active": false
+  }
+},
+{
+  "model": "cmscontexts.website",
+  "pk": 2,
+  "fields": {
+    "name": "Portale dell'Università della Calabria",
+    "domain": "test.unical.it",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.website",
+  "pk": 3,
+  "fields": {
+    "name": "Dipartimento DIMES",
+    "domain": "test.dimes.unical.it",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 1,
+  "fields": {
+    "created": "2020-10-29T09:11:39.008Z",
+    "modified": "2020-11-07T14:55:20.868Z",
+    "created_by": null,
+    "modified_by": null,
+    "site": 2,
+    "name": "Portale dell'Università della Calabria",
+    "parent": null,
+    "alias": null,
+    "alias_url": null,
+    "path": "/",
+    "fullpath": "/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 2,
+  "fields": {
+    "created": "2020-11-07T14:57:19.676Z",
+    "modified": "2020-11-07T14:58:52.545Z",
+    "created_by": null,
+    "modified_by": null,
+    "site": 2,
+    "name": "banane",
+    "parent": 1,
+    "alias": null,
+    "alias_url": null,
+    "path": "didattica",
+    "fullpath": "/didattica",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 3,
+  "fields": {
+    "created": "2020-11-20T08:50:48.265Z",
+    "modified": "2020-11-23T08:09:16.220Z",
+    "created_by": null,
+    "modified_by": null,
+    "site": 3,
+    "name": "DIMES (subdomain)",
+    "parent": null,
+    "alias": null,
+    "alias_url": "//test.unical.it:8000/portale/dipartimenti/dimes/",
+    "path": "/",
+    "fullpath": "/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 4,
+  "fields": {
+    "created": "2020-11-20T09:14:17.710Z",
+    "modified": "2020-11-23T08:08:52.725Z",
+    "created_by": null,
+    "modified_by": null,
+    "site": 2,
+    "name": "DIMES",
+    "parent": 5,
+    "alias": null,
+    "alias_url": "",
+    "path": "dimes/",
+    "fullpath": "/dipartimenti/dimes/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 5,
+  "fields": {
+    "created": "2020-11-20T12:29:06.360Z",
+    "modified": "2020-11-20T16:39:05.276Z",
+    "created_by": null,
+    "modified_by": null,
+    "site": 2,
+    "name": "dipartimenti",
+    "parent": 1,
+    "alias": null,
+    "alias_url": "",
+    "path": "dipartimenti/",
+    "fullpath": "/dipartimenti/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 6,
+  "fields": {
+    "created": "2020-11-30T16:43:00.111Z",
+    "modified": "2020-11-30T16:43:00.111Z",
+    "created_by": null,
+    "modified_by": null,
+    "site": 3,
+    "name": "ricerca dimes",
+    "parent": 3,
+    "alias": null,
+    "alias_url": "",
+    "path": "ricerca/",
+    "fullpath": "/ricerca/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 7,
+  "fields": {
+    "created": "2020-12-03T07:22:04.219Z",
+    "modified": "2020-12-03T07:22:04.219Z",
+    "created_by": null,
+    "modified_by": null,
+    "site": 2,
+    "name": "Offerta formativa",
+    "parent": 1,
+    "alias": null,
+    "alias_url": "",
+    "path": "didattica/offerta-formativa/",
+    "fullpath": "/didattica/offerta-formativa/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 8,
+  "fields": {
+    "created": "2020-12-03T10:46:38.760Z",
+    "modified": "2020-12-09T16:10:03.884Z",
+    "created_by": null,
+    "modified_by": null,
+    "site": 2,
+    "name": "I Servizi del Campus",
+    "parent": 12,
+    "alias": null,
+    "alias_url": "",
+    "path": "servizi/",
+    "fullpath": "/campus/servizi/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 9,
+  "fields": {
+    "created": "2020-12-03T14:52:05.979Z",
+    "modified": "2020-12-03T14:52:05.979Z",
+    "created_by": null,
+    "modified_by": null,
+    "site": 2,
+    "name": "Visita il campus",
+    "parent": 1,
+    "alias": null,
+    "alias_url": "",
+    "path": "campus/visita-il-campus/",
+    "fullpath": "/campus/visita-il-campus/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 10,
+  "fields": {
+    "created": "2020-12-03T15:56:23.454Z",
+    "modified": "2020-12-09T16:12:12.342Z",
+    "created_by": null,
+    "modified_by": null,
+    "site": 2,
+    "name": "Futuri Studenti",
+    "parent": 8,
+    "alias": null,
+    "alias_url": "",
+    "path": "futuri-studenti/",
+    "fullpath": "/campus/servizi/futuri-studenti/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 11,
+  "fields": {
+    "created": "2020-12-06T15:04:22.135Z",
+    "modified": "2020-12-06T15:08:57.658Z",
+    "created_by": null,
+    "modified_by": null,
+    "site": 2,
+    "name": "Motore di Ricerca",
+    "parent": 1,
+    "alias": null,
+    "alias_url": "",
+    "path": "search/",
+    "fullpath": "/search/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 12,
+  "fields": {
+    "created": "2020-12-09T16:08:41.327Z",
+    "modified": "2020-12-09T16:08:41.327Z",
+    "created_by": 2,
+    "modified_by": 2,
+    "site": 2,
+    "name": "Campus",
+    "parent": 1,
+    "alias": null,
+    "alias_url": "",
+    "path": "campus/",
+    "fullpath": "/campus/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 13,
+  "fields": {
+    "created": "2020-12-09T17:19:16.758Z",
+    "modified": "2020-12-09T17:19:16.758Z",
+    "created_by": 2,
+    "modified_by": null,
+    "site": 2,
+    "name": "Ammissione",
+    "parent": 10,
+    "alias": null,
+    "alias_url": "",
+    "path": "ammissione/",
+    "fullpath": "/campus/servizi/futuri-studenti/ammissione/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 14,
+  "fields": {
+    "created": "2020-12-10T11:30:25.811Z",
+    "modified": "2020-12-10T11:30:32.317Z",
+    "created_by": 2,
+    "modified_by": null,
+    "site": 2,
+    "name": "Internazionale",
+    "parent": 1,
+    "alias": null,
+    "alias_url": "",
+    "path": "internazionale/",
+    "fullpath": "/internazionale/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 15,
+  "fields": {
+    "created": "2020-12-11T08:47:43.612Z",
+    "modified": "2020-12-11T08:47:43.612Z",
+    "created_by": null,
+    "modified_by": null,
+    "site": 2,
+    "name": "Accordi internazionali",
+    "parent": 14,
+    "alias": null,
+    "alias_url": "",
+    "path": "accordi/",
+    "fullpath": "/internazionale/accordi/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.webpath",
+  "pk": 16,
+  "fields": {
+    "created": "2020-12-14T17:05:58.864Z",
+    "modified": "2020-12-14T17:06:34.748Z",
+    "created_by": 2,
+    "modified_by": null,
+    "site": 2,
+    "name": "Italia",
+    "parent": 1,
+    "alias": null,
+    "alias_url": "",
+    "path": "italia/",
+    "fullpath": "/italia/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.editorialboardlocks",
+  "pk": 1,
+  "fields": {
+    "content_type": 28,
+    "object_id": 1,
+    "locked_by": 1,
+    "locked_time": "2020-11-22T14:36:44Z"
+  }
+},
+{
+  "model": "cmscontexts.editorialboardlocks",
+  "pk": 2,
+  "fields": {
+    "content_type": 21,
+    "object_id": 3,
+    "locked_by": 1,
+    "locked_time": "2020-11-22T14:38:50Z"
+  }
+},
+{
+  "model": "cmscarousels.carousel",
+  "pk": 1,
+  "fields": {
+    "created": "2020-10-30T16:33:34.047Z",
+    "modified": "2020-11-02T10:45:06.229Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "name": "Portale Unical Home",
+    "description": "Carosello principale di immagini e notizie"
+  }
+},
+{
+  "model": "cmscarousels.carousel",
+  "pk": 2,
+  "fields": {
+    "created": "2020-12-11T07:32:24.567Z",
+    "modified": "2020-12-11T07:37:35.285Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "name": "Home DIMES",
+    "description": "banner dimes"
+  }
+},
+{
+  "model": "cmscarousels.carouselitem",
+  "pk": 1,
+  "fields": {
+    "created": "2020-10-30T16:35:38.477Z",
+    "modified": "2020-11-02T10:45:06.234Z",
+    "order": 1,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "carousel": 1,
+    "image": 1,
+    "pre_heading": "Benvenuti",
+    "heading": "Questa è una Intestazione",
+    "description": "Questo è il corpo del messaggio."
+  }
+},
+{
+  "model": "cmscarousels.carouselitem",
+  "pk": 2,
+  "fields": {
+    "created": "2020-10-31T13:54:29.853Z",
+    "modified": "2020-11-02T10:44:42.912Z",
+    "order": 2,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "carousel": 1,
+    "image": 2,
+    "pre_heading": "Studenti",
+    "heading": "Altro elemento",
+    "description": "La foto di background viene automaticamente rivestita di un overlay grigio per migliorare il contrasto con il testo in sovraimpressione. In caso di assenza di testo la foto non verrà scurita."
+  }
+},
+{
+  "model": "cmscarousels.carouselitem",
+  "pk": 3,
+  "fields": {
+    "created": "2020-10-31T15:04:48.019Z",
+    "modified": "2020-11-02T10:45:06.232Z",
+    "order": 0,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "carousel": 1,
+    "image": 3,
+    "pre_heading": "Per gli studenti",
+    "heading": "Innovare non è un'opzione",
+    "description": "E possibile definire l'ordine di apparizione degli elementi di carousel con un semplice drag and drop"
+  }
+},
+{
+  "model": "cmscarousels.carouselitem",
+  "pk": 4,
+  "fields": {
+    "created": "2020-12-11T07:32:24.568Z",
+    "modified": "2020-12-11T07:37:35.288Z",
+    "order": 0,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "carousel": 2,
+    "image": 1,
+    "pre_heading": "Innovazione lorem ipsum",
+    "heading": "<h1>Tutto in un bit</h1>",
+    "description": "Lorem ipsum sit amen"
+  }
+},
+{
+  "model": "cmscarousels.carouselitemlocalization",
+  "pk": 1,
+  "fields": {
+    "created": "2020-10-30T16:43:19.241Z",
+    "modified": "2020-10-30T16:43:19.241Z",
+    "order": 0,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "carousel_item": 1,
+    "language": "en",
+    "pre_heading": "Welcome",
+    "heading": "that thing",
+    "description": ""
+  }
+},
+{
+  "model": "cmscarousels.carouselitemlocalization",
+  "pk": 2,
+  "fields": {
+    "created": "2020-11-02T09:34:48.487Z",
+    "modified": "2020-11-02T09:34:48.487Z",
+    "order": 0,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "carousel_item": 3,
+    "language": "en",
+    "pre_heading": "Students first",
+    "heading": "Innovation is not an option",
+    "description": "We can even control the order of the carousel items and modify it with a simple drag and drop, via backend"
+  }
+},
+{
+  "model": "cmscarousels.carouselitemlink",
+  "pk": 1,
+  "fields": {
+    "created": "2020-10-31T14:05:01.913Z",
+    "modified": "2020-10-31T14:14:51.624Z",
+    "order": 0,
+    "is_active": true,
+    "carousel_item": 1,
+    "title_preset": "read more",
+    "title": null,
+    "url": "#"
+  }
+},
+{
+  "model": "cmscarousels.carouselitemlink",
+  "pk": 2,
+  "fields": {
+    "created": "2020-11-02T09:32:19.175Z",
+    "modified": "2020-11-02T09:32:19.175Z",
+    "order": 0,
+    "is_active": true,
+    "carousel_item": 3,
+    "title_preset": "read more",
+    "title": null,
+    "url": "#"
+  }
+},
+{
+  "model": "cmsmenus.navigationbar",
+  "pk": 1,
+  "fields": {
+    "created": "2020-10-30T14:06:46.447Z",
+    "modified": "2020-12-28T09:38:55.591Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "name": "Unical Portale - Menu principale"
+  }
+},
+{
+  "model": "cmsmenus.navigationbar",
+  "pk": 2,
+  "fields": {
+    "created": "2020-11-02T09:42:43.659Z",
+    "modified": "2020-11-02T09:43:31.256Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "name": "Unical Portale Menu Secondario"
+  }
+},
+{
+  "model": "cmsmenus.navigationbar",
+  "pk": 18,
+  "fields": {
+    "created": "2020-11-20T10:28:27.095Z",
+    "modified": "2020-12-11T07:28:38.808Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "name": "DIMES - Menu secondario"
+  }
+},
+{
+  "model": "cmsmenus.navigationbar",
+  "pk": 19,
+  "fields": {
+    "created": "2020-11-20T17:15:19.394Z",
+    "modified": "2020-12-11T08:20:54.917Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "name": "DIMES - Menu Principale"
+  }
+},
+{
+  "model": "cmsmenus.navigationbar",
+  "pk": 20,
+  "fields": {
+    "created": "2020-12-03T12:09:16.230Z",
+    "modified": "2020-12-03T12:29:04.072Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "name": "Visita il campus"
+  }
+},
+{
+  "model": "cmsmenus.navigationbar",
+  "pk": 21,
+  "fields": {
+    "created": "2020-12-03T12:30:13.023Z",
+    "modified": "2020-12-03T15:33:02.806Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "name": "Vivere nel/il Campus"
+  }
+},
+{
+  "model": "cmsmenus.navigationbar",
+  "pk": 22,
+  "fields": {
+    "created": "2020-12-03T15:16:35.412Z",
+    "modified": "2020-12-03T15:32:50.974Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "name": "Portale Unical SIDE - I servizi"
+  }
+},
+{
+  "model": "cmsmenus.navigationbar",
+  "pk": 23,
+  "fields": {
+    "created": "2020-12-03T17:30:13.858Z",
+    "modified": "2020-12-03T17:31:27.088Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "name": "Servizi / Futuri Studenti"
+  }
+},
+{
+  "model": "cmsmenus.navigationbar",
+  "pk": 24,
+  "fields": {
+    "created": "2020-12-11T08:52:10.187Z",
+    "modified": "2020-12-11T08:55:41.500Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "name": "Internazionale"
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 1,
+  "fields": {
+    "created": "2020-10-29T09:18:53.178Z",
+    "modified": "2020-11-19T09:19:24.028Z",
+    "order": 2,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Ateneo",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 2,
+  "fields": {
+    "created": "2020-10-29T09:19:21.186Z",
+    "modified": "2020-11-12T16:35:29.106Z",
+    "order": 0,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Didattica",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 3,
+  "fields": {
+    "created": "2020-10-29T09:19:36.099Z",
+    "modified": "2020-11-18T17:54:29.541Z",
+    "order": 1,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Campus",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 4,
+  "fields": {
+    "created": "2020-10-29T09:19:48.538Z",
+    "modified": "2020-11-19T09:45:36.247Z",
+    "order": 4,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Ricerca",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 5,
+  "fields": {
+    "created": "2020-10-29T09:20:02.598Z",
+    "modified": "2020-12-09T15:48:55.363Z",
+    "order": 5,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Impatti",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 6,
+  "fields": {
+    "created": "2020-10-29T09:20:19.287Z",
+    "modified": "2020-12-11T09:32:11.893Z",
+    "order": 3,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Internazionale",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 7,
+  "fields": {
+    "created": "2020-10-29T09:27:04.167Z",
+    "modified": "2020-12-02T11:00:15.175Z",
+    "order": 7,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Lauree Triennali",
+    "webpath": null,
+    "parent": 15,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 8,
+  "fields": {
+    "created": "2020-10-29T09:28:17.305Z",
+    "modified": "2020-12-02T11:00:15.179Z",
+    "order": 8,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Lauree Magistrali a ciclo unico",
+    "webpath": null,
+    "parent": 15,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 9,
+  "fields": {
+    "created": "2020-10-29T09:29:16.363Z",
+    "modified": "2020-12-02T11:00:15.182Z",
+    "order": 9,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Lauree Magistrali",
+    "webpath": null,
+    "parent": 15,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 12,
+  "fields": {
+    "created": "2020-11-02T09:43:31.257Z",
+    "modified": "2020-11-02T09:43:31.257Z",
+    "order": 0,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 2,
+    "name": "my Unical",
+    "webpath": null,
+    "parent": null,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 13,
+  "fields": {
+    "created": "2020-11-02T09:43:31.258Z",
+    "modified": "2020-11-02T09:43:31.258Z",
+    "order": 1,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 2,
+    "name": "Orienta Unical",
+    "webpath": null,
+    "parent": null,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 14,
+  "fields": {
+    "created": "2020-11-02T09:43:31.258Z",
+    "modified": "2020-11-02T09:43:31.258Z",
+    "order": 2,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 2,
+    "name": "Unical Store",
+    "webpath": null,
+    "parent": null,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 15,
+  "fields": {
+    "created": "2020-11-12T15:59:19.881Z",
+    "modified": "2020-12-03T07:25:00.784Z",
+    "order": 6,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Offerta Formativa",
+    "webpath": 7,
+    "parent": 2,
+    "url": null,
+    "publication": null,
+    "inherited_content": 5
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 16,
+  "fields": {
+    "created": "2020-11-12T16:09:30.409Z",
+    "modified": "2020-12-02T11:00:15.188Z",
+    "order": 11,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Dottorati",
+    "webpath": null,
+    "parent": 15,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 19,
+  "fields": {
+    "created": "2020-11-12T16:09:30.410Z",
+    "modified": "2020-12-02T14:52:50.808Z",
+    "order": 12,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Master e Alta formazione",
+    "webpath": null,
+    "parent": 15,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 21,
+  "fields": {
+    "created": "2020-11-12T16:26:45.451Z",
+    "modified": "2020-12-02T11:55:13.735Z",
+    "order": 14,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Iscrizioni e diritto allo studio",
+    "webpath": null,
+    "parent": 2,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 22,
+  "fields": {
+    "created": "2020-11-12T16:26:45.451Z",
+    "modified": "2020-12-02T15:03:59.973Z",
+    "order": 15,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Ammissione, iscrizioni",
+    "webpath": null,
+    "parent": 21,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 23,
+  "fields": {
+    "created": "2020-11-12T16:26:45.451Z",
+    "modified": "2020-12-02T15:03:59.975Z",
+    "order": 16,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Trasferimenti e passaggi di corso",
+    "webpath": null,
+    "parent": 21,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 24,
+  "fields": {
+    "created": "2020-11-12T16:26:45.452Z",
+    "modified": "2020-12-02T11:55:48.718Z",
+    "order": 18,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Borse e servizi di supporto",
+    "webpath": null,
+    "parent": 21,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 25,
+  "fields": {
+    "created": "2020-11-12T16:26:45.452Z",
+    "modified": "2020-12-02T11:55:48.721Z",
+    "order": 19,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Servizi per studenti con disabilità, DSA e BES",
+    "webpath": null,
+    "parent": 21,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 26,
+  "fields": {
+    "created": "2020-11-12T16:28:25.860Z",
+    "modified": "2020-12-03T10:48:00.222Z",
+    "order": 21,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "I servizi",
+    "webpath": 8,
+    "parent": 3,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 27,
+  "fields": {
+    "created": "2020-11-12T16:28:25.860Z",
+    "modified": "2020-12-02T15:09:13.971Z",
+    "order": 22,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Vivere nel/il campus",
+    "webpath": null,
+    "parent": 3,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 28,
+  "fields": {
+    "created": "2020-11-12T16:29:52.952Z",
+    "modified": "2020-12-02T15:10:18.368Z",
+    "order": 28,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "RiMuseum",
+    "webpath": null,
+    "parent": 27,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 29,
+  "fields": {
+    "created": "2020-11-12T16:29:52.953Z",
+    "modified": "2020-12-10T07:44:57.935Z",
+    "order": 29,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Futuri studenti",
+    "webpath": null,
+    "parent": 26,
+    "url": null,
+    "publication": 7,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 30,
+  "fields": {
+    "created": "2020-11-12T16:29:52.953Z",
+    "modified": "2020-12-02T15:07:42.629Z",
+    "order": 30,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Studenti iscritti",
+    "webpath": null,
+    "parent": 26,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 31,
+  "fields": {
+    "created": "2020-11-12T16:29:52.953Z",
+    "modified": "2020-12-02T15:07:42.632Z",
+    "order": 31,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Laureati",
+    "webpath": null,
+    "parent": 26,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 32,
+  "fields": {
+    "created": "2020-11-12T16:30:49.005Z",
+    "modified": "2020-12-09T15:46:01.637Z",
+    "order": 39,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Storie e architettura",
+    "webpath": null,
+    "parent": 53,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 33,
+  "fields": {
+    "created": "2020-11-12T16:30:49.006Z",
+    "modified": "2020-12-09T15:46:01.640Z",
+    "order": 40,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Territorio",
+    "webpath": null,
+    "parent": 53,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 34,
+  "fields": {
+    "created": "2020-11-12T16:30:49.006Z",
+    "modified": "2020-12-09T15:46:01.644Z",
+    "order": 41,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Come arrivare",
+    "webpath": null,
+    "parent": 53,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 35,
+  "fields": {
+    "created": "2020-11-12T16:32:46.287Z",
+    "modified": "2020-12-09T15:46:01.647Z",
+    "order": 42,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Mappa",
+    "webpath": null,
+    "parent": 53,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 36,
+  "fields": {
+    "created": "2020-11-12T16:32:46.287Z",
+    "modified": "2020-12-09T15:46:01.649Z",
+    "order": 43,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Organizzazione",
+    "webpath": null,
+    "parent": 1,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 37,
+  "fields": {
+    "created": "2020-11-12T16:32:46.288Z",
+    "modified": "2020-12-09T15:46:01.653Z",
+    "order": 44,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Storia e Missione",
+    "webpath": null,
+    "parent": 36,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 38,
+  "fields": {
+    "created": "2020-11-12T16:32:46.288Z",
+    "modified": "2020-12-09T15:46:01.656Z",
+    "order": 45,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Organi",
+    "webpath": null,
+    "parent": 36,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 39,
+  "fields": {
+    "created": "2020-11-12T16:32:46.289Z",
+    "modified": "2020-12-09T15:46:01.659Z",
+    "order": 46,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Linee strategiche",
+    "webpath": null,
+    "parent": 36,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 40,
+  "fields": {
+    "created": "2020-11-12T16:34:22.931Z",
+    "modified": "2020-12-09T15:46:01.665Z",
+    "order": 48,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Qualità didattica",
+    "webpath": null,
+    "parent": 36,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 41,
+  "fields": {
+    "created": "2020-11-12T16:34:22.932Z",
+    "modified": "2020-12-09T15:46:01.667Z",
+    "order": 49,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Qualità ricerca",
+    "webpath": null,
+    "parent": 36,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 42,
+  "fields": {
+    "created": "2020-11-12T16:34:22.932Z",
+    "modified": "2020-12-09T15:46:01.671Z",
+    "order": 50,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Statuto e regolamenti",
+    "webpath": null,
+    "parent": 36,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 45,
+  "fields": {
+    "created": "2020-11-12T16:38:06.977Z",
+    "modified": "2020-12-09T15:46:01.677Z",
+    "order": 52,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Dipartimenti",
+    "webpath": null,
+    "parent": 46,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 46,
+  "fields": {
+    "created": "2020-11-12T16:38:06.978Z",
+    "modified": "2020-12-09T15:46:01.674Z",
+    "order": 51,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Strutture",
+    "webpath": null,
+    "parent": 1,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 47,
+  "fields": {
+    "created": "2020-11-12T16:38:06.978Z",
+    "modified": "2020-12-09T15:46:01.679Z",
+    "order": 53,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Amministrazione e uffici",
+    "webpath": null,
+    "parent": 46,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 48,
+  "fields": {
+    "created": "2020-11-12T16:38:06.978Z",
+    "modified": "2020-12-09T15:46:01.682Z",
+    "order": 54,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Centro Residenziale",
+    "webpath": null,
+    "parent": 46,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 49,
+  "fields": {
+    "created": "2020-11-12T16:38:06.979Z",
+    "modified": "2020-12-09T15:46:01.684Z",
+    "order": 55,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Scuola Superiore di Scienze Amministrazioni Pubbliche",
+    "webpath": null,
+    "parent": 46,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 50,
+  "fields": {
+    "created": "2020-11-12T16:38:06.979Z",
+    "modified": "2020-12-09T15:46:01.689Z",
+    "order": 56,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Scuola di Specializzazione in Patologia Clinica",
+    "webpath": null,
+    "parent": 46,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 51,
+  "fields": {
+    "created": "2020-11-12T16:38:06.979Z",
+    "modified": "2020-12-09T15:46:01.692Z",
+    "order": 57,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Centri",
+    "webpath": null,
+    "parent": 46,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 53,
+  "fields": {
+    "created": "2020-11-18T17:56:03.148Z",
+    "modified": "2020-12-03T14:54:02.564Z",
+    "order": 23,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Visita il campus",
+    "webpath": 9,
+    "parent": 3,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 54,
+  "fields": {
+    "created": "2020-11-18T17:56:03.149Z",
+    "modified": "2020-12-02T15:10:18.355Z",
+    "order": 24,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Quartieri",
+    "webpath": null,
+    "parent": 27,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 55,
+  "fields": {
+    "created": "2020-11-18T17:56:03.149Z",
+    "modified": "2020-12-02T15:10:18.358Z",
+    "order": 25,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Residenze",
+    "webpath": null,
+    "parent": 27,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 56,
+  "fields": {
+    "created": "2020-11-18T17:56:03.149Z",
+    "modified": "2020-12-02T15:10:18.361Z",
+    "order": 26,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Biblioteche",
+    "webpath": null,
+    "parent": 27,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 57,
+  "fields": {
+    "created": "2020-11-18T17:56:03.149Z",
+    "modified": "2020-12-02T15:10:18.365Z",
+    "order": 27,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Museo storia naturale e Orto botanico",
+    "webpath": null,
+    "parent": 27,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 58,
+  "fields": {
+    "created": "2020-11-18T18:15:07.072Z",
+    "modified": "2020-12-02T15:11:47.151Z",
+    "order": 32,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Teatri e cinema",
+    "webpath": null,
+    "parent": 27,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 59,
+  "fields": {
+    "created": "2020-11-18T18:15:07.073Z",
+    "modified": "2020-12-02T15:11:47.155Z",
+    "order": 33,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Centro Linguistico di Ateneo",
+    "webpath": null,
+    "parent": 27,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 60,
+  "fields": {
+    "created": "2020-11-18T18:15:07.073Z",
+    "modified": "2020-12-02T15:11:47.158Z",
+    "order": 34,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Centro Sanitario",
+    "webpath": null,
+    "parent": 27,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 61,
+  "fields": {
+    "created": "2020-11-18T18:15:07.073Z",
+    "modified": "2020-12-02T15:11:47.161Z",
+    "order": 35,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Centro Sportivo",
+    "webpath": null,
+    "parent": 27,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 62,
+  "fields": {
+    "created": "2020-11-18T18:15:07.073Z",
+    "modified": "2020-12-02T15:11:47.163Z",
+    "order": 36,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Centro Congressi",
+    "webpath": null,
+    "parent": 27,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 103,
+  "fields": {
+    "created": "2020-11-19T09:49:06.005Z",
+    "modified": "2020-12-09T15:46:01.662Z",
+    "order": 47,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Assicurazione di Qualità",
+    "webpath": null,
+    "parent": 36,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 104,
+  "fields": {
+    "created": "2020-11-19T09:50:43.823Z",
+    "modified": "2020-12-02T15:11:47.166Z",
+    "order": 37,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Polo d'infanzia",
+    "webpath": null,
+    "parent": 27,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 186,
+  "fields": {
+    "created": "2020-11-20T10:28:27.095Z",
+    "modified": "2020-12-11T07:28:31.445Z",
+    "order": 0,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 18,
+    "name": "my Department",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 187,
+  "fields": {
+    "created": "2020-11-20T10:28:27.096Z",
+    "modified": "2020-12-11T07:28:31.449Z",
+    "order": 1,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 18,
+    "name": "Orienta DIMES",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 188,
+  "fields": {
+    "created": "2020-11-20T17:15:19.414Z",
+    "modified": "2020-12-11T07:48:45.456Z",
+    "order": 4,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Dipartimento",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 194,
+  "fields": {
+    "created": "2020-11-20T17:15:19.488Z",
+    "modified": "2020-12-11T07:48:45.445Z",
+    "order": 0,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Didattica",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 199,
+  "fields": {
+    "created": "2020-11-20T17:15:19.596Z",
+    "modified": "2020-12-11T07:48:45.453Z",
+    "order": 3,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Persone",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 204,
+  "fields": {
+    "created": "2020-11-20T17:15:19.659Z",
+    "modified": "2020-12-11T07:48:45.448Z",
+    "order": 1,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Ricerca",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 210,
+  "fields": {
+    "created": "2020-11-20T17:15:19.732Z",
+    "modified": "2020-12-11T07:48:45.451Z",
+    "order": 2,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Impatti",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 214,
+  "fields": {
+    "created": "2020-12-02T07:57:48.514Z",
+    "modified": "2020-12-02T11:00:15.184Z",
+    "order": 10,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Lauree in Lingua inglese",
+    "webpath": null,
+    "parent": 15,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 215,
+  "fields": {
+    "created": "2020-12-02T08:00:46.214Z",
+    "modified": "2020-12-02T14:52:50.811Z",
+    "order": 13,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Formazione insegnanti",
+    "webpath": null,
+    "parent": 15,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 216,
+  "fields": {
+    "created": "2020-12-02T08:07:45.119Z",
+    "modified": "2020-12-02T11:55:48.715Z",
+    "order": 17,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Frequentare i corsi",
+    "webpath": null,
+    "parent": 21,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 217,
+  "fields": {
+    "created": "2020-12-02T08:25:07.773Z",
+    "modified": "2020-12-02T11:55:48.725Z",
+    "order": 20,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Orientamento",
+    "webpath": null,
+    "parent": 21,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 218,
+  "fields": {
+    "created": "2020-12-02T15:21:53.964Z",
+    "modified": "2020-12-11T09:32:22.848Z",
+    "order": 58,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Da sempre aperta",
+    "webpath": 14,
+    "parent": 6,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 219,
+  "fields": {
+    "created": "2020-12-02T15:23:13.931Z",
+    "modified": "2020-12-11T09:32:46.673Z",
+    "order": 61,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Accordi internazionali",
+    "webpath": 15,
+    "parent": 218,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 220,
+  "fields": {
+    "created": "2020-12-02T15:23:13.932Z",
+    "modified": "2020-12-09T15:48:02.607Z",
+    "order": 59,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Per studiare in Unical",
+    "webpath": null,
+    "parent": 218,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 221,
+  "fields": {
+    "created": "2020-12-02T15:23:13.932Z",
+    "modified": "2020-12-09T15:48:02.611Z",
+    "order": 60,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Studenti Unical verso l'estero",
+    "webpath": null,
+    "parent": 218,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 222,
+  "fields": {
+    "created": "2020-12-02T15:23:13.932Z",
+    "modified": "2020-12-09T15:46:01.707Z",
+    "order": 62,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Mobilità docenti, ricercatori e staff",
+    "webpath": null,
+    "parent": 218,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 223,
+  "fields": {
+    "created": "2020-12-02T15:24:06.726Z",
+    "modified": "2020-12-09T15:46:01.709Z",
+    "order": 63,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Un sistema all'avanguardia",
+    "webpath": null,
+    "parent": 4,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 224,
+  "fields": {
+    "created": "2020-12-02T15:24:44.360Z",
+    "modified": "2020-12-09T15:46:01.712Z",
+    "order": 64,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Strutture",
+    "webpath": null,
+    "parent": 223,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 225,
+  "fields": {
+    "created": "2020-12-02T15:24:44.360Z",
+    "modified": "2020-12-09T15:46:01.716Z",
+    "order": 65,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Macro ambiti",
+    "webpath": null,
+    "parent": 223,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 226,
+  "fields": {
+    "created": "2020-12-02T15:24:44.361Z",
+    "modified": "2020-12-09T15:46:01.719Z",
+    "order": 66,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Dottorati",
+    "webpath": null,
+    "parent": 223,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 227,
+  "fields": {
+    "created": "2020-12-02T15:32:24.343Z",
+    "modified": "2020-12-09T15:49:13.578Z",
+    "order": 67,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Energie e progetti per",
+    "webpath": null,
+    "parent": 5,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 228,
+  "fields": {
+    "created": "2020-12-02T15:32:59.902Z",
+    "modified": "2020-12-09T15:46:01.724Z",
+    "order": 68,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Le imprese",
+    "webpath": null,
+    "parent": 227,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 229,
+  "fields": {
+    "created": "2020-12-02T15:32:59.903Z",
+    "modified": "2020-12-09T15:46:01.727Z",
+    "order": 69,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Le culture",
+    "webpath": null,
+    "parent": 227,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 230,
+  "fields": {
+    "created": "2020-12-02T15:32:59.903Z",
+    "modified": "2020-12-09T15:46:01.729Z",
+    "order": 70,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "La società",
+    "webpath": null,
+    "parent": 227,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 231,
+  "fields": {
+    "created": "2020-12-03T12:10:40.004Z",
+    "modified": "2020-12-03T12:29:04.078Z",
+    "order": 1,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 20,
+    "name": "storia e architettura",
+    "webpath": null,
+    "parent": 235,
+    "url": "#",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 232,
+  "fields": {
+    "created": "2020-12-03T12:26:14.094Z",
+    "modified": "2020-12-03T12:29:04.080Z",
+    "order": 2,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 20,
+    "name": "territorio",
+    "webpath": null,
+    "parent": 235,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 233,
+  "fields": {
+    "created": "2020-12-03T12:26:14.095Z",
+    "modified": "2020-12-03T12:29:04.083Z",
+    "order": 3,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 20,
+    "name": "come arrivare",
+    "webpath": null,
+    "parent": 235,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 234,
+  "fields": {
+    "created": "2020-12-03T12:26:14.096Z",
+    "modified": "2020-12-03T12:29:04.086Z",
+    "order": 4,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 20,
+    "name": "mappa",
+    "webpath": null,
+    "parent": 235,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 235,
+  "fields": {
+    "created": "2020-12-03T12:28:43.081Z",
+    "modified": "2020-12-03T14:52:45.507Z",
+    "order": 0,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 20,
+    "name": "visita il campus",
+    "webpath": 9,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 236,
+  "fields": {
+    "created": "2020-12-03T12:30:36.592Z",
+    "modified": "2020-12-03T12:32:18.408Z",
+    "order": 0,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 21,
+    "name": "vivere nel/il campus",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 237,
+  "fields": {
+    "created": "2020-12-03T12:30:36.593Z",
+    "modified": "2020-12-03T12:32:18.412Z",
+    "order": 1,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 21,
+    "name": "quartieri",
+    "webpath": null,
+    "parent": 236,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 238,
+  "fields": {
+    "created": "2020-12-03T12:30:54.978Z",
+    "modified": "2020-12-03T12:32:18.414Z",
+    "order": 2,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 21,
+    "name": "residenze",
+    "webpath": null,
+    "parent": 236,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 239,
+  "fields": {
+    "created": "2020-12-03T12:30:54.979Z",
+    "modified": "2020-12-03T12:32:18.417Z",
+    "order": 3,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 21,
+    "name": "biblioteche",
+    "webpath": null,
+    "parent": 236,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 240,
+  "fields": {
+    "created": "2020-12-03T12:33:44.439Z",
+    "modified": "2020-12-03T12:33:44.439Z",
+    "order": 4,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 21,
+    "name": "museo storia naturale e orto botanico",
+    "webpath": null,
+    "parent": 236,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 241,
+  "fields": {
+    "created": "2020-12-03T12:33:44.440Z",
+    "modified": "2020-12-03T12:33:44.440Z",
+    "order": 5,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 21,
+    "name": "rimuseum",
+    "webpath": null,
+    "parent": 236,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 242,
+  "fields": {
+    "created": "2020-12-03T12:33:44.440Z",
+    "modified": "2020-12-03T12:33:44.440Z",
+    "order": 6,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 21,
+    "name": "teatri e cinema",
+    "webpath": null,
+    "parent": 236,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 243,
+  "fields": {
+    "created": "2020-12-03T12:33:44.440Z",
+    "modified": "2020-12-03T12:33:44.440Z",
+    "order": 7,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 21,
+    "name": "centro linguistico di ateneo",
+    "webpath": null,
+    "parent": 236,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 244,
+  "fields": {
+    "created": "2020-12-03T12:33:44.441Z",
+    "modified": "2020-12-03T12:33:44.441Z",
+    "order": 8,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 21,
+    "name": "centro sanitario",
+    "webpath": null,
+    "parent": 236,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 245,
+  "fields": {
+    "created": "2020-12-03T12:33:44.441Z",
+    "modified": "2020-12-03T12:33:44.441Z",
+    "order": 9,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 21,
+    "name": "centro sportivo",
+    "webpath": null,
+    "parent": 236,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 246,
+  "fields": {
+    "created": "2020-12-03T12:33:44.441Z",
+    "modified": "2020-12-03T12:33:44.441Z",
+    "order": 10,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 21,
+    "name": "centro congressi",
+    "webpath": null,
+    "parent": 236,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 247,
+  "fields": {
+    "created": "2020-12-03T12:33:44.441Z",
+    "modified": "2020-12-03T12:33:44.441Z",
+    "order": 11,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 21,
+    "name": "polo d'infanzia",
+    "webpath": null,
+    "parent": 236,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 248,
+  "fields": {
+    "created": "2020-12-03T15:16:35.412Z",
+    "modified": "2020-12-03T15:32:29.301Z",
+    "order": 0,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 22,
+    "name": "I servizi",
+    "webpath": null,
+    "parent": null,
+    "url": "//test.unical.it:8000/portale/campus/servizi/",
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 249,
+  "fields": {
+    "created": "2020-12-03T15:17:01.417Z",
+    "modified": "2020-12-03T17:26:11.627Z",
+    "order": 1,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 22,
+    "name": "futuri studenti",
+    "webpath": 10,
+    "parent": 248,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 250,
+  "fields": {
+    "created": "2020-12-03T15:17:01.417Z",
+    "modified": "2020-12-03T15:17:01.417Z",
+    "order": 2,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 22,
+    "name": "studenti iscritti",
+    "webpath": null,
+    "parent": 248,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 251,
+  "fields": {
+    "created": "2020-12-03T15:17:01.418Z",
+    "modified": "2020-12-03T15:17:01.418Z",
+    "order": 3,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 22,
+    "name": "laureati",
+    "webpath": null,
+    "parent": 248,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 252,
+  "fields": {
+    "created": "2020-12-03T17:30:20.957Z",
+    "modified": "2020-12-09T17:46:47.413Z",
+    "order": 0,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 23,
+    "name": "futuri studenti",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 253,
+  "fields": {
+    "created": "2020-12-03T17:31:27.091Z",
+    "modified": "2020-12-03T17:31:27.091Z",
+    "order": 1,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 23,
+    "name": "ammissione",
+    "webpath": null,
+    "parent": 252,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 254,
+  "fields": {
+    "created": "2020-12-03T17:31:27.092Z",
+    "modified": "2020-12-03T17:31:27.092Z",
+    "order": 2,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 23,
+    "name": "tasse",
+    "webpath": null,
+    "parent": 252,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 255,
+  "fields": {
+    "created": "2020-12-03T17:31:27.092Z",
+    "modified": "2020-12-03T17:31:27.092Z",
+    "order": 3,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 23,
+    "name": "mensa",
+    "webpath": null,
+    "parent": 252,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 256,
+  "fields": {
+    "created": "2020-12-03T17:31:27.093Z",
+    "modified": "2020-12-03T17:31:27.093Z",
+    "order": 4,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 23,
+    "name": "alloggi",
+    "webpath": null,
+    "parent": 252,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 257,
+  "fields": {
+    "created": "2020-12-03T17:31:27.093Z",
+    "modified": "2020-12-03T17:31:27.093Z",
+    "order": 5,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 23,
+    "name": "borse di studio",
+    "webpath": null,
+    "parent": 252,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 258,
+  "fields": {
+    "created": "2020-12-03T17:31:27.093Z",
+    "modified": "2020-12-03T17:31:27.093Z",
+    "order": 6,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 23,
+    "name": "sussidi",
+    "webpath": null,
+    "parent": 252,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 259,
+  "fields": {
+    "created": "2020-12-03T17:31:27.094Z",
+    "modified": "2020-12-03T17:31:27.094Z",
+    "order": 7,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 23,
+    "name": "counselling",
+    "webpath": null,
+    "parent": 252,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 260,
+  "fields": {
+    "created": "2020-12-03T17:31:27.094Z",
+    "modified": "2020-12-03T17:31:27.094Z",
+    "order": 8,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 23,
+    "name": "servizi per studenti con disabilità DSA e Bes",
+    "webpath": null,
+    "parent": 252,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 261,
+  "fields": {
+    "created": "2020-12-09T15:44:50.484Z",
+    "modified": "2020-12-09T15:46:01.633Z",
+    "order": 38,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Associazioni",
+    "webpath": null,
+    "parent": 27,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 262,
+  "fields": {
+    "created": "2020-12-09T15:46:01.730Z",
+    "modified": "2020-12-09T15:46:01.730Z",
+    "order": 71,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 1,
+    "name": "Alumni",
+    "webpath": null,
+    "parent": 27,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 263,
+  "fields": {
+    "created": "2020-12-11T07:28:31.450Z",
+    "modified": "2020-12-11T07:28:38.816Z",
+    "order": 2,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 18,
+    "name": "documenti",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 264,
+  "fields": {
+    "created": "2020-12-11T07:28:31.450Z",
+    "modified": "2020-12-11T07:28:38.821Z",
+    "order": 3,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 18,
+    "name": "aule e orari",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 265,
+  "fields": {
+    "created": "2020-12-11T07:28:31.450Z",
+    "modified": "2020-12-11T07:28:38.826Z",
+    "order": 4,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 18,
+    "name": "tutor",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 266,
+  "fields": {
+    "created": "2020-12-11T07:50:52.230Z",
+    "modified": "2020-12-11T07:51:07.038Z",
+    "order": 5,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Lauree triennali",
+    "webpath": null,
+    "parent": 194,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 267,
+  "fields": {
+    "created": "2020-12-11T07:50:52.231Z",
+    "modified": "2020-12-11T07:51:07.041Z",
+    "order": 6,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Lauree magistrali a ciclo unico",
+    "webpath": null,
+    "parent": 194,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 268,
+  "fields": {
+    "created": "2020-12-11T07:50:52.232Z",
+    "modified": "2020-12-11T07:51:07.045Z",
+    "order": 7,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Lauree magistrali",
+    "webpath": null,
+    "parent": 194,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 269,
+  "fields": {
+    "created": "2020-12-11T07:50:52.232Z",
+    "modified": "2020-12-11T07:51:07.048Z",
+    "order": 8,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Master universitari",
+    "webpath": null,
+    "parent": 194,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 270,
+  "fields": {
+    "created": "2020-12-11T07:50:52.233Z",
+    "modified": "2020-12-11T07:51:07.051Z",
+    "order": 9,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Dottorati di ricerca",
+    "webpath": null,
+    "parent": 194,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 271,
+  "fields": {
+    "created": "2020-12-11T07:50:52.233Z",
+    "modified": "2020-12-11T07:51:07.053Z",
+    "order": 10,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Corsi di alta formazione",
+    "webpath": null,
+    "parent": 194,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 272,
+  "fields": {
+    "created": "2020-12-11T07:50:52.234Z",
+    "modified": "2020-12-11T07:51:07.056Z",
+    "order": 11,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Mobilità internazionale",
+    "webpath": null,
+    "parent": 194,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 273,
+  "fields": {
+    "created": "2020-12-11T07:50:52.234Z",
+    "modified": "2020-12-11T07:51:07.059Z",
+    "order": 12,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Orientamento",
+    "webpath": null,
+    "parent": 194,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 274,
+  "fields": {
+    "created": "2020-12-11T08:20:54.952Z",
+    "modified": "2020-12-11T08:20:54.952Z",
+    "order": 13,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Ambiti di ricerca",
+    "webpath": null,
+    "parent": 204,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 275,
+  "fields": {
+    "created": "2020-12-11T08:20:54.953Z",
+    "modified": "2020-12-11T08:20:54.953Z",
+    "order": 14,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Laboratori",
+    "webpath": null,
+    "parent": 204,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 276,
+  "fields": {
+    "created": "2020-12-11T08:20:54.953Z",
+    "modified": "2020-12-11T08:20:54.953Z",
+    "order": 15,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Dottorato di ricerca",
+    "webpath": null,
+    "parent": 204,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 277,
+  "fields": {
+    "created": "2020-12-11T08:20:54.954Z",
+    "modified": "2020-12-11T08:20:54.954Z",
+    "order": 16,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 19,
+    "name": "Attività e risultati",
+    "webpath": null,
+    "parent": 204,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 278,
+  "fields": {
+    "created": "2020-12-11T08:52:10.189Z",
+    "modified": "2020-12-11T08:55:41.509Z",
+    "order": 1,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 24,
+    "name": "per studiare in unical",
+    "webpath": null,
+    "parent": 282,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 279,
+  "fields": {
+    "created": "2020-12-11T08:52:10.189Z",
+    "modified": "2020-12-11T08:55:41.511Z",
+    "order": 2,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 24,
+    "name": "studenti Unical verso l'estero",
+    "webpath": null,
+    "parent": 282,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 280,
+  "fields": {
+    "created": "2020-12-11T08:52:10.190Z",
+    "modified": "2020-12-11T08:55:41.514Z",
+    "order": 3,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 24,
+    "name": "accordi internazionali",
+    "webpath": null,
+    "parent": 282,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 281,
+  "fields": {
+    "created": "2020-12-11T08:52:10.190Z",
+    "modified": "2020-12-11T08:55:41.516Z",
+    "order": 4,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 24,
+    "name": "mobilità docenti, ricercatori, staff",
+    "webpath": null,
+    "parent": 282,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritem",
+  "pk": 282,
+  "fields": {
+    "created": "2020-12-11T08:55:26.296Z",
+    "modified": "2020-12-11T08:55:41.505Z",
+    "order": 0,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "menu": 24,
+    "name": "Internazionale",
+    "webpath": null,
+    "parent": null,
+    "url": null,
+    "publication": null,
+    "inherited_content": null
+  }
+},
+{
+  "model": "cmsmenus.navigationbaritemlocalization",
+  "pk": 1,
+  "fields": {
+    "created_by": null,
+    "modified_by": null,
+    "item": 4,
+    "language": "en",
+    "name": "Research"
+  }
+},
+{
+  "model": "cmsmedias.mediacollection",
+  "pk": 1,
+  "fields": {
+    "created": "2020-11-24T09:33:24.719Z",
+    "modified": "2020-11-24T10:13:50.234Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "name": "Unical gallery",
+    "description": "Galleria foto unical"
+  }
+},
+{
+  "model": "cmsmedias.media",
+  "pk": 1,
+  "fields": {
+    "created": "2020-10-30T16:32:21.019Z",
+    "modified": "2020-12-14T10:51:46.665Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "file_size": 381988,
+    "file_type": "image/webp",
+    "title": "Unical Campus",
+    "file": "medias/2020/campus_6mLhkN8_ISrAwex.webp",
+    "description": "Vista con panorama"
+  }
+},
+{
+  "model": "cmsmedias.media",
+  "pk": 2,
+  "fields": {
+    "created": "2020-10-31T13:53:43.251Z",
+    "modified": "2020-12-14T10:51:39.223Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "file_size": 28278,
+    "file_type": "image/webp",
+    "title": "Unical Campus esempio 2",
+    "file": "medias/2020/students1_NvBumvC.webp",
+    "description": "Esempio di immagine promozionale di campus"
+  }
+},
+{
+  "model": "cmsmedias.media",
+  "pk": 3,
+  "fields": {
+    "created": "2020-10-31T15:04:12.200Z",
+    "modified": "2020-12-14T10:51:31.092Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "file_size": 115002,
+    "file_type": "image/webp",
+    "title": "studenti 3",
+    "file": "medias/2020/students2_6iCYH1c.webp",
+    "description": "studenti 3"
+  }
+},
+{
+  "model": "cmsmedias.media",
+  "pk": 4,
+  "fields": {
+    "created": "2020-11-11T17:14:02.849Z",
+    "modified": "2020-12-14T10:51:19.106Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "file_size": 28278,
+    "file_type": "image/webp",
+    "title": "Banner test 1",
+    "file": "medias/2020/students1_ANQfxVl.webp",
+    "description": "test"
+  }
+},
+{
+  "model": "cmsmedias.media",
+  "pk": 5,
+  "fields": {
+    "created": "2020-12-11T07:35:55.566Z",
+    "modified": "2020-12-14T10:49:00.058Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "file_size": 7562,
+    "file_type": "image/webp",
+    "title": "computer student",
+    "file": "medias/2020/download_8.webp",
+    "description": "test pc"
+  }
+},
+{
+  "model": "cmsmedias.media",
+  "pk": 6,
+  "fields": {
+    "created": "2020-12-11T09:09:22.271Z",
+    "modified": "2020-12-11T09:11:52.315Z",
+    "is_active": false,
+    "created_by": null,
+    "modified_by": null,
+    "file_size": 38698,
+    "file_type": "image/webp",
+    "title": "internazionale",
+    "file": "medias/2020/internazionale_temsyeH.webp",
+    "description": "test"
+  }
+},
+{
+  "model": "cmsmedias.mediacollectionitem",
+  "pk": 1,
+  "fields": {
+    "created": "2020-11-24T09:33:24.727Z",
+    "modified": "2020-11-24T09:33:24.727Z",
+    "order": 10,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "media": 1,
+    "collection": 1
+  }
+},
+{
+  "model": "cmsmedias.mediacollectionitem",
+  "pk": 2,
+  "fields": {
+    "created": "2020-11-24T09:33:24.727Z",
+    "modified": "2020-11-24T09:33:24.727Z",
+    "order": 20,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "media": 2,
+    "collection": 1
+  }
+},
+{
+  "model": "cmsmedias.mediacollectionitem",
+  "pk": 3,
+  "fields": {
+    "created": "2020-11-24T10:13:09.157Z",
+    "modified": "2020-11-24T10:13:09.157Z",
+    "order": 30,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "media": 4,
+    "collection": 1
+  }
+},
+{
+  "model": "cmsmedias.mediacollectionitem",
+  "pk": 4,
+  "fields": {
+    "created": "2020-11-24T10:13:50.240Z",
+    "modified": "2020-11-24T10:13:50.240Z",
+    "order": 10,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "media": 3,
+    "collection": 1
+  }
+},
+{
+  "model": "cmspages.page",
+  "pk": 1,
+  "fields": {
+    "created": "2020-10-29T09:12:44.427Z",
+    "modified": "2020-12-28T12:31:45.147Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "draft_of": null,
+    "name": "Portale dell'Università della Calabria",
+    "title": "titolo pagina",
+    "webpath": 1,
+    "base_template": 7,
+    "description": "",
+    "date_start": "2020-10-29T09:12:02Z",
+    "date_end": null,
+    "state": "published",
+    "type": "home"
+  }
+},
+{
+  "model": "cmspages.page",
+  "pk": 2,
+  "fields": {
+    "created": "2020-11-20T09:15:53.481Z",
+    "modified": "2020-12-11T07:33:31.693Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "draft_of": null,
+    "name": "Dimes",
+    "title": "titolo pagina",
+    "webpath": 4,
+    "base_template": 2,
+    "description": "",
+    "date_start": "2020-11-20T09:15:51Z",
+    "date_end": null,
+    "state": "published",
+    "type": "home"
+  }
+},
+{
+  "model": "cmspages.page",
+  "pk": 15,
+  "fields": {
+    "created": "2020-11-24T12:52:00.324Z",
+    "modified": "2020-11-24T12:52:09.027Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "draft_of": 1,
+    "name": "Portale dell'Università della Calabria",
+    "title": "titolo pagina",
+    "webpath": 1,
+    "base_template": 1,
+    "description": "",
+    "date_start": "2020-11-24T12:52:00Z",
+    "date_end": null,
+    "state": "draft",
+    "type": "home"
+  }
+},
+{
+  "model": "cmspages.page",
+  "pk": 17,
+  "fields": {
+    "created": "2020-12-03T10:47:08.171Z",
+    "modified": "2020-12-28T11:31:46.315Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "draft_of": null,
+    "name": "I Servizi del Campus",
+    "title": "I Servizi del Campus",
+    "webpath": 8,
+    "base_template": 7,
+    "description": "",
+    "date_start": "2020-12-03T10:46:59Z",
+    "date_end": null,
+    "state": "published",
+    "type": "standard"
+  }
+},
+{
+  "model": "cmspages.page",
+  "pk": 20,
+  "fields": {
+    "created": "2020-12-06T15:07:13.649Z",
+    "modified": "2020-12-22T22:29:00.602Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "draft_of": null,
+    "name": "Motore di Ricerca Portale Unical",
+    "title": "titolo pagina",
+    "webpath": 11,
+    "base_template": 7,
+    "description": "",
+    "date_start": "2020-12-06T15:06:53Z",
+    "date_end": null,
+    "state": "published",
+    "type": "standard"
+  }
+},
+{
+  "model": "cmspages.page",
+  "pk": 23,
+  "fields": {
+    "created": "2020-12-14T17:04:52.893Z",
+    "modified": "2020-12-23T12:18:58.574Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "draft_of": null,
+    "name": "Bootstrap Italia GRID PAGE",
+    "title": "titolo pagina",
+    "webpath": 16,
+    "base_template": 1,
+    "description": "",
+    "date_start": "2020-12-14T17:04:19Z",
+    "date_end": null,
+    "state": "published",
+    "type": "standard"
+  }
+},
+{
+  "model": "cmspages.page",
+  "pk": 24,
+  "fields": {
+    "created": "2020-12-22T22:32:23.831Z",
+    "modified": "2020-12-28T09:43:24.354Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "draft_of": null,
+    "name": "Accordi internazionali",
+    "title": "titolo pagina",
+    "webpath": 15,
+    "base_template": 7,
+    "description": "",
+    "date_start": "2020-12-22T22:32:17Z",
+    "date_end": null,
+    "state": "published",
+    "type": "standard"
+  }
+},
+{
+  "model": "cmspages.pagecarousel",
+  "pk": 1,
+  "fields": {
+    "created": "2020-10-30T16:37:39.528Z",
+    "modified": "2020-12-23T08:21:28.856Z",
+    "order": 0,
+    "is_active": true,
+    "section": "banner",
+    "page": 1,
+    "carousel": 1
+  }
+},
+{
+  "model": "cmspages.pagecarousel",
+  "pk": 2,
+  "fields": {
+    "created": "2020-11-20T10:12:41.157Z",
+    "modified": "2020-12-11T07:33:31.721Z",
+    "order": 10,
+    "is_active": true,
+    "section": "slider",
+    "page": 2,
+    "carousel": 2
+  }
+},
+{
+  "model": "cmspages.pagecarousel",
+  "pk": 6,
+  "fields": {
+    "created": "2020-11-24T12:52:00.366Z",
+    "modified": "2020-11-24T12:52:00.366Z",
+    "order": 10,
+    "is_active": true,
+    "section": "slider",
+    "page": 15,
+    "carousel": 1
+  }
+},
+{
+  "model": "cmspages.pagecarousel",
+  "pk": 7,
+  "fields": {
+    "created": "2020-12-28T12:23:56.261Z",
+    "modified": "2020-12-28T12:23:56.261Z",
+    "order": 1,
+    "is_active": true,
+    "section": "banner",
+    "page": 1,
+    "carousel": 2
+  }
+},
+{
+  "model": "cmspages.pagecarousel",
+  "pk": 8,
+  "fields": {
+    "created": "2020-12-28T12:31:45.252Z",
+    "modified": "2020-12-28T12:31:45.252Z",
+    "order": 2,
+    "is_active": true,
+    "section": "banner",
+    "page": 1,
+    "carousel": 1
+  }
+},
+{
+  "model": "cmspages.pagelocalization",
+  "pk": 1,
+  "fields": {
+    "created": "2020-12-28T11:31:46.489Z",
+    "modified": "2020-12-28T11:31:46.489Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Campus Services",
+    "page": 17,
+    "language": "en"
+  }
+},
+{
+  "model": "cmspages.pagemenu",
+  "pk": 1,
+  "fields": {
+    "created": "2020-11-02T10:08:40.122Z",
+    "modified": "2020-12-21T07:50:11.786Z",
+    "order": 0,
+    "is_active": true,
+    "section": "menu-1",
+    "page": 1,
+    "menu": 1
+  }
+},
+{
+  "model": "cmspages.pagemenu",
+  "pk": 2,
+  "fields": {
+    "created": "2020-11-02T10:09:03.494Z",
+    "modified": "2020-12-21T07:50:11.797Z",
+    "order": 1,
+    "is_active": true,
+    "section": "menu-2",
+    "page": 1,
+    "menu": 2
+  }
+},
+{
+  "model": "cmspages.pagemenu",
+  "pk": 6,
+  "fields": {
+    "created": "2020-11-20T10:29:42.578Z",
+    "modified": "2020-11-20T10:29:42.578Z",
+    "order": 10,
+    "is_active": true,
+    "section": "menu-2",
+    "page": 2,
+    "menu": 18
+  }
+},
+{
+  "model": "cmspages.pagemenu",
+  "pk": 7,
+  "fields": {
+    "created": "2020-11-20T17:16:02.007Z",
+    "modified": "2020-11-20T17:16:02.007Z",
+    "order": 10,
+    "is_active": true,
+    "section": "menu-1",
+    "page": 2,
+    "menu": 19
+  }
+},
+{
+  "model": "cmspages.pagemenu",
+  "pk": 15,
+  "fields": {
+    "created": "2020-11-24T12:52:00.379Z",
+    "modified": "2020-11-24T12:52:09.031Z",
+    "order": 10,
+    "is_active": false,
+    "section": "menu-1",
+    "page": 15,
+    "menu": 1
+  }
+},
+{
+  "model": "cmspages.pagemenu",
+  "pk": 16,
+  "fields": {
+    "created": "2020-11-24T12:52:00.395Z",
+    "modified": "2020-11-24T12:52:09.031Z",
+    "order": 11,
+    "is_active": false,
+    "section": "menu-2",
+    "page": 15,
+    "menu": 2
+  }
+},
+{
+  "model": "cmspages.pagemenu",
+  "pk": 18,
+  "fields": {
+    "created": "2020-12-03T10:47:08.181Z",
+    "modified": "2020-12-21T22:26:48.895Z",
+    "order": 0,
+    "is_active": true,
+    "section": "menu-1",
+    "page": 17,
+    "menu": 1
+  }
+},
+{
+  "model": "cmspages.pagemenu",
+  "pk": 35,
+  "fields": {
+    "created": "2020-12-06T15:25:55.179Z",
+    "modified": "2020-12-22T22:26:14.558Z",
+    "order": 0,
+    "is_active": true,
+    "section": "menu-1",
+    "page": 20,
+    "menu": 1
+  }
+},
+{
+  "model": "cmspages.pagemenu",
+  "pk": 43,
+  "fields": {
+    "created": "2020-12-22T22:33:06.472Z",
+    "modified": "2020-12-22T22:33:06.472Z",
+    "order": 0,
+    "is_active": true,
+    "section": "menu-1",
+    "page": 24,
+    "menu": 1
+  }
+},
+{
+  "model": "cmspages.pagemenu",
+  "pk": 44,
+  "fields": {
+    "created": "2020-12-23T10:01:32.013Z",
+    "modified": "2020-12-23T10:01:32.013Z",
+    "order": 0,
+    "is_active": true,
+    "section": "menu-1",
+    "page": 23,
+    "menu": 1
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 3,
+  "fields": {
+    "order": 0,
+    "is_active": true,
+    "section": "1-right-b",
+    "page": 17,
+    "block": 32
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 4,
+  "fields": {
+    "order": 1,
+    "is_active": true,
+    "section": "1-right-b",
+    "page": 17,
+    "block": 14
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 11,
+  "fields": {
+    "order": 2,
+    "is_active": true,
+    "section": "1-right-b",
+    "page": 17,
+    "block": 14
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 66,
+  "fields": {
+    "order": 0,
+    "is_active": false,
+    "section": "2-center-content",
+    "page": 1,
+    "block": 1
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 67,
+  "fields": {
+    "order": 1,
+    "is_active": true,
+    "section": "2-right-a",
+    "page": 1,
+    "block": 25
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 68,
+  "fields": {
+    "order": 2,
+    "is_active": true,
+    "section": "2-right-a",
+    "page": 1,
+    "block": 26
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 69,
+  "fields": {
+    "order": 3,
+    "is_active": false,
+    "section": "banner",
+    "page": 1,
+    "block": 2
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 70,
+  "fields": {
+    "order": 4,
+    "is_active": true,
+    "section": "3-center-content",
+    "page": 1,
+    "block": 3
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 72,
+  "fields": {
+    "order": 3,
+    "is_active": true,
+    "section": "1-right-b",
+    "page": 17,
+    "block": 11
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 74,
+  "fields": {
+    "order": 5,
+    "is_active": true,
+    "section": "2-mid-top-a",
+    "page": 1,
+    "block": 28
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 76,
+  "fields": {
+    "order": 0,
+    "is_active": true,
+    "section": "1-center-content",
+    "page": 23,
+    "block": 24
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 77,
+  "fields": {
+    "order": 1,
+    "is_active": true,
+    "section": "2-center-content",
+    "page": 23,
+    "block": 24
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 78,
+  "fields": {
+    "order": 2,
+    "is_active": true,
+    "section": "3-center-content",
+    "page": 23,
+    "block": 24
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 79,
+  "fields": {
+    "order": 4,
+    "is_active": true,
+    "section": "1-right-b",
+    "page": 17,
+    "block": 33
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 80,
+  "fields": {
+    "order": 6,
+    "is_active": true,
+    "section": "2-mid-bottom-a",
+    "page": 1,
+    "block": 4
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 81,
+  "fields": {
+    "order": 7,
+    "is_active": true,
+    "section": "2-mid-bottom-c",
+    "page": 1,
+    "block": 4
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 91,
+  "fields": {
+    "order": 5,
+    "is_active": true,
+    "section": "1-center-top-a",
+    "page": 17,
+    "block": 8
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 92,
+  "fields": {
+    "order": 6,
+    "is_active": true,
+    "section": "1-center-top-a",
+    "page": 17,
+    "block": 14
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 93,
+  "fields": {
+    "order": 7,
+    "is_active": true,
+    "section": "1-center-top-a",
+    "page": 17,
+    "block": 8
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 94,
+  "fields": {
+    "order": 8,
+    "is_active": true,
+    "section": "1-center-top-a",
+    "page": 17,
+    "block": 14
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 95,
+  "fields": {
+    "order": 9,
+    "is_active": true,
+    "section": "1-center-top-a",
+    "page": 17,
+    "block": 8
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 98,
+  "fields": {
+    "order": 8,
+    "is_active": true,
+    "section": "2-center-top-a",
+    "page": 1,
+    "block": 37
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 100,
+  "fields": {
+    "order": 9,
+    "is_active": true,
+    "section": "2-center-top-b",
+    "page": 1,
+    "block": 38
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 101,
+  "fields": {
+    "order": 10,
+    "is_active": true,
+    "section": "breadcrumbs",
+    "page": 17,
+    "block": 35
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 102,
+  "fields": {
+    "order": 0,
+    "is_active": true,
+    "section": "1-center-content",
+    "page": 20,
+    "block": 18
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 103,
+  "fields": {
+    "order": 1,
+    "is_active": true,
+    "section": "breadcrumbs",
+    "page": 20,
+    "block": 35
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 104,
+  "fields": {
+    "order": 0,
+    "is_active": true,
+    "section": "breadcrumbs",
+    "page": 24,
+    "block": 35
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 105,
+  "fields": {
+    "order": 1,
+    "is_active": true,
+    "section": "1-center-top-a",
+    "page": 24,
+    "block": 22
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 106,
+  "fields": {
+    "order": 10,
+    "is_active": true,
+    "section": "menu-2",
+    "page": 1,
+    "block": 39
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 110,
+  "fields": {
+    "order": 11,
+    "is_active": true,
+    "section": "1-top-a",
+    "page": 17,
+    "block": 30
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 111,
+  "fields": {
+    "order": 2,
+    "is_active": true,
+    "section": "1-top-a",
+    "page": 24,
+    "block": 30
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 112,
+  "fields": {
+    "order": 11,
+    "is_active": true,
+    "section": "banner",
+    "page": 1,
+    "block": 41
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 113,
+  "fields": {
+    "order": 12,
+    "is_active": true,
+    "section": "1-top-a",
+    "page": 1,
+    "block": 41
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 114,
+  "fields": {
+    "order": 13,
+    "is_active": true,
+    "section": "1-top-b",
+    "page": 1,
+    "block": 41
+  }
+},
+{
+  "model": "cmspages.pagelink",
+  "pk": 1,
+  "fields": {
+    "created": "2020-12-21T10:22:24.879Z",
+    "modified": "2020-12-21T10:24:46.653Z",
+    "order": 0,
+    "page": 1,
+    "name": "youtube 1",
+    "url": "https://www.youtube.com/embed/ArpMSujC8mM"
+  }
+},
+{
+  "model": "cmspages.pagelink",
+  "pk": 2,
+  "fields": {
+    "created": "2020-12-21T10:29:15.522Z",
+    "modified": "2020-12-21T10:29:15.522Z",
+    "order": 1,
+    "page": 1,
+    "name": "youtube 2",
+    "url": "https://www.youtube.com/embed/ArpMSujC8mM"
+  }
+},
+{
+  "model": "cmspages.pagelink",
+  "pk": 3,
+  "fields": {
+    "created": "2020-12-21T11:35:57.131Z",
+    "modified": "2020-12-21T11:35:57.131Z",
+    "order": 2,
+    "page": 1,
+    "name": "side",
+    "url": "https://www.youtube.com/embed/ArpMSujC8mM"
+  }
+},
+{
+  "model": "cmspages.pagepublication",
+  "pk": 3,
+  "fields": {
+    "created": "2020-12-21T22:26:48.924Z",
+    "modified": "2020-12-21T22:26:48.924Z",
+    "order": 0,
+    "is_active": true,
+    "page": 17,
+    "publication": 7
+  }
+},
+{
+  "model": "cmspages.pagepublication",
+  "pk": 4,
+  "fields": {
+    "created": "2020-12-21T22:32:05.402Z",
+    "modified": "2020-12-22T14:10:54.233Z",
+    "order": 1,
+    "is_active": true,
+    "page": 17,
+    "publication": 8
+  }
+},
+{
+  "model": "cmspages.pagepublication",
+  "pk": 5,
+  "fields": {
+    "created": "2020-12-21T22:33:07.500Z",
+    "modified": "2020-12-22T14:10:54.236Z",
+    "order": 2,
+    "is_active": true,
+    "page": 17,
+    "publication": 9
+  }
+},
+{
+  "model": "cmspages.pagepublication",
+  "pk": 6,
+  "fields": {
+    "created": "2020-12-22T14:35:45.009Z",
+    "modified": "2020-12-22T14:35:45.009Z",
+    "order": 0,
+    "is_active": true,
+    "page": 1,
+    "publication": 1
+  }
+},
+{
+  "model": "cmspages.pagepublication",
+  "pk": 7,
+  "fields": {
+    "created": "2020-12-22T15:16:50.164Z",
+    "modified": "2020-12-22T15:16:50.164Z",
+    "order": 1,
+    "is_active": true,
+    "page": 1,
+    "publication": 4
+  }
+},
+{
+  "model": "cmspages.pagepublication",
+  "pk": 8,
+  "fields": {
+    "created": "2020-12-22T22:33:55.396Z",
+    "modified": "2020-12-22T22:33:55.396Z",
+    "order": 0,
+    "is_active": true,
+    "page": 24,
+    "publication": 11
+  }
+},
+{
+  "model": "cmspages.pagepublication",
+  "pk": 9,
+  "fields": {
+    "created": "2020-12-23T13:03:51.044Z",
+    "modified": "2020-12-23T13:03:51.044Z",
+    "order": 2,
+    "is_active": true,
+    "page": 1,
+    "publication": 4
+  }
+},
+{
+  "model": "cmspages.category",
+  "pk": 1,
+  "fields": {
+    "created": "2020-11-09T13:25:34.020Z",
+    "modified": "2020-11-09T13:25:34.020Z",
+    "created_by": null,
+    "modified_by": null,
+    "name": "Didattica",
+    "description": "Didattica",
+    "image": "images/categories/inline_image_preview.jpg"
+  }
+},
+{
+  "model": "cmspages.category",
+  "pk": 2,
+  "fields": {
+    "created": "2020-11-09T13:26:39.646Z",
+    "modified": "2020-11-09T13:26:39.646Z",
+    "created_by": null,
+    "modified_by": null,
+    "name": "Ricerca",
+    "description": "Ricerca",
+    "image": "images/categories/ricerca.png"
+  }
+},
+{
+  "model": "cmspages.category",
+  "pk": 3,
+  "fields": {
+    "created": "2020-11-09T13:27:51.975Z",
+    "modified": "2020-11-09T13:27:51.975Z",
+    "created_by": null,
+    "modified_by": null,
+    "name": "Eventi",
+    "description": "Eventi",
+    "image": "images/categories/eventi.jpg"
+  }
+},
+{
+  "model": "cmspages.category",
+  "pk": 4,
+  "fields": {
+    "created": "2020-11-14T15:11:08.755Z",
+    "modified": "2020-11-14T15:11:08.755Z",
+    "created_by": null,
+    "modified_by": null,
+    "name": "Cultura",
+    "description": "Cultura",
+    "image": ""
+  }
+},
+{
+  "model": "cmspages.category",
+  "pk": 5,
+  "fields": {
+    "created": "2020-12-03T10:45:29.559Z",
+    "modified": "2020-12-03T10:45:29.559Z",
+    "created_by": null,
+    "modified_by": null,
+    "name": "Servizi",
+    "description": "I servizi del Campus",
+    "image": ""
+  }
+},
+{
+  "model": "cmspages.category",
+  "pk": 6,
+  "fields": {
+    "created": "2020-12-03T15:04:27.918Z",
+    "modified": "2020-12-03T15:04:27.918Z",
+    "created_by": null,
+    "modified_by": null,
+    "name": "Visita il campus",
+    "description": "test",
+    "image": ""
+  }
+},
+{
+  "model": "cmspages.category",
+  "pk": 7,
+  "fields": {
+    "created": "2020-12-10T11:29:39.517Z",
+    "modified": "2020-12-10T11:29:39.517Z",
+    "created_by": null,
+    "modified_by": null,
+    "name": "Internazionale",
+    "description": "internazionale",
+    "image": ""
+  }
+},
+{
+  "model": "cmspublications.publication",
+  "pk": 1,
+  "fields": {
+    "created": "2020-11-09T13:33:21.852Z",
+    "modified": "2020-11-25T09:51:03.244Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Papiri, Codex, Libri. La attraverso labora lorem ipsum",
+    "subheading": "Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.",
+    "content": "<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</p><p>&lt;h1&gt;This HTML is escaped by default!&lt;/h1&gt;</p><p>&nbsp;</p>",
+    "content_type": "html",
+    "presentation_image": 4,
+    "state": "published",
+    "date_start": "2020-11-09T13:24:35Z",
+    "date_end": "2022-11-30T14:31:20Z",
+    "note": "",
+    "slug": "unical-campus-1",
+    "relevance": 0,
+    "category": [
+      1
+    ]
+  }
+},
+{
+  "model": "cmspublications.publication",
+  "pk": 2,
+  "fields": {
+    "created": "2020-11-09T13:36:12.360Z",
+    "modified": "2020-11-16T14:29:56.271Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Unical Campus esempio 2",
+    "subheading": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+    "content": "<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>",
+    "content_type": "markdown",
+    "presentation_image": null,
+    "state": "published",
+    "date_start": "2020-11-09T13:35:44Z",
+    "date_end": "2022-11-30T14:29:43Z",
+    "note": "",
+    "slug": "unical-campus-esempio-2",
+    "relevance": 0,
+    "category": [
+      3
+    ]
+  }
+},
+{
+  "model": "cmspublications.publication",
+  "pk": 3,
+  "fields": {
+    "created": "2020-11-09T13:36:59.347Z",
+    "modified": "2020-12-11T07:26:28.929Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Unical Campus 3",
+    "subheading": "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.",
+    "content": "<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>",
+    "content_type": "markdown",
+    "presentation_image": 2,
+    "state": "published",
+    "date_start": "2020-11-09T13:36:39Z",
+    "date_end": "2022-11-30T14:30:13Z",
+    "note": "",
+    "slug": "unical-campus-3",
+    "relevance": 0,
+    "category": [
+      2
+    ]
+  }
+},
+{
+  "model": "cmspublications.publication",
+  "pk": 4,
+  "fields": {
+    "created": "2020-11-11T16:49:38.838Z",
+    "modified": "2020-11-20T14:47:36.489Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Studiare online è sempre più semplice",
+    "subheading": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+    "content": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat</p>",
+    "content_type": "markdown",
+    "presentation_image": null,
+    "state": "published",
+    "date_start": "2020-11-11T16:56:21Z",
+    "date_end": "2022-11-30T14:31:00Z",
+    "note": "",
+    "slug": "studiare-online-e-sempre-piu-semplice",
+    "relevance": 0,
+    "category": [
+      2
+    ]
+  }
+},
+{
+  "model": "cmspublications.publication",
+  "pk": 5,
+  "fields": {
+    "created": "2020-11-11T17:18:19.297Z",
+    "modified": "2020-11-24T14:11:36.607Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Il cinema è Unical",
+    "subheading": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+    "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+    "content_type": "markdown",
+    "presentation_image": 3,
+    "state": "published",
+    "date_start": "2020-11-11T17:18:08Z",
+    "date_end": "2022-11-30T14:30:24Z",
+    "note": "",
+    "slug": "il-cinema-e-unical",
+    "relevance": 0,
+    "category": [
+      4,
+      3
+    ]
+  }
+},
+{
+  "model": "cmspublications.publication",
+  "pk": 6,
+  "fields": {
+    "created": "2020-12-03T07:45:16.807Z",
+    "modified": "2020-12-03T08:06:07.624Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Studiare all'Unical",
+    "subheading": "sub heading",
+    "content": "",
+    "content_type": "markdown",
+    "presentation_image": 2,
+    "state": "published",
+    "date_start": "2020-12-03T07:43:54Z",
+    "date_end": "2050-12-03T07:43:56Z",
+    "note": "",
+    "slug": "studiare-allunical",
+    "relevance": 0,
+    "category": [
+      1
+    ]
+  }
+},
+{
+  "model": "cmspublications.publication",
+  "pk": 7,
+  "fields": {
+    "created": "2020-12-03T10:33:49.701Z",
+    "modified": "2020-12-09T15:58:52.859Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Futuri studenti",
+    "subheading": "Dopo la scuo uanans sun d dmndidmla superi undaurosanor qui puoi sceglier yunas ueondhc eie udndiid did dmdi il cors unsusi didnd odm dimd comeusna di te.",
+    "content": "",
+    "content_type": "markdown",
+    "presentation_image": 3,
+    "state": "published",
+    "date_start": "2020-12-03T10:33:19Z",
+    "date_end": "2050-12-03T10:33:20Z",
+    "note": "",
+    "slug": "futuri-studenti",
+    "relevance": 0,
+    "category": [
+      5
+    ]
+  }
+},
+{
+  "model": "cmspublications.publication",
+  "pk": 8,
+  "fields": {
+    "created": "2020-12-03T10:51:16.034Z",
+    "modified": "2020-12-09T15:58:36.868Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Studenti iscritti",
+    "subheading": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum",
+    "content": "",
+    "content_type": "markdown",
+    "presentation_image": 2,
+    "state": "published",
+    "date_start": "2020-12-03T10:49:04Z",
+    "date_end": "2050-12-03T10:49:05Z",
+    "note": "",
+    "slug": "studenti-iscritti",
+    "relevance": 0,
+    "category": [
+      5
+    ]
+  }
+},
+{
+  "model": "cmspublications.publication",
+  "pk": 9,
+  "fields": {
+    "created": "2020-12-03T10:52:35.844Z",
+    "modified": "2020-12-03T10:53:12.123Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Laureati",
+    "subheading": "lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsumlorem ipsum lorem ipsum lorem ipsum lorem ipsumlorem ipsumlorem ipsumlorem ipsum lorem ipsum lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum lorem ipsum lorem ipsumlorem ipsumlorem ipsumlorem ipsum",
+    "content": "",
+    "content_type": "markdown",
+    "presentation_image": 2,
+    "state": "published",
+    "date_start": "2020-12-03T10:52:10Z",
+    "date_end": "2050-12-03T10:52:11Z",
+    "note": "",
+    "slug": "laureati",
+    "relevance": 0,
+    "category": [
+      5
+    ]
+  }
+},
+{
+  "model": "cmspublications.publication",
+  "pk": 10,
+  "fields": {
+    "created": "2020-12-03T15:04:45.980Z",
+    "modified": "2020-12-03T15:47:10.135Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Visita il Campus",
+    "subheading": "Il Campus universitario più grande e attrezzato d’Italia, \r\noltre 200 ettari di verde con dndunf,kf msmnd fcifmnf \r\nfudndiw sdnd di, oltre 200 ettari di verde con dndunf,kf msmnd\r\n fcifmnf fudndiw sdnd di",
+    "content": "",
+    "content_type": "markdown",
+    "presentation_image": 2,
+    "state": "published",
+    "date_start": "2020-12-03T15:04:14Z",
+    "date_end": "2050-12-03T15:04:15Z",
+    "note": "",
+    "slug": "visita-il-campus",
+    "relevance": 0,
+    "category": [
+      6
+    ]
+  }
+},
+{
+  "model": "cmspublications.publication",
+  "pk": 11,
+  "fields": {
+    "created": "2020-12-10T11:28:08.372Z",
+    "modified": "2020-12-10T11:35:32.996Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Accordi e reti",
+    "subheading": "Dopo la scuo uanans sun d dmndidmla\r\nsuperi undaurosanor qui puoi sceglier yunas\r\nueondhc eie udndiid did dmdi il cors\r\nunsusi didnd odm dimd comeusna di te.",
+    "content": "",
+    "content_type": "markdown",
+    "presentation_image": 1,
+    "state": "published",
+    "date_start": "2020-12-10T11:26:35Z",
+    "date_end": "2050-12-10T11:26:36Z",
+    "note": "",
+    "slug": "accordi-e-reti",
+    "relevance": 0,
+    "category": [
+      7
+    ]
+  }
+},
+{
+  "model": "cmspublications.publication",
+  "pk": 12,
+  "fields": {
+    "created": "2020-12-10T11:37:15.907Z",
+    "modified": "2020-12-18T07:38:09.454Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Studiare all'estero",
+    "subheading": "Dopo la scuo uanans sun d dmndidmla superi undaurosanor qui puoi sceglier yunas ueondhc eie udndiid did dmdi il cors unsusi didnd odm dimd comeusna di te. Accordi e reti  Incontri Ranking",
+    "content": "",
+    "content_type": "markdown",
+    "presentation_image": 2,
+    "state": "published",
+    "date_start": "2020-12-10T11:36:09Z",
+    "date_end": "2050-12-10T11:36:10Z",
+    "note": "",
+    "slug": "studiare-allestero",
+    "relevance": 0,
+    "category": [
+      7
+    ]
+  }
+},
+{
+  "model": "cmspublications.publication",
+  "pk": 13,
+  "fields": {
+    "created": "2020-12-10T11:39:40.318Z",
+    "modified": "2020-12-10T11:39:53.423Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Studenti internazionali",
+    "subheading": "Dopo la scuo uanans sun d dmndidmla superi undaurosanor qui puoi sceglier yunas ueondhc eie udndiid did dmdi il cors unsusi didnd odm dimd comeusna di te. Accordi e reti  Incontri Ranking",
+    "content": "",
+    "content_type": "markdown",
+    "presentation_image": 3,
+    "state": "published",
+    "date_start": "2020-12-10T11:37:57Z",
+    "date_end": "2050-12-10T11:37:59Z",
+    "note": "",
+    "slug": "studenti-internazionali",
+    "relevance": 0,
+    "category": [
+      7
+    ]
+  }
+},
+{
+  "model": "cmspublications.publication",
+  "pk": 14,
+  "fields": {
+    "created": "2020-12-10T11:41:11.499Z",
+    "modified": "2020-12-10T11:41:11.499Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "Mobilità docenti, ricercatori, staff",
+    "subheading": "Dopo la scuo uanans sun d dmndidmla superi undaurosanor qui puoi sceglier yunas ueondhc eie udndiid did dmdi il cors unsusi didnd odm dimd comeusna di te. Accordi e reti  Incontri Ranking",
+    "content": "",
+    "content_type": "markdown",
+    "presentation_image": 1,
+    "state": "published",
+    "date_start": "2020-12-10T11:40:16Z",
+    "date_end": "2050-12-10T11:40:17Z",
+    "note": "",
+    "slug": "mobilita-docenti-ricercatori-staff",
+    "relevance": 0,
+    "category": [
+      7
+    ]
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 1,
+  "fields": {
+    "created": "2020-11-09T13:34:17.872Z",
+    "modified": "2020-11-09T13:34:26.064Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 1,
+    "webpath": 1,
+    "in_evidence_start": "2020-11-09T13:33:54Z",
+    "in_evidence_end": null
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 2,
+  "fields": {
+    "created": "2020-11-09T13:36:12.365Z",
+    "modified": "2020-11-09T13:36:12.365Z",
+    "order": 50,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 2,
+    "webpath": 1,
+    "in_evidence_start": "2020-11-09T13:36:10Z",
+    "in_evidence_end": null
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 3,
+  "fields": {
+    "created": "2020-11-09T13:36:59.352Z",
+    "modified": "2020-11-09T13:36:59.352Z",
+    "order": 90,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 3,
+    "webpath": 1,
+    "in_evidence_start": "2020-11-09T13:36:53Z",
+    "in_evidence_end": null
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 4,
+  "fields": {
+    "created": "2020-11-11T16:50:10.775Z",
+    "modified": "2020-11-11T16:50:30.389Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 4,
+    "webpath": 1,
+    "in_evidence_start": "2020-11-11T16:50:08Z",
+    "in_evidence_end": null
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 5,
+  "fields": {
+    "created": "2020-11-11T17:18:19.304Z",
+    "modified": "2020-11-12T07:25:17.712Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 5,
+    "webpath": 1,
+    "in_evidence_start": "2020-11-11T17:18:17Z",
+    "in_evidence_end": null
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 6,
+  "fields": {
+    "created": "2020-11-20T09:17:52.876Z",
+    "modified": "2020-11-20T12:39:48.614Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 5,
+    "webpath": 4,
+    "in_evidence_start": "2020-11-20T09:17:44Z",
+    "in_evidence_end": null
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 7,
+  "fields": {
+    "created": "2020-11-20T14:47:36.495Z",
+    "modified": "2020-11-20T14:47:36.495Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 4,
+    "webpath": 4,
+    "in_evidence_start": "2020-11-20T14:47:29Z",
+    "in_evidence_end": null
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 8,
+  "fields": {
+    "created": "2020-11-20T14:47:59.186Z",
+    "modified": "2020-11-20T14:47:59.186Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 1,
+    "webpath": 4,
+    "in_evidence_start": "2020-11-20T14:47:57Z",
+    "in_evidence_end": null
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 9,
+  "fields": {
+    "created": "2020-12-03T07:46:20.349Z",
+    "modified": "2020-12-03T07:46:20.349Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 6,
+    "webpath": 7,
+    "in_evidence_start": "2020-12-03T07:46:10Z",
+    "in_evidence_end": "2060-12-03T07:46:12Z"
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 10,
+  "fields": {
+    "created": "2020-12-03T10:34:07.755Z",
+    "modified": "2020-12-03T10:48:24.884Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 7,
+    "webpath": 8,
+    "in_evidence_start": "2020-12-03T10:34:02Z",
+    "in_evidence_end": "2050-12-03T10:34:03Z"
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 11,
+  "fields": {
+    "created": "2020-12-03T10:51:16.043Z",
+    "modified": "2020-12-03T10:51:16.043Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 8,
+    "webpath": 8,
+    "in_evidence_start": "2020-12-03T10:49:14Z",
+    "in_evidence_end": "2050-12-03T10:49:16Z"
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 12,
+  "fields": {
+    "created": "2020-12-03T10:52:35.853Z",
+    "modified": "2020-12-03T10:52:35.853Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 9,
+    "webpath": 8,
+    "in_evidence_start": "2020-12-03T10:52:24Z",
+    "in_evidence_end": "2050-12-03T10:52:24Z"
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 13,
+  "fields": {
+    "created": "2020-12-03T15:04:45.986Z",
+    "modified": "2020-12-03T15:04:45.986Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 10,
+    "webpath": 9,
+    "in_evidence_start": "2020-12-03T15:04:38Z",
+    "in_evidence_end": "2050-12-03T15:04:39Z"
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 14,
+  "fields": {
+    "created": "2020-12-10T11:30:57.995Z",
+    "modified": "2020-12-10T11:30:57.995Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 11,
+    "webpath": 14,
+    "in_evidence_start": "2020-12-10T11:30:51Z",
+    "in_evidence_end": "2050-12-10T11:30:53Z"
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 15,
+  "fields": {
+    "created": "2020-12-10T11:37:15.926Z",
+    "modified": "2020-12-10T11:37:15.926Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 12,
+    "webpath": 14,
+    "in_evidence_start": "2020-12-10T11:36:25Z",
+    "in_evidence_end": "2050-12-10T11:36:26Z"
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 16,
+  "fields": {
+    "created": "2020-12-10T11:39:40.337Z",
+    "modified": "2020-12-10T11:39:40.337Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 13,
+    "webpath": 14,
+    "in_evidence_start": "2020-12-10T11:38:15Z",
+    "in_evidence_end": "2050-12-10T11:38:16Z"
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 17,
+  "fields": {
+    "created": "2020-12-10T11:41:11.516Z",
+    "modified": "2020-12-10T11:41:11.516Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 14,
+    "webpath": 14,
+    "in_evidence_start": "2020-12-10T11:40:26Z",
+    "in_evidence_end": "2050-12-10T11:40:27Z"
+  }
+},
+{
+  "model": "cmspublications.publicationcontext",
+  "pk": 18,
+  "fields": {
+    "created": "2020-12-11T07:26:34.021Z",
+    "modified": "2020-12-11T07:26:34.022Z",
+    "order": 10,
+    "is_active": true,
+    "section": null,
+    "created_by": null,
+    "modified_by": null,
+    "publication": 3,
+    "webpath": 4,
+    "in_evidence_start": "2020-12-11T07:26:17Z",
+    "in_evidence_end": null
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 1,
+  "fields": {
+    "created": "2020-11-24T10:52:29.885Z",
+    "modified": "2020-11-24T10:52:29.885Z",
+    "publication": 1,
+    "name": "test",
+    "url": "https://auditorium.unical.it"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 2,
+  "fields": {
+    "created": "2020-12-03T07:45:16.816Z",
+    "modified": "2020-12-03T07:45:16.816Z",
+    "publication": 6,
+    "name": "Lauree",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 3,
+  "fields": {
+    "created": "2020-12-03T07:45:16.816Z",
+    "modified": "2020-12-03T07:45:16.816Z",
+    "publication": 6,
+    "name": "Lauree Magistrali a Ciclo Unico",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 4,
+  "fields": {
+    "created": "2020-12-03T07:45:16.816Z",
+    "modified": "2020-12-03T07:45:16.816Z",
+    "publication": 6,
+    "name": "Lauree Magistrali",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 5,
+  "fields": {
+    "created": "2020-12-03T10:33:49.709Z",
+    "modified": "2020-12-03T10:54:05.303Z",
+    "publication": 7,
+    "name": "ammissione",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 6,
+  "fields": {
+    "created": "2020-12-03T10:33:49.709Z",
+    "modified": "2020-12-03T10:54:05.303Z",
+    "publication": 7,
+    "name": "tasse",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 7,
+  "fields": {
+    "created": "2020-12-03T10:33:49.710Z",
+    "modified": "2020-12-03T10:54:05.304Z",
+    "publication": 7,
+    "name": "mensa",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 8,
+  "fields": {
+    "created": "2020-12-03T10:33:49.710Z",
+    "modified": "2020-12-03T10:54:05.305Z",
+    "publication": 7,
+    "name": "alloggi",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 9,
+  "fields": {
+    "created": "2020-12-03T10:33:49.710Z",
+    "modified": "2020-12-03T10:54:05.306Z",
+    "publication": 7,
+    "name": "borse di studio",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 10,
+  "fields": {
+    "created": "2020-12-03T10:51:16.044Z",
+    "modified": "2020-12-03T10:51:16.044Z",
+    "publication": 8,
+    "name": "iscrizioni",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 11,
+  "fields": {
+    "created": "2020-12-03T10:51:16.044Z",
+    "modified": "2020-12-03T10:51:16.044Z",
+    "publication": 8,
+    "name": "tasse",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 12,
+  "fields": {
+    "created": "2020-12-03T10:51:16.045Z",
+    "modified": "2020-12-03T10:51:16.045Z",
+    "publication": 8,
+    "name": "mensa",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 13,
+  "fields": {
+    "created": "2020-12-03T10:51:16.045Z",
+    "modified": "2020-12-03T10:51:16.045Z",
+    "publication": 8,
+    "name": "alloggi",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 14,
+  "fields": {
+    "created": "2020-12-03T10:51:16.046Z",
+    "modified": "2020-12-03T10:51:16.046Z",
+    "publication": 8,
+    "name": "residenze",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 15,
+  "fields": {
+    "created": "2020-12-03T10:51:16.046Z",
+    "modified": "2020-12-03T10:51:16.046Z",
+    "publication": 8,
+    "name": "borse di studio",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 16,
+  "fields": {
+    "created": "2020-12-03T10:51:16.046Z",
+    "modified": "2020-12-03T10:51:16.046Z",
+    "publication": 8,
+    "name": "counselling",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 17,
+  "fields": {
+    "created": "2020-12-03T10:51:16.047Z",
+    "modified": "2020-12-03T10:51:16.047Z",
+    "publication": 8,
+    "name": "tutor",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 18,
+  "fields": {
+    "created": "2020-12-03T10:51:16.047Z",
+    "modified": "2020-12-03T10:51:16.047Z",
+    "publication": 8,
+    "name": "servizi per studenti con disabilità, DSA e Bes",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 19,
+  "fields": {
+    "created": "2020-12-03T10:51:16.047Z",
+    "modified": "2020-12-03T10:51:16.047Z",
+    "publication": 8,
+    "name": "studiare all'estero",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 20,
+  "fields": {
+    "created": "2020-12-03T10:51:16.048Z",
+    "modified": "2020-12-03T10:51:16.048Z",
+    "publication": 8,
+    "name": "associazioni",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 21,
+  "fields": {
+    "created": "2020-12-03T10:53:12.129Z",
+    "modified": "2020-12-03T10:53:12.129Z",
+    "publication": 9,
+    "name": "dottorati",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 22,
+  "fields": {
+    "created": "2020-12-03T10:53:12.129Z",
+    "modified": "2020-12-03T10:53:12.130Z",
+    "publication": 9,
+    "name": "master",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 23,
+  "fields": {
+    "created": "2020-12-03T10:53:12.130Z",
+    "modified": "2020-12-03T10:53:12.130Z",
+    "publication": 9,
+    "name": "fare impresa",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 24,
+  "fields": {
+    "created": "2020-12-03T10:53:12.130Z",
+    "modified": "2020-12-03T10:53:12.130Z",
+    "publication": 9,
+    "name": "alumni",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 25,
+  "fields": {
+    "created": "2020-12-03T10:54:05.307Z",
+    "modified": "2020-12-03T10:54:05.307Z",
+    "publication": 7,
+    "name": "sussidi",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 26,
+  "fields": {
+    "created": "2020-12-03T10:54:05.307Z",
+    "modified": "2020-12-03T10:54:05.307Z",
+    "publication": 7,
+    "name": "counselling",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 27,
+  "fields": {
+    "created": "2020-12-03T10:54:05.308Z",
+    "modified": "2020-12-03T10:54:05.308Z",
+    "publication": 7,
+    "name": "servizi per studenti con disabilità, DSA e Bes",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 28,
+  "fields": {
+    "created": "2020-12-03T15:08:36.026Z",
+    "modified": "2020-12-03T15:08:36.026Z",
+    "publication": 10,
+    "name": "storia e architettura",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 29,
+  "fields": {
+    "created": "2020-12-03T15:08:36.026Z",
+    "modified": "2020-12-03T15:08:36.026Z",
+    "publication": 10,
+    "name": "territorio",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 30,
+  "fields": {
+    "created": "2020-12-03T15:08:36.027Z",
+    "modified": "2020-12-03T15:08:36.027Z",
+    "publication": 10,
+    "name": "come arrivare",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 31,
+  "fields": {
+    "created": "2020-12-03T15:08:36.027Z",
+    "modified": "2020-12-03T15:08:36.027Z",
+    "publication": 10,
+    "name": "mappa",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 32,
+  "fields": {
+    "created": "2020-12-10T11:35:33.030Z",
+    "modified": "2020-12-10T11:35:33.030Z",
+    "publication": 11,
+    "name": "Erasmus Charter for Higher",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 33,
+  "fields": {
+    "created": "2020-12-10T11:35:33.031Z",
+    "modified": "2020-12-10T11:35:33.031Z",
+    "publication": 11,
+    "name": "Accordi e reti",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 34,
+  "fields": {
+    "created": "2020-12-10T11:35:33.031Z",
+    "modified": "2020-12-10T11:35:33.031Z",
+    "publication": 11,
+    "name": "Incontri",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 35,
+  "fields": {
+    "created": "2020-12-10T11:35:33.032Z",
+    "modified": "2020-12-10T11:35:33.032Z",
+    "publication": 11,
+    "name": "Ranking",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 36,
+  "fields": {
+    "created": "2020-12-10T11:37:15.927Z",
+    "modified": "2020-12-10T11:37:15.927Z",
+    "publication": 12,
+    "name": "Erasmus + studio",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 37,
+  "fields": {
+    "created": "2020-12-10T11:37:15.927Z",
+    "modified": "2020-12-10T11:37:15.927Z",
+    "publication": 12,
+    "name": "Tirocini",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 38,
+  "fields": {
+    "created": "2020-12-10T11:37:15.928Z",
+    "modified": "2020-12-10T11:37:15.928Z",
+    "publication": 12,
+    "name": "Altre opportunità",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 39,
+  "fields": {
+    "created": "2020-12-10T11:37:15.928Z",
+    "modified": "2020-12-10T11:37:15.928Z",
+    "publication": 12,
+    "name": "Mobilità overseases",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 40,
+  "fields": {
+    "created": "2020-12-10T11:39:40.338Z",
+    "modified": "2020-12-10T11:39:40.338Z",
+    "publication": 13,
+    "name": "Offerta formativa internazionale",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 41,
+  "fields": {
+    "created": "2020-12-10T11:39:40.339Z",
+    "modified": "2020-12-10T11:39:40.339Z",
+    "publication": 13,
+    "name": "Offerta formativa",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 42,
+  "fields": {
+    "created": "2020-12-10T11:39:40.339Z",
+    "modified": "2020-12-10T11:39:40.339Z",
+    "publication": 13,
+    "name": "Unical admission",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 43,
+  "fields": {
+    "created": "2020-12-10T11:39:40.340Z",
+    "modified": "2020-12-10T11:39:40.340Z",
+    "publication": 13,
+    "name": "Summer courses",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 44,
+  "fields": {
+    "created": "2020-12-10T11:39:40.341Z",
+    "modified": "2020-12-10T11:39:40.341Z",
+    "publication": 13,
+    "name": "Welcome office",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 45,
+  "fields": {
+    "created": "2020-12-10T11:39:40.341Z",
+    "modified": "2020-12-10T11:39:40.341Z",
+    "publication": 13,
+    "name": "Erasmus incoming",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 46,
+  "fields": {
+    "created": "2020-12-10T11:39:40.342Z",
+    "modified": "2020-12-10T11:39:40.342Z",
+    "publication": 13,
+    "name": "Vivere nel Campus",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 47,
+  "fields": {
+    "created": "2020-12-10T11:41:11.517Z",
+    "modified": "2020-12-10T11:41:11.517Z",
+    "publication": 14,
+    "name": "Erasmus + per l'estero",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 48,
+  "fields": {
+    "created": "2020-12-10T11:41:11.518Z",
+    "modified": "2020-12-10T11:41:11.518Z",
+    "publication": 14,
+    "name": "Erasmus + per Unical",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 49,
+  "fields": {
+    "created": "2020-12-10T11:41:11.518Z",
+    "modified": "2020-12-10T11:41:11.518Z",
+    "publication": 14,
+    "name": "Fullbright",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationlink",
+  "pk": 50,
+  "fields": {
+    "created": "2020-12-10T11:41:11.520Z",
+    "modified": "2020-12-10T11:41:11.520Z",
+    "publication": 14,
+    "name": "Euraccess",
+    "url": "http://test.unical.it:8000"
+  }
+},
+{
+  "model": "cmspublications.publicationgallery",
+  "pk": 1,
+  "fields": {
+    "created": "2020-11-24T09:33:26.374Z",
+    "modified": "2020-11-24T09:33:26.374Z",
+    "order": 10,
+    "is_active": true,
+    "publication": 1,
+    "collection": 1
+  }
+},
+{
+  "model": "cmspublications.publicationrelated",
+  "pk": 1,
+  "fields": {
+    "created": "2020-11-25T09:10:42.440Z",
+    "modified": "2020-11-25T09:10:42.440Z",
+    "order": 10,
+    "is_active": true,
+    "publication": 1,
+    "related": 4
+  }
+},
+{
+  "model": "cmspublications.publicationrelated",
+  "pk": 2,
+  "fields": {
+    "created": "2020-11-25T09:11:11.987Z",
+    "modified": "2020-11-25T09:11:11.987Z",
+    "order": 20,
+    "is_active": true,
+    "publication": 1,
+    "related": 2
+  }
+},
+{
+  "model": "cmspublications.publicationattachment",
+  "pk": 1,
+  "fields": {
+    "created": "2020-11-25T09:51:03.248Z",
+    "modified": "2020-11-25T09:51:03.248Z",
+    "order": 10,
+    "is_active": true,
+    "file_size": 137610,
+    "file_type": "image/png",
+    "publication": 1,
+    "name": "allegato di prova",
+    "file": "publications_attachments/1/Schermata_da_2020-09-09_11-57-00.png",
+    "description": "Descrizione dell'allegato"
+  }
+},
+{
+  "model": "cmspublications.publicationlocalization",
+  "pk": 1,
+  "fields": {
+    "created": "2020-11-09T15:37:55.487Z",
+    "modified": "2020-11-09T15:37:55.488Z",
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "title": "gdfg",
+    "publication": 1,
+    "language": "en",
+    "subheading": "dfgdfgdf",
+    "content": "<p>dfgdfgdfg</p>"
+  }
+}
+]

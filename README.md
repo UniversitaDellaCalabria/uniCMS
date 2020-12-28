@@ -35,5 +35,11 @@ The entire uniCMS project code is open sourced and therefore licensed under the 
 For any other information please consult the [Official Documentation](https://unicms.readthedocs.io/) and feel free to contribute the project or open issues.
 
 
+#### Tests
 
+````
+# activate your virtualenv first, then
+cd example
+coverage erase ; coverage run ./manage.py test cms; coverage report -m
+````
 
