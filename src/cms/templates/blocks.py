@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 
 from cms.pages.templatetags.unicms_pages import (load_carousel_placeholder,
                                                  load_link_placeholder,
+                                                 load_menu_placeholder,
                                                  load_publication_content_placeholder)
 
 class AbstractBlock(object):
@@ -92,3 +93,20 @@ class CarouselPlaceholderBlock(PlaceHolderBlock):
         return load_carousel_placeholder(context=context,
                                          carousel_id=carousel_id,
                                          template=template)
+
+
+class MenuPlaceholderBlock(PlaceHolderBlock):
+    """
+    Menu PlaceHolder
+    """
+    def render(self):
+        template = self.content.get('template', '')
+        menu_id = self.content.get('menu_id', None)
+        if not template: return ''
+        context = Context({'request': self.request,
+                           'webpath': self.webpath,
+                           'page': self.page,
+                           'block': self})
+        return load_menu_placeholder(context=context,
+                                     menu_id=menu_id,
+                                     template=template)
