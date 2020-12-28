@@ -141,6 +141,14 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                                     order_by('order')
         return self._pubs
 
+    def get_carousels(self):
+        if getattr(self, '_carousels', None):
+            return self._carousels
+        self._carousels = PageCarousel.objects.filter(page=self,
+                                                      is_active=True).\
+                                                      order_by('order')
+        return self._carousels
+
     def get_links(self):
         if getattr(self, '_links', None):
             return self._links
