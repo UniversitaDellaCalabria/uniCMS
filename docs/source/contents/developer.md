@@ -166,3 +166,10 @@ The paths defined in `CMS_HANDLERS_PATHS` generates the list of reserved words t
 
 `cms.contexts.middleware.show_cms_draft_mode`:
    toggles, for staff users, the draft view mode in pages.
+
+#### Example data
+
+If you want to dump and share your example data:
+````
+./manage.py dumpdata --exclude auth.permission --exclude accounts --exclude contenttypes --exclude sessions --exclude admin --indent 2 > ../dumps/cms.json
+````

@@ -13,9 +13,9 @@ source env/bin/activate
 pip install unicms
 ````
 
-You can even start the project / example available in the official uniCMS repository.
+To complete the installation assure that you have correctly loaded 
+unicms' modules to your project settings file.
 
-To complete the installation remeber to load unicms' app to your project settings file.
 ````
 INSTALLED_APPS = [
     'accounts',
@@ -27,12 +27,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # templates related - have your own if you prefer
     'sass_processor',
     'bootstrap_italia_template',
-
-    'taggit',
-    'nested_admin',
-
+    'unicms_template_italia', # for example
+    'unicms_template_unical', # for example
+    
+    # unicms
+    'nested_admin', # for admin CRUD
+    'taggit', # page and publication tags 
+    'rest_framework' # api
     'cms.templates',
     'cms.contexts',
     'cms.carousels',
@@ -42,13 +46,33 @@ INSTALLED_APPS = [
     'cms.publications',
     'cms.api',
     'cms.search',
-
-    'unicms_template_italia', # for example
-    'unicms_template_unical', # for example
-    
-    'rest_framework' # api
 ]
 ````
+
+#### Getting Started
+
+You can even start the project / example available in the official uniCMS repository.
+````
+git clone https://github.com/UniversitaDellaCalabria/uniCMS.git
+cd uniCMS/example
+````
+
+Prepare Database and Preload example datas
+````
+./manage.py migrate
+
+# install your templates in settings.INSTALLED_APPS and then create CMS template symbolic links
+./manage.py unicms_collect_templates
+
+# if you want to load some example datas
+./manage.py loaddata ../dumps/cms.json
+
+./manage.py createsuperuser
+./manage.py runserver
+````
+
+Go to `/admin` and submit superuser credentials to start.
+
 
 #### URLs
 
@@ -208,29 +232,6 @@ CMS_LINKS_LABELS = (('view', _('View')),
                     ('submit', _('Submit')),
                     ('custom', _('custom'))
                   )
-````
-
-
-#### Getting Started
-
-````
-./manage.py migrate
-
-# install your templates in settings.INSTALLED_APPS and then create CMS template symbolic links
-./manage.py unicms_collect_templates
-
-# if you want to load some example datas
-./manage.py loaddata ../dumps/cms.json
-
-./manage.py createsuperuser
-./manage.py runserver
-````
-
-Go to `/admin` and submit superuser credentials to start.
-
-If you want to dump and share your example data:
-````
-./manage.py dumpdata --exclude auth.permission --exclude accounts --exclude contenttypes --exclude sessions --exclude admin --indent 2 > ../dumps/cms.json
 ````
 
 ###### Redis (Cache)
