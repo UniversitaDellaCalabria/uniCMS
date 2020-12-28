@@ -1,7 +1,7 @@
 Setup
 -----
 
-#### Prepare Environment
+#### Prepare Environment and Installing Requirements
 
 ````
 apt install python3-pip
@@ -13,8 +13,7 @@ source env/bin/activate
 pip install unicms
 ````
 
-To complete the installation assure that you have correctly loaded 
-unicms' modules to your project settings file.
+To complete the installation make sure you have correctly loaded unicms modules to your project settings file.
 
 ````
 INSTALLED_APPS = [
@@ -27,7 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # templates related - have your own if you prefer
+    # templates - you can load your own templates
     'sass_processor',
     'bootstrap_italia_template',
     'unicms_template_italia', # for example
@@ -51,13 +50,13 @@ INSTALLED_APPS = [
 
 #### Getting Started
 
-You can even start the project / example available in the official uniCMS repository.
+You can start the project/examples available in uniCMS repository as follow.
 ````
 git clone https://github.com/UniversitaDellaCalabria/uniCMS.git
 cd uniCMS/example
 ````
 
-Prepare Database and Preload example datas
+Prepare Database and Preload example data
 ````
 ./manage.py migrate
 
@@ -77,8 +76,7 @@ Go to `/admin` and submit superuser credentials to start.
 #### URLs
 
 uniCMS URLs are fully managed with `cms.context` via admin interface. 
-It enables user to load/import third-party django applications. It's important to keep in mind that the user should configures django application URLs
-before defining uniCMS's own URLs. Otherwise uniCMS will intercept those parameters and there is a good chance that the user will hit 404 page. The user can set the environment variable `CMS_PATH_PREFIX` to a desidered path, eg: `portale/`, to restrict uniCMS URL matching to specified root path.
+This feature enable users to load/import third-party django applications. It's important to keep in mind that the user should configure django application URLs before defining uniCMS's own URLs. Otherwise uniCMS will intercept those parameters and there is a good chance that the user will hit 404 page. The user can set the environment variable `CMS_PATH_PREFIX` to a desidered path, eg: `portale/`, to restrict uniCMS URL matching to specified root path.
 
 Here is an example of project urls.py 
 ````
@@ -111,15 +109,13 @@ for the latter, uniCMS uses some reserved keywords as prefix to specific URL rou
 These configurations are typically stored in settings file. See the following [Handlers](#handlers) for instance.
 
 See `cms.contexts.settings` as example.
-See `cms.contexts.views.cms_dispatcher` to figure how an HTTP request is intercepted and handled by uniCMS in order to establish if either to use a Handler or a Standard Page as response.
+See `cms.contexts.views.cms_dispatcher` to figure how an HTTP request is intercepted and handled by uniCMS to establish if either to use a Handler or a Standard Page as response.
 
 
 #### Settings
 
-uniCMS by default have standard settings for its applications, in their settings.py file,
-as for example `cms/pages/settings.py` or `cms/contexts/settings.py`.
-Each of the parameters declared in them can be overloaded in your project 
-general `settings.py` file.
+uniCMS by default have standard settings for its applications, in their respective settings.py file, as shown in the examples `cms/pages/settings.py` and `cms/contexts/settings.py`.
+Each of these parameters declared can be added to your project general (global) `settings.py` file.
 
 uniCMS parameters are the followings.
 
@@ -137,7 +133,7 @@ CMS_CONTEXT_PERMISSIONS = (('1', _('edit created by them in their own context'))
                            )
 ````
 
-###### Medias
+###### Media
 
 ````
 CMS_IMAGE_CATEGORY_SIZE = 128
@@ -171,7 +167,7 @@ FILE_MAX_SIZE = 5242880
 ###### Publications
 
 ````
-# as documentation reference or default
+# as per documentation reference or default
 CMS_PUBLICATION_VIEW_PREFIX_PATH = 'contents/news/view/'
 CMS_PUBLICATION_LIST_PREFIX_PATH = 'contents/news/list'
 
@@ -239,7 +235,7 @@ CMS_LINKS_LABELS = (('view', _('View')),
 uniCMS can cache HTTP responses based on relevant parameters outlined below:
 ````
 ################
-# Django related
+# Django config
 ################
 
 CACHES = {
@@ -259,7 +255,7 @@ CACHES = {
 DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
 
 ######################
-# Redis uniCMS related
+# Redis uniCMS config
 ######################
 
 CMS_CACHE_ENABLED = True
@@ -338,7 +334,7 @@ SEARCH_ELEMENTS_IN_PAGE = 25
 
 
 Create your fulltext indexes with the help of **cms.search** CLI. 
-Remember that default_language is set to italian by default.
+Remember that default_language is set to italian. Do the following to set your own language:
 ````
 ./manage.py cms_search_create_mongo_index -default_language english
 ````

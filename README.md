@@ -9,7 +9,7 @@ uniCMS is a Web Application Content Management System developed using  **Django 
 Setup
 -----
 
-#### Requirements
+#### Prepare Environment and Installing Requirements
 
 ````
 apt install python3-pip
@@ -49,7 +49,7 @@ If you want to dump and share your example data:
 uniCMS can cache HTTP responses based on relevant parameters outlined below:
 ````
 ################
-# Django related
+# Django config
 ################
 
 CACHES = {
@@ -69,7 +69,7 @@ CACHES = {
 DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
 
 ######################
-# Redis uniCMS related
+# Redis uniCMS config
 ######################
 
 CMS_CACHE_ENABLED = True
@@ -145,7 +145,7 @@ MODEL_TO_MONGO_MAP = {
 ````
 
 
-Create your fulltext indexes. Default_language is set to italian by default.
+Create your fulltext indexes. Default_language is set to italian. Do the following to set your own language:
 ````
 ./manage.py cms_search_create_mongo_index -default_language english
 ````
