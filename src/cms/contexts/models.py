@@ -171,6 +171,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
             return '{} {}'.format(self.user, self.permission)
 
 
+### DEPRECATED - TODO - mode to Redis TTL
 class EditorialBoardLocks(models.Model):
     content_type = models.ForeignKey(
         ContentType,
