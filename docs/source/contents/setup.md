@@ -50,6 +50,46 @@ INSTALLED_APPS = [
 ]
 ````
 
+#### URLs
+
+uniCMS URLs are fully managed with `cms.context` via admin interface. 
+It enables user to load/import third-party django applications. It's important to keep in mind that the user should configures django application URLs
+before defining uniCMS's own URLs. Otherwise uniCMS will intercept those parameters and there is a good chance that the user will hit 404 page. The user can set the environment variable `CMS_PATH_PREFIX` to a desidered path, eg: `portale/`, to restrict uniCMS URL matching to specified root path.
+
+Here is an example of project urls.py 
+````
+if 'cms.contexts' in settings.INSTALLED_APPS:
+    urlpatterns += path('', 
+                        include(('cms.contexts.urls', 'cms'), 
+                                 namespace="unicms"), 
+                        name="unicms"),
+
+if 'cms.api' in settings.INSTALLED_APPS:
+    urlpatterns += path('', 
+                        include(('cms.api.urls', 'cms'), 
+                                namespace="unicms_api"), 
+                        name="unicms_api"),
+
+
+if 'cms.search' in settings.INSTALLED_APPS:
+    urlpatterns += path('', 
+                        include(('cms.search.urls', 'cms_search'), 
+                                namespace="unicms_search"), 
+                        name="unicms_search"),
+````
+
+URLs that match the namespace within configuration in the `urls.py` of the the master project will be handled by uniCMS. uniCMS can match two type of resources:
+
+1. WebPath (Context) corresponsing to a single Page (Home page and associated pages)
+2. Application Handlers, a typical example would be the Pubblication List and the View resources
+
+for the latter, uniCMS uses some reserved keywords as prefix to specific URL routings.
+These configurations are typically stored in settings file. See the following [Handlers](#handlers) for instance.
+
+See `cms.contexts.settings` as example.
+See `cms.contexts.views.cms_dispatcher` to figure how an HTTP request is intercepted and handled by uniCMS in order to establish if either to use a Handler or a Standard Page as response.
+
+
 #### Settings
 
 uniCMS by default have standard settings for its applications, in their settings.py file,
