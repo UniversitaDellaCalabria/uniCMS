@@ -6,12 +6,15 @@ from . models import *
 
 class MediaCollectionItemInline(admin.TabularInline):
     model = MediaCollectionItem
+    readonly_fields = ('created_by', 'modified_by', 'preview_image')
     extra = 0
 
-
-# class MediaLinkInline(admin.TabularInline):
-    # model = MediaLink
-    # extra = 0
+    def preview_image(self, obj):
+        width="15"
+        # breakpoint()
+        img_tag = f'<img src="{obj.media.file.url}" style="width: {width}vw;"/>'
+        result = mark_safe(img_tag)
+        return result
 
 
 @admin.register(Media)
@@ -20,12 +23,11 @@ class MediaAdmin(admin.ModelAdmin):
     list_display  = ('title', 'file_size', 'file_type', 'preview_image')
     list_filter   = ('file_type', 
                      'created', 'modified')
-    readonly_fields = ('created_by', 'modified_by', 
-                       'file_size', 'file_type')
     inlines = (MediaCollectionItemInline,) # MediaLinkInline)
 
-    readonly_fields = ["headshot_image", "preview_image", 
-                       "file_type", "file_size"]
+    readonly_fields = ("headshot_image", "preview_image", 
+                       "file_type", "file_size",
+                       'created_by', 'modified_by')
 
     def headshot_image(self, obj):
         width="55"
@@ -39,7 +41,9 @@ class MediaAdmin(admin.ModelAdmin):
         result = mark_safe(img_tag)
         return result
 
+
 @admin.register(MediaCollection)
 class MediaCollectionAdmin(admin.ModelAdmin):
     search_fields = ('name',)
+    readonly_fields = ('created_by', 'modified_by')
     inlines = (MediaCollectionItemInline,)

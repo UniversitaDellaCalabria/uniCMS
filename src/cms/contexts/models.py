@@ -52,7 +52,9 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
     A editor/moderator can belong to one or more Context
     The same for Page Templates
     """
-    site = models.ForeignKey(WebSite, on_delete=models.CASCADE)
+    site = models.ForeignKey(WebSite, 
+                             null=True, blank=True,
+                             on_delete=models.CASCADE)
     name = models.CharField(max_length=254, blank=False, null=False)
     parent = models.ForeignKey('WebPath',
                                null=True, blank=True,
@@ -92,8 +94,12 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
 
     @property
     def redirect_url(self):
+        """
+        if this webpath is an alias this attribute 
+        will be valued with a redirect url
+        """
         if self.alias:
-            return self.alias.fullpath
+            return self.alias.get_full_path()
         return self.alias_url
 
     def get_full_path(self):
@@ -103,14 +109,26 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
         return sanitize_path(url)
 
     def save(self, *args, **kwargs):
+        # manage aliases
+        if self.alias:
+            self.site = self.alias.site         
+            
+        # alias or alias_url
+        if self.alias and self.alias_url:
+            self.alias = None
+        
+        # store a correct fullpath
         self.path = self.path if self.path[-1] == '/' else f'{self.path}/'
         self.path = sanitize_path(self.path)
         if self.parent:
+            self.site = self.parent.site
             # update fullpath
             fullpath = sanitize_path(f'{self.parent.fullpath}/{self.path}')
+        elif self.is_alias:
+            fullpath = self.redirect_url
         else:
             fullpath = self.path
-
+        
         for reserved_word in settings.CMS_HANDLERS_PATHS:
             if reserved_word in fullpath:
                 _msg = f'{fullpath} matches with the reserved word: {reserved_word}'
@@ -153,6 +171,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
             return '{} {}'.format(self.user, self.permission)
 
 
+### DEPRECATED - TODO - mode to Redis TTL
 class EditorialBoardLocks(models.Model):
     content_type = models.ForeignKey(
         ContentType,

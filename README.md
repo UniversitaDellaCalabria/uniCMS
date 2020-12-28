@@ -1,5 +1,9 @@
 # uniCMS
 
+![CI build](https://travis-ci.org/UniversitaDellaCalabria/uniCMS.svg?branch=master)
+![Python version](https://img.shields.io/badge/license-Apache%202-blue.svg)
+![License](https://img.shields.io/badge/python-3.5%20%7C%203.6%20%7C%203.7%203.8%203.9-blue.svg)
+
 uniCMS is a Web Application Content Management System developed using  **Django Framework**. The project is created by a group of passionate developers who introduces bespoke design and architecture for a next generation CMS.
 
 Setup
@@ -184,11 +188,17 @@ uniCMS is designed for both end users and developers where the developers can cr
 
 uniCMS was created due to necessity of creation and design of a new protal for the University of Calabria. After evaluation of several options, University of Calabria having a strong in-house competitive and highly skilled technical team it was decided to opt for the development of a brand new CMS solution based on Django framework. 
 
-The entire uniCMS project code is open sourced and therefore licensed under the [Apache 2.0 (https://en.wikipedia.org/wiki/Apache_License)].
+The entire uniCMS project code is open sourced and therefore licensed under the [Apache 2.0](https://en.wikipedia.org/wiki/Apache_License).
 
 
 For any other information please consult the [Official Documentation](https://unicms.readthedocs.io/) and feel free to contribute the project or open issues.
 
 
+#### Tests
 
+````
+# activate your virtualenv first, then
+cd example
+coverage erase ; coverage run ./manage.py test cms; coverage report -m
+````
 

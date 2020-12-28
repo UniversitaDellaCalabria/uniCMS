@@ -35,13 +35,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if confirm():
             # if options['renew'] and os.path.isdir(CMS_TEMPLATES_FOLDER):
-            shutil.rmtree('templates')
             if not os.path.isdir(CMS_TEMPLATES_FOLDER):
                 os.makedirs(f'{CMS_TEMPLATES_FOLDER}')
-                os.makedirs(f'{CMS_TEMPLATES_FOLDER}/blocks')
-                os.makedirs(f'{CMS_TEMPLATES_FOLDER}/pages')
+            for target in 'blocks', 'pages':
+                shutil.rmtree(f'{CMS_TEMPLATES_FOLDER}/{target}')
+                os.makedirs(f'{CMS_TEMPLATES_FOLDER}/{target}')
+            
+            # admin templates
             if not os.path.isdir('templates/admin'):
                 os.makedirs('templates/admin')
+            
             for i in get_unicms_templates():
                 if i[1] == 'admin/':
                     dest = f"templates/{''.join(i[1:])}"
@@ -49,5 +52,7 @@ class Command(BaseCommand):
                     dest = f"{CMS_TEMPLATES_FOLDER}/{''.join(i[1:])}"
                 src = ''.join(i)
                 print(f'Copying {src} -> {dest}')
+                if os.path.exists(f"{dest}"):
+                  os.remove(f"{dest}")
                 os.symlink(src, dest)
                 # shutil.copyfile(src, dest)

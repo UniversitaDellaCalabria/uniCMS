@@ -10,7 +10,6 @@ from django.utils import timezone
 
 from . forms import *
 from . models import *
-from . settings import *
 
 
 logger = logging.getLogger(__name__)

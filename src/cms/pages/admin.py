@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class AbstractPreviewableAdmin(admin.ModelAdmin):
-    change_form_template = "change_form_preview.html"
+    change_form_template = "admin/change_form_preview.html"
 
     def response_change(self, request, obj):
         if "_save_draft" in request.POST:
@@ -29,14 +29,14 @@ class AbstractPreviewableAdmin(admin.ModelAdmin):
                     "and 'Draft view mode' is set on.").format(obj, obj.pk)
             draft = copy_page_as_draft(obj)
             self.message_user(request, _msg)
-            url = reverse('admin:cmspage_change', 
+            url = reverse('admin:cmspage_change',
                           kwargs={'object_id': draft.pk})
-            return HttpResponseRedirect(url)  
-        
+            return HttpResponseRedirect(url)
+
         elif request.POST.get('state') == 'published' and obj.draft_of:
             published = obj.__class__.objects.filter(pk=obj.draft_of).first()
             if not published:
-                self.message_user(request, 
+                self.message_user(request,
                                   "Draft missed its parent page ... ",
                                   level = messages.ERROR)
             published.is_active = False
@@ -44,10 +44,10 @@ class AbstractPreviewableAdmin(admin.ModelAdmin):
             obj.draft_of = None
             published.save()
             obj.save()
-            
+
             self.message_user(request, "Draft being published succesfully")
-            
-        
+
+
         elif "_preview" in request.POST:
             # matching_names_except_this = self.get_queryset(request).filter(name=obj.name).exclude(pk=obj.id)
             # matching_names_except_this.delete()
@@ -55,7 +55,7 @@ class AbstractPreviewableAdmin(admin.ModelAdmin):
             # obj.save()
             self.message_user(request, "Preview is available at ...")
             return HttpResponseRedirect(".")
-            
+
         return super().response_change(request, obj)
 
 
@@ -67,6 +67,8 @@ make_page_draft.short_description = _("Make page Draft")
 
 @admin.register(Page)
 class PageAdmin(AbstractCreatedModifiedBy, nested_admin.NestedModelAdmin):
+    change_form_template = "admin/change_form_preview.html"
+
     search_fields = ('name',)
     list_display  = ('webpath', 'name',
                      'date_start', 'date_end',
@@ -74,13 +76,14 @@ class PageAdmin(AbstractCreatedModifiedBy, nested_admin.NestedModelAdmin):
     list_filter   = ('webpath__site', 'state', 'is_active', 'type',
                      'created', 'modified', 'date_start', 'date_end')
     readonly_fields = ('created_by', 'modified_by', 'draft_of')
-    inlines       = (PageMenuInline,
-                     PageCarouselInline, PageBlockInline, 
+    inlines       = (PageLocalizationInline,
+                     PageMenuInline,
+                     PageCarouselInline, PageBlockInline,
                      PagePublicationInline,
                      PageRelatedInline, PageLinkInline)
     actions = AbstractPreviewableAdmin.actions + [make_page_draft,]
     raw_id_fields = ['webpath', 'base_template']
-    
+
     def save_model(self, request, obj, form, change):
         super(PageAdmin, self).save_model(request, obj, form, change)
         for block_entry in obj.pageblock_set.filter(is_active=True):

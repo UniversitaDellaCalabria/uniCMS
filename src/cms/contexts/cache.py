@@ -19,9 +19,9 @@ CMS_CACHE_EXCLUDED_MATCHES = getattr(settings,
 CMS_CACHE_KEY_PREFIX = getattr(settings, 
                                'CMS_CACHE_KEY_PREFIX',
                                app_settings.CMS_CACHE_KEY_PREFIX)
-CMS_MAX_ENTRIES = getattr(settings, 
-                          'CMS_MAX_ENTRIES',
-                          app_settings.CMS_MAX_ENTRIES)
+CMS_CACHE_MAX_ENTRIES = getattr(settings, 
+                          'CMS_CACHE_MAX_ENTRIES',
+                          app_settings.CMS_CACHE_MAX_ENTRIES)
 CMS_CACHE_ENABLED = getattr(settings, 
                             'CMS_CACHE_ENABLED',
                              app_settings.CMS_CACHE_ENABLED)
@@ -49,8 +49,8 @@ def get_from_cache(request):
     
 
 def set_to_cache(request, value):
-    if not CMS_MAX_ENTRIES or \
-       len(cache.keys(f'{CMS_CACHE_KEY_PREFIX}*')) < CMS_MAX_ENTRIES:        
+    if not CMS_CACHE_MAX_ENTRIES or \
+       len(cache.keys(f'{CMS_CACHE_KEY_PREFIX}*')) < CMS_CACHE_MAX_ENTRIES:        
         key = make_cache_key(request)
         cache.set(key, value, CMS_CACHE_TTL)
         logger.debug(f'uniCMS Cache - {key} succesfully stored to cache')

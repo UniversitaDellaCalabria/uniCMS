@@ -1,46 +1,6 @@
 Developer's
 -----------
 
-#### URLs
-
-uniCMS URLs are fully managed with `cms.context` via admin interface. 
-It enables user to load/import third-party django applications. It's important to keep in mind that the user should configures django application URLs
-before defining uniCMS's own URLs. Otherwise uniCMS will intercept those parameters and there is a good chance that the user will hit 404 page. The user can set the environment variable `CMS_PATH_PREFIX` to a desidered path, eg: `portale/`, to restrict uniCMS URL matching to specified root path.
-
-Here is an example of project urls.py 
-````
-if 'cms.contexts' in settings.INSTALLED_APPS:
-    urlpatterns += path('', 
-                        include(('cms.contexts.urls', 'cms'), 
-                                 namespace="unicms"), 
-                        name="unicms"),
-
-if 'cms.api' in settings.INSTALLED_APPS:
-    urlpatterns += path('', 
-                        include(('cms.api.urls', 'cms'), 
-                                namespace="unicms_api"), 
-                        name="unicms_api"),
-
-
-if 'cms.search' in settings.INSTALLED_APPS:
-    urlpatterns += path('', 
-                        include(('cms.search.urls', 'cms_search'), 
-                                namespace="unicms_search"), 
-                        name="unicms_search"),
-````
-
-URLs that match the namespace within configuration in the `urls.py` of the the master project will be handled by uniCMS. uniCMS can match two type of resources:
-
-1. WebPath (Context) corresponsing to a single Page (Home page and associated pages)
-2. Application Handlers, a typical example would be the Pubblication List and the View resources
-
-for the latter, uniCMS uses some reserved keywords as prefix to specific URL routings.
-These configurations are typically stored in settings file. See the following [Handlers](#handlers) for instance.
-
-See `cms.contexts.settings` as example.
-See `cms.contexts.views.cms_dispatcher` to figure how an HTTP request is intercepted and handled by uniCMS in order to establish if either to use a Handler or a Standard Page as response.
-
-
 #### Models
 
 The models are implemented within the following applications:
@@ -56,6 +16,17 @@ The models are implemented within the following applications:
 The module `cms.contexts` defines the multitenancy feature. Each WebPath would have a related web pages. Each context have users (Editorial Board Editors) with single or multiple permissions (see `cms.contexts.settings.CMS_CONTEXT_PERMISSIONS`)
 
 The modules `cms.page` and `cms.publications` defines how a Page or a Publication is built. A Page is nothing but a composition of blocks, rendered in a HTML base template. This means that a page is just container block where multiple block can be defined in different order and fashion. For every page we must define to context (webpath) belonging as well as the template that we wish to adopt to be rendered by HTML.
+
+#### WebPaths
+
+[WiP]
+
+This section describes how WebPath works and how it can be configured.
+
+- path value match
+- child path behavior
+- the role of **.get_full_path()**
+- some use cases and strategies: third-party url, webpath aliases, intheritance by webpath childs
 
 
 #### Post Pre Save Hooks
@@ -195,3 +166,10 @@ The paths defined in `CMS_HANDLERS_PATHS` generates the list of reserved words t
 
 `cms.contexts.middleware.show_cms_draft_mode`:
    toggles, for staff users, the draft view mode in pages.
+
+#### Example data
+
+If you want to dump and share your example data:
+````
+./manage.py dumpdata --exclude auth.permission --exclude accounts --exclude contenttypes --exclude sessions --exclude admin --indent 2 > ../dumps/cms.json
+````

@@ -25,14 +25,23 @@ It will:
 WebPaths
 ********
 
-[WiP]
+A WebPath is nothing more than a path, such as 
+**/** or **/contacts**, where the first corresponds to a home page and 
+the second to a child path of the first.
+Child WebPaths are objects that have a relationship with a parent.
 
-This section describes how WebPath works and how it can be configured.
+In uniCMS a Webpath is also called Context. 
+Contents such as pages, menus, carousels and publications, can refer 
+to one or more contexts at the same time.
 
-- path value match
-- child path behavior
-- the role of **.get_full_path()**
-- some use cases and strategies: third-party url, webpath aliases, intheritance by webpath childs
+Let's think of a templatetag of an HTML block that dynamically loads all 
+the publications pertaining to the context where it is loaded. 
+Moreover, a webpath can also be an alias of another one, or a third party URL. 
+Example:
+
+- **/about-us** could be an alias of **/contacts**
+- **/polls** could be a redirect to a polling system, hosted at 
+  **https://that.polls.system.org/start**
 
 
 NavigationBars and Menus
