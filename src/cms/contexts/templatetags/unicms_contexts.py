@@ -61,8 +61,8 @@ def breadcrumbs(webpath, template=None, leaf=None):
     return handle_faulty_templates(template, data, name='breadcrumbs')
 
 
-@register.simple_tag(takes_context=True)
-def call(context, obj, method, **kwargs):
+@register.simple_tag
+def call(obj, method, **kwargs):
     return getattr(obj, method)(**kwargs)
 
 
