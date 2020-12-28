@@ -57,6 +57,17 @@ The module `cms.contexts` defines the multitenancy feature. Each WebPath would h
 
 The modules `cms.page` and `cms.publications` defines how a Page or a Publication is built. A Page is nothing but a composition of blocks, rendered in a HTML base template. This means that a page is just container block where multiple block can be defined in different order and fashion. For every page we must define to context (webpath) belonging as well as the template that we wish to adopt to be rendered by HTML.
 
+#### WebPaths
+
+[WiP]
+
+This section describes how WebPath works and how it can be configured.
+
+- path value match
+- child path behavior
+- the role of **.get_full_path()**
+- some use cases and strategies: third-party url, webpath aliases, intheritance by webpath childs
+
 
 #### Post Pre Save Hooks
 

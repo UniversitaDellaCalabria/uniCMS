@@ -94,6 +94,10 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
 
     @property
     def redirect_url(self):
+        """
+        if this webpath is an alias this attribute 
+        will be valued with a redirect url
+        """
         if self.alias:
             return self.alias.get_full_path()
         return self.alias_url
