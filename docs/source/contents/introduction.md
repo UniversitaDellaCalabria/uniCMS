@@ -35,4 +35,4 @@ The quickest way to get started with uniCMS is to run a demo platform with a few
 This project aims to simplify the design and implementation of a typical web portals designed for Universities/Colleges/Academic world.
 You'll find a simplified generalization of all entities aimed to build a common Content Management System (CMS).
 
-[uniCMS Example Project](https://github.com/UniversitaDellaCalabria/Portale-PoC)
+[uniCMS Example Project](https://github.com/UniversitaDellaCalabria/uniCMS/tree/main/example)
