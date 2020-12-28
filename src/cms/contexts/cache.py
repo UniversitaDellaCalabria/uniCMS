@@ -4,6 +4,7 @@ import logging
 import re
 import urllib
 
+from collections import OrderedDict
 from django.conf import settings
 from django.core.cache import cache
 
@@ -31,7 +32,9 @@ def make_cache_key(request):
     v = request.get_raw_uri()
     up = urllib.parse.urlparse(v)
     q = urllib.parse.parse_qs(up.query)
-    qs = sorted(q.items())
+    qs = OrderedDict(sorted(q.items()))
+    if not 'lang' in qs.keys():
+        qs['lang'] = [request.LANGUAGE_CODE]
     qs_ser = json.dumps(dict(qs))
     
     value_key = f'{up.netloc}_{up.path}_{qs_ser}'
