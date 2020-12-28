@@ -94,7 +94,8 @@ def load_publication_content_placeholder(context, template,
             return ''
 
         pub.translate_as(lang=language)
-        data = {'publication': pub}
+        data = {'publication': pub,
+                'webpath': webpath}
         return handle_faulty_templates(template, data, name=_func_name)
 
     else:
@@ -119,7 +120,8 @@ def load_publication_content_placeholder(context, template,
                 # i18n
                 pub.translate_as(lang=language)
 
-                data = {'publication': pub}
+                data = {'publication': pub,
+                        'webpath': webpath}
                 pub._published = True
                 return handle_faulty_templates(template, data, name=_func_name)
 

@@ -35,7 +35,7 @@ class AbstractPublication(TimeStampedModel, ActivableModel):
                                     default='markdown')
     presentation_image = models.ForeignKey(Media, null=True, blank=True,
                                            on_delete=models.CASCADE)
-    state = models.CharField(choices=PAGE_STATES, 
+    state = models.CharField(choices=PAGE_STATES,
                              max_length=33,
                              default='draft')
     date_start = models.DateTimeField()
@@ -150,6 +150,24 @@ class Publication(AbstractPublication, AbstractPublicable,
         return PublicationAttachment.objects.filter(publication=self,
                                                     is_active=True).\
                                              order_by('order')
+
+    def get_publication_context(self, webpath=None):
+        if not webpath: return None
+        pub_context = PublicationContext.objects.filter(publication=self,
+                                                        webpath=webpath,
+                                                        is_active=True).\
+                                                        first()
+        return pub_context
+
+    def url(self, webpath=None):
+        pub_context = self.get_publication_context(webpath=webpath)
+        if not pub_context: return '#'
+        return pub_context.url
+
+    def get_url_list(self, webpath=None, category_name=None):
+        pub_context = self.get_publication_context(webpath=webpath)
+        if not pub_context: return '#'
+        return pub_context.get_url_list(category_name=category_name)
 
     def __str__(self):
         return '{} {}'.format(self.title, self.state)
