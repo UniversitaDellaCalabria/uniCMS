@@ -21,7 +21,12 @@ from django.urls import path, include, re_path
 from rest_framework import routers, permissions
 from rest_framework.renderers import JSONOpenAPIRenderer
 from rest_framework.schemas import get_schema_view
-from rest_framework.schemas.agid_schema_views import get_schema_view
+
+try:
+    from rest_framework.schemas.agid_schema_views import get_schema_view
+except:
+    from rest_framework.schemas.schema_views import get_schema_view
+
 from rest_framework.schemas.openapi_agid import AgidSchemaGenerator as openapi_agid_generator
 
 
