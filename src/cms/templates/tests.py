@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-class TemplatesTest(TestCase):
+class TemplateTest(TestCase):
 
     def setUp(self):
         pass
@@ -47,8 +47,7 @@ class TemplatesTest(TestCase):
         return tb
 
 
-    def create_page_block_template(self, 
-                                   page_data=None, block_data=None):
+    def create_page_block_template(self, page_data={}, block_data={}):
         if page_data:
             pt = self.create_page_template(**page_data)
         else:
