@@ -75,8 +75,7 @@ def load_link(context, template, url):
 
 
 @register.simple_tag(takes_context=True)
-def load_publication_content_placeholder(context, template,
-                                         publication_id = None):
+def load_publication_content_placeholder(context, template):
     _func_name = 'load_publication_content_placeholder'
     _log_msg = f'Template Tag {_func_name}'
 
@@ -92,47 +91,31 @@ def load_publication_content_placeholder(context, template,
         logger.warning(f'{_func_name} cannot get a block object')
         return ''
 
-    # id is quite arbitrary
-    if publication_id:
-        pub = Publication.objects.filter(pk = publication_id).first()
+    pubs = page.get_publications()
 
-        if not pub:
-            _msg = '{} cannot find publication id {}'.format(_log_msg,
-                                                             publication_id)
-            logger.error(_msg)
-            return ''
+    ph = _get_placeholder_by_typestring(page,
+            'cms.templates.blocks.PublicationContentPlaceholderBlock')
 
-        pub.translate_as(lang=language)
-        data = {'publication': pub,
-                'webpath': webpath}
-        return handle_faulty_templates(template, data, name=_func_name)
+    if not ph:
+        _msg = '{} doesn\'t have any page publications'.format(_log_msg)
+        logger.warning(_msg)
+        return ''
 
-    else:
-        pubs = page.get_publications()
+    ph_pubs = [i for i in zip(ph, pubs)]
+    for i in ph_pubs:
+        pub = i[1].publication
+        if block.__class__.__name__ == i[0].type.split('.')[-1]:
+            # already rendered
+            if getattr(pub, '_published', False):
+                continue
 
-        ph = _get_placeholder_by_typestring(page,
-                'cms.templates.blocks.PublicationContentPlaceholderBlock')
+            # i18n
+            pub.translate_as(lang=language)
 
-        if not ph:
-            _msg = '{} doesn\'t have any page publications'.format(_log_msg)
-            logger.warning(_msg)
-            return ''
-
-        ph_pubs = [i for i in zip(ph, pubs)]
-        for i in ph_pubs:
-            pub = i[1].publication
-            if block.__class__.__name__ == i[0].type.split('.')[-1]:
-                # already rendered
-                if getattr(pub, '_published', False):
-                    continue
-
-                # i18n
-                pub.translate_as(lang=language)
-
-                data = {'publication': pub,
-                        'webpath': webpath}
-                pub._published = True
-                return handle_faulty_templates(template, data, name=_func_name)
+            data = {'publication': pub,
+                    'webpath': webpath}
+            pub._published = True
+            return handle_faulty_templates(template, data, name=_func_name)
 
 
 @register.simple_tag(takes_context=True)
