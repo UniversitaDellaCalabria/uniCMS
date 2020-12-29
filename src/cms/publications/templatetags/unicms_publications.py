@@ -9,7 +9,7 @@ from django.utils.safestring import SafeString
 
 from cms.contexts.utils import handle_faulty_templates
 from cms.pages.models import Category
-from cms.publications.models import PublicationContext
+from cms.publications.models import Publication, PublicationContext
 
 
 logger = logging.getLogger(__name__)
