@@ -171,16 +171,14 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
 
     def save(self, *args, **kwargs):
         super(self.__class__, self).save(*args, **kwargs)
-
-        for rel in PageRelated.objects.filter(page=self):
-            if not PageRelated.objects.\
-                    filter(page=rel.related_page, related_page=self):
-                PageRelated.objects.\
-                    create(page=rel.page, related_page=self,
-                           is_active=True)
-
-    def get_category_img(self):
-        return [i.image_as_html() for i in self.category.all()]
+        
+        # can't remember why I wrote this code ...!
+        # for rel in PageRelated.objects.filter(page=self):
+            # if not PageRelated.objects.\
+                    # filter(page=rel.related_page, related_page=self):
+                # PageRelated.objects.\
+                    # create(page=rel.page, related_page=self,
+                           # is_active=True)
 
     def translate_as(self, lang):
         """
@@ -326,7 +324,7 @@ class Category(TimeStampedModel, CreatedModifiedBy):
         res = ""
         try:
             res = f'<img width={CMS_IMAGE_CATEGORY_SIZE} src="{self.image.url}"/>'
-        except ValueError as e:
+        except ValueError as e:  # pragma: no cover
             # *** ValueError: The 'image' attribute has no file associated with it.
             res = f"{settings.STATIC_URL}images/no-image.jpg"
         return mark_safe(res)

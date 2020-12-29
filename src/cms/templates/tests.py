@@ -21,8 +21,8 @@ class TemplateUnitTest(TestCase):
     def setUp(self):
         pass
 
-
-    def create_page_template(self, **kwargs):
+    @classmethod
+    def create_page_template(cls, **kwargs):
         data = {'is_active': True, 
                 'name': 'Bootstrap Italia', 
                 'template_file': 'italia.html', 
@@ -31,10 +31,11 @@ class TemplateUnitTest(TestCase):
         for k,v in kwargs.items():
             data[k] = v
         pt = PageTemplate.objects.create(**data)
+        pt.__str__()
         return pt
 
-
-    def create_block_template(self, **kwargs):
+    @classmethod
+    def create_block_template(cls, **kwargs):
         data = {'is_active': True, 
                 'name': 'Carousel - Main Banner', 
                 'description': '', 
@@ -44,20 +45,22 @@ class TemplateUnitTest(TestCase):
         for k,v in kwargs.items():
             data[k] = v
         tb = TemplateBlock.objects.create(**data)
+        tb.__str__()
         return tb
 
-
-    def create_page_block_template(self, page_data={}, block_data={}):
+    @classmethod
+    def create_page_block_template(cls, page_data={}, block_data={}):
         if page_data:
-            pt = self.create_page_template(**page_data)
+            pt = cls.create_page_template(**page_data)
         else:
-            pt = self.create_page_template()
+            pt = cls.create_page_template()
 
         if block_data:
-            bt = self.create_block_template(**block_data)
+            bt = cls.create_block_template(**block_data)
         else:
-            bt = self.create_block_template()
-        return PageTemplateBlock(template=pt, block=bt, section='1')
+            bt = cls.create_block_template()
+        return PageTemplateBlock.objects.create(template=pt, block=bt, 
+                                                section='1', is_active=1)
 
         
     def test_template_page_block(self):

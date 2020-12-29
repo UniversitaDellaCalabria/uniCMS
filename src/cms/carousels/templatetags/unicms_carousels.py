@@ -25,6 +25,7 @@ def _load_carousel_by_id(carousel_id, template,
     data = {'carousel_items': carousel_items}
     return handle_faulty_templates(template, data, name=func_name)
 
+
 @register.simple_tag(takes_context=True)
 def load_carousel(context, section, template, carousel_id=None):
     _func_name = 'load_carousel'

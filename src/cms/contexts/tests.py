@@ -21,7 +21,8 @@ class ContextUnitTest(TestCase):
         pass
 
 
-    def create_user(self, **kwargs):
+    @classmethod
+    def create_user(cls, **kwargs):
         if not kwargs:
             kwargs =  {'username': 'foo',
                        'first_name': 'foo',
@@ -31,7 +32,8 @@ class ContextUnitTest(TestCase):
         return user
 
 
-    def create_website(self, **kwargs):
+    @classmethod
+    def create_website(cls, **kwargs):
         kwargs = kwargs or dict(name='example.org',
                                 domain='example.org',
                                 is_active=True)
@@ -39,9 +41,10 @@ class ContextUnitTest(TestCase):
         return website
 
 
-    def create_webpath(self, **kwargs):
+    @classmethod
+    def create_webpath(cls, **kwargs):
         if not kwargs:
-            website = self.create_website()
+            website = cls.create_website()
             kwargs =  {'site': website,
                        'name': "Example WebPath",
                        'parent': None,
@@ -53,12 +56,13 @@ class ContextUnitTest(TestCase):
         webpath = WebPath.objects.create(**kwargs)
         return webpath
 
-    def create_editorialboard_user(self, **kwargs):
+    @classmethod
+    def create_editorialboard_user(cls, **kwargs):
         if not kwargs:
-            webpath = self.create_webpath()
-            kwargs =  {'user': self.create_user(),
+            webpath = cls.create_webpath()
+            kwargs =  {'user': cls.create_user(),
                        'permission': '1',
-                       'webpath': self.create_webpath(),
+                       'webpath': cls.create_webpath(),
                        'is_active': True}
 
         ebe = EditorialBoardEditors.objects.create(**kwargs)
