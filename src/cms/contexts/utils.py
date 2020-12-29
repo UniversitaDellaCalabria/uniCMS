@@ -58,6 +58,10 @@ def sanitize_path(path):
     return re.sub('/[/]+', '/', path)
 
 
+def append_slash(path):
+    return f'{path}/' if path[-1] != '/' else path
+
+
 def toggle_session_state(request, arg_name) -> None:
     state_session = request.session.get(arg_name)
     state_request = request.GET.get(arg_name, 'not-set')

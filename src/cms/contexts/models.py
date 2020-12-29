@@ -12,6 +12,7 @@ from cms.contexts.utils import sanitize_path
 from cms.templates.models import TimeStampedModel
 
 from . import settings as app_settings
+from . utils import append_slash
 
 
 logger = logging.getLogger(__name__)
@@ -118,7 +119,7 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
             self.alias = None
         
         # store a correct fullpath
-        self.path = self.path if self.path[-1] == '/' else f'{self.path}/'
+        self.path = append_slash(self.path)
         self.path = sanitize_path(self.path)
         if self.parent:
             self.site = self.parent.site
