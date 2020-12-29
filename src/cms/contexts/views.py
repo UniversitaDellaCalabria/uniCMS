@@ -11,11 +11,12 @@ from django.shortcuts import render, get_object_or_404
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
-from . decorators import unicms_cache
-from .models import WebSite, WebPath
-
 from cms.pages.models import Page
 from urllib.parse import urlparse
+
+from . decorators import unicms_cache
+from . models import WebSite, WebPath
+from . utils import append_slash
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +56,7 @@ def cms_dispatch(request):
             logger.exception(f'{path}:{e}')
 
     # go further with webpath matching
-    path = f'{path}/' if path[-1] != '/' else path
+    path = append_slash(path)
     webpath = WebPath.objects.filter(site=website,
                                      fullpath=path).first()
     if not webpath:
