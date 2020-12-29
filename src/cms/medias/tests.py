@@ -41,6 +41,13 @@ class MediaTest(TestCase):
         media = cls.create_media(file = fpath)
         copyfile(fpath, dest)
         
+        media.__str__()
+        assert isinstance(media.get_media_path(), str)
+        
+        # testing also file_size_X properties
+        media.file_size_kb
+        media.file_size_mb
+        
         media.delete()
     
     @classmethod
