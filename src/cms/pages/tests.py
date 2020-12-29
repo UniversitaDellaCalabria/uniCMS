@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase
 from django.utils import timezone
 
+from cms.carousels.templatetags.unicms_carousels import load_carousel
 from cms.carousels.tests import CarouselUnitTest
 from cms.contexts.tests import ContextUnitTest
 from cms.menus.tests import MenuUnitTest
@@ -75,6 +76,7 @@ class PageUnitTest(TestCase):
         carousel = carousel_item.carousel
         pc = PageCarousel.objects.create(page = obj,
                                          carousel=carousel,
+                                         section='banner',
                                          is_active=1)
         pc.__str__()
 
@@ -157,4 +159,14 @@ class PageUnitTest(TestCase):
     def test_page_expired(cls):
         obj = cls.create_page(date_end=timezone.localtime())
         obj.is_publicable
-        
+    
+    
+    @classmethod
+    def test_page_load_carousel(cls):
+        obj = cls.create_page(date_end=timezone.localtime())
+        req = RequestFactory().get('/')
+        template_context = dict(request=req, webpath=obj.webpath)
+        lm = load_carousel(section='banner',  
+                           template='italia_hero_slider.html',
+                           context=template_context)
+        assert 'italia_carousel' in lm

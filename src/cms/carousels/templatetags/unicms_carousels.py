@@ -46,9 +46,9 @@ def load_carousel(context, section, template, carousel_id=None):
                                                     is_active=True,
                                                     page__webpath=context['webpath']).\
                                                     first()
-        if not page_carousel:
+        if not page_carousel: # pragma: no cover
             _msg = '{} cannot find carousel in page {} and section {}'\
-                   .format(log_msg, page, section)
+                   .format(_msg, page, section)
             logger.error(_msg)
             return ''
 
