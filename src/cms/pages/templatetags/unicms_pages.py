@@ -66,6 +66,15 @@ def load_page_title(context, page):
 
 
 @register.simple_tag(takes_context=True)
+def load_link(context, template, url):
+    _func_name = 'load_link'
+
+    # url is quite arbitrary
+    data = {'link': url}
+    return handle_faulty_templates(template, data, name=_func_name)
+
+
+@register.simple_tag(takes_context=True)
 def load_publication_content_placeholder(context, template,
                                          publication_id = None):
     _func_name = 'load_publication_content_placeholder'
@@ -127,8 +136,7 @@ def load_publication_content_placeholder(context, template,
 
 
 @register.simple_tag(takes_context=True)
-def load_link_placeholder(context, template,
-                          url=''):
+def load_link_placeholder(context, template):
     _func_name = 'load_link_placeholder'
     _log_msg = f'Template Tag {_func_name}'
 
@@ -140,32 +148,27 @@ def load_link_placeholder(context, template,
         logger.warning(f'{_func_name} cannot get a block object')
         return ''
 
-    # url is quite arbitrary
-    if url:
-        data = {'link': url,}
+    blocks = page.get_blocks()
+    ph = [i for i in blocks
+          if i.type == \
+          'cms.templates.blocks.LinkPlaceholderBlock']
+
+    if not ph:
+        _msg = '{} doesn\'t have any page link'.format(_log_msg)
+        logger.warning(_msg)
+        return ''
+
+    links = page.get_links()
+    for i in zip(ph, links):
+        link = i[1]
+        if block.__class__.__name__ == i[0].type.split('.')[-1]:
+            # already rendered
+            if getattr(link, '_published', False):
+                continue
+            data = {'link': link.url,}
+            link._published = True
+
         return handle_faulty_templates(template, data, name=_func_name)
-    else:
-        blocks = page.get_blocks()
-        ph = [i for i in blocks
-              if i.type == \
-              'cms.templates.blocks.LinkPlaceholderBlock']
-
-        if not ph:
-            _msg = '{} doesn\'t have any page link'.format(_log_msg)
-            logger.warning(_msg)
-            return ''
-
-        links = page.get_links()
-        for i in zip(ph, links):
-            link = i[1]
-            if block.__class__.__name__ == i[0].type.split('.')[-1]:
-                # already rendered
-                if getattr(link, '_published', False):
-                    continue
-                data = {'link': link.url,}
-                link._published = True
-
-            return handle_faulty_templates(template, data, name=_func_name)
 
 
 @register.simple_tag(takes_context=True)

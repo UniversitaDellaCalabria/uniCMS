@@ -67,15 +67,13 @@ class LinkPlaceholderBlock(PlaceHolderBlock):
     """
     def render(self):
         template = self.content.get('template', '')
-        url = self.content.get('url', None)
         if not template: return ''
         context = Context({'request': self.request,
                            'webpath': self.webpath,
                            'page': self.page,
                            'block': self})
         return load_link_placeholder(context=context,
-                                     template=template,
-                                     url=url)
+                                     template=template)
 
 
 class CarouselPlaceholderBlock(PlaceHolderBlock):

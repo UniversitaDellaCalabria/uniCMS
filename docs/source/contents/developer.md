@@ -135,6 +135,11 @@ following the template blocks order (e.g. 1st PageCarousel is associated to
 *arguments*: template<br>
 *example*: `{% load_carousel_placeholder template="carousel.html" %}`
 
+* **load_link**<br>
+gets a URL as parameter and pass it to a template.<br>
+*arguments*: template, url<br>
+*example*: `{% load_link url="https://myvideo.it" template="iframe-video.html" %}`
+
 * **load_link_placeholder**<br>
 renders a URL through passed template (e.g. iFrame template). 
 Every carousel placeholder is associated to an active page's PageLink, 
@@ -143,6 +148,26 @@ following the template blocks order (e.g. 1st PageLink is associated to
 *arguments*: template<br>
 *example*: `{% load_link_placeholder template="iframe.html" %}`
 
+* **load_menu_placeholder**<br>
+renders a Menu through passed template. 
+Every menu placeholder is associated to an active page's PageMenu, 
+following the template blocks order (e.g. 1st PageMenu is associated to 
+1st rendered Menu PlaceHolder, 2nd to 2nd, etc...)<br>
+*arguments*: template<br>
+*example*: `{% load_menu_placeholder template="alternative-menu.html" %}`
+
+* **load_page_title**<br>
+returns a translated page title.<br>
+*arguments*: page<br>
+*example*: `{% load_page_title page=page %}`
+
+* **load_publication_content_placeholder**<br>
+renders a Publication through passed template. 
+Every publication placeholder is associated to an active page's PagePublication, 
+following the template blocks order (e.g. 1st PageMenu is associated to 
+1st rendered Publication PlaceHolder, 2nd to 2nd, etc...)<br>
+*arguments*: template<br>
+*example*: `{% load_publication_content_placeholder template="publication-layout.html" %}`
 
 ###### cms_templates
 supported_languages: get settings.LANGUAGES_CODE to templates
