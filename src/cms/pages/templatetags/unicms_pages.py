@@ -261,7 +261,6 @@ def load_menu_placeholder(context, template,
         ph = [i for i in blocks
               if i.type == \
               'cms.templates.blocks.MenuPlaceholderBlock']
-
         if not ph:
             _msg = '{} doesn\'t have any page menu'.format(_log_msg)
             logger.warning(_msg)

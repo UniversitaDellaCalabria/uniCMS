@@ -108,7 +108,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         template_blocks = self.base_template.\
                             pagetemplateblock_set.\
                             filter(**query_params).\
-                            exclude(pk__in=[i[1] for i in blocks]).\
+                            exclude(pk__in=excluded_blocks).\
                             order_by('section', 'order').\
                             values_list('order', 'block__pk')
         order_pk = set()
