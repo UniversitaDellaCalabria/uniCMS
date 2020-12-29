@@ -79,7 +79,7 @@ class Publication(AbstractPublication, AbstractPublicable,
     def image_url(self):
         if self.presentation_image:
             image_path =  self.presentation_image.file
-        else:
+        else: # pragma: no cover
             image_path = self.category.first().image
         return sanitize_path(f'{settings.MEDIA_URL}/{image_path}')
 
@@ -137,8 +137,8 @@ class Publication(AbstractPublication, AbstractPublicable,
     def title2slug(self):
         return slugify(self.title)
 
-    def delete(self, *args, **kwargs):
-        super(self.__class__, self).delete(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+        # super(self.__class__, self).delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -151,6 +151,7 @@ class Publication(AbstractPublication, AbstractPublicable,
                                                     is_active=True).\
                                              order_by('order')
 
+
     def get_publication_context(self, webpath=None):
         if not webpath: return None
         pub_context = PublicationContext.objects.filter(publication=self,
@@ -159,15 +160,18 @@ class Publication(AbstractPublication, AbstractPublicable,
                                                         first()
         return pub_context
 
+
     def url(self, webpath=None):
         pub_context = self.get_publication_context(webpath=webpath)
         if not pub_context: return ''
         return pub_context.url
 
+
     def get_url_list(self, webpath=None, category_name=None):
         pub_context = self.get_publication_context(webpath=webpath)
         if not pub_context: return ''
         return pub_context.get_url_list(category_name=category_name)
+
 
     def __str__(self):
         return '{} {}'.format(self.title, self.state)
@@ -232,7 +236,8 @@ class PublicationLink(TimeStampedModel):
         return '{} {}'.format(self.publication, self.name)
 
 
-class PublicationBlock(TimeStampedModel, ActivableModel, SortableModel):
+class PublicationBlock(SectionAbstractModel,TimeStampedModel, 
+                       ActivableModel, SortableModel):
     publication = models.ForeignKey(Publication, null=False, blank=False,
                                     on_delete=models.CASCADE)
     block = models.ForeignKey(TemplateBlock, null=False, blank=False,
@@ -276,7 +281,7 @@ class PublicationRelated(TimeStampedModel, SortableModel, ActivableModel):
         return '{} {}'.format(self.publication, self.related)
 
 
-def publication_attachment_path(instance, filename):
+def publication_attachment_path(instance, filename): # pragma: no cover
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     return 'publications_attachments/{}/{}'.format(instance.publication.pk,
                                                    filename)
@@ -294,7 +299,6 @@ class PublicationAttachment(TimeStampedModel, SortableModel, ActivableModel,
                                 "this block would be rendered."))
     file = models.FileField(upload_to=publication_attachment_path)
     description = models.TextField()
-
 
     class Meta:
         verbose_name_plural = _("Publication Attachments")

@@ -27,7 +27,7 @@ class PageUnitTest(TestCase):
     def create_category(cls, **kwargs):
         if not kwargs:
             kwargs =  {
-                'name': 'main menu',
+                'name': 'main',
                 'description': 'description',
                 'image': f'{settings.MEDIA_ROOT}/images/categories/eventi.jpg'
             }

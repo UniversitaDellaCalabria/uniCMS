@@ -12,8 +12,8 @@ DEFAULT_LANGUAGE = dict(settings.LANGUAGES)[settings.LANGUAGE].lower()
 class SearchTranslationEntry(BaseModel):
     language : str
     title : str
-    subheading : str
-    content : str
+    subheading : Optional[str]
+    content : Optional[str]
 
 
 class SearchEntry(BaseModel):

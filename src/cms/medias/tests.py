@@ -33,7 +33,22 @@ class MediaUnitTest(TestCase):
             data[k] = v
         obj = Media.objects.create(**data)
         return obj
-    
+
+    @classmethod
+    def create_media_collection(cls, **kwargs):
+        data = {'name': 'media1', 
+                'tags': 'ciao,mamma',
+                'description': 'blah blah',
+                'is_active': 1}
+        for k,v in kwargs.items():
+            data[k] = v
+        obj = MediaCollection.objects.create(**data)
+        
+        item = MediaCollectionItem.objects.create(media=cls.create_media(),
+                                                  collection=obj,
+                                                  is_active=1)
+        return obj
+
     @classmethod
     def test_delete_media(cls, **kwargs):
         fpath = f'{settings.MEDIA_ROOT}/unit_tests/download.jpeg'
