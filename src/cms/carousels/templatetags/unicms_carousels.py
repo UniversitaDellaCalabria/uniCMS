@@ -2,9 +2,9 @@ import logging
 
 from django import template
 
-from cms.pages.models import PageCarousel
+from cms.carousels.models import Carousel
 from cms.contexts.utils import handle_faulty_templates
-
+from cms.pages.models import PageCarousel
 
 logger = logging.getLogger(__name__)
 register = template.Library()
