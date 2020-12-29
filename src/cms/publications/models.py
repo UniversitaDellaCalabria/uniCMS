@@ -161,12 +161,12 @@ class Publication(AbstractPublication, AbstractPublicable,
 
     def url(self, webpath=None):
         pub_context = self.get_publication_context(webpath=webpath)
-        if not pub_context: return '#'
+        if not pub_context: return ''
         return pub_context.url
 
     def get_url_list(self, webpath=None, category_name=None):
         pub_context = self.get_publication_context(webpath=webpath)
-        if not pub_context: return '#'
+        if not pub_context: return ''
         return pub_context.get_url_list(category_name=category_name)
 
     def __str__(self):
