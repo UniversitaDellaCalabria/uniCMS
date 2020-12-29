@@ -4,17 +4,22 @@ from django.utils.safestring import mark_safe
 from . models import *
 
 
+def preview_image(obj):
+    width="15"
+    # breakpoint()
+    img_tag = f'<img src="{obj.media.file.url}" style="width: {width}vw;"/>'
+    result = mark_safe(img_tag)
+    return result
+
+
 class MediaCollectionItemInline(admin.TabularInline):
     model = MediaCollectionItem
     readonly_fields = ('created_by', 'modified_by', 'preview_image')
     extra = 0
 
     def preview_image(self, obj):
-        width="15"
-        # breakpoint()
-        img_tag = f'<img src="{obj.media.file.url}" style="width: {width}vw;"/>'
-        result = mark_safe(img_tag)
-        return result
+        return preview_image(obj)
+
 
 
 @admin.register(Media)
@@ -34,12 +39,9 @@ class MediaAdmin(admin.ModelAdmin):
         img_tag = f'<img src="{obj.file.url}" style="width: {width}vw;"/>'
         result = mark_safe(img_tag)
         return result
-
+    
     def preview_image(self, obj):
-        width="15"
-        img_tag = f'<img src="{obj.file.url}" style="width: {width}vw;"/>'
-        result = mark_safe(img_tag)
-        return result
+        return preview_image(obj)
 
 
 @admin.register(MediaCollection)

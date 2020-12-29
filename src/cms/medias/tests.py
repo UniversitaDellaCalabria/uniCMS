@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-class MediaTest(TestCase):
+class MediaUnitTest(TestCase):
 
     def setUp(cls):
         pass

@@ -42,6 +42,7 @@ class NavigationBar(TimeStampedModel, ActivableModel, CreatedModifiedBy):
         """
         items = deepcopy(item_list)
         for item in item_list:
+            if not item: continue
             for i in 'link', 'parent_id', 'webpath_id', 'menu_id':
                 item.pop(i, None)
             item['menu'] = self
@@ -95,7 +96,6 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
 
     @property
     def link(self):
-        # getattr(self.webpath, 'fullpath', None) or \
         return self.url or \
                self.webpath and self.webpath.get_full_path() or \
                self.publication or ''

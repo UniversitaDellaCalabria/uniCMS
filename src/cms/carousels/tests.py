@@ -7,7 +7,7 @@ from django.test.client import RequestFactory
 from django.urls import reverse
 from django.utils import timezone
 
-from cms.medias.tests import MediaTest
+from cms.medias.tests import MediaUnitTest
 
 from . models import *
 
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-class CarouselTest(TestCase):
+class CarouselUnitTest(TestCase):
 
     def setUp(cls):
         pass
@@ -41,7 +41,7 @@ class CarouselTest(TestCase):
         data = {'carousel': carousel, 
                 'heading': 'heading', 
                 'pre_heading': 'pre heading', 
-                'image': MediaTest.create_media(), 
+                'image': MediaUnitTest.create_media(), 
                 'description': 'blah blah',
                 'is_active': 1}
         for k,v in kwargs.items():

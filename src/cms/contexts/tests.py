@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-class ContextsTest(TestCase):
+class ContextUnitTest(TestCase):
 
     def setUp(self):
         pass
