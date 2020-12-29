@@ -166,7 +166,14 @@ class PageUnitTest(TestCase):
         obj = cls.create_page(date_end=timezone.localtime())
         req = RequestFactory().get('/')
         template_context = dict(request=req, webpath=obj.webpath)
-        lm = load_carousel(section='banner',  
-                           template='italia_hero_slider.html',
-                           context=template_context)
+        
+        data = dict(section='banner',  
+                    template='italia_hero_slider.html',
+                    context=template_context)
+        
+        lm = load_carousel(**data)
+        assert 'italia_carousel' in lm
+        
+        data['carousel_id'] = obj.get_carousels()[0].pk
+        lm = load_carousel(**data)
         assert 'italia_carousel' in lm

@@ -12,7 +12,7 @@ register = template.Library()
 
 def _load_carousel_by_id(carousel_id, template,
                          func_name, lang='', log_msg=''):
-    carousel = Carousel.objects.filter(carousel_id=carousel_id,
+    carousel = Carousel.objects.filter(pk=carousel_id,
                                        is_active=True).\
                                        first()
     if not carousel:

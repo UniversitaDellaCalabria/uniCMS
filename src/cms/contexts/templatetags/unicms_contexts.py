@@ -49,7 +49,6 @@ def language_menu(context, template=None):
     return data
 
 
-# @register.simple_tag(takes_context=True)
 @register.simple_tag
 def breadcrumbs(webpath, template=None, leaf=None):
     template = template or 'breadcrumbs.html'
