@@ -169,6 +169,19 @@ following the template blocks order (e.g. 1st PageMenu is associated to
 *arguments*: template<br>
 *example*: `{% load_publication_content_placeholder template="publication-layout.html" %}`
 
+###### cms_publication
+
+* **load_publication**<br>
+pass a single active publication to a template.<br>
+*arguments*: template, publication_id<br>
+*example*: `{% load_publication publication_id="1" template="publication-layout.html" %}`
+
+* **load_publications_preview**<br>
+returns all published publications in a context and passes them to a template.<br>
+*arguments*: template, section (opt), number (opt, default=5), 
+in_evidence (opt, default=False), categories_csv (opt), tags_csv (opt)<br>
+*example*: `{% load_publications_preview template="publication-list.html" number="3" categories="Research, Study" tags_csv="read, sport" in_evidence=True %}`
+
 ###### cms_templates
 supported_languages: get settings.LANGUAGES_CODE to templates
 
@@ -181,23 +194,7 @@ supported_languages: get settings.LANGUAGES_CODE to templates
 
 
 
-###### cms_publication
-`{% load_publications_preview template="publications_preview.html" %}`
-    - additional paramenters:
-        template,
-        section
-        number=5
-        in_evidence=False
-        categories_csv="Didattica,Ricerca"
-        tags_csv="eventi,ricerca"
-`{% load_publication_content_placeholder template="publication_that.html" %}`
-    - additional paramenters:
-        template,
-        section
-        publication_id # optional
-    This templatetags maps "page place holder blocks" with page
-    publications and show a publication content, according to
-    the choosed template, where the "page place holder will be rendered.
+
 
 
 #### Handlers
