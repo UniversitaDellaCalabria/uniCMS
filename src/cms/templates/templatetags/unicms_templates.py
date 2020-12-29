@@ -17,7 +17,7 @@ CMS_TEMPLATE_BLOCK_SECTIONS = getattr(settings, "CMS_TEMPLATE_BLOCK_SECTIONS",
 
 
 @register.simple_tag
-def supported_languages():
+def supported_languages(): # pragma: no cover
     return settings.LANGUAGES
 
 

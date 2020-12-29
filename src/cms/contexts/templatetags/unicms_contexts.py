@@ -44,7 +44,7 @@ def language_menu(context, template=None, leaf=None):
     languages = {k:v for k,v in dict(settings.LANGUAGES).items()}
     current_args = urllib.parse.urlencode(request.GET)
     data = {v:f'?{current_args}&lang={k}' for k,v in languages.items()}
-    if template:
+    if template: # pragma: no cover
         return handle_faulty_templates(template, data, name='language_menu')
     return data
 
@@ -54,7 +54,7 @@ def language_menu(context, template=None, leaf=None):
 def breadcrumbs(webpath, template=None, leaf=None):
     template = template or 'breadcrumbs.html'
     crumbs = _build_breadcrumbs(webpath.fullpath)
-    if leaf:
+    if leaf: # pragma: no cover
         for i in leaf.breadcrumbs:
             crumbs.append(i)
     data = {'breadcrumbs': crumbs}
