@@ -39,7 +39,7 @@ def _build_breadcrumbs(webpath: str):
 
 
 @register.simple_tag(takes_context=True)
-def language_menu(context, template=None, leaf=None):
+def language_menu(context, template=None):
     request = context['request']
     languages = {k:v for k,v in dict(settings.LANGUAGES).items()}
     current_args = urllib.parse.urlencode(request.GET)

@@ -84,31 +84,37 @@ Based on informations taken from these objects as input uniCMS adopts some addit
 These templatetags will also work in Page Blocks that would take, optionally, the HTML template as parameter.
 
 ###### cms_carousels
-* **load_data**<br>
-**example: `{% load_carousel section="template-section" template="template.html" %}`<br>
+* **load_carousel**<br>
+**example**: `{% load_carousel section="template-section" template="template.html" %}`<br>
 **arguments**: context, section, template<br>
-**return**: render in the template the first active carousel in section,
-with translated items
+**return**: renders in the template the first active carousel in section,
+with translated items.
 
 ###### cms_contexts
+* **breadcrumbs**<br>
+**example**: `{% breadcrumbs webpath=webpath template="breadcrumbs.html" %}`<br>
+**arguments**: webpath, template (opt, default=breadcrumbs.html), leaf (opt)<br>
+**return**: builds webpath breadcrumbs. If leaf, appends leaf breadcrumbs.
+
+
 * **call**<br>
-**example: `{% call obj=publication method='get_url_list' category_name=cat %}`<br>
+**example**: `{% call obj=publication method='get_url_list' category_name=cat %}`<br>
 **arguments**: obj, method, kwargs<br>
-**return**: call method of obj passing parameters as kwargs
+**return**: calls any object method and also pass to it whatever `**kwargs`
 
-`language_menu`: an usage example here:
-   ````
-       {% language_menu as language_urls %}
-       {% for lang,url in language_urls.items %}
-       <li><a class="list-item" href="{{ url }}"><span>{{ lang }}</span></a></li>
-       {% endfor %}
-   ````
-`{% breadcrumbs template="breadcrumbs.html" %}`
-   if template argument will be absent it will rely on `breadcrumbs.html` template.
 
-`call`: `{% call obj=pub method='get_url_list' category_name=cat %}`
-    Call any object method and also pass to it whatever `**kwargs`.
-
+* **language_menu**<br>
+**example**:
+````
+   {% language_menu as language_urls %}
+   {% for lang,url in language_urls.items %}
+   <li><a class="list-item" href="{{ url }}"><span>{{ lang }}</span></a></li>
+   {% endfor %}
+````
+<br>
+**arguments**: teamplate (opt)<br>
+**return**: builds a data dict with {url:language} pairs.
+If a template is present, passes it data.
 
 ###### cms_templates
 supported_languages: get settings.LANGUAGES_CODE to templates
