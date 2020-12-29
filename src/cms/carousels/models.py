@@ -125,4 +125,5 @@ class CarouselItemLinkLocalization(ActivableModel, TimeStampedModel,
         verbose_name_plural = _("Carousel Item Links")
     
     def __str__(self):
-        return '{} {}' % (self.carousel, self.url)
+        return '{} {}'.format(self.carousel_item_link.carousel_item.carousel, 
+                              self.carousel_item_link.url)

@@ -22,7 +22,7 @@ FILETYPE_ALLOWED = getattr(settings, 'FILETYPE_ALLOWED',
                            FILETYPE_ALLOWED)
 
 
-def context_media_path(instance, filename):
+def context_media_path(instance, filename): # pragma: no cover
     # file will be uploaded to MEDIA_ROOT/<year>/<filename>
     return 'medias/{}/{}'.format(timezone.now().year,
                                  filename)
@@ -59,7 +59,7 @@ class MediaCollection(ActivableModel, TimeStampedModel,
         ordering = ['name']
         verbose_name_plural = _("Media Collections")
         
-    def __str__(self):
+    def __str__(self): # pragma: no cover
         return self.name
 
 
@@ -95,5 +95,5 @@ class MediaCollectionItem(ActivableModel, SortableModel,
         ordering = ['order']
         verbose_name_plural = _("Media Collection Items")
 
-    def __str__(self):
+    def __str__(self): # pragma: no cover
         return '{} {}'.format(self.collection, self.media)
