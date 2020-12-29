@@ -1,4 +1,5 @@
 import os
+import magic
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -31,17 +32,24 @@ def validate_file_size(value):
 
 
 def validate_file_extension(value):
-    if not hasattr(value._file, 'content_type'):
+    if not hasattr(value._file, 'size'):
         return
-    content_type = value._file.content_type
-    if content_type not in FILETYPE_ALLOWED:
-        raise ValidationError(f'Unsupported file extension {content_type}')
+    
+    mimetype = magic.Magic(mime=True).from_buffer(value._file.file.read())
+    value._file.file.seek(0)
+
+    if mimetype not in FILETYPE_ALLOWED:
+        raise ValidationError(f'Unsupported file extension {mimetype}')
 
 
 def validate_image_size_ratio(value):
     if not hasattr(value._file, 'content_type'):
         return
-    if value._file.content_type in FILETYPE_IMAGE:
+
+    mimetype = magic.Magic(mime=True).from_buffer(value._file.file.read())
+    value._file.file.seek(0)
+    
+    if mimetype in FILETYPE_IMAGE:
         w, y = get_image_width_height(value._file)
         ratio = y / w
         if ratio < 0.28 or ratio > 0.6:

@@ -1,7 +1,9 @@
 import logging
+import magic
 import os
 
 from cms.medias.utils import get_file_type_size
+from django.core.files.base import ContentFile
 from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from PIL import Image
@@ -31,8 +33,9 @@ def webp_image_optimizer(media_object):
     if not getattr(field, '_file', None):
         return
     
-    if field._file.content_type in FILETYPE_IMAGE:
-
+    mimetype = magic.Magic(mime=True).from_buffer(field._file.file.read())
+    if mimetype in FILETYPE_IMAGE:
+        field._file.seek(0)
         byte_io = to_webp(field._file)
         byte_io.seek(0, os.SEEK_END)
         content_size = byte_io.tell()        
@@ -54,6 +57,7 @@ def webp_image_optimizer(media_object):
         # if they are valuable ... otherwise nothins happens to model
         media_object.file_size = content_size
         media_object.file_type = 'image/webp'
+        logger.info(f'Image {fname} converted from {mimetype} to {media_object.file_type}')
         return True
 
 
