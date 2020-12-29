@@ -67,19 +67,54 @@ CMS_HOOKS = {
         'POSTDELETE': []
     }
 }
-```` 
+````
 
 
 #### Template tags
 
-The HTML template and/or an HTML page block can also adopt some of the template tags that shipped with uniCMS and Django.UniCMS template context by default comes with the following two objects:
+The HTML template and/or an HTML page block can also adopt some of the template tags that shipped with uniCMS and Django.
+UniCMS template context by default comes with the following two objects:
 
 ````
     'webpath': Context object (cms.contexts.models.WebPath)
     'page': Page object (cms.pages.models.Page)
 ````
 
-Based on informations taken from these objects as input uniCMS adopts some additionale custom templatetags as outlined below. These templatetags will also work in Page Blocks that would take, optionally, the HTML template as parameter.
+Based on informations taken from these objects as input uniCMS adopts some additionale custom templatetags as outlined below.
+These templatetags will also work in Page Blocks that would take, optionally, the HTML template as parameter.
+
+###### cms_carousels
+* **load_carousel**<br>
+**example**: `{% load_carousel section="template-section" template="template.html" %}`<br>
+**arguments**: context, section, template<br>
+**return**: renders in the template the first active carousel in section,
+with translated items.
+
+###### cms_contexts
+* **breadcrumbs**<br>
+**example**: `{% breadcrumbs webpath=webpath template="breadcrumbs.html" %}`<br>
+**arguments**: webpath, template (opt, default=breadcrumbs.html), leaf (opt)<br>
+**return**: builds webpath breadcrumbs. If leaf, appends leaf breadcrumbs.
+
+
+* **call**<br>
+**example**: `{% call obj=publication method='get_url_list' category_name=cat %}`<br>
+**arguments**: obj, method, kwargs<br>
+**return**: calls any object method and also pass to it whatever `**kwargs`
+
+
+* **language_menu**<br>
+**example**:
+````
+   {% language_menu as language_urls %}
+   {% for lang,url in language_urls.items %}
+   <li><a class="list-item" href="{{ url }}"><span>{{ lang }}</span></a></li>
+   {% endfor %}
+````
+<br>
+**arguments**: teamplate (opt)<br>
+**return**: builds a data dict with {url:language} pairs.
+If a template is present, passes it data.
 
 ###### cms_templates
 supported_languages: get settings.LANGUAGES_CODE to templates
@@ -87,22 +122,9 @@ supported_languages: get settings.LANGUAGES_CODE to templates
 ###### cms_menus
 `load_menu`: eg, `{% load_menu section='menu-1' template="main_menu.html" %}`
 
-###### cms_carousels
-`load_carousel`: similar to `load_menu`
 
-###### cms_contexts
-`language_menu`: an usage example here:
-   ````
-       {% language_menu as language_urls %}
-       {% for lang,url in language_urls.items %}
-       <li><a class="list-item" href="{{ url }}"><span>{{ lang }}</span></a></li>
-       {% endfor %}
-   ````
-###### breadcrumbs
-`{% breadcrumbs template="breadcrumbs.html" %}`
-   if template argument will be absent it will rely on `breadcrumbs.html` template.
-`call`: `{% call obj=pub method='get_url_list' category_name=cat %}`
-    Call any object method and also pass to it whatever `**kwargs`.
+
+
 
 ###### cms_page
 `{% load_blocks section='slider' %}`
@@ -123,14 +145,14 @@ supported_languages: get settings.LANGUAGES_CODE to templates
         template,
         section
         publication_id # optional
-    This templatetags maps "page place holder blocks" with page 
+    This templatetags maps "page place holder blocks" with page
     publications and show a publication content, according to
     the choosed template, where the "page place holder will be rendered.
 
 
 #### Handlers
 
-There are circumstances and scenarios where is necessary to create specific applications with templates and templatetags, detached from the pages that are configured within the CMS. 
+There are circumstances and scenarios where is necessary to create specific applications with templates and templatetags, detached from the pages that are configured within the CMS.
 The `cms.publications.handlers` for instance, it manages the pages for navigation of publications (List) and opening a publication (View).
 
 In such scenario the handlers have to be registered in `settings.py` as follow:
@@ -157,8 +179,8 @@ The paths defined in `CMS_HANDLERS_PATHS` generates the list of reserved words t
 #### Middlewares
 
 `cms.contexts.middleware.detect_language_middleware`:
-   detects the browser user language checking both `?lang=` request arg 
-   and the web browser default language. This required to 
+   detects the browser user language checking both `?lang=` request arg
+   and the web browser default language. This required to
    handle the Menu, Carousel and localized Publication.
 
 `cms.contexts.middleware.show_template_blocks_sections`:
