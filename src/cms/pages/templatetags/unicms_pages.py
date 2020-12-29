@@ -251,7 +251,8 @@ def load_menu_placeholder(context, template,
     # id is quite arbitrary
     if menu_id:
         menu = NavigationBar.objects.filter(pk=menu_id,
-                                            is_active=True)
+                                            is_active=True).\
+                                            first()
 
         if not menu:
             _msg = '{} cannot find menu id {}'.format(_log_msg, menu_id)
