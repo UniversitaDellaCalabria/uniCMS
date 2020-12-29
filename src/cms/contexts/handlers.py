@@ -37,7 +37,7 @@ class BaseContentHandler(object):
             setattr(self, k, v)
 
 
-    def match(self) -> bool:
+    def match(self) -> bool: # pragma: no cover
         """
         check if settings.CMS_PUBLICATION_URLPATH_REGEXP matches
         with the given path. Return True or False
@@ -45,21 +45,21 @@ class BaseContentHandler(object):
         raise NotImplementedError()
 
 
-    def get(self):
+    def get(self): # pragma: no cover
         """
             returns a queryset with the results
         """
         raise NotImplementedError()
 
 
-    def url(self):
+    def url(self): # pragma: no cover
         """
             returns an absolute url to the render view
         """
         raise NotImplementedError()
 
 
-    def as_view(self):
+    def as_view(self): # pragma: no cover
         """
             get the template configured for this resources (self.template)
             open

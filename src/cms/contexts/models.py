@@ -12,6 +12,7 @@ from cms.contexts.utils import sanitize_path
 from cms.templates.models import TimeStampedModel
 
 from . import settings as app_settings
+from . exceptions import ReservedWordException
 from . utils import append_slash
 
 
@@ -115,7 +116,7 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
             self.site = self.alias.site         
             
         # alias or alias_url
-        if self.alias and self.alias_url:
+        if self.alias and self.alias_url: # pragma: no cover
             self.alias = None
         
         # store a correct fullpath
@@ -138,7 +139,7 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
         if fullpath != self.fullpath:
             self.fullpath = fullpath
 
-        return super(WebPath, self).save(*args, **kwargs)
+        super(WebPath, self).save(*args, **kwargs)
         # update also its childs
         for child_path in WebPath.objects.filter(parent=self):
             child_path.save()
@@ -168,7 +169,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
     def __str__(self):
         if getattr(self, 'webpath'):
             return '{} {} in {}'.format(self.user, self.permission, self.webpath)
-        else:
+        else: # pragma: no cover
             return '{} {}'.format(self.user, self.permission)
 
 
@@ -193,10 +194,10 @@ class EditorialBoardLocks(models.Model):
         ordering = ('-locked_time',)
         
     @property
-    def is_active(self):
+    def is_active(self): # pragma: no cover
         now = timezone.localtime() 
         unlock_time = self.locked_time + timezone.timedelta(minutes = 1)
         return now < unlock_time
     
-    def __str__(self):
+    def __str__(self): # pragma: no cover
         return f'{self.content_type} {self.object_id}'

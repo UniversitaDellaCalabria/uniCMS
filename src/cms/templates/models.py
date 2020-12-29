@@ -69,7 +69,22 @@ class AbstractPageBlock(TimeStampedModel, ActivableModel):
         abstract = True
 
 
-class PageTemplate(TimeStampedModel, ActivableModel):
+class AbstractTemplate(models.Model):
+
+    def image_as_html(self):
+        res = ""
+        try:
+            res = f'<img width=280 src="{self.image.url}"/>'
+        except ValueError as e:
+            # *** ValueError: The 'image' attribute has no file associated with it.
+            res = f"{settings.STATIC_URL}images/no-image.jpg"
+        return mark_safe(res)
+
+    class Meta:
+        abstract = True
+
+
+class PageTemplate(TimeStampedModel, ActivableModel, AbstractTemplate):
     name = models.CharField(max_length=160,
                             blank=True, null=True)
     template_file = models.CharField(max_length=1024,
@@ -86,20 +101,11 @@ class PageTemplate(TimeStampedModel, ActivableModel):
         ordering = ['name']
         verbose_name_plural = _("Page Templates")
 
-    def image_as_html(self):
-        res = ""
-        try:
-            res = f'<img width=280 src="{self.image.url}"/>'
-        except ValueError as e:
-            # *** ValueError: The 'image' attribute has no file associated with it.
-            res = f"{settings.STATIC_URL}images/no-image.jpg"
-        return mark_safe(res)
-
     def __str__(self):
         return '{} ({})'.format(self.name, self.template_file)
 
 
-class TemplateBlock(AbstractPageBlock):
+class TemplateBlock(AbstractPageBlock, AbstractTemplate):
     name = models.CharField(max_length=60, blank=True, null=True,
                             help_text=_("Specify the container "
                                         "section in the template where "
@@ -117,15 +123,6 @@ class TemplateBlock(AbstractPageBlock):
     class Meta:
         ordering = ['name']
         verbose_name_plural = _("Template Blocks")
-
-    def image_as_html(self):
-        res = ""
-        try:
-            res = f'<img width=240 src="{self.image.url}"/>'
-        except ValueError as e:
-            # *** ValueError: The 'image' attribute has no file associated with it.
-            res = f"{settings.STATIC_URL}images/no-image.jpg"
-        return mark_safe(res)
 
     def __str__(self):
         return self.name if self.name else self.path

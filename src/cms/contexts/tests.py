@@ -5,9 +5,11 @@ from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase
 from django.utils import timezone
 
-from . templatetags.unicms_contexts import *
+from . exceptions import ReservedWordException
 from . models import *
 from . settings import *
+from . templatetags.unicms_contexts import *
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -74,7 +76,21 @@ class ContextsTest(TestCase):
         
         assert webpath.get_full_path() == \
             sanitize_path(f'/{CMS_PATH_PREFIX}/{webpath.path}')
-
+        
+        # test reserved words
+        webpath.path = 'that/contents/news/view'
+        try:
+            webpath.save()
+        except Exception as e:
+            assert isinstance(e, ReservedWordException)
+        
+        # test split
+        webpath.path = '/test/io'
+        webpath.save()
+        res = webpath.split()
+        assert isinstance(res, list) and len(res) > 1
+        
+        webpath.delete()
 
     def test_parented_webpath(self):
         webpath = self.create_webpath()
@@ -86,6 +102,8 @@ class ContextsTest(TestCase):
         assert webpath2.get_full_path() == \
             sanitize_path(f'/{CMS_PATH_PREFIX}/{webpath.path}/{webpath2.path}')
         
+        # covers child updates
+        webpath.save()
 
     def test_aliased_webpath(self):
         webpath = self.create_webpath()

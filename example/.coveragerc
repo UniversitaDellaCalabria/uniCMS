@@ -8,3 +8,5 @@ omit =
     */migrations/*
     */site-packages/*
     */unicms-template*
+    unicms/*
+    */tests.py
