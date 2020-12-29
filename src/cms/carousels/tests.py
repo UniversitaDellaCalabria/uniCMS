@@ -76,7 +76,7 @@ class CarouselTest(TestCase):
         carousel_item = cls.create_carousel_item(carousel_data=carousel_data,
                                         **carousel_data_item)
         data = {'carousel_item': carousel_item, 
-                'item': 'pre heading', 
+                'title': 'pre heading', 
                 'url': '/that/url',
                 'is_active': 1}
         for k,v in kwargs.items():
@@ -85,5 +85,33 @@ class CarouselTest(TestCase):
         return obj    
 
 
-    def test_carousel(cls):
-        carousel_item_localization = cls.create_carousel_item_localization()
+    def test_carousel_localization(self):
+        carousel_item_localization = self.create_carousel_item_localization()
+        carousel_item_localization.__str__()
+        
+        carousel_item = carousel_item_localization.carousel_item
+        carousel = carousel_item.carousel
+        carousel.__str__()
+        carousel.get_items()
+        
+        carousel_item.__str__()
+        carousel_item.get_links()
+        carousel_item.localized(lang='en')
+        
+    
+    def test_carousel_link(self):
+        carousel_item_link = self.create_carousel_item_link()
+        carousel_item_link.__str__()
+        carousel_item_link.get_title()
+        
+        loc = CarouselItemLinkLocalization.\
+                objects.create(carousel_item_link=carousel_item_link,
+                               language = 'en',
+                               title = 'title',
+                               is_active = True)
+        loc.__str__()
+    
+    
+    # test template tags
+    # def test_load_carousel(self):
+        # needs page

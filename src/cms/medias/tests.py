@@ -1,4 +1,5 @@
 import logging
+import os
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -7,8 +8,11 @@ from django.test.client import RequestFactory
 from django.urls import reverse
 from django.utils import timezone
 
-from . models import *
+from shutil import copyfile
 
+from . models import *
+from . validators import validate_file_extension
+from . settings import FILE_MAX_SIZE
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -29,3 +33,56 @@ class MediaTest(TestCase):
             data[k] = v
         obj = Media.objects.create(**data)
         return obj
+    
+    @classmethod
+    def test_delete_media(cls, **kwargs):
+        fpath = f'{settings.MEDIA_ROOT}/unit_tests/download.jpeg'
+        dest = f'{settings.MEDIA_ROOT}/unit_tests/download.webp'
+        media = cls.create_media(file = fpath)
+        copyfile(fpath, dest)
+        
+        media.delete()
+    
+    @classmethod
+    def test_create_faulty_media_ext(cls):
+        data = {'title': 'media1', 
+                'file': f'{settings.MEDIA_ROOT}/unit_tests/icon_small.arj',
+                'description': 'blah blah',
+                'is_active': 1}
+        
+        media = cls.create_media(**data)
+        try:
+            validate_file_extension(media.file)
+        except Exception as e:
+            assert isinstance(e, ValidationError)
+
+    @classmethod
+    def test_create_faulty_media_size(cls):
+        fpath = f'{settings.MEDIA_ROOT}/garbage.img'
+        os.system(f'dd if=/dev/zero of={fpath} bs={FILE_MAX_SIZE+1024} count=1' )
+        data = {'title': 'media1', 
+                'file': fpath,
+                'description': 'blah blah',
+                'is_active': 1}
+        
+        media = cls.create_media(**data)
+        try:
+            validate_file_size(media.file)
+        except Exception as e:
+            assert isinstance(e, ValidationError)
+        
+        os.remove(fpath)
+
+    @classmethod
+    def test_create_faulty_media_size_ratio(cls):
+        data = {'title': 'media1', 
+                'file': f'{settings.MEDIA_ROOT}/unit_tests/faulty_size.jpg',
+                'description': 'blah blah',
+                'is_active': 1}
+        
+        media = cls.create_media(**data)
+        try:
+            validate_image_size_ratio(media.file)
+        except Exception as e:
+            assert isinstance(e, ValidationError)
+

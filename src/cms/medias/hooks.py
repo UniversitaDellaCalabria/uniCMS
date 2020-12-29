@@ -30,7 +30,7 @@ def webp_image_optimizer(media_object):
         if field:
             break
     
-    if not getattr(field, '_file', None):
+    if not getattr(field, '_file', None): # pragma: no cover
         return
     
     mimetype = magic.Magic(mime=True).from_buffer(field._file.file.read())
@@ -65,6 +65,6 @@ def remove_file(media_object):
     fpath = media_object.file.path
     try:
         os.remove(fpath)
-    except Exception as e:
+    except Exception as e: # pragma: no cover
         _msg = 'Media Hook remove_file: {} cannot be removed: {}'
         logger.error(_msg.format(fpath, e))
