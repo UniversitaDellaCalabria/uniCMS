@@ -1,47 +1,5 @@
 [
 {
-  "model": "accounts.user",
-  "pk": 1,
-  "fields": {
-    "password": "pbkdf2_sha256$216000$aL1y4It24fXT$1Wk5h0sRihJB9e09LnevaV4lJukNGuZ5lno1kFXKLmY=",
-    "last_login": "2020-12-04T11:00:11.855Z",
-    "is_superuser": true,
-    "username": "wert",
-    "is_staff": true,
-    "date_joined": "2020-10-29T09:08:47.271Z",
-    "first_name": "Giuseppe",
-    "last_name": "De Marco",
-    "is_active": true,
-    "email": "that@mail.org",
-    "taxpayer_id": null,
-    "matricola_studente": null,
-    "matricola_dipendente": null,
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
-  "model": "accounts.user",
-  "pk": 2,
-  "fields": {
-    "password": "pbkdf2_sha256$216000$VdsaV1CyuN6i$KmQ+lOwEGhP5WGh9Kaspel/M9jfseZKMOfrVydcaKVg=",
-    "last_login": "2020-12-18T07:59:49.482Z",
-    "is_superuser": true,
-    "username": "felix",
-    "is_staff": true,
-    "date_joined": "2020-11-11T14:58:29.557Z",
-    "first_name": "Francesco",
-    "last_name": "Filicetti",
-    "is_active": true,
-    "email": "",
-    "taxpayer_id": null,
-    "matricola_studente": null,
-    "matricola_dipendente": null,
-    "groups": [],
-    "user_permissions": []
-  }
-},
-{
   "model": "taggit.tag",
   "pk": 1,
   "fields": {
@@ -552,6 +510,33 @@
   }
 },
 {
+  "model": "taggit.taggeditem",
+  "pk": 60,
+  "fields": {
+    "tag": 2,
+    "content_type": 36,
+    "object_id": 4
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 61,
+  "fields": {
+    "tag": 2,
+    "content_type": 36,
+    "object_id": 3
+  }
+},
+{
+  "model": "taggit.taggeditem",
+  "pk": 62,
+  "fields": {
+    "tag": 2,
+    "content_type": 27,
+    "object_id": 15
+  }
+},
+{
   "model": "cmstemplates.pagetemplate",
   "pk": 1,
   "fields": {
@@ -569,7 +554,7 @@
   "pk": 2,
   "fields": {
     "created": "2020-11-20T09:31:57.345Z",
-    "modified": "2020-12-11T07:27:11.653Z",
+    "modified": "2020-12-29T09:02:42.350Z",
     "is_active": true,
     "name": "Sito dipartimento - DIMES",
     "template_file": "dipartimento_home_v3_dimes.html",
@@ -595,7 +580,7 @@
   "pk": 7,
   "fields": {
     "created": "2020-12-14T11:18:00.221Z",
-    "modified": "2020-12-22T21:12:54.990Z",
+    "modified": "2020-12-28T16:48:36.383Z",
     "is_active": true,
     "name": "Unical - Main Template",
     "template_file": "unical_main.html",
@@ -692,7 +677,7 @@
   "pk": 7,
   "fields": {
     "created": "2020-12-01T14:08:42.924Z",
-    "modified": "2020-12-23T12:17:47.111Z",
+    "modified": "2020-12-29T09:01:53.958Z",
     "is_active": true,
     "name": "Main Menu",
     "description": "",
@@ -972,12 +957,12 @@
   "pk": 31,
   "fields": {
     "created": "2020-12-15T11:04:35.522Z",
-    "modified": "2020-12-16T10:54:48.939Z",
+    "modified": "2020-12-29T07:29:30.042Z",
     "is_active": true,
     "name": "Menu - Campus/Servizi/Futuri Studenti",
     "description": "",
     "type": "cms.templates.blocks.HtmlBlock",
-    "content": "{% load unicms_menus %}\r\n\r\n{% load_menu_by_id pk=\"23\" template=\"side_menu.html\" %}",
+    "content": "{% load unicms_menus %}\r\n\r\n{% load_menu menu_id=\"23\" template=\"side_menu.html\" %}",
     "image": ""
   }
 },
@@ -986,12 +971,12 @@
   "pk": 32,
   "fields": {
     "created": "2020-12-16T10:43:14.490Z",
-    "modified": "2020-12-16T10:43:47.016Z",
+    "modified": "2020-12-29T07:29:37.439Z",
     "is_active": true,
     "name": "Menu - Campus/Visita il campus",
     "description": "",
     "type": "cms.templates.blocks.HtmlBlock",
-    "content": "{% load unicms_menus %}\r\n\r\n{% load_menu_by_id pk=\"20\" template=\"side_menu.html\" %}",
+    "content": "{% load unicms_menus %}\r\n\r\n{% load_menu menu_id=\"20\" template=\"side_menu.html\" %}",
     "image": ""
   }
 },
@@ -1000,12 +985,12 @@
   "pk": 33,
   "fields": {
     "created": "2020-12-16T10:45:37.974Z",
-    "modified": "2020-12-16T10:45:37.974Z",
+    "modified": "2020-12-29T07:29:42.411Z",
     "is_active": true,
     "name": "Menu - Campus/Vivere il campus",
     "description": "",
     "type": "cms.templates.blocks.HtmlBlock",
-    "content": "{% load unicms_menus %}\r\n\r\n{% load_menu_by_id pk=\"21\" template=\"side_menu.html\" %}",
+    "content": "{% load unicms_menus %}\r\n\r\n{% load_menu menu_id=\"21\" template=\"side_menu.html\" %}",
     "image": ""
   }
 },
@@ -1122,16 +1107,44 @@
   }
 },
 {
+  "model": "cmstemplates.templateblock",
+  "pk": 42,
+  "fields": {
+    "created": "2020-12-28T16:16:04.988Z",
+    "modified": "2020-12-28T16:16:04.988Z",
+    "is_active": true,
+    "name": "Placeholder Menu - Style Menu 2",
+    "description": "",
+    "type": "cms.templates.blocks.MenuPlaceholderBlock",
+    "content": "{\"template\": \"unical_portale_menu_secondario.html\"}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 43,
+  "fields": {
+    "created": "2020-12-28T16:43:19.523Z",
+    "modified": "2020-12-28T16:43:19.523Z",
+    "is_active": true,
+    "name": "Placeholder Menu - Style Main Menu",
+    "description": "",
+    "type": "cms.templates.blocks.MenuPlaceholderBlock",
+    "content": "{\"template\": \"unical_main_menu.html\"}",
+    "image": ""
+  }
+},
+{
   "model": "cmstemplates.pagetemplateblock",
   "pk": 5,
   "fields": {
     "created": "2020-11-20T09:59:33.051Z",
-    "modified": "2020-11-20T09:59:33.051Z",
+    "modified": "2020-12-29T09:02:42.350Z",
     "order": 10,
     "is_active": true,
     "template": 2,
     "block": 2,
-    "section": "slider"
+    "section": "banner"
   }
 },
 {
@@ -1139,12 +1152,12 @@
   "pk": 6,
   "fields": {
     "created": "2020-11-20T11:52:46.129Z",
-    "modified": "2020-11-20T11:52:46.129Z",
+    "modified": "2020-12-29T09:02:42.351Z",
     "order": 10,
     "is_active": true,
     "template": 2,
     "block": 6,
-    "section": "1"
+    "section": null
   }
 },
 {
@@ -1191,12 +1204,12 @@
   "pk": 16,
   "fields": {
     "created": "2020-12-11T07:27:11.654Z",
-    "modified": "2020-12-11T07:27:11.654Z",
+    "modified": "2020-12-29T09:02:42.352Z",
     "order": 10,
     "is_active": true,
     "template": 2,
     "block": 3,
-    "section": "2"
+    "section": null
   }
 },
 {
@@ -1204,9 +1217,9 @@
   "pk": 19,
   "fields": {
     "created": "2020-12-14T11:42:27.589Z",
-    "modified": "2020-12-14T16:45:09.318Z",
+    "modified": "2020-12-28T16:48:36.385Z",
     "order": 10,
-    "is_active": true,
+    "is_active": false,
     "template": 7,
     "block": 7,
     "section": "menu-1"
@@ -4500,7 +4513,7 @@
   "pk": 1,
   "fields": {
     "created": "2020-10-29T09:12:44.427Z",
-    "modified": "2020-12-28T12:31:45.147Z",
+    "modified": "2020-12-28T16:50:12.390Z",
     "is_active": true,
     "created_by": null,
     "modified_by": null,
@@ -4521,7 +4534,7 @@
   "pk": 2,
   "fields": {
     "created": "2020-11-20T09:15:53.481Z",
-    "modified": "2020-12-11T07:33:31.693Z",
+    "modified": "2020-12-29T09:03:04.207Z",
     "is_active": true,
     "created_by": null,
     "modified_by": null,
@@ -4542,7 +4555,7 @@
   "pk": 15,
   "fields": {
     "created": "2020-11-24T12:52:00.324Z",
-    "modified": "2020-11-24T12:52:09.027Z",
+    "modified": "2020-12-29T08:41:59.809Z",
     "is_active": true,
     "created_by": null,
     "modified_by": null,
@@ -4563,7 +4576,7 @@
   "pk": 17,
   "fields": {
     "created": "2020-12-03T10:47:08.171Z",
-    "modified": "2020-12-28T11:31:46.315Z",
+    "modified": "2020-12-29T08:25:55.206Z",
     "is_active": true,
     "created_by": null,
     "modified_by": null,
@@ -4660,10 +4673,10 @@
   "pk": 2,
   "fields": {
     "created": "2020-11-20T10:12:41.157Z",
-    "modified": "2020-12-11T07:33:31.721Z",
-    "order": 10,
+    "modified": "2020-12-29T09:03:04.252Z",
+    "order": 0,
     "is_active": true,
-    "section": "slider",
+    "section": "banner",
     "page": 2,
     "carousel": 2
   }
@@ -4673,10 +4686,10 @@
   "pk": 6,
   "fields": {
     "created": "2020-11-24T12:52:00.366Z",
-    "modified": "2020-11-24T12:52:00.366Z",
-    "order": 10,
+    "modified": "2020-12-29T08:40:30.831Z",
+    "order": 0,
     "is_active": true,
-    "section": "slider",
+    "section": null,
     "page": 15,
     "carousel": 1
   }
@@ -4723,23 +4736,10 @@
 },
 {
   "model": "cmspages.pagemenu",
-  "pk": 1,
-  "fields": {
-    "created": "2020-11-02T10:08:40.122Z",
-    "modified": "2020-12-21T07:50:11.786Z",
-    "order": 0,
-    "is_active": true,
-    "section": "menu-1",
-    "page": 1,
-    "menu": 1
-  }
-},
-{
-  "model": "cmspages.pagemenu",
   "pk": 2,
   "fields": {
     "created": "2020-11-02T10:09:03.494Z",
-    "modified": "2020-12-21T07:50:11.797Z",
+    "modified": "2020-12-28T16:50:13.432Z",
     "order": 1,
     "is_active": true,
     "section": "menu-2",
@@ -4752,8 +4752,8 @@
   "pk": 6,
   "fields": {
     "created": "2020-11-20T10:29:42.578Z",
-    "modified": "2020-11-20T10:29:42.578Z",
-    "order": 10,
+    "modified": "2020-12-29T09:03:04.247Z",
+    "order": 0,
     "is_active": true,
     "section": "menu-2",
     "page": 2,
@@ -4765,8 +4765,8 @@
   "pk": 7,
   "fields": {
     "created": "2020-11-20T17:16:02.007Z",
-    "modified": "2020-11-20T17:16:02.007Z",
-    "order": 10,
+    "modified": "2020-12-29T09:03:04.250Z",
+    "order": 1,
     "is_active": true,
     "section": "menu-1",
     "page": 2,
@@ -4778,9 +4778,9 @@
   "pk": 15,
   "fields": {
     "created": "2020-11-24T12:52:00.379Z",
-    "modified": "2020-11-24T12:52:09.031Z",
-    "order": 10,
-    "is_active": false,
+    "modified": "2020-12-29T08:41:59.844Z",
+    "order": 0,
+    "is_active": true,
     "section": "menu-1",
     "page": 15,
     "menu": 1
@@ -4791,8 +4791,8 @@
   "pk": 16,
   "fields": {
     "created": "2020-11-24T12:52:00.395Z",
-    "modified": "2020-11-24T12:52:09.031Z",
-    "order": 11,
+    "modified": "2020-12-29T08:40:30.828Z",
+    "order": 1,
     "is_active": false,
     "section": "menu-2",
     "page": 15,
@@ -4852,10 +4852,23 @@
   }
 },
 {
+  "model": "cmspages.pagemenu",
+  "pk": 45,
+  "fields": {
+    "created": "2020-12-28T16:44:01.673Z",
+    "modified": "2020-12-28T16:50:13.428Z",
+    "order": 0,
+    "is_active": true,
+    "section": "menu-1",
+    "page": 1,
+    "menu": 1
+  }
+},
+{
   "model": "cmspages.pageblock",
   "pk": 3,
   "fields": {
-    "order": 0,
+    "order": 2,
     "is_active": true,
     "section": "1-right-b",
     "page": 17,
@@ -4877,7 +4890,7 @@
   "model": "cmspages.pageblock",
   "pk": 11,
   "fields": {
-    "order": 2,
+    "order": 3,
     "is_active": true,
     "section": "1-right-b",
     "page": 17,
@@ -4943,7 +4956,7 @@
   "model": "cmspages.pageblock",
   "pk": 72,
   "fields": {
-    "order": 3,
+    "order": 0,
     "is_active": true,
     "section": "1-right-b",
     "page": 17,
@@ -5164,7 +5177,7 @@
   "pk": 106,
   "fields": {
     "order": 10,
-    "is_active": true,
+    "is_active": false,
     "section": "menu-2",
     "page": 1,
     "block": 39
@@ -5205,24 +5218,35 @@
 },
 {
   "model": "cmspages.pageblock",
-  "pk": 113,
+  "pk": 116,
   "fields": {
     "order": 12,
     "is_active": true,
-    "section": "1-top-a",
+    "section": "menu-2",
     "page": 1,
-    "block": 41
+    "block": 42
   }
 },
 {
   "model": "cmspages.pageblock",
-  "pk": 114,
+  "pk": 117,
   "fields": {
     "order": 13,
     "is_active": true,
-    "section": "1-top-b",
+    "section": "menu-1",
     "page": 1,
-    "block": 41
+    "block": 43
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 118,
+  "fields": {
+    "order": 0,
+    "is_active": true,
+    "section": "menu-1",
+    "page": 15,
+    "block": 7
   }
 },
 {
@@ -5491,7 +5515,7 @@
   "pk": 3,
   "fields": {
     "created": "2020-11-09T13:36:59.347Z",
-    "modified": "2020-12-11T07:26:28.929Z",
+    "modified": "2020-12-29T07:13:50.613Z",
     "is_active": true,
     "created_by": null,
     "modified_by": null,
@@ -5507,7 +5531,7 @@
     "slug": "unical-campus-3",
     "relevance": 0,
     "category": [
-      2
+      4
     ]
   }
 },
@@ -5516,7 +5540,7 @@
   "pk": 4,
   "fields": {
     "created": "2020-11-11T16:49:38.838Z",
-    "modified": "2020-11-20T14:47:36.489Z",
+    "modified": "2020-12-29T07:13:33.815Z",
     "is_active": true,
     "created_by": null,
     "modified_by": null,
@@ -5532,7 +5556,7 @@
     "slug": "studiare-online-e-sempre-piu-semplice",
     "relevance": 0,
     "category": [
-      2
+      1
     ]
   }
 },
@@ -5843,7 +5867,7 @@
   "pk": 4,
   "fields": {
     "created": "2020-11-11T16:50:10.775Z",
-    "modified": "2020-11-11T16:50:30.389Z",
+    "modified": "2020-12-29T07:12:30.720Z",
     "order": 10,
     "is_active": true,
     "section": null,
