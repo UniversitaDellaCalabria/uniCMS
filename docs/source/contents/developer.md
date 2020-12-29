@@ -180,7 +180,13 @@ pass a single active publication to a template.<br>
 returns all published publications in a context and passes them to a template.<br>
 *arguments*: template, section (opt), number (opt, default=5), 
 in_evidence (opt, default=False), categories_csv (opt), tags_csv (opt)<br>
-*example*: `{% load_publications_preview template="publication-list.html" number="3" categories="Research, Study" tags_csv="read, sport" in_evidence=True %}`
+*example*:
+````
+    {% load_publications_preview template="publ.html" number="3" %}
+    {% load_publications_preview template="publ.html" categories="Research, Study" %}
+    {% load_publications_preview template="publ.html" tags_csv="read, sport" %}
+    {% load_publications_preview template="publ.html" in_evidence=True %} 
+````
 
 ###### cms_templates
 supported_languages: get settings.LANGUAGES_CODE to templates
