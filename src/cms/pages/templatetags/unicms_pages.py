@@ -12,6 +12,7 @@ from cms.carousels.models import Carousel
 from cms.contexts.decorators import detect_language
 from cms.contexts.utils import handle_faulty_templates
 from cms.menus.models import NavigationBar, NavigationBarItem
+from cms.menus.templatetags.unicms_menus import load_menu_by_id
 from cms.pages.models import Category, PageBlock, PageLink, PagePublication
 from cms.publications.models import Publication, PublicationContext
 from cms.templates.utils import import_string_block
@@ -250,18 +251,11 @@ def load_menu_placeholder(context, template,
 
     # id is quite arbitrary
     if menu_id:
-        menu = NavigationBar.objects.filter(pk=menu_id,
-                                            is_active=True).\
-                                            first()
-
-        if not menu:
-            _msg = '{} cannot find menu id {}'.format(_log_msg, menu_id)
-            logger.error(_msg)
-            return ''
-
-        items = menu.get_items(lang=language, parent__isnull=True)
-        data = {'items': items}
-        return handle_faulty_templates(template, data, name=_func_name)
+        return load_menu_by_id(menu_id=menu_id,
+                               template=template,
+                               lang=language,
+                               log_msg=_log_msg,
+                               func_name=_func_name)
     else:
         blocks = page.get_blocks()
         ph = [i for i in blocks
