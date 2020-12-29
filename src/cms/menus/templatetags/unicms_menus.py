@@ -43,12 +43,15 @@ def load_menu(context, template, section=None, menu_id=None):
     else:
         if not section: return ''
         # draft mode
-        if request.session.get('draft_view_mode'):
-            page = Page.objects.filter(webpath = context['webpath'],
-                                       is_active = True)
-            page = page.filter(state = 'draft').last() or context['page']
-        else:
-            page = context['page']
+        # if request.session.get('draft_view_mode'):
+            # page = Page.objects.filter(webpath = context['webpath'],
+                                       # is_active = True)
+            # page = page.filter(state = 'draft').last() or context['page']
+
+        # else:
+            # page = context['page']
+
+        page = context['page']
         page_menu = PageMenu.objects.filter(section=section,
                                             is_active=True,
                                             page=page).first()
@@ -56,4 +59,4 @@ def load_menu(context, template, section=None, menu_id=None):
         items = page_menu.menu.get_items(lang=language,
                                          parent__isnull=True)
         data = {'items': items}
-        return handle_faulty_templates(template, data, name='load_menu')
+        return handle_faulty_templates(template, data, name=_func_name)
