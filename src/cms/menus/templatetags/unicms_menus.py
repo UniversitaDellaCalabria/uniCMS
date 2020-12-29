@@ -12,35 +12,51 @@ logger = logging.getLogger(__name__)
 register = template.Library()
 
 
+def load_menu_by_id(menu_id, template, func_name, lang='', log_msg=''):
+    menu = NavigationBar.objects.filter(pk=menu_id,
+                                        is_active=True).\
+                                        first()
+    if not menu:
+        _msg = '{} cannot find menu id {}'.format(log_msg, menu_id)
+        logger.error(_msg)
+        return ''
+
+    items = menu.get_items(lang=lang, parent__isnull=True)
+    data = {'items': items}
+    return handle_faulty_templates(template, data, name=func_name)
+
+
 @register.simple_tag(takes_context=True)
-def load_menu(context, section, template):
+def load_menu(context, template, section=None, menu_id=None):
+    _func_name = 'load_menu'
+    _log_msg = f'Template Tag {_func_name}'
+
     request = context['request']
-    # draft mode
-    if request.session.get('draft_view_mode'):
-        page = Page.objects.filter(webpath = context['webpath'],
-                                   is_active = True)
-        page = page.filter(state = 'draft').last() or context['page']
+    language = getattr(request, 'LANGUAGE_CODE', '')
+
+    if menu_id:
+        return load_menu_by_id(menu_id=menu_id,
+                               template=template,
+                               lang=language,
+                               log_msg=_log_msg,
+                               func_name=_func_name)
     else:
+        if not section: return ''
+        # draft mode
+        # if request.session.get('draft_view_mode'):
+            # page = Page.objects.filter(webpath = context['webpath'],
+                                       # is_active = True)
+            # page = page.filter(state = 'draft').last() or context['page']
+
+        # else:
+            # page = context['page']
+
         page = context['page']
-
-    page_menu = PageMenu.objects.filter(section=section,
-                                        is_active=True,
-                                        page=page).first()
-    if not page_menu: return ''
-    language = getattr(request, 'LANGUAGE_CODE', '')
-    menu_items = page_menu.menu.get_items(lang=language,
-                                          parent__isnull=True)
-    data = {'page': page, 'menu': menu_items}
-    return handle_faulty_templates(template, data, name='load_menu')
-
-@register.simple_tag(takes_context=True)
-def load_menu_by_id(context, pk, template):
-    if not pk: return ''
-    request = context['request']
-    menu = NavigationBar.objects.filter(pk=pk, is_active=True).first()
-    if not menu: return ''
-    language = getattr(request, 'LANGUAGE_CODE', '')
-    menu_items = menu.get_items(lang=language,
-                                parent__isnull=True)
-    data = {'menu': menu_items}
-    return handle_faulty_templates(template, data, name='load_menu')
+        page_menu = PageMenu.objects.filter(section=section,
+                                            is_active=True,
+                                            page=page).first()
+        if not page_menu: return ''
+        items = page_menu.menu.get_items(lang=language,
+                                         parent__isnull=True)
+        data = {'items': items}
+        return handle_faulty_templates(template, data, name=_func_name)
