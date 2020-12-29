@@ -50,14 +50,12 @@ class PublicationContentPlaceholderBlock(PlaceHolderBlock):
     """
     def render(self):
         template = self.content.get('template', '')
-        publication_id = self.content.get('publication_id', None)
         if not template: return ''
         context = Context({'request': self.request,
                            'webpath': self.webpath,
                            'page': self.page,
                            'block': self})
         return load_publication_content_placeholder(context=context,
-                                                    publication_id=publication_id,
                                                     template=template)
 
 

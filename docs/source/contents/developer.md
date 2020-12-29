@@ -86,7 +86,7 @@ These templatetags will also work in Page Blocks that would take, optionally, th
 ###### cms_carousels
 
 * **load_carousel**<br>
-renders in the template the first active carousel in section,
+renders in the template the first active carousel in section or the identified one,
 with translated items.<br>
 *arguments*: context, section, template, carousel_id<br>
 *example*:
@@ -119,7 +119,23 @@ If a template is present, passes it data.<br>
    {% endfor %}
 ````
 
-###### cms_page
+###### cms_menus
+
+* **load_menu**<br>
+renders in the template the first active menu in section or the identified one,
+with translated items.<br>
+*arguments*: context, section, template, menu_id<br>
+*example*:
+````
+    {% load_menu section="template-section" template="menu.html" %}
+    {% load_menu menu_id="1" %}
+````
+
+###### cms_pages
+
+* **cms_categories**<br>
+returns all CMS content categories.<br>
+*example*: `{% cms_categories %}`
 
 * **load_blocks**<br>
 it would be configured in the base templates and defines where the blocks would be rendered. 
@@ -129,7 +145,7 @@ it takes `section` as argument, to query/filter only active blocks that belongs 
 
 * **load_carousel_placeholder**<br>
 renders a carousel through passed template. 
-Every carousel placeholder is associated to an active page's PageCarousel, 
+Every carousel placeholder is associated to a page's active PageCarousel, 
 following the template blocks order (e.g. 1st PageCarousel is associated to 
 1st rendered Carousel PlaceHolder, 2nd to 2nd, etc...)<br>
 *arguments*: template<br>
@@ -142,7 +158,7 @@ gets a URL as parameter and pass it to a template.<br>
 
 * **load_link_placeholder**<br>
 renders a URL through passed template (e.g. iFrame template). 
-Every carousel placeholder is associated to an active page's PageLink, 
+Every carousel placeholder is associated to a page's active PageLink, 
 following the template blocks order (e.g. 1st PageLink is associated to 
 1st rendered Link PlaceHolder, 2nd to 2nd, etc...)<br>
 *arguments*: template<br>
@@ -150,7 +166,7 @@ following the template blocks order (e.g. 1st PageLink is associated to
 
 * **load_menu_placeholder**<br>
 renders a Menu through passed template. 
-Every menu placeholder is associated to an active page's PageMenu, 
+Every menu placeholder is associated to a page's active PageMenu, 
 following the template blocks order (e.g. 1st PageMenu is associated to 
 1st rendered Menu PlaceHolder, 2nd to 2nd, etc...)<br>
 *arguments*: template<br>
@@ -163,41 +179,51 @@ returns a translated page title.<br>
 
 * **load_publication_content_placeholder**<br>
 renders a Publication through passed template. 
-Every publication placeholder is associated to an active page's PagePublication, 
+Every publication placeholder is associated to a page's active PagePublication, 
 following the template blocks order (e.g. 1st PageMenu is associated to 
 1st rendered Publication PlaceHolder, 2nd to 2nd, etc...)<br>
 *arguments*: template<br>
 *example*: `{% load_publication_content_placeholder template="publication-layout.html" %}`
 
-###### cms_templates
-supported_languages: get settings.LANGUAGES_CODE to templates
-
-###### cms_menus
-`load_menu`: eg, `{% load_menu section='menu-1' template="main_menu.html" %}`
-
-
-
-
-
-
-
 ###### cms_publication
-`{% load_publications_preview template="publications_preview.html" %}`
-    - additional paramenters:
-        template,
-        section
-        number=5
-        in_evidence=False
-        categories_csv="Didattica,Ricerca"
-        tags_csv="eventi,ricerca"
-`{% load_publication_content_placeholder template="publication_that.html" %}`
-    - additional paramenters:
-        template,
-        section
-        publication_id # optional
-    This templatetags maps "page place holder blocks" with page
-    publications and show a publication content, according to
-    the choosed template, where the "page place holder will be rendered.
+
+* **load_publication**<br>
+pass a single active publication to a template.<br>
+*arguments*: template, publication_id<br>
+*example*: `{% load_publication publication_id="1" template="publication-layout.html" %}`
+
+* **load_publications_preview**<br>
+returns all published publications in a context and passes them to a template.<br>
+*arguments*: template, section (opt), number (opt, default=5), 
+in_evidence (opt, default=False), categories_csv (opt), tags_csv (opt)<br>
+*example*:
+````
+    {% load_publications_preview template="publ.html" number="3" %}
+    {% load_publications_preview template="publ.html" categories="Research, Study" %}
+    {% load_publications_preview template="publ.html" tags_csv="read, sport" %}
+    {% load_publications_preview template="publ.html" in_evidence=True %} 
+````
+
+###### cms_templates
+
+* **blocks_in_position**<br>
+returns True if there are active blocks in passed position or its childs, else False.<br>
+*arguments*: position<br>
+*example*: `{% blocks_in_position position="section-1" %}`
+
+* **supported_languages**<br>
+returns settings.LANGUAGES<br>
+*example*: `{% supported_languages %}`
+
+
+
+
+
+
+
+
+
+
 
 
 #### Handlers

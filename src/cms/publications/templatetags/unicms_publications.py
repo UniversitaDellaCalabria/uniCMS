@@ -9,7 +9,7 @@ from django.utils.safestring import SafeString
 
 from cms.contexts.utils import handle_faulty_templates
 from cms.pages.models import Category
-from cms.publications.models import PublicationContext
+from cms.publications.models import Publication, PublicationContext
 
 
 logger = logging.getLogger(__name__)
@@ -37,6 +37,30 @@ def _get_pub_qparams(context, webpath, section = None, in_evidence=False,
         query_params['publication__tags__name__in'] = tags
 
     return query_params
+
+
+@register.simple_tag(takes_context=True)
+def load_publication(context, template, publication_id):
+    _func_name = 'load_publication'
+    _log_msg = f'Template Tag {_func_name}'
+
+    request = context['request']
+    webpath = context['webpath']
+    language = getattr(request, 'LANGUAGE_CODE', '')
+
+    pub = Publication.objects.filter(pk=publication_id,
+                                     is_active=True).\
+                                     first()
+
+    if not pub:
+        _msg = '{} cannot find publication id {}'.format(log_msg,
+                                                         publication_id)
+        logger.error(_msg)
+        return ''
+
+    pub.translate_as(lang=language)
+    data = {'publication': pub, 'webpath': webpath}
+    return handle_faulty_templates(template, data, name=_func_name)
 
 
 @register.simple_tag(takes_context=True)
