@@ -22,7 +22,7 @@ def supported_languages(): # pragma: no cover
 
 
 @register.simple_tag(takes_context=True)
-def blocks_in_position(context, position=None):
+def blocks_in_position(context, position):
     request = context['request']
     page = context['page']
     webpath = context['webpath']
