@@ -100,12 +100,12 @@ with translated items.<br>
 * **breadcrumbs**<br>
 builds webpath breadcrumbs. If leaf, appends leaf breadcrumbs.<br>
 *arguments*: webpath, template (opt, default=breadcrumbs.html), leaf (opt)<br>
-*example*: `{% breadcrumbs webpath=webpath template="breadcrumbs.html" %}`
+*example*: `{% breadcrumbs webpath=webpath template="breadcrumbs.html" %}`<br>
 
 * **call**<br>
 calls any object method and also pass to it whatever `**kwargs`.<br>
 *arguments*: obj, method, kwargs<br>
-*example*: `{% call obj=publication method="get_url_list" category_name=cat %}`
+*example*: `{% call obj=publication method="get_url_list" category_name=cat %}`<br>
 
 * **language_menu**<br>
 builds a data dict with {url:language} pairs.
@@ -117,7 +117,7 @@ If a template is present, passes it data.<br>
    {% for lang,url in language_urls.items %}
    <li><a class="list-item" href="{{ url }}"><span>{{ lang }}</span></a></li>
    {% endfor %}
-````
+````<br>
 
 ###### cms_page
 
@@ -125,17 +125,23 @@ If a template is present, passes it data.<br>
 it would be configured in the base templates and defines where the blocks would be rendered. 
 it takes `section` as argument, to query/filter only active blocks that belongs to that section.<br>
 *arguments*: section (opt)<br>
-*example*: `{% load_blocks section='banner' %}`
+*example*: `{% load_blocks section="banner" %}`<br>
 
 * **load_carousel_placeholder**<br>
-it would be configured in the base templates and defines where the blocks would be rendered. 
-it takes `section` as argument, to query/filter only active blocks that belongs to that section.<br>
-*arguments*: section (opt)<br>
-*example*: `{% load_blocks section='banner' %}`
+renders a carousel through passed template. 
+Every carousel placeholder is associated to an active page's PageCarousel, 
+following the template blocks order (e.g. 1st PageCarousel is associated to 
+1st rendered Carousel PlaceHolder, 2nd to 2nd, etc...)<br>
+*arguments*: template<br>
+*example*: `{% load_carousel_placeholder template="carousel.html" %}`<br>
 
-
-
-
+* **load_link_placeholder**<br>
+renders a URL through passed template (e.g. iFrame template). 
+Every carousel placeholder is associated to an active page's PageLink, 
+following the template blocks order (e.g. 1st PageLink is associated to 
+1st rendered Link PlaceHolder, 2nd to 2nd, etc...)<br>
+*arguments*: template<br>
+*example*: `{% load_link_placeholder template="iframe.html" %}`<br>
 
 
 ###### cms_templates
