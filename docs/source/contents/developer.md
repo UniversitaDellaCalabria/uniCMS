@@ -84,13 +84,19 @@ Based on informations taken from these objects as input uniCMS adopts some addit
 These templatetags will also work in Page Blocks that would take, optionally, the HTML template as parameter.
 
 ###### cms_carousels
+
 * **load_carousel**<br>
 renders in the template the first active carousel in section,
 with translated items.<br>
-*arguments*: context, section, template<br>
-*example*: `{% load_carousel section="template-section" template="template.html" %}`
+*arguments*: context, section, template, carousel_id<br>
+*example*:
+````
+    {% load_carousel section="template-section" template="template.html" %}
+    {% load_carousel carousel_id="1" %}
+````
 
 ###### cms_contexts
+
 * **breadcrumbs**<br>
 builds webpath breadcrumbs. If leaf, appends leaf breadcrumbs.<br>
 *arguments*: webpath, template (opt, default=breadcrumbs.html), leaf (opt)<br>
@@ -99,7 +105,7 @@ builds webpath breadcrumbs. If leaf, appends leaf breadcrumbs.<br>
 * **call**<br>
 calls any object method and also pass to it whatever `**kwargs`.<br>
 *arguments*: obj, method, kwargs<br>
-*example*: `{% call obj=publication method='get_url_list' category_name=cat %}`
+*example*: `{% call obj=publication method="get_url_list" category_name=cat %}`
 
 * **language_menu**<br>
 builds a data dict with {url:language} pairs.
@@ -113,6 +119,25 @@ If a template is present, passes it data.<br>
    {% endfor %}
 ````
 
+###### cms_page
+
+* **load_blocks**<br>
+it would be configured in the base templates and defines where the blocks would be rendered. 
+it takes `section` as argument, to query/filter only active blocks that belongs to that section.<br>
+*arguments*: section (opt)<br>
+*example*: `{% load_blocks section='banner' %}`
+
+* **load_carousel_placeholder**<br>
+it would be configured in the base templates and defines where the blocks would be rendered. 
+it takes `section` as argument, to query/filter only active blocks that belongs to that section.<br>
+*arguments*: section (opt)<br>
+*example*: `{% load_blocks section='banner' %}`
+
+
+
+
+
+
 ###### cms_templates
 supported_languages: get settings.LANGUAGES_CODE to templates
 
@@ -123,10 +148,7 @@ supported_languages: get settings.LANGUAGES_CODE to templates
 
 
 
-###### cms_page
-`{% load_blocks section='slider' %}`
-  it would be configured in the base templates and defines where the blocks would be rendered.
-  it takes `section` as argument, to query/filter only the blocks that belongs to that section.
+
 
 ###### cms_publication
 `{% load_publications_preview template="publications_preview.html" %}`

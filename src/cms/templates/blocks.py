@@ -84,14 +84,12 @@ class CarouselPlaceholderBlock(PlaceHolderBlock):
     """
     def render(self):
         template = self.content.get('template', '')
-        carousel_id = self.content.get('carousel_id', None)
         if not template: return ''
         context = Context({'request': self.request,
                            'webpath': self.webpath,
                            'page': self.page,
                            'block': self})
         return load_carousel_placeholder(context=context,
-                                         carousel_id=carousel_id,
                                          template=template)
 
 
@@ -101,12 +99,10 @@ class MenuPlaceholderBlock(PlaceHolderBlock):
     """
     def render(self):
         template = self.content.get('template', '')
-        menu_id = self.content.get('menu_id', None)
         if not template: return ''
         context = Context({'request': self.request,
                            'webpath': self.webpath,
                            'page': self.page,
                            'block': self})
         return load_menu_placeholder(context=context,
-                                     menu_id=menu_id,
                                      template=template)

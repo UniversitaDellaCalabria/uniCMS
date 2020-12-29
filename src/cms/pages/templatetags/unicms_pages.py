@@ -12,7 +12,6 @@ from cms.carousels.models import Carousel
 from cms.contexts.decorators import detect_language
 from cms.contexts.utils import handle_faulty_templates
 from cms.menus.models import NavigationBar, NavigationBarItem
-from cms.menus.templatetags.unicms_menus import load_menu_by_id
 from cms.pages.models import Category, PageBlock, PageLink, PagePublication
 from cms.publications.models import Publication, PublicationContext
 from cms.templates.utils import import_string_block
@@ -170,8 +169,7 @@ def load_link_placeholder(context, template,
 
 
 @register.simple_tag(takes_context=True)
-def load_carousel_placeholder(context, template,
-                              carousel_id=None):
+def load_carousel_placeholder(context, template):
     _func_name = 'load_carousel_placeholder'
     _log_msg = f'Template Tag {_func_name}'
 
@@ -193,48 +191,32 @@ def load_carousel_placeholder(context, template,
     identifier = ''.join(random.choices(string.ascii_lowercase +
                                         string.digits, k = N))
 
-    # id is quite arbitrary
-    if carousel_id:
-        carousel = Carousel.objects.filter(pk=carousel_id,
-                                           is_active=True).\
-                                           first()
+    blocks = page.get_blocks()
+    ph = [i for i in blocks
+          if i.type == \
+          'cms.templates.blocks.CarouselPlaceholderBlock']
 
-        if not carousel:
-            _msg = '{} cannot find carousel id {}'.format(_log_msg,
-                                                          carousel_id)
-            logger.error(_msg)
-            return ''
-        data = {'carousel_items': carousel.get_items(language),
-                'carousel_identifier': identifier}
+    if not ph:
+        _msg = '{} doesn\'t have any page carousel'.format(_log_msg)
+        logger.warning(_msg)
+        return ''
+
+    carousels = page.get_carousels()
+    for i in zip(ph, carousels):
+        page_carousel = i[1]
+        if block.__class__.__name__ == i[0].type.split('.')[-1]:
+            # already rendered
+            if getattr(page_carousel, '_published', False):
+                continue
+            data = {'carousel_items': page_carousel.carousel.get_items(language),
+                    'carousel_identifier': identifier}
+            page_carousel._published = True
+
         return handle_faulty_templates(template, data, name=_func_name)
-    else:
-        blocks = page.get_blocks()
-        ph = [i for i in blocks
-              if i.type == \
-              'cms.templates.blocks.CarouselPlaceholderBlock']
-
-        if not ph:
-            _msg = '{} doesn\'t have any page carousel'.format(_log_msg)
-            logger.warning(_msg)
-            return ''
-
-        carousels = page.get_carousels()
-        for i in zip(ph, carousels):
-            page_carousel = i[1]
-            if block.__class__.__name__ == i[0].type.split('.')[-1]:
-                # already rendered
-                if getattr(page_carousel, '_published', False):
-                    continue
-                data = {'carousel_items': page_carousel.carousel.get_items(language),
-                        'carousel_identifier': identifier}
-                page_carousel._published = True
-
-            return handle_faulty_templates(template, data, name=_func_name)
 
 
 @register.simple_tag(takes_context=True)
-def load_menu_placeholder(context, template,
-                          menu_id=None):
+def load_menu_placeholder(context, template):
     _func_name = 'load_menu_placeholder'
     _log_msg = f'Template Tag {_func_name}'
 
@@ -249,33 +231,25 @@ def load_menu_placeholder(context, template,
     # i18n
     language = getattr(request, 'LANGUAGE_CODE', '')
 
-    # id is quite arbitrary
-    if menu_id:
-        return load_menu_by_id(menu_id=menu_id,
-                               template=template,
-                               lang=language,
-                               log_msg=_log_msg,
-                               func_name=_func_name)
-    else:
-        blocks = page.get_blocks()
-        ph = [i for i in blocks
-              if i.type == \
-              'cms.templates.blocks.MenuPlaceholderBlock']
-        if not ph:
-            _msg = '{} doesn\'t have any page menu'.format(_log_msg)
-            logger.warning(_msg)
-            return ''
+    blocks = page.get_blocks()
+    ph = [i for i in blocks
+          if i.type == \
+          'cms.templates.blocks.MenuPlaceholderBlock']
+    if not ph:
+        _msg = '{} doesn\'t have any page menu'.format(_log_msg)
+        logger.warning(_msg)
+        return ''
 
-        menus = page.get_menus()
-        for i in zip(ph, menus):
-            page_menu = i[1]
-            if block.__class__.__name__ == i[0].type.split('.')[-1]:
-                # already rendered
-                if getattr(page_menu, '_published', False):
-                    continue
-                items = page_menu.menu.get_items(lang=language,
-                                                 parent__isnull=True)
-                data = {'items': items}
-                page_menu._published = True
+    menus = page.get_menus()
+    for i in zip(ph, menus):
+        page_menu = i[1]
+        if block.__class__.__name__ == i[0].type.split('.')[-1]:
+            # already rendered
+            if getattr(page_menu, '_published', False):
+                continue
+            items = page_menu.menu.get_items(lang=language,
+                                             parent__isnull=True)
+            data = {'items': items}
+            page_menu._published = True
 
-            return handle_faulty_templates(template, data, name=_func_name)
+        return handle_faulty_templates(template, data, name=_func_name)
