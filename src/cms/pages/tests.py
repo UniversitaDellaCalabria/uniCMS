@@ -177,3 +177,7 @@ class PageUnitTest(TestCase):
         data['carousel_id'] = obj.get_carousels()[0].pk
         lm = load_carousel(**data)
         assert 'italia_carousel' in lm
+
+        data['carousel_id'] = 101
+        lm = load_carousel(**data)
+        assert 'italia_carousel' not in lm
