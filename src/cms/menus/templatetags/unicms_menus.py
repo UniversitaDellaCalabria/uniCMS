@@ -12,7 +12,8 @@ logger = logging.getLogger(__name__)
 register = template.Library()
 
 
-def load_menu_by_id(menu_id, template, func_name, lang='', log_msg=''):
+def _load_menu_by_id(menu_id, template,
+                     func_name, lang='', log_msg=''):
     menu = NavigationBar.objects.filter(pk=menu_id,
                                         is_active=True).\
                                         first()
@@ -35,27 +36,22 @@ def load_menu(context, template, section=None, menu_id=None):
     language = getattr(request, 'LANGUAGE_CODE', '')
 
     if menu_id:
-        return load_menu_by_id(menu_id=menu_id,
-                               template=template,
-                               lang=language,
-                               log_msg=_log_msg,
-                               func_name=_func_name)
+        return _load_menu_by_id(menu_id=menu_id,
+                                template=template,
+                                lang=language,
+                                log_msg=_log_msg,
+                                func_name=_func_name)
     else:
         if not section: return ''
-        # draft mode
-        # if request.session.get('draft_view_mode'):
-            # page = Page.objects.filter(webpath = context['webpath'],
-                                       # is_active = True)
-            # page = page.filter(state = 'draft').last() or context['page']
-
-        # else:
-            # page = context['page']
-
         page = context['page']
         page_menu = PageMenu.objects.filter(section=section,
                                             is_active=True,
                                             page=page).first()
-        if not page_menu: return ''
+        if not page_menu:
+            _msg = '{} cannot find menu in page {} and section {}'\
+                   .format(log_msg, page, section)
+            logger.error(_msg)
+            return ''
         items = page_menu.menu.get_items(lang=language,
                                          parent__isnull=True)
         data = {'items': items}
