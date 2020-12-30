@@ -6,8 +6,8 @@ Why another CMS?
 We're constantly looking for limitless experiences.
 When we are going through the selection of CMS platforms we find different and variety of products and solutions that each are based on different functionalities, depending on what they offer and designed for. And this creates huge limitations if you are looking to customize the CMS for your specific need. Starting from our use case (in a univeristy environment) below the list of some of the reasons why another CMS.
 
-1. **Cganging the structure of pages**.
-In a CMS like Wordpress you cannot modify the structure of the page and you are limited to deal with its content only. To modify the structure you are forced to modify its template in use which requires PHP knowledge. 
+1. **Changing the structure of pages**.
+In a CMS like Wordpress you cannot modify the structure of the page and you are limited to deal with its content only. To modify the structure you are forced to modify its template in use which requires PHP knowledge.
 
 2. **Implementation of large and scalable portals/services**.
 Wordpress does not scale, it is designed as a personal blog therefore it does not satisfy the requirements when it comes to large volumes of traffic.
