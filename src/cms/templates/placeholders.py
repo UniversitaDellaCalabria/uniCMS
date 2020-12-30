@@ -180,7 +180,7 @@ def load_media_placeholder(context, template):
             # already rendered
             if getattr(media, '_published', False):
                 continue
-            data = {'media': media.media}
+            data = {'media': media.media, 'url': media.url}
             media._published = True
 
         return handle_faulty_templates(template, data, name=_func_name)

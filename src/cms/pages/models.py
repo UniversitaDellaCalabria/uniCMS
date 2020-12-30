@@ -247,6 +247,8 @@ class PageMedia(SectionAbstractModel, ActivableModel, SortableModel,
                              on_delete=models.CASCADE)
     media = models.ForeignKey(Media, null=False, blank=False,
                               on_delete=models.CASCADE)
+    url = models.URLField(help_text=_("url"),
+                          null=True, blank=True)
 
     class Meta:
         verbose_name_plural = _("Page Medias")
