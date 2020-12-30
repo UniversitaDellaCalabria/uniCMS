@@ -155,8 +155,9 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         if getattr(self, '_medias', None):
             return self._medias
         self._medias = PageMedia.objects.filter(page=self,
-                                               is_active=True).\
-                                               order_by('order')
+                                                is_active=True,
+                                                media__is_active=True).\
+                                                order_by('order')
         return self._medias
 
     def get_menus(self):

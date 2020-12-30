@@ -4,6 +4,8 @@ from django import template
 from django.template.exceptions import (TemplateDoesNotExist,
                                         TemplateSyntaxError)
 from django.utils import timezone
+from django.utils.safestring import SafeString
+
 from cms.contexts.utils import handle_faulty_templates
 from cms.menus.models import NavigationBar
 from cms.pages.models import PageMenu, Page
@@ -20,7 +22,7 @@ def _load_menu_by_id(menu_id, template,
     if not menu:
         _msg = '{} cannot find menu id {}'.format(log_msg, menu_id)
         logger.error(_msg)
-        return ''
+        return SafeString('')
 
     items = menu.get_items(lang=lang, parent__isnull=True)
     data = {'items': items}
@@ -42,7 +44,7 @@ def load_menu(context, template, section=None, menu_id=None):
                                 log_msg=_log_msg,
                                 func_name=_func_name)
     else:
-        if not section: return ''
+        if not section: return SafeString('')
         page = context['page']
         page_menu = PageMenu.objects.filter(section=section,
                                             is_active=True,
@@ -51,7 +53,7 @@ def load_menu(context, template, section=None, menu_id=None):
             _msg = '{} cannot find menu in page {} and section {}'\
                    .format(log_msg, page, section)
             logger.error(_msg)
-            return ''
+            return SafeString('')
         items = page_menu.menu.get_items(lang=language,
                                          parent__isnull=True)
         data = {'items': items}

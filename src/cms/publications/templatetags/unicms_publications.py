@@ -56,7 +56,7 @@ def load_publication(context, template, publication_id):
         _msg = '{} cannot find publication id {}'.format(log_msg,
                                                          publication_id)
         logger.error(_msg)
-        return ''
+        return SafeString('')
 
     pub.translate_as(lang=language)
     data = {'publication': pub, 'webpath': webpath}
@@ -82,7 +82,7 @@ def load_publications_preview(context, template,
                         filter(**query_params).\
                         order_by('order')[0:number]
 
-    if not pub_in_context: return ''
+    if not pub_in_context: return SafeString('')
 
     # i18n
     language = getattr(request, 'LANGUAGE_CODE', '')
