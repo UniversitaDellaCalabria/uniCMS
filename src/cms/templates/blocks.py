@@ -14,6 +14,13 @@ class AbstractBlock(object):
             setattr(self, k, v)
         self._rendered = False
 
+    def get_context(self):
+        context = Context({'request': self.request,
+                           'webpath': self.webpath,
+                           'page': self.page,
+                           'block': self})
+        return context
+
     def render(self):
         return mark_safe(self.content)
 
@@ -21,10 +28,7 @@ class AbstractBlock(object):
 class HtmlBlock(AbstractBlock):
     def render(self):
         template = Template(self.content)
-        context = Context({'request': self.request,
-                           'webpath': self.webpath,
-                           'page': self.page,
-                           'block': self})
+        context = self.get_context()
         return template.render(context)
 
 
@@ -42,13 +46,6 @@ class PlaceHolderBlock(JSONBlock):
     def get_template(self):
         template = self.content.get('template', '')
         return template
-
-    def get_context(self):
-        context = Context({'request': self.request,
-                           'webpath': self.webpath,
-                           'page': self.page,
-                           'block': self})
-        return context
 
 
 class CarouselPlaceholderBlock(PlaceHolderBlock):
