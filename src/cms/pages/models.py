@@ -139,7 +139,8 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         if getattr(self, '_pubs', None):
             return self._pubs
         self._pubs = PagePublication.objects.filter(page=self,
-                                                    is_active=True).\
+                                                    is_active=True,
+                                                    publication__is_active=True).\
                                                     order_by('order')
         return self._pubs
 
@@ -147,7 +148,8 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         if getattr(self, '_carousels', None):
             return self._carousels
         self._carousels = PageCarousel.objects.filter(page=self,
-                                                      is_active=True).\
+                                                      is_active=True,
+                                                      carousel__is_active=True).\
                                                       order_by('order')
         return self._carousels
 
@@ -164,7 +166,8 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         if getattr(self, '_menus', None):
             return self._menus
         self._menus = PageMenu.objects.filter(page=self,
-                                              is_active=True).\
+                                              is_active=True,
+                                              menu__is_active=True).\
                                               order_by('order')
         return self._menus
 
