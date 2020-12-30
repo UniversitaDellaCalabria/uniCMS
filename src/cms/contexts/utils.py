@@ -95,7 +95,7 @@ def load_hooks(obj, flow_type, *args, **kwargs):
     _msg_hook_exp = '{} Hook {} failed with: {}'
     type_hooks = CMS_HOOKS.get(obj.__class__.__name__, {})
     flow_hooks = type_hooks.get(flow_type, [])
-    
+
     # pre-Save HOOKS call
     for hook in flow_hooks:
         try:

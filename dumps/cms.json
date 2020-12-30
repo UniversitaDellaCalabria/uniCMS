@@ -1,5 +1,47 @@
 [
 {
+  "model": "accounts.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$aL1y4It24fXT$1Wk5h0sRihJB9e09LnevaV4lJukNGuZ5lno1kFXKLmY=",
+    "last_login": "2020-12-04T11:00:11.855Z",
+    "is_superuser": true,
+    "username": "wert",
+    "is_staff": true,
+    "date_joined": "2020-10-29T09:08:47.271Z",
+    "first_name": "Giuseppe",
+    "last_name": "De Marco",
+    "is_active": true,
+    "email": "that@mail.org",
+    "taxpayer_id": null,
+    "matricola_studente": null,
+    "matricola_dipendente": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "accounts.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$VdsaV1CyuN6i$KmQ+lOwEGhP5WGh9Kaspel/M9jfseZKMOfrVydcaKVg=",
+    "last_login": "2020-12-28T15:39:04.622Z",
+    "is_superuser": true,
+    "username": "felix",
+    "is_staff": true,
+    "date_joined": "2020-11-11T14:58:29.557Z",
+    "first_name": "Francesco",
+    "last_name": "Filicetti",
+    "is_active": true,
+    "email": "",
+    "taxpayer_id": null,
+    "matricola_studente": null,
+    "matricola_dipendente": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
   "model": "taggit.tag",
   "pk": 1,
   "fields": {
@@ -580,7 +622,7 @@
   "pk": 7,
   "fields": {
     "created": "2020-12-14T11:18:00.221Z",
-    "modified": "2020-12-28T16:48:36.383Z",
+    "modified": "2020-12-29T11:18:54.851Z",
     "is_active": true,
     "name": "Unical - Main Template",
     "template_file": "unical_main.html",
@@ -1055,7 +1097,7 @@
   "pk": 38,
   "fields": {
     "created": "2020-12-22T15:26:13.833Z",
-    "modified": "2020-12-22T15:26:13.833Z",
+    "modified": "2020-12-30T09:28:46.250Z",
     "is_active": true,
     "name": "Placeholder Publication - Card no image",
     "description": "",
@@ -1111,12 +1153,12 @@
   "pk": 42,
   "fields": {
     "created": "2020-12-28T16:16:04.988Z",
-    "modified": "2020-12-28T16:16:04.988Z",
+    "modified": "2020-12-30T09:31:59.417Z",
     "is_active": true,
-    "name": "Placeholder Menu - Style Menu 2",
+    "name": "Placeholder Media - Italia Image",
     "description": "",
-    "type": "cms.templates.blocks.MenuPlaceholderBlock",
-    "content": "{\"template\": \"unical_portale_menu_secondario.html\"}",
+    "type": "cms.templates.blocks.MediaPlaceholderBlock",
+    "content": "{\"template\": \"italia_image.html\"}",
     "image": ""
   }
 },
@@ -1131,6 +1173,20 @@
     "description": "",
     "type": "cms.templates.blocks.MenuPlaceholderBlock",
     "content": "{\"template\": \"unical_main_menu.html\"}",
+    "image": ""
+  }
+},
+{
+  "model": "cmstemplates.templateblock",
+  "pk": 44,
+  "fields": {
+    "created": "2020-12-30T07:51:35.365Z",
+    "modified": "2020-12-30T07:52:23.072Z",
+    "is_active": true,
+    "name": "Placeholder Menu - Style Secondary Menu",
+    "description": "",
+    "type": "cms.templates.blocks.MenuPlaceholderBlock",
+    "content": "{\"template\": \"unical_portale_menu_secondario.html\"}",
     "image": ""
   }
 },
@@ -1217,9 +1273,9 @@
   "pk": 19,
   "fields": {
     "created": "2020-12-14T11:42:27.589Z",
-    "modified": "2020-12-28T16:48:36.385Z",
+    "modified": "2020-12-29T11:18:54.852Z",
     "order": 10,
-    "is_active": false,
+    "is_active": true,
     "template": 7,
     "block": 7,
     "section": "menu-1"
@@ -4441,11 +4497,11 @@
   "pk": 6,
   "fields": {
     "created": "2020-12-11T09:09:22.271Z",
-    "modified": "2020-12-11T09:11:52.315Z",
-    "is_active": false,
+    "modified": "2020-12-30T13:02:00.951Z",
+    "is_active": true,
     "created_by": null,
     "modified_by": null,
-    "file_size": 38698,
+    "file_size": 31522,
     "file_type": "image/webp",
     "title": "internazionale",
     "file": "medias/2020/internazionale_temsyeH.webp",
@@ -4509,11 +4565,25 @@
   }
 },
 {
+  "model": "cmsmedias.mediacollectionitem",
+  "pk": 5,
+  "fields": {
+    "created": "2020-12-29T13:57:05.861Z",
+    "modified": "2020-12-29T13:57:05.861Z",
+    "order": 10,
+    "is_active": true,
+    "created_by": null,
+    "modified_by": null,
+    "media": 6,
+    "collection": 1
+  }
+},
+{
   "model": "cmspages.page",
   "pk": 1,
   "fields": {
     "created": "2020-10-29T09:12:44.427Z",
-    "modified": "2020-12-28T16:50:12.390Z",
+    "modified": "2020-12-30T14:31:18.084Z",
     "is_active": true,
     "created_by": null,
     "modified_by": null,
@@ -4735,12 +4805,26 @@
   }
 },
 {
+  "model": "cmspages.pagemedia",
+  "pk": 1,
+  "fields": {
+    "created": "2020-12-30T07:21:29.684Z",
+    "modified": "2020-12-30T14:31:18.231Z",
+    "order": 0,
+    "is_active": true,
+    "section": null,
+    "page": 1,
+    "media": 6,
+    "url": "https://www.unical.it"
+  }
+},
+{
   "model": "cmspages.pagemenu",
   "pk": 2,
   "fields": {
     "created": "2020-11-02T10:09:03.494Z",
-    "modified": "2020-12-28T16:50:13.432Z",
-    "order": 1,
+    "modified": "2020-12-29T11:21:44.549Z",
+    "order": 0,
     "is_active": true,
     "section": "menu-2",
     "page": 1,
@@ -4856,12 +4940,25 @@
   "pk": 45,
   "fields": {
     "created": "2020-12-28T16:44:01.673Z",
-    "modified": "2020-12-28T16:50:13.428Z",
-    "order": 0,
+    "modified": "2020-12-29T11:59:49.673Z",
+    "order": 1,
     "is_active": true,
     "section": "menu-1",
     "page": 1,
     "menu": 1
+  }
+},
+{
+  "model": "cmspages.pagemenu",
+  "pk": 46,
+  "fields": {
+    "created": "2020-12-29T11:21:44.555Z",
+    "modified": "2020-12-29T11:59:49.677Z",
+    "order": 2,
+    "is_active": true,
+    "section": "menu-2",
+    "page": 1,
+    "menu": 2
   }
 },
 {
@@ -5224,7 +5321,7 @@
     "is_active": true,
     "section": "menu-2",
     "page": 1,
-    "block": 42
+    "block": 44
   }
 },
 {
@@ -5232,7 +5329,7 @@
   "pk": 117,
   "fields": {
     "order": 13,
-    "is_active": true,
+    "is_active": false,
     "section": "menu-1",
     "page": 1,
     "block": 43
@@ -5247,6 +5344,17 @@
     "section": "menu-1",
     "page": 15,
     "block": 7
+  }
+},
+{
+  "model": "cmspages.pageblock",
+  "pk": 119,
+  "fields": {
+    "order": 14,
+    "is_active": true,
+    "section": "2-center-top-b",
+    "page": 1,
+    "block": 42
   }
 },
 {
@@ -5540,7 +5648,7 @@
   "pk": 4,
   "fields": {
     "created": "2020-11-11T16:49:38.838Z",
-    "modified": "2020-12-29T07:13:33.815Z",
+    "modified": "2020-12-29T12:01:28.258Z",
     "is_active": true,
     "created_by": null,
     "modified_by": null,
@@ -5867,7 +5975,7 @@
   "pk": 4,
   "fields": {
     "created": "2020-11-11T16:50:10.775Z",
-    "modified": "2020-12-29T07:12:30.720Z",
+    "modified": "2020-12-29T12:01:28.314Z",
     "order": 10,
     "is_active": true,
     "section": null,

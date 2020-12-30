@@ -1,6 +1,7 @@
 import logging
 
 from django import template
+from django.utils.safestring import SafeString
 
 from cms.carousels.models import Carousel
 from cms.contexts.utils import handle_faulty_templates
@@ -19,7 +20,7 @@ def _load_carousel_by_id(carousel_id, template,
         _msg = '{} cannot find carousel id {}'.format(log_msg,
                                                       carousel_id)
         logger.error(_msg)
-        return ''
+        return SafeString('')
 
     carousel_items = carousel.get_items(lang=lang)
     data = {'carousel_items': carousel_items}
@@ -41,7 +42,7 @@ def load_carousel(context, section, template, carousel_id=None):
                                     log_msg=_log_msg,
                                     func_name=_func_name)
     else:
-        if not section: return ''
+        if not section: return SafeString('')
         page_carousel = PageCarousel.objects.filter(section=section,
                                                     is_active=True,
                                                     page__webpath=context['webpath']).\
@@ -50,7 +51,7 @@ def load_carousel(context, section, template, carousel_id=None):
             _msg = '{} cannot find carousel in page {} and section {}'\
                    .format(_msg, page, section)
             logger.error(_msg)
-            return ''
+            return SafeString('')
 
         carousel = page_carousel.carousel
         carousel_items = carousel.get_items(lang=language)
