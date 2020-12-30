@@ -139,6 +139,42 @@ def load_publication_content_placeholder(context, template):
             pub._published = True
             return handle_faulty_templates(template, data, name=_func_name)
 
+def load_media_placeholder(context, template):
+    _func_name = 'load_media_placeholder'
+    _log_msg = f'Template Tag {_func_name}'
+
+    request = context['request']
+    webpath = context['webpath']
+    block = context.get('block')
+    page = context['page']
+    if not block:
+        logger.warning(f'{_func_name} cannot get a block object')
+        return ''
+
+    # i18n
+    language = getattr(request, 'LANGUAGE_CODE', '')
+
+    blocks = page.get_blocks()
+    ph = [i for i in blocks
+          if i.type == \
+          'cms.templates.blocks.MediaPlaceholderBlock']
+    if not ph:
+        _msg = '{} doesn\'t have any page media'.format(_log_msg)
+        logger.warning(_msg)
+        return ''
+
+    medias = page.get_medias()
+    for i in zip(ph, medias):
+        media = i[1]
+        if block.__class__.__name__ == i[0].type.split('.')[-1]:
+            # already rendered
+            if getattr(media, '_published', False):
+                continue
+            data = {'media': media.media}
+            media._published = True
+
+        return handle_faulty_templates(template, data, name=_func_name)
+
 def load_menu_placeholder(context, template):
     _func_name = 'load_menu_placeholder'
     _log_msg = f'Template Tag {_func_name}'
@@ -165,14 +201,14 @@ def load_menu_placeholder(context, template):
 
     menus = page.get_menus()
     for i in zip(ph, menus):
-        page_menu = i[1]
+        menu = i[1]
         if block.__class__.__name__ == i[0].type.split('.')[-1]:
             # already rendered
-            if getattr(page_menu, '_published', False):
+            if getattr(menu, '_published', False):
                 continue
-            items = page_menu.menu.get_items(lang=language,
-                                             parent__isnull=True)
+            items = menu.menu.get_items(lang=language,
+                                        parent__isnull=True)
             data = {'items': items}
-            page_menu._published = True
+            menu._published = True
 
         return handle_faulty_templates(template, data, name=_func_name)

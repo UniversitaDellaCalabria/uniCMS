@@ -12,6 +12,7 @@ from cms.contexts.models import *
 from cms.contexts.utils import sanitize_path
 from cms.carousels.models import Carousel
 from cms.medias import settings as cms_media_settings
+from cms.medias.models import Media
 from cms.medias.validators import *
 from cms.menus.models import NavigationBar
 from cms.templates.models import (CMS_TEMPLATE_BLOCK_SECTIONS,
@@ -99,7 +100,8 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         if section:
             query_params['section'] = section
         blocks = PageBlock.objects.filter(page=self,
-                                          **query_params).\
+                                          **query_params,
+                                          block__is_active=True).\
                                    order_by('section', 'order').\
                                    values_list('order', 'block__pk')
         excluded_blocks = PageBlock.objects.filter(page=self,
@@ -149,6 +151,14 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                                       order_by('order')
         return self._carousels
 
+    def get_medias(self):
+        if getattr(self, '_medias', None):
+            return self._medias
+        self._medias = PageMedia.objects.filter(page=self,
+                                               is_active=True).\
+                                               order_by('order')
+        return self._medias
+
     def get_menus(self):
         if getattr(self, '_menus', None):
             return self._menus
@@ -171,7 +181,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
 
     def save(self, *args, **kwargs):
         super(self.__class__, self).save(*args, **kwargs)
-        
+
         # can't remember why I wrote this code ...!
         # for rel in PageRelated.objects.filter(page=self):
             # if not PageRelated.objects.\
@@ -225,6 +235,21 @@ class PageLocalization(TimeStampedModel, ActivableModel,
 
     def __str__(self):
         return '{} {}'.format(self.page, self.language)
+
+
+class PageMedia(SectionAbstractModel, ActivableModel, SortableModel,
+                TimeStampedModel):
+    page = models.ForeignKey(Page, null=False, blank=False,
+                             on_delete=models.CASCADE)
+    media = models.ForeignKey(Media, null=False, blank=False,
+                              on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = _("Page Medias")
+
+    def __str__(self):
+        return '{} {} :{}'.format(self.page, self.media,
+                                  self.section or '#')
 
 
 class PageMenu(SectionAbstractModel, ActivableModel, SortableModel,

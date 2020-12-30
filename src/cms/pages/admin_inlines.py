@@ -55,6 +55,14 @@ class PageCarouselInline(nested_admin.NestedTabularInline):
     sortable_field_name = "order"
 
 
+class PageMediaInline(nested_admin.NestedTabularInline):
+    model = PageMedia
+    extra = 0
+    classes = ['collapse']
+    raw_id_fields = ("media",)
+    sortable_field_name = "order"
+
+
 class PageMenuInline(nested_admin.NestedTabularInline):
     model = PageMenu
     extra = 0

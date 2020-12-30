@@ -7,7 +7,7 @@ from . models import *
 def preview_image(obj):
     width="15"
     # breakpoint()
-    img_tag = f'<img src="{obj.media.file.url}" style="width: {width}vw;"/>'
+    img_tag = f'<img src="{obj.file.url}" style="width: {width}vw;"/>'
     result = mark_safe(img_tag)
     return result
 
@@ -26,11 +26,11 @@ class MediaCollectionItemInline(admin.TabularInline):
 class MediaAdmin(admin.ModelAdmin):
     search_fields = ('title',)
     list_display  = ('title', 'file_size', 'file_type', 'preview_image')
-    list_filter   = ('file_type', 
+    list_filter   = ('file_type',
                      'created', 'modified')
     inlines = (MediaCollectionItemInline,) # MediaLinkInline)
 
-    readonly_fields = ("headshot_image", "preview_image", 
+    readonly_fields = ("headshot_image", "preview_image",
                        "file_type", "file_size",
                        'created_by', 'modified_by')
 
@@ -39,7 +39,7 @@ class MediaAdmin(admin.ModelAdmin):
         img_tag = f'<img src="{obj.file.url}" style="width: {width}vw;"/>'
         result = mark_safe(img_tag)
         return result
-    
+
     def preview_image(self, obj):
         return preview_image(obj)
 

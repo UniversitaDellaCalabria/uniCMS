@@ -39,37 +39,16 @@ class JSONBlock(AbstractBlock):
 class PlaceHolderBlock(JSONBlock):
     """
     """
-    pass
-
-
-class PublicationContentPlaceholderBlock(PlaceHolderBlock):
-    """
-    Publication PlaceHolder
-    """
-    def render(self):
+    def get_template(self):
         template = self.content.get('template', '')
-        if not template: return ''
+        return template
+
+    def get_context(self):
         context = Context({'request': self.request,
                            'webpath': self.webpath,
                            'page': self.page,
                            'block': self})
-        return load_publication_content_placeholder(context=context,
-                                                    template=template)
-
-
-class LinkPlaceholderBlock(PlaceHolderBlock):
-    """
-    Link PlaceHolder
-    """
-    def render(self):
-        template = self.content.get('template', '')
-        if not template: return ''
-        context = Context({'request': self.request,
-                           'webpath': self.webpath,
-                           'page': self.page,
-                           'block': self})
-        return load_link_placeholder(context=context,
-                                     template=template)
+        return context
 
 
 class CarouselPlaceholderBlock(PlaceHolderBlock):
@@ -77,14 +56,35 @@ class CarouselPlaceholderBlock(PlaceHolderBlock):
     Carousel PlaceHolder
     """
     def render(self):
-        template = self.content.get('template', '')
+        template = self.get_template()
         if not template: return ''
-        context = Context({'request': self.request,
-                           'webpath': self.webpath,
-                           'page': self.page,
-                           'block': self})
+        context = self.get_context()
         return load_carousel_placeholder(context=context,
                                          template=template)
+
+
+class LinkPlaceholderBlock(PlaceHolderBlock):
+    """
+    Link PlaceHolder
+    """
+    def render(self):
+        template = self.get_template()
+        if not template: return ''
+        context = self.get_context()
+        return load_link_placeholder(context=context,
+                                     template=template)
+
+
+class MediaPlaceholderBlock(PlaceHolderBlock):
+    """
+    Media PlaceHolder
+    """
+    def render(self):
+        template = self.get_template()
+        if not template: return ''
+        context = self.get_context()
+        return load_media_placeholder(context=context,
+                                      template=template)
 
 
 class MenuPlaceholderBlock(PlaceHolderBlock):
@@ -92,11 +92,20 @@ class MenuPlaceholderBlock(PlaceHolderBlock):
     Menu PlaceHolder
     """
     def render(self):
-        template = self.content.get('template', '')
+        template = self.get_template()
         if not template: return ''
-        context = Context({'request': self.request,
-                           'webpath': self.webpath,
-                           'page': self.page,
-                           'block': self})
+        context = self.get_context()
         return load_menu_placeholder(context=context,
                                      template=template)
+
+
+class PublicationContentPlaceholderBlock(PlaceHolderBlock):
+    """
+    Publication PlaceHolder
+    """
+    def render(self):
+        template = self.get_template()
+        if not template: return ''
+        context = self.get_context()
+        return load_publication_content_placeholder(context=context,
+                                                    template=template)
