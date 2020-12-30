@@ -22,7 +22,7 @@ logger.setLevel(logging.INFO)
 class PageUnitTest(TestCase):
 
     def setUp(self):
-        pass
+        self.client = Client(HTTP_HOST='example.org')
 
 
     @classmethod
@@ -191,12 +191,32 @@ class PageUnitTest(TestCase):
 
     def test_home_page(self):
         obj = self.create_page(date_end=timezone.localtime())
-        req = Client(HTTP_HOST='example.org')
+        
         
         url = reverse('unicms:cms_dispatch')
-        res = req.get(url)
+        res = self.client.get(url)
         assert res.status_code == 200
         # testing cache
-        req = Client(HTTP_HOST='example.org')
-        res = req.get(url)
+        res = self.client.get(url)
+        assert res.status_code == 200
+
+    def test_show_template_blocks_sections(self):
+        obj = self.create_page()
+        user = ContextUnitTest.create_user()
+        user.is_staff = 1
+        user.save()
+        self.client.force_login(user)
+        url = reverse('unicms:cms_dispatch')
+        res = self.client.get(f'{url}?show_template_blocks_sections')
+        assert res.status_code == 200
+        assert 'block' in res.content.decode()
+
+    def show_cms_draft_mode(self):
+        obj = self.create_page()
+        user = ContextUnitTest.create_user()
+        user.is_staff = 1
+        user.save()
+        self.client.force_login(user)
+        url = reverse('unicms:cms_dispatch')
+        res = self.client.get(f'{url}?show_cms_draft_mode')
         assert res.status_code == 200
