@@ -66,8 +66,8 @@ class PublicationUnitTest(TestCase):
 
     
     @classmethod
-    def enrich_pub(cls):
-        pub = cls.create_pub()
+    def enrich_pub(cls, **kwargs):
+        pub = cls.create_pub(**kwargs)
         
         pub.categories
         pub.serialize()
@@ -180,6 +180,9 @@ class PublicationUnitTest(TestCase):
     
     def test_publication_handlers(self):
         pub = self.enrich_pub()
+        webpath=pub.related_contexts[0].webpath
+        page = PageUnitTest.create_page(webpath=webpath)
+        
         url = pub.related_contexts[0].url
         req = Client(HTTP_HOST='example.org')
         res = req.get(url)

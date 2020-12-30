@@ -37,8 +37,12 @@ class CreatedModifiedBy(models.Model):
 
 
 class WebSite(models.Model):
-    name = models.CharField(max_length=254, blank=False, null=False)
-    domain = models.CharField(max_length=254, blank=False, null=False)
+    name = models.CharField(max_length=254, 
+                            unique=True,
+                            blank=False, null=False)
+    domain = models.CharField(max_length=254, 
+                              blank=False, null=False,
+                              unique=True)
     is_active   = models.BooleanField(default=False, blank=True)
 
     class Meta:

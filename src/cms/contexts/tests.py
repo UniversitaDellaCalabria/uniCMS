@@ -38,7 +38,8 @@ class ContextUnitTest(TestCase):
         kwargs = kwargs or dict(name='example.org',
                                 domain='example.org',
                                 is_active=True)
-        website = WebSite.objects.create(**kwargs)
+        website = WebSite.objects.filter(**kwargs).first() or \
+                  WebSite.objects.create(**kwargs)
         return website
 
 
@@ -53,7 +54,6 @@ class ContextUnitTest(TestCase):
                        'alias_url': None,
                        'path': '/',
                        'is_active': True}
-
         webpath = WebPath.objects.create(**kwargs)
         return webpath
 

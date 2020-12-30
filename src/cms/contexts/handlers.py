@@ -11,7 +11,8 @@ class BaseContentHandler(object):
     def __init__(self, path:str,
                  webpath:WebPath = None,
                  template_fname:str = None,
-                 **kwargs):
+                 **kwargs
+        ): # pragma: no cover
         """
         Checks if a path belongs to a CMS specialized application
         :type webpath: cmscontext.model.WebPath

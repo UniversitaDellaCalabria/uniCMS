@@ -44,17 +44,18 @@ class PageUnitTest(TestCase):
         page_template = page_template_block.template
         
         data =  {'is_active': 1,
-                   'draft_of': None, 
-                   'name': "Portale dell'Università della Calabria", 
-                   'title': 'titolo pagina', 
-                   'webpath': ContextUnitTest.create_webpath(), 
-                   'base_template': page_template, 
-                   'description': '', 
-                   'date_start': timezone.localtime(), 
-                   'date_end': None, 
-                   'state': 'published', 
-                   'type': 'home'}
+                 'draft_of': None, 
+                 'name': "Portale dell'Università della Calabria", 
+                 'title': 'titolo pagina', 
+                 'webpath': kwargs.get('webpath', None) or ContextUnitTest.create_webpath(), 
+                 'base_template': page_template, 
+                 'description': '', 
+                 'date_start': timezone.localtime(), 
+                 'date_end': None, 
+                 'state': 'published', 
+                 'type': 'home'}
         for k,v in kwargs.items():
+            if k == 'webpath': continue
             data[k] = v
 
         obj = Page.objects.create(**data)
