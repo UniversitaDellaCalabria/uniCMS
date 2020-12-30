@@ -138,52 +138,20 @@ returns all CMS content categories.<br>
 *example*: `{% cms_categories %}`
 
 * **load_blocks**<br>
-it would be configured in the base templates and defines where the blocks would be rendered. 
+it would be configured in the base templates and defines where the blocks would be rendered.
 it takes `section` as argument, to query/filter only active blocks that belongs to that section.<br>
 *arguments*: section (opt)<br>
 *example*: `{% load_blocks section="banner" %}`
-
-* **load_carousel_placeholder**<br>
-renders a carousel through passed template. 
-Every carousel placeholder is associated to a page's active PageCarousel, 
-following the template blocks order (e.g. 1st PageCarousel is associated to 
-1st rendered Carousel PlaceHolder, 2nd to 2nd, etc...)<br>
-*arguments*: template<br>
-*example*: `{% load_carousel_placeholder template="carousel.html" %}`
 
 * **load_link**<br>
 gets a URL as parameter and pass it to a template.<br>
 *arguments*: template, url<br>
 *example*: `{% load_link url="https://myvideo.it" template="iframe-video.html" %}`
 
-* **load_link_placeholder**<br>
-renders a URL through passed template (e.g. iFrame template). 
-Every carousel placeholder is associated to a page's active PageLink, 
-following the template blocks order (e.g. 1st PageLink is associated to 
-1st rendered Link PlaceHolder, 2nd to 2nd, etc...)<br>
-*arguments*: template<br>
-*example*: `{% load_link_placeholder template="iframe.html" %}`
-
-* **load_menu_placeholder**<br>
-renders a Menu through passed template. 
-Every menu placeholder is associated to a page's active PageMenu, 
-following the template blocks order (e.g. 1st PageMenu is associated to 
-1st rendered Menu PlaceHolder, 2nd to 2nd, etc...)<br>
-*arguments*: template<br>
-*example*: `{% load_menu_placeholder template="alternative-menu.html" %}`
-
 * **load_page_title**<br>
 returns a translated page title.<br>
 *arguments*: page<br>
 *example*: `{% load_page_title page=page %}`
-
-* **load_publication_content_placeholder**<br>
-renders a Publication through passed template. 
-Every publication placeholder is associated to a page's active PagePublication, 
-following the template blocks order (e.g. 1st PageMenu is associated to 
-1st rendered Publication PlaceHolder, 2nd to 2nd, etc...)<br>
-*arguments*: template<br>
-*example*: `{% load_publication_content_placeholder template="publication-layout.html" %}`
 
 ###### cms_publication
 
@@ -194,14 +162,14 @@ pass a single active publication to a template.<br>
 
 * **load_publications_preview**<br>
 returns all published publications in a context and passes them to a template.<br>
-*arguments*: template, section (opt), number (opt, default=5), 
+*arguments*: template, section (opt), number (opt, default=5),
 in_evidence (opt, default=False), categories_csv (opt), tags_csv (opt)<br>
 *example*:
 ````
     {% load_publications_preview template="publ.html" number="3" %}
     {% load_publications_preview template="publ.html" categories="Research, Study" %}
     {% load_publications_preview template="publ.html" tags_csv="read, sport" %}
-    {% load_publications_preview template="publ.html" in_evidence=True %} 
+    {% load_publications_preview template="publ.html" in_evidence=True %}
 ````
 
 ###### cms_templates
