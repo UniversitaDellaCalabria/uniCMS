@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from rest_framework import generics, viewsets, permissions
 from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -41,7 +41,8 @@ class ApiMenu(APIView):
         create a new menu, only for staff users
         """
         if not request.user.is_staff:
-            raise NotFound(detail="Error 403, forbidden", code=404)
+            raise PermissionDenied(detail="Error 403, forbidden", code=403)
+        
         childs = request.data.get('childs')
 
         # post method

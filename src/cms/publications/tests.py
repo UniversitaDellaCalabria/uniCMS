@@ -206,7 +206,13 @@ class PublicationUnitTest(TestCase):
         res = req.get(url, content_type='application/json')
         assert res.status_code == 404
         
-        # re-create the menu
+        # re-create the menu - with unprivileged user
+        url = reverse('unicms_api:api-menu-post')
+        res = req.post(url, data=menu_json, 
+                       content_type='application/json', follow=1)
+        assert res.status_code == 403
+        
+        # re-create the menu - with privileged user
         user = ContextUnitTest.create_user()
         user.is_staff = 1
         user.save()
@@ -217,7 +223,6 @@ class PublicationUnitTest(TestCase):
                        content_type='application/json', follow=1)
         
         # update a menu
-        url = reverse('unicms_api:api-menu', kwargs={'menu_id': 2})
         menu_json['childs'].append(
             {'parent_id': None, 
              'name': 'Other', 
@@ -228,6 +233,14 @@ class PublicationUnitTest(TestCase):
              'order': 10, 
              'childs': []}
         )
+        
+        # not existing menu
+        url = reverse('unicms_api:api-menu', kwargs={'menu_id': 100})
+        res = req.post(url, data=menu_json, 
+                      content_type='application/json', follow=1)
+        assert res.status_code == 404
+        
+        url = reverse('unicms_api:api-menu', kwargs={'menu_id': 2})
         res = req.post(url, data=menu_json, 
                       content_type='application/json', follow=1)
         
