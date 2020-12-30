@@ -191,14 +191,13 @@ class PageUnitTest(TestCase):
 
     def test_home_page(self):
         obj = self.create_page(date_end=timezone.localtime())
-        
-        
         url = reverse('unicms:cms_dispatch')
         res = self.client.get(url)
         assert res.status_code == 200
         # testing cache
         res = self.client.get(url)
         assert res.status_code == 200
+
 
     def test_show_template_blocks_sections(self):
         obj = self.create_page()
@@ -210,6 +209,7 @@ class PageUnitTest(TestCase):
         res = self.client.get(f'{url}?show_template_blocks_sections')
         assert res.status_code == 200
         assert 'block' in res.content.decode()
+
 
     def show_cms_draft_mode(self):
         obj = self.create_page()

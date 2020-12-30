@@ -187,3 +187,54 @@ class PublicationUnitTest(TestCase):
         req = Client(HTTP_HOST='example.org')
         res = req.get(url)
         assert res.status_code == 200
+    
+    def test_api_menu_builder_with_publications(self):
+        pub = self.enrich_pub()
+        webpath=pub.related_contexts[0].webpath
+        menu = MenuUnitTest.create_menu_item().menu
+        
+        req = Client()
+        url = reverse('unicms_api:api-menu', kwargs={'menu_id': 1})
+        res = req.get(url, content_type='application/json')
+        assert isinstance(res.json(), dict)
+        
+        menu_json = res.json()
+        # destroy the menu
+        menu.delete()
+        
+        # check that it doesn't exist anymore
+        res = req.get(url, content_type='application/json')
+        assert res.status_code == 404
+        
+        # re-create the menu
+        user = ContextUnitTest.create_user()
+        user.is_staff = 1
+        user.save()
+        req.force_login(user)
+        
+        url = reverse('unicms_api:api-menu-post')
+        res = req.post(url, data=menu_json, 
+                       content_type='application/json', follow=1)
+        
+        # update a menu
+        url = reverse('unicms_api:api-menu', kwargs={'menu_id': 2})
+        menu_json['childs'].append(
+            {'parent_id': None, 
+             'name': 'Other', 
+             'url': '', 
+             'publication_id': 1, 
+             'webpath_id': None, 
+             'is_active': True, 
+             'order': 10, 
+             'childs': []}
+        )
+        res = req.post(url, data=menu_json, 
+                      content_type='application/json', follow=1)
+        
+        from cms.menus.models import NavigationBar
+        menu = NavigationBar.objects.last()
+        # verify
+        res = req.get(url, content_type='application/json')
+        assert len(res.json()['childs']) == 2
+        
+

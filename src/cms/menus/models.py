@@ -41,7 +41,7 @@ class NavigationBar(TimeStampedModel, ActivableModel, CreatedModifiedBy):
         create menu items importing a dictionary
         """
         items = deepcopy(item_list)
-        for item in item_list:
+        for item in items:
             if not item: continue
             for i in 'link', 'parent_id', 'webpath_id', 'menu_id':
                 item.pop(i, None)
@@ -96,10 +96,16 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
 
     @property
     def link(self):
-        return self.url or \
-               self.webpath and self.webpath.get_full_path() or \
-               self.publication or ''
-
+        if self.url:
+            return self.url
+        elif self.webpath:
+            if self.publication:
+                return self.publication.get_publication_context(webpath=self.webpath).url
+            else:
+                return self.webpath.get_full_path()
+        else:
+            return ''
+        
     def localized(self, lang=settings.LANGUAGE, **kwargs):
         i18n = NavigationBarItemLocalization.objects.filter(item=self,
                                                             language=lang).first()
