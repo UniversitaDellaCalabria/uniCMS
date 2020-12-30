@@ -18,6 +18,7 @@ from cms.api.serializers import *
 from cms.publications.utils import publication_context_base_filter
 
 
+# TODO - better get with filters
 class PublicationDetail(generics.RetrieveAPIView):
     name = 'publication-detail'
     description = 'News'
@@ -49,7 +50,7 @@ class ApiPublicationsByContext(APIView):
         
         try:
             page_num = int(request.GET.get('page_number', 1))
-        except:
+        except: # pragma: no cover
             raise ValidationError('Wrong page_number value')
 
         paged = paginator.get_page(page_num)
@@ -57,15 +58,15 @@ class ApiPublicationsByContext(APIView):
         return Response(result)
 
 
-
 @method_decorator(detect_language, name='dispatch')
-class ApiContext(APIView):
+class ApiContext(APIView): # pragma: no cover
     """
     """
     description = 'Get publications in Context (WebPath)'
     
     def get(self, request):
         webpaths = WebPath.objects.filter(is_active=True)
-        pubs = ({i.pk: f'{i.site.domain}{i.get_full_path()}'} for i in webpaths)
+        pubs = ({i.pk: f'{i.site.domain}{i.get_full_path()}'} 
+                 for i in webpaths if i.is_publicable)
         return Response(pubs)
     

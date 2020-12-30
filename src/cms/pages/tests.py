@@ -2,7 +2,8 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.test import RequestFactory, TestCase
+from django.test import Client, RequestFactory, TestCase
+from django.urls import reverse
 from django.utils import timezone
 
 from cms.carousels.templatetags.unicms_carousels import load_carousel
@@ -130,9 +131,10 @@ class PageUnitTest(TestCase):
     def test_page(cls):
         obj = cls.create_page()
         obj.__str__()
-                
+        
         obj.get_publications()
         # test cached _pubs
+        assert hasattr(obj, '_pubs')
         obj.get_publications()
 
         obj.get_blocks()
@@ -141,14 +143,17 @@ class PageUnitTest(TestCase):
 
         obj.get_carousels()
         # test cached carousels
+        assert obj._carousels
         obj.get_carousels()
         
         obj.get_menus()
         # test cached menus
+        assert obj._menus
         obj.get_menus()
         
         obj.get_links()
         # test cached links
+        assert obj._links
         obj.get_links()
         
         obj.translate_as(lang='en')
@@ -181,3 +186,16 @@ class PageUnitTest(TestCase):
         data['carousel_id'] = 101
         lm = load_carousel(**data)
         assert 'italia_carousel' not in lm
+
+
+    def test_home_page(self):
+        obj = self.create_page(date_end=timezone.localtime())
+        req = Client(HTTP_HOST='example.org')
+        
+        url = reverse('unicms:cms_dispatch')
+        res = req.get(url)
+        assert res.status_code == 200
+        # testing cache
+        req = Client(HTTP_HOST='example.org')
+        res = req.get(url)
+        assert res.status_code == 200

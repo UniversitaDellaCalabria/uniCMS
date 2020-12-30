@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase
 from django.utils import timezone
 
+
 from . exceptions import ReservedWordException
 from . models import *
 from . settings import *

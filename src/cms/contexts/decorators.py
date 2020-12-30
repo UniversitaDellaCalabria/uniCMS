@@ -39,6 +39,6 @@ def unicms_cache(func_to_decorate):
             if cacheable and is_response_cacheable(res):
                 set_to_cache(request, res)
             return res
-        else:
+        else: # pragma: no cover
             return func_to_decorate(*original_args, **original_kwargs)
     return new_func

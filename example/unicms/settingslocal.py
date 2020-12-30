@@ -102,21 +102,36 @@ MIDDLEWARE = [
 HTML_MINIFY = True
 EXCLUDE_FROM_MINIFYING = ('^admin/',)
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://10.0.3.89:6379/unicms",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
-            # improve resilience
-            "IGNORE_EXCEPTIONS": True,
-            "SOCKET_CONNECT_TIMEOUT": 2,  # seconds
-            "SOCKET_TIMEOUT": 2,  # seconds
+
+if os.environ.get('CI'):
+    CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/var/tmp/django_cache',
+        'TIMEOUT': 60,
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000
         }
     }
 }
-DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": "redis://10.0.3.89:6379/unicms",
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+                "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
+                # improve resilience
+                "IGNORE_EXCEPTIONS": True,
+                "SOCKET_CONNECT_TIMEOUT": 2,  # seconds
+                "SOCKET_TIMEOUT": 2,  # seconds
+            }
+        }
+    }
+    DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
+
+
 
 CMS_CACHE_ENABLED = True
 
@@ -126,7 +141,7 @@ CMS_CACHE_TTL = 25
 # set to 0 means infinite
 CMS_CACHE_MAX_ENTRIES = 0
 # request.get_raw_uri() that matches the following would be ignored by cache ...
-CMS_CACHE_EXCLUDED_MATCHES =  ['/search?',]
+CMS_CACHE_EXCLUDED_MATCHES =  ['/search?', '/portale/search?',]
 
 # Static files (CSS, JavaScript, Images)
 STATICFILES_FINDERS = [

@@ -2,7 +2,8 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.test import RequestFactory, TestCase
+from django.test import Client, RequestFactory, TestCase
+from django.urls import reverse
 from django.utils import timezone
 
 from cms.carousels.tests import CarouselUnitTest
@@ -65,7 +66,7 @@ class PublicationUnitTest(TestCase):
 
     
     @classmethod
-    def test_pub(cls):
+    def enrich_pub(cls):
         pub = cls.create_pub()
         
         pub.categories
@@ -144,7 +145,42 @@ class PublicationUnitTest(TestCase):
                         is_active = True
         )
         pubblock.__str__()
+        return pub
+
+
+    def test_api_pubcont(self):
         
+        def test_call(url):
+            req = Client()
+            res = req.get(url).json()
+            assert len(res['results']) == 1
+            assert res['total_pages'] == 1
+            assert res['count'] == 1
+            assert res['page_number'] == 1
+            assert res['current_url'] == url
+            assert res['previous_url'] == None
+            assert res['next_url'] == None
         
-        
-        
+        pub = self.enrich_pub()
+        url = reverse('unicms_api:api-news-by-contexts', 
+                      kwargs={'webpath_id': 1})
+        test_call(url)
+
+        url = reverse('unicms_api:api-news-by-contexts-category', 
+                      kwargs={'webpath_id': 1, 'category_name': 'main'})
+        test_call(url)
+    
+    def test_api_context(self):
+        pub = self.enrich_pub()
+        req = Client()
+        url = reverse('unicms_api:publication-detail', 
+                      kwargs={'slug': pub.slug})
+        res = req.get(url).json()
+    
+    
+    def test_publication_handlers(self):
+        pub = self.enrich_pub()
+        url = pub.related_contexts[0].url
+        req = Client(HTTP_HOST='example.org')
+        res = req.get(url)
+        assert res.status_code == 200
