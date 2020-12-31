@@ -24,12 +24,13 @@ class ContextUnitTest(TestCase):
 
     @classmethod
     def create_user(cls, **kwargs):
-        if not kwargs:
-            kwargs =  {'username': 'foo',
-                       'first_name': 'foo',
-                       'last_name': 'bar',
-                       'email': 'that@mail.org'}
-        user = get_user_model().objects.create(**kwargs)
+        data =  {'username': 'foo',
+                 'first_name': 'foo',
+                 'last_name': 'bar',
+                 'email': 'that@mail.org'}
+        for k,v in kwargs.items():
+            data[k] = v
+        user = get_user_model().objects.create(**data)
         return user
 
 

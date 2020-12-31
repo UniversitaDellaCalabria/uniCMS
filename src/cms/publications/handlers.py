@@ -34,7 +34,7 @@ class PublicationViewHandler(BaseContentHandler):
                     )
         )
         self.pub_context = PublicationContext.objects.filter(**query).first()
-        if not hasattr(self.pub_context, 'webpath'):
+        if not hasattr(self.pub_context, 'webpath'): # pragma: no cover
             raise Http404('Unknown WebPath')
 
         self.page = Page.objects.filter(is_active=True,
@@ -95,6 +95,8 @@ class PublicationListHandler(BaseContentHandler):
         page = Page.objects.filter(is_active=True,
                            webpath__site=self.website,
                            webpath__fullpath=match_dict.get('webpath', '/')).first()
+        if not page: # pragma: no cover
+            raise Http404('Unknown Web Page')
         data = {'request': self.request,
                 'webpath': page.webpath,
                 'website': self.website,

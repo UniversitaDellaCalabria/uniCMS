@@ -201,9 +201,7 @@ class PageUnitTest(TestCase):
 
     def test_show_template_blocks_sections(self):
         obj = self.create_page()
-        user = ContextUnitTest.create_user()
-        user.is_staff = 1
-        user.save()
+        user = ContextUnitTest.create_user(is_staff=1)
         self.client.force_login(user)
         url = reverse('unicms:cms_dispatch')
         res = self.client.get(f'{url}?show_template_blocks_sections')
@@ -213,9 +211,7 @@ class PageUnitTest(TestCase):
 
     def show_cms_draft_mode(self):
         obj = self.create_page()
-        user = ContextUnitTest.create_user()
-        user.is_staff = 1
-        user.save()
+        user = ContextUnitTest.create_user(is_staff=1)
         self.client.force_login(user)
         url = reverse('unicms:cms_dispatch')
         res = self.client.get(f'{url}?show_cms_draft_mode')

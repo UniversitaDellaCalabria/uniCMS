@@ -178,16 +178,36 @@ class PublicationUnitTest(TestCase):
         res = req.get(url).json()
     
     
-    def test_publication_handlers(self):
+    def test_publication_handler_view(self):
         pub = self.enrich_pub()
         webpath=pub.related_contexts[0].webpath
         page = PageUnitTest.create_page(webpath=webpath)
         
         url = pub.related_contexts[0].url
         req = Client(HTTP_HOST='example.org')
+        
+        # privileged users avoids cache!
+        user = ContextUnitTest.create_user(is_staff=1)
+        req.force_login(user)
+        
         res = req.get(url)
         assert res.status_code == 200
-    
+
+
+    def test_publication_handler_list(self):
+        pub = self.enrich_pub()
+        webpath=pub.related_contexts[0].webpath
+        page = PageUnitTest.create_page(webpath=webpath)
+        req = Client(HTTP_HOST='example.org')
+        user = ContextUnitTest.create_user(is_staff=1)
+        req.force_login(user)
+        
+        url = reverse('unicms:cms_dispatch')
+        lurl = f'{url}{settings.CMS_PUBLICATION_LIST_PREFIX_PATH}'
+        res = req.get(lurl)
+        assert res.status_code == 200
+        
+
     def test_api_menu_builder_with_publications(self):
         pub = self.enrich_pub()
         webpath=pub.related_contexts[0].webpath
@@ -213,9 +233,7 @@ class PublicationUnitTest(TestCase):
         assert res.status_code == 403
         
         # re-create the menu - with privileged user
-        user = ContextUnitTest.create_user()
-        user.is_staff = 1
-        user.save()
+        user = ContextUnitTest.create_user(is_staff=1)
         req.force_login(user)
         
         url = reverse('unicms_api:api-menu-post')
@@ -244,8 +262,6 @@ class PublicationUnitTest(TestCase):
         res = req.post(url, data=menu_json, 
                       content_type='application/json', follow=1)
         
-        from cms.menus.models import NavigationBar
-        menu = NavigationBar.objects.last()
         # verify
         res = req.get(url, content_type='application/json')
         assert len(res.json()['childs']) == 2
