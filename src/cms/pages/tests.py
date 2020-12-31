@@ -13,6 +13,7 @@ from cms.menus.tests import MenuUnitTest
 from cms.templates.tests import TemplateUnitTest
 
 from . models import *
+from . utils import copy_page_as_draft
 
 
 logger = logging.getLogger(__name__)
@@ -158,6 +159,9 @@ class PageUnitTest(TestCase):
         obj.get_links()
         
         obj.translate_as(lang='en')
+        
+        # copy as draft
+        copy_page_as_draft(obj)
         
         obj.delete()
     

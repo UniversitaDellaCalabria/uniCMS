@@ -9,8 +9,11 @@ def copy_page_as_draft(obj):
         if draft.get(attr):
             draft.pop(attr)
     
-    draft['date_start'] = timezone.localtime()
-    new_obj = obj.__class__.objects.create(**draft)
+    # cleanup cached items
+    data = { k:v for k,v in draft.items() if not k.startswith('_')}
+            
+    data['date_start'] = timezone.localtime()
+    new_obj = obj.__class__.objects.create(**data)
     tags = [i for i in obj.tags.values_list('name', flat=1)]
     new_obj.tags.add(*tags)
     
