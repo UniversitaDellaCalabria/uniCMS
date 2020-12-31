@@ -27,7 +27,7 @@ def detect_user_language(request):
     return lang
 
 
-def handle_faulty_templates(template: str, data: dict, name='', ):
+def handle_faulty_templates(template: str, data: dict, name='', ): # pragma: no cover
     _error_msg = 'ERROR: {} template tags: {}'
     _error_msg_pub = '<!-- Error {} template tags. See log file. -->'
 
@@ -85,7 +85,7 @@ def toggle_session_state(request, arg_name) -> None:
                              _('You entered in {}').format(arg_name.upper()))
 
 
-def set_created_modified_by(obj, user):
+def set_created_modified_by(obj, user): # pragma: no cover
     if not obj.created_by:
         obj.created_by = user
     obj.modified_by = user
@@ -100,5 +100,5 @@ def load_hooks(obj, flow_type, *args, **kwargs):
     for hook in flow_hooks:
         try:
             hook(obj)
-        except Exception as e:
+        except Exception as e: # pragma: no cover
             logger.exception(_msg_hook_exp.format(flow_type, hook, e))

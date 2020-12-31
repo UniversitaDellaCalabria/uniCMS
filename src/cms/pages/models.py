@@ -144,6 +144,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                                     order_by('order')
         return self._pubs
 
+
     def get_carousels(self):
         if getattr(self, '_carousels', None):
             return self._carousels
@@ -152,6 +153,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                                       carousel__is_active=True).\
                                                       order_by('order')
         return self._carousels
+
 
     def get_medias(self):
         if getattr(self, '_medias', None):
@@ -162,6 +164,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                                 order_by('order')
         return self._medias
 
+
     def get_menus(self):
         if getattr(self, '_menus', None):
             return self._menus
@@ -171,12 +174,14 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                               order_by('order')
         return self._menus
 
+
     def get_links(self):
         if getattr(self, '_links', None):
             return self._links
         self._links = PageLink.objects.filter(page=self).\
                                               order_by('order')
         return self._links
+
 
     def delete(self, *args, **kwargs):
         PageRelated.objects.filter(related_page=self).delete()

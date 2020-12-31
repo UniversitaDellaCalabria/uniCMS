@@ -158,6 +158,11 @@ class PageUnitTest(TestCase):
         assert obj._links
         obj.get_links()
         
+        obj.get_medias()
+        # test cache medias
+        # assert obj._medias -> test add some medias ...
+        obj.get_medias()
+        
         obj.translate_as(lang='en')
         
         # copy as draft
