@@ -13,6 +13,9 @@ from cms.menus.tests import MenuUnitTest
 from cms.pages.tests import PageUnitTest
 from cms.templates.tests import TemplateUnitTest
 
+from cms.pages.templatetags.unicms_pages import cms_categories
+from cms.publications.templatetags.unicms_publications import (load_publication,
+                                                               load_publications_preview)
 from . models import *
 
 
@@ -265,4 +268,63 @@ class PublicationUnitTest(TestCase):
         assert len(res.json()['childs']) == 2
         logger.debug(res.json())
         
+    
+    # teamplatetags
+    def test_load_publications_preview(self):
+        req = RequestFactory().get('/')
+        pub = self.enrich_pub()
+        webpath=pub.related_contexts[0].webpath
+        page = PageUnitTest.create_page(webpath=webpath)
+        template_context = dict(request=req, 
+                                page=page, webpath=page.webpath)
+        data = dict(context=template_context, template='that.html')
         
+        lm = load_publications_preview(**data)
+        assert lm
+
+        data['section'] = 'not-existent-section'
+        lm = load_publications_preview(**data)
+        assert not lm
+        
+        data['categories_csv'] = 'ciao,mamma'
+        lm = load_publications_preview(**data)
+        assert not lm
+
+        data['tags_csv'] = 'ciao,mamma'
+        lm = load_publications_preview(**data)
+        assert not lm
+        
+        data['in_evidence'] = True
+        lm = load_publications_preview(**data)
+        assert not lm
+        
+
+    # templatetag
+    def test_load_publication(self):
+        req = RequestFactory().get('/')
+        pub = self.enrich_pub()
+        webpath=pub.related_contexts[0].webpath
+        page = PageUnitTest.create_page(webpath=webpath)
+        template_context = dict(request=req, 
+                                page=page, webpath=page.webpath)
+        
+        data = dict(context=template_context, 
+                    template='that.html', publication_id=pub.pk)
+        
+        lm = load_publication(**data)
+        assert lm
+
+        # not existent pub
+        data['publication_id'] = 100
+        
+        lm = load_publication(**data)
+        assert not lm
+
+
+    # templatetag
+    @classmethod
+    def test_cms_categories(cls):
+        pub = cls.enrich_pub()
+        lm = cms_categories()
+        assert isinstance(list(lm), list) and len(lm) == 1
+ 

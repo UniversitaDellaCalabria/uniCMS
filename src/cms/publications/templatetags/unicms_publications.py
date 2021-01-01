@@ -53,7 +53,7 @@ def load_publication(context, template, publication_id):
                                      first()
 
     if not pub:
-        _msg = '{} cannot find publication id {}'.format(log_msg,
+        _msg = '{} cannot find publication id {}'.format(_log_msg,
                                                          publication_id)
         logger.error(_msg)
         return SafeString('')
