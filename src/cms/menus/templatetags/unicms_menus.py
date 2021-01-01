@@ -46,12 +46,10 @@ def load_menu(context, template, section=None, menu_id=None):
     else:
         if not section: return SafeString('')
         page = context['page']
-        page_menu = PageMenu.objects.filter(section=section,
-                                            is_active=True,
-                                            page=page).first()
+        page_menu = page.get_menus().filter(section=section).first()
         if not page_menu:
             _msg = '{} cannot find menu in page {} and section {}'\
-                   .format(log_msg, page, section)
+                   .format(_log_msg, page, section)
             logger.error(_msg)
             return SafeString('')
         items = page_menu.menu.get_items(lang=language,

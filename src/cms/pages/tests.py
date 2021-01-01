@@ -10,6 +10,7 @@ from cms.carousels.templatetags.unicms_carousels import load_carousel
 from cms.carousels.tests import CarouselUnitTest
 from cms.contexts.tests import ContextUnitTest
 from cms.menus.tests import MenuUnitTest
+from cms.menus.templatetags.unicms_menus import load_menu
 from cms.templates.tests import TemplateUnitTest
 
 from . models import *
@@ -197,6 +198,39 @@ class PageUnitTest(TestCase):
         lm = load_carousel(**data)
         assert 'italia_carousel' not in lm
 
+    @classmethod
+    def test_load_menu(cls):
+        req = RequestFactory().get('/')
+        page = cls.create_page()
+        template_context = dict(request=req, 
+                                page=page, webpath=page.webpath)
+        
+        data = dict(section='main-menu',  
+                    template='italia_main_menu.html',
+                    context=template_context)
+
+        lm = load_menu(**data)
+        assert lm == '' # it's without page menu!
+        
+        # create a page menu with a real section
+        menu = MenuUnitTest.create_menu()
+        page_menu = PageMenu.objects.create(page=page,
+                                            menu = menu,
+                                            is_active=1,
+                                            section='main-menu')
+        lm = load_menu(**data)
+        assert lm
+        
+        # with menu-id
+        data['menu_id'] = menu.pk
+        lm = load_menu(**data)
+        assert lm
+        
+        # not existent menu-id
+        data['menu_id'] = 100
+        lm = load_menu(**data)
+        assert lm == ''
+        
 
     def test_home_page(self):
         obj = self.create_page(date_end=timezone.localtime())

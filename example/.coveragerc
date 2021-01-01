@@ -10,3 +10,5 @@ omit =
     */unicms-template*
     unicms/*
     */tests.py
+    */pages/admin.py
+    */medias/admin.py

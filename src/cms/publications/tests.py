@@ -8,11 +8,6 @@ from django.utils import timezone
 
 from cms.carousels.tests import CarouselUnitTest
 from cms.contexts.tests import ContextUnitTest
-from cms.menus.tests import MenuUnitTest
-from cms.templates.tests import TemplateUnitTest
-
-from cms.carousels.tests import CarouselUnitTest
-from cms.contexts.tests import ContextUnitTest
 from cms.medias.tests import MediaUnitTest
 from cms.menus.tests import MenuUnitTest
 from cms.pages.tests import PageUnitTest
@@ -269,4 +264,5 @@ class PublicationUnitTest(TestCase):
         res = req.get(url, content_type='application/json')
         assert len(res.json()['childs']) == 2
         logger.debug(res.json())
-
+        
+        
