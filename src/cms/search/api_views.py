@@ -29,7 +29,7 @@ from . import MongoClientFactory
 logger = logging.getLogger(__name__)
 
 
-class ServiceUnavailable(APIException):
+class ServiceUnavailable(APIException): # pragma: no cover
     status_code = 503
     default_detail = 'Service temporarily unavailable, try again later.'
     default_code = 'service_unavailable'
@@ -114,7 +114,7 @@ class ApiSearchEngine(APIView):
             else:
                 res = collection.find(query).sort('published', 
                                                   pymongo.DESCENDING)
-        except ServerSelectionTimeoutError as e:
+        except ServerSelectionTimeoutError as e: # pragma; no cover
             logger.critical(e)
             raise ServiceUnavailable()
         

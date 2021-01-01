@@ -34,3 +34,28 @@ class TemplateUnitTest(TestCase):
         url = reverse('unicms_search:api-search-engine')
         res = req.get(url, content_type='application/json')
         assert isinstance(res.json(), dict)
+
+        # categories
+        res = req.get(url+'?categories=ciao,mamma', content_type='application/json')
+        assert isinstance(res.json(), dict)
+
+        # tags
+        res = req.get(url+'?tags=ciao,mamma', content_type='application/json')
+        assert isinstance(res.json(), dict)
+        
+        # sites
+        res = req.get(url+'?sites=unical.it,example.org', content_type='application/json')
+        assert isinstance(res.json(), dict)
+        
+        # search
+        res = req.get(url+'?search=lorem ipsum', content_type='application/json')
+        assert isinstance(res.json(), dict)
+
+        # year
+        res = req.get(url+f'?year={timezone.now().year}', content_type='application/json')
+        assert isinstance(res.json(), dict)
+        
+        # date_start
+        res = req.get(url+f'?date_start={timezone.now().strftime("%Y-%m-%d")}', content_type='application/json')
+        assert isinstance(res.json(), dict)
+        
