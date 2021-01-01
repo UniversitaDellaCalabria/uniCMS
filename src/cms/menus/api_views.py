@@ -60,7 +60,7 @@ class ApiMenu(APIView):
             for i in menu.get_items():
                 i.delete()
         
-        menu.import_items(childs)
+        menu.import_childs(childs)
         
         url = reverse('unicms_api:api-menu', kwargs={'menu_id': menu.pk})
         return HttpResponseRedirect(url)

@@ -137,8 +137,6 @@ class Publication(AbstractPublication, AbstractPublicable,
     def title2slug(self):
         return slugify(self.title)
 
-    # def delete(self, *args, **kwargs):
-        # super(self.__class__, self).delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         if not self.slug:

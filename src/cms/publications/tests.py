@@ -240,17 +240,19 @@ class PublicationUnitTest(TestCase):
         res = req.post(url, data=menu_json, 
                        content_type='application/json', follow=1)
         
+        menu_item = {'parent_id': None, 
+                     'name': 'Other', 
+                     'url': '', 
+                     'publication_id': 1, 
+                     'webpath_id': webpath.pk, 
+                     'is_active': True, 
+                     'order': 10, 
+                     'childs': []}
+        menu_item['childs'] = [menu_item.copy()]
+        
         # update a menu
-        menu_json['childs'].append(
-            {'parent_id': None, 
-             'name': 'Other', 
-             'url': '', 
-             'publication_id': 1, 
-             'webpath_id': None, 
-             'is_active': True, 
-             'order': 10, 
-             'childs': []}
-        )
+        menu_json['childs'].append(menu_item)
+        menu_json['childs'][-1]['publication_id'] = None
         
         # not existing menu
         url = reverse('unicms_api:api-menu', kwargs={'menu_id': 100})
@@ -258,6 +260,7 @@ class PublicationUnitTest(TestCase):
                       content_type='application/json', follow=1)
         assert res.status_code == 404
         
+        # update a menu
         url = reverse('unicms_api:api-menu', kwargs={'menu_id': 2})
         res = req.post(url, data=menu_json, 
                       content_type='application/json', follow=1)
@@ -265,5 +268,5 @@ class PublicationUnitTest(TestCase):
         # verify
         res = req.get(url, content_type='application/json')
         assert len(res.json()['childs']) == 2
-        
+        logger.debug(res.json())
 

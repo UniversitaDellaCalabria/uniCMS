@@ -10,8 +10,34 @@ from cms.templates.models import (CMS_TEMPLATE_BLOCK_SECTIONS,
                                   SortableModel,
                                   TimeStampedModel)
 
+class AbstractImportableMenu(object):
+    
+    def import_childs(self, child_list) -> bool:
+        """
+        create menu items importing a dictionary
+        """
+        items = deepcopy(child_list)
+        for item in child_list:
+            if not item: continue
+            
+            for i in 'link', 'parent_id', 'menu_id':
+                item.pop(i, None)
+            item['menu'] = self.get_menu()
+            childs = item.pop('childs', None)
+            
+            if item.get('webpath_id', None):
+                item['webpath'] = WebPath.objects.get(pk=item['webpath_id'])
+            
+            if isinstance(self, NavigationBarItem):
+                item['parent'] = self
+            obj = NavigationBarItem.objects.create(**item)
+            if childs:
+                obj.import_childs(childs)
+        return True
 
-class NavigationBar(TimeStampedModel, ActivableModel, CreatedModifiedBy):
+
+class NavigationBar(TimeStampedModel, ActivableModel, CreatedModifiedBy,
+                    AbstractImportableMenu):
     name = models.CharField(max_length=33, blank=False, null=False)
 
     class Meta:
@@ -35,22 +61,9 @@ class NavigationBar(TimeStampedModel, ActivableModel, CreatedModifiedBy):
             data.append(child.serialize(deep=True, lang=lang))
         return dict(name=self.name, is_active=self.is_active, childs=data)
 
-
-    def import_items(self, item_list) -> bool:
-        """
-        create menu items importing a dictionary
-        """
-        items = deepcopy(item_list)
-        for item in items:
-            if not item: continue
-            for i in 'link', 'parent_id', 'webpath_id', 'menu_id':
-                item.pop(i, None)
-            item['menu'] = self
-            childs = item.pop('childs', None)
-            obj = NavigationBarItem.objects.create(**item)
-            if childs:
-                obj.import_childs(childs)
-        return True
+    
+    def get_menu(self):
+        return self
 
 
     def __str__(self):
@@ -58,7 +71,7 @@ class NavigationBar(TimeStampedModel, ActivableModel, CreatedModifiedBy):
 
 
 class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
-                        CreatedModifiedBy):
+                        CreatedModifiedBy, AbstractImportableMenu):
     """
     elements that builds up the navigation menu
     """
@@ -103,13 +116,13 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
                 return self.publication.get_publication_context(webpath=self.webpath).url
             else:
                 return self.webpath.get_full_path()
-        else:
+        else: # pragma: no cover
             return ''
         
     def localized(self, lang=settings.LANGUAGE, **kwargs):
         i18n = NavigationBarItemLocalization.objects.filter(item=self,
                                                             language=lang).first()
-        if i18n:
+        if i18n: # pragma: no cover
             self.name = i18n.name
             self.language = lang
         else:
@@ -146,36 +159,27 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
         return items
 
 
-    def import_childs(self, child_list) -> bool:
-        """
-        create menu items importing a dictionary
-        """
-        items = deepcopy(child_list)
-        for item in child_list:
-            for i in 'link', 'parent_id', 'webpath_id', 'menu_id':
-                item.pop(i, None)
-            item['menu'] = self.menu
-            item['parent'] = self
-            childs = item.pop('childs', None)
-            obj = NavigationBarItem.objects.create(**item)
-            if childs:
-                obj.import_childs(childs)
-        return True
+    def get_menu(self):
+        return self.menu
+
 
     def has_childs(self):
         return True if NavigationBarItem.objects.filter(is_active=True,
                                                         parent=self,
                                                         menu=self.menu) else False
 
+
     def childs_count(self):
         return NavigationBarItem.objects.filter(is_active=True,
                                                 parent=self,
                                                 menu=self.menu).count()
 
+
     def get_siblings_count(self):
         count = NavigationBarItem.objects.filter(parent=self.parent,
                                                  is_active=True).count()
         return count
+
 
     def __str__(self):
         return '{}: {} ({})'.format(self.menu,

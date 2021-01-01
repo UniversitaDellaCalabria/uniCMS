@@ -53,7 +53,7 @@ class MenuUnitTest(TestCase):
         
         # TODO - import json menu items
         list_of_dict = [{}]
-        menu.import_items(list_of_dict)
+        menu.import_childs(list_of_dict)
     
     
     @classmethod
