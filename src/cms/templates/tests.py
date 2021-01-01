@@ -60,7 +60,7 @@ class TemplateUnitTest(TestCase):
         else:
             bt = cls.create_block_template()
         return PageTemplateBlock.objects.create(template=pt, block=bt, 
-                                                section='1', is_active=1)
+                                                section='banner', is_active=1)
 
         
     def test_template_page_block(self):

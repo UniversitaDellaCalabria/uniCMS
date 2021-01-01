@@ -22,11 +22,13 @@ def load_blocks(context, section=None):
     page = context['page']
     webpath = context['webpath']
     blocks = page.get_blocks(section=section)
-
+    
+    logger.debug(f'load_blocks section: {section}')
+    
     result = SafeString('')
     if request.user.is_staff and request.session.get('show_template_blocks_sections'):
         result += render_to_string('load_blocks_head.html', {'section': section})
-
+    
     for block in blocks:
         obj = import_string_block(block=block,
                                   request=request,
@@ -34,7 +36,7 @@ def load_blocks(context, section=None):
                                   webpath=webpath)
         try:
             result += obj.render()
-        except Exception as e:
+        except Exception as e: # pragma: no cover
             logger.exception(('Block {} failed rendering '
                               '({}): {}').format(block, obj, e))
     return result
@@ -46,8 +48,9 @@ def cms_categories():
 
 
 @register.simple_tag(takes_context=True)
-def load_page_title(context, page):
+def load_page_title(context):
     request = context['request']
+    page = context['page']
     language = getattr(request, 'LANGUAGE_CODE', '')
     page.translate_as(lang=language)
     return page.title

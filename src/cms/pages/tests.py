@@ -11,6 +11,7 @@ from cms.carousels.tests import CarouselUnitTest
 from cms.contexts.tests import ContextUnitTest
 from cms.menus.tests import MenuUnitTest
 from cms.menus.templatetags.unicms_menus import load_menu
+from cms.pages.templatetags.unicms_pages import load_link, load_page_title
 from cms.templates.tests import TemplateUnitTest
 
 from . models import *
@@ -198,6 +199,36 @@ class PageUnitTest(TestCase):
         lm = load_carousel(**data)
         assert 'italia_carousel' not in lm
 
+    # templatetag
+    @classmethod
+    def test_load_page_title(cls):
+        req = RequestFactory().get('/')
+        page = cls.create_page()
+        template_context = dict(request=req, 
+                                page=page, webpath=page.webpath)
+        
+        data = dict(context=template_context)
+        
+        lm = load_page_title(**data)
+        assert lm
+
+
+    # templatetag
+    @classmethod
+    def test_load_link(cls):
+        req = RequestFactory().get('/')
+        page = cls.create_page()
+        template_context = dict(request=req, 
+                                page=page, webpath=page.webpath)
+        
+        data = dict(context=template_context, 
+                    template='that.html', url='http://example.org')
+        
+        lm = load_link(**data)
+        assert lm
+
+
+    # templatetag
     @classmethod
     def test_load_menu(cls):
         req = RequestFactory().get('/')
@@ -240,7 +271,7 @@ class PageUnitTest(TestCase):
         # testing cache
         res = self.client.get(url)
         assert res.status_code == 200
-
+        
 
     def test_show_template_blocks_sections(self):
         obj = self.create_page()
