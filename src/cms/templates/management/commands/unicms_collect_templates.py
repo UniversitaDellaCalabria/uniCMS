@@ -27,18 +27,19 @@ def confirm():
 class Command(BaseCommand):
     help = 'uniCMS symlink templates'
 
-    # def add_arguments(self, parser):
-        # parser.epilog='Example: ./manage.py unicms_symlink_templates'
-        # parser.add_argument('-renew', required=False, action="store_true",
-                            # help="clean up preexistent folders")
+    def add_arguments(self, parser):
+        parser.epilog='Example: ./manage.py unicms_collect_templates'
+        parser.add_argument('-y', required=False, action="store_true",
+                            help="clean up preexistent folders")
 
     def handle(self, *args, **options):
-        if confirm():
+        if options['y'] or confirm():
             # if options['renew'] and os.path.isdir(CMS_TEMPLATES_FOLDER):
             if not os.path.isdir(CMS_TEMPLATES_FOLDER):
                 os.makedirs(f'{CMS_TEMPLATES_FOLDER}')
             for target in 'blocks', 'pages':
-                shutil.rmtree(f'{CMS_TEMPLATES_FOLDER}/{target}')
+                if os.path.isdir(f'{CMS_TEMPLATES_FOLDER}/{target}'):
+                    shutil.rmtree(f'{CMS_TEMPLATES_FOLDER}/{target}')
                 os.makedirs(f'{CMS_TEMPLATES_FOLDER}/{target}')
             
             # admin templates
@@ -54,5 +55,8 @@ class Command(BaseCommand):
                 print(f'Copying {src} -> {dest}')
                 if os.path.exists(f"{dest}"):
                   os.remove(f"{dest}")
-                os.symlink(src, dest)
+                try:
+                    os.symlink(src, dest)
+                except FileExistsError as e:
+                    print(f'ERROR: File Already Exists: {src} -> {dest}')
                 # shutil.copyfile(src, dest)

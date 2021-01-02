@@ -1,0 +1,70 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python application
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - '3.6'
+          - '3.7'
+          - '3.8'
+          - '3.9'
+        django-version:
+          - '3.0'
+          - '3.1'
+          - 'master'
+        redis-version:
+          - 'master'
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest coverage
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        python -m pip install --upgrade tox tox-gh-actions
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        # flake8 . --count --exit-zero --max-complexity=10 --max-line-length=164 --statistics
+
+    - name: Install MongoDB
+      run: |
+        sudo apt-get install -y gnupg wget
+        sudo wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
+        sudo echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/4.4 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+        sudo apt-get update
+        sudo apt-get install -y mongodb-org
+    - name: Start MongoDB
+      run: sudo systemctl start mongod
+    
+    - name: Install unicms-templates-unical
+      run: pip install unicms_template_unical
+    
+    - name: Test with pytest
+      working-directory: ./example
+      run: |
+        DJANGO_SETTINGS_MODULE=unicms.settingslocal_test ./manage.py cms_search_create_mongo_index -y
+        ./manage.py unicms_collect_templates -y
+        ./manage.py test --settings=unicms.settingslocal_test -v 2
+        coverage erase ; coverage run ./manage.py test --settings=unicms.settingslocal_test cms; coverage report -m 

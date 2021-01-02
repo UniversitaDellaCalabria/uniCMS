@@ -24,6 +24,8 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.epilog='Example: ./manage.py cms_search_create_mongo_index'
+        parser.add_argument('-y', required=False, action="store_true",
+                            help="clean up preexistent folders")
         parser.add_argument('-default_language', required=False,
                             default='italian',
                             help="default language for fulltext fields")
@@ -31,7 +33,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         collection = mongo_collection()
         
-        if confirm():
+        if options['y'] or confirm():
             # drop indexes
             print(f"Drop existing indexes in {collection}")
             collection.drop_indexes()

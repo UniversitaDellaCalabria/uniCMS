@@ -25,9 +25,7 @@ from rest_framework.schemas import get_schema_view
 try:
     from rest_framework.schemas.agid_schema_views import get_schema_view
 except:
-    from rest_framework.schemas.schema_views import get_schema_view
-
-from rest_framework.schemas.openapi_agid import AgidSchemaGenerator as openapi_agid_generator
+    from rest_framework.schemas import get_schema_view
 
 
 ADMIN_PATH = getattr(settings, 'ADMIN_PATH', 'admin')
@@ -45,14 +43,22 @@ router = routers.DefaultRouter()
 urlpatterns += re_path('^api', include(router.urls)),
 
 # API schemas
-urlpatterns += re_path('^openapi$',
-                        get_schema_view(**settings.OAS3_CONFIG),
-                        name='openapi-schema'),
-urlpatterns += re_path('^openapi.json$',
-                       get_schema_view(renderer_classes = [JSONOpenAPIRenderer],
-                                    **settings.OAS3_CONFIG),
-                       name='openapi-schema-json'),
-
+try:
+    urlpatterns += re_path('^openapi$',
+                            get_schema_view(**settings.OAS3_CONFIG),
+                            name='openapi-schema'),
+    urlpatterns += re_path('^openapi.json$',
+                           get_schema_view(renderer_classes = [JSONOpenAPIRenderer],
+                                        **settings.OAS3_CONFIG),
+                           name='openapi-schema-json'),
+except:
+    urlpatterns += re_path('^openapi$',
+                            get_schema_view(**{}),
+                            name='openapi-schema'),
+    urlpatterns += re_path('^openapi.json$',
+                           get_schema_view(renderer_classes = [JSONOpenAPIRenderer],
+                                        **{}),
+                           name='openapi-schema-json'),
 
 if 'cms.contexts' in settings.INSTALLED_APPS:
     urlpatterns += path('', 

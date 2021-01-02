@@ -7,6 +7,12 @@ from setuptools import setup, find_packages
 _src_folder = 'src'
 _pkg_name = 'cms'
 
+
+def get_requirements(fname='requirements.txt'):
+    fopen = open(fname, 'r')
+    return fopen.read().splitlines()
+
+
 setup(
     name="unicms",
     version='0.2.3',
@@ -31,19 +37,6 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Topic :: Software Development :: Libraries :: Python Modules"],
-    install_requires=[
-        'django>=2.0,<4.0',
-        'django-nested-admin>=3.3.2',
-        'django-taggit',
-        'pillow>=7.2.0',
-        'python-magic>=0.4.18',
-        'pymongo>=3.11.0',
-        'django-rest-framework',
-        'uritemplate',
-        'pyyaml',
-        'pydantic',
-        'django-htmlmin>=0.11.0',
-        'django-redis>=4.12.1'
-        ],
+    install_requires=get_requirements(),
     zip_safe=False,
     )

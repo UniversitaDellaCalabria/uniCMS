@@ -12,8 +12,10 @@ class MongoClientFactory(object):
     def __new__(cls, *args, **kwargs):
         if not isinstance(cls.mongo_client, cls) or \
            not cls.mongo_client.server_info():
-            cls.mongo_client = pymongo.MongoClient(settings.MONGO_URL, 
-                                **global_settings.MONGO_CONNECTION_PARAMS)
+            cls.mongo_client = pymongo.MongoClient(
+                                global_settings.MONGO_URL, 
+                                **global_settings.MONGO_CONNECTION_PARAMS
+            )
         return cls.mongo_client
     
 

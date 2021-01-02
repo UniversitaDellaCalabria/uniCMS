@@ -33,6 +33,7 @@ def load_carousel(context, section, template, carousel_id=None):
     _log_msg = f'Template Tag {_func_name}'
 
     request = context['request']
+    page = context['page']
     language = getattr(request, 'LANGUAGE_CODE', '')
 
     if carousel_id:
@@ -49,7 +50,7 @@ def load_carousel(context, section, template, carousel_id=None):
                                                     first()
         if not page_carousel: # pragma: no cover
             _msg = '{} cannot find carousel in page {} and section {}'\
-                   .format(_msg, page, section)
+                   .format(_func_name, page, section)
             logger.error(_msg)
             return SafeString('')
 

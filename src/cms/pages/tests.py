@@ -182,7 +182,9 @@ class PageUnitTest(TestCase):
     def test_page_load_carousel(cls):
         obj = cls.create_page(date_end=timezone.localtime())
         req = RequestFactory().get('/')
-        template_context = dict(request=req, webpath=obj.webpath)
+        template_context = dict(request=req, 
+                                webpath=obj.webpath,
+                                page=obj)
         
         data = dict(section='banner',  
                     template='italia_hero_slider.html',
