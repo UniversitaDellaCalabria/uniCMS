@@ -38,7 +38,7 @@ def handle_faulty_templates(template: str, data: dict, name='', ): # pragma: no 
     except TemplateSyntaxError as e:
         logger.error(_error_msg.format(name, e))
 
-    return mark_safe(_error_msg_pub)
+    return mark_safe(_error_msg_pub) # nosec
 
 
 def contextualize_template(template_fname, page):

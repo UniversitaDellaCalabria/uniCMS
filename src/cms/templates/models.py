@@ -78,7 +78,7 @@ class AbstractTemplate(models.Model):
         except ValueError as e:
             # *** ValueError: The 'image' attribute has no file associated with it.
             res = f"{settings.STATIC_URL}images/no-image.jpg"
-        return mark_safe(res)
+        return mark_safe(res) # nosec
 
     class Meta:
         abstract = True

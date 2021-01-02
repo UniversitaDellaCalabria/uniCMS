@@ -363,7 +363,7 @@ class Category(TimeStampedModel, CreatedModifiedBy):
         except ValueError as e:  # pragma: no cover
             # *** ValueError: The 'image' attribute has no file associated with it.
             res = f"{settings.STATIC_URL}images/no-image.jpg"
-        return mark_safe(res)
+        return mark_safe(res) # nosec
 
     image_as_html.short_description = _('Image of this Category')
     image_as_html.allow_tags = True

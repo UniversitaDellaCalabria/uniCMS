@@ -22,7 +22,7 @@ class AbstractBlock(object):
         return context
 
     def render(self):
-        return mark_safe(self.content)
+        return mark_safe(self.content) # nosec
 
 
 class HtmlBlock(AbstractBlock):

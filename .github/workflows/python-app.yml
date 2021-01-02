@@ -36,15 +36,15 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest coverage
+        if [ -f requirements.txt ]; then pip install -r requirements-dev.txt; fi
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-        python -m pip install --upgrade tox tox-gh-actions
+        # python -m pip install --upgrade tox tox-gh-actions
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 ./src/cms --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        # flake8 . --count --exit-zero --max-complexity=10 --max-line-length=164 --statistics
+        # flake8 ./src/cms --count --exit-zero --max-complexity=10 --max-line-length=164 --statistics
 
     - name: Install Redis
       run: |
@@ -70,5 +70,8 @@ jobs:
       run: |
         DJANGO_SETTINGS_MODULE=unicms.settingslocal_test ./manage.py cms_search_create_mongo_index -y
         ./manage.py unicms_collect_templates -y
-        ./manage.py test --settings=unicms.settingslocal_test -v 2
+        # ./manage.py test --settings=unicms.settingslocal_test -v 2
         coverage erase ; coverage run ./manage.py test --settings=unicms.settingslocal_test cms; coverage report -m 
+    - name: Bandit Security Scan
+      run: |
+        bandit -r -x tests.py  src/cms/*
