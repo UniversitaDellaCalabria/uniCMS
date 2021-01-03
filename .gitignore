@@ -6,6 +6,9 @@ __pycache__/
 example/static/*
 example/templates/*
 
+*/coverage.json
+*/coverage.xml
+
 # C extensions
 *.so
 

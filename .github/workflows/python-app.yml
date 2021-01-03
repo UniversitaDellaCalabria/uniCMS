@@ -1,11 +1,11 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Python application
+name: uniCMS
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
   pull_request:
     branches: [ main, dev ]
 
@@ -71,7 +71,22 @@ jobs:
         DJANGO_SETTINGS_MODULE=unicms.settingslocal_test ./manage.py cms_search_create_mongo_index -y
         ./manage.py unicms_collect_templates -y
         # ./manage.py test --settings=unicms.settingslocal_test -v 2
-        coverage erase ; coverage run ./manage.py test --settings=unicms.settingslocal_test cms; coverage report -m 
+        coverage erase
+        coverage run ./manage.py test --settings=unicms.settingslocal_test cms
+        coverage report -m
+        coverage report --fail-under=91
+        coverage xml
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: example/coverage.xml
+        flags: unittests
+        env_vars: OS,PYTHON
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        path_to_write_report: ./codecov_report.txt
+        # verbose: true    
     - name: Bandit Security Scan
       run: |
         bandit -r -x tests.py  src/cms/*
