@@ -6,6 +6,7 @@ __pycache__/
 example/static/*
 example/templates/*
 
+*/.coverage
 */coverage.json
 */coverage.xml
 
