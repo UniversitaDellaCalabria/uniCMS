@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 CMS_BLOCK_TYPES = getattr(settings, 'CMS_BLOCK_TYPES',
                           app_settings.CMS_BLOCK_TYPES)
 CMS_BLOCK_TEMPLATES = getattr(settings, 'CMS_BLOCK_TEMPLATES',
-                            app_settings.CMS_BLOCK_TEMPLATES)
+                              app_settings.CMS_BLOCK_TEMPLATES)
 CMS_TEMPLATE_BLOCK_SECTIONS = getattr(settings, 'CMS_TEMPLATE_BLOCK_SECTIONS',
                                       app_settings.CMS_TEMPLATE_BLOCK_SECTIONS)
 CMS_PAGE_TEMPLATES = getattr(settings, 'CMS_PAGE_TEMPLATES',
@@ -23,7 +23,7 @@ CMS_LINKS_LABELS = getattr(settings, 'CMS_LINKS_LABELS',
 
 class TimeStampedModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    modified =  models.DateTimeField(auto_now=True)
+    modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
@@ -38,7 +38,7 @@ class SortableModel(models.Model):
 
 
 class ActivableModel(models.Model):
-    is_active    = models.BooleanField()
+    is_active = models.BooleanField()
 
     class Meta:
         abstract = True
@@ -50,6 +50,7 @@ class SectionAbstractModel(models.Model):
                                            "section in the template where "
                                            "this block would be rendered."),
                                choices=CMS_TEMPLATE_BLOCK_SECTIONS)
+
     class Meta:
         abstract = True
 
@@ -75,7 +76,7 @@ class AbstractTemplate(models.Model):
         res = ""
         try:
             res = f'<img width=280 src="{self.image.url}"/>'
-        except ValueError as e:
+        except ValueError:
             # *** ValueError: The 'image' attribute has no file associated with it.
             res = f"{settings.STATIC_URL}images/no-image.jpg"
         return mark_safe(res) # nosec
@@ -85,12 +86,10 @@ class AbstractTemplate(models.Model):
 
 
 class PageTemplate(TimeStampedModel, ActivableModel, AbstractTemplate):
-    name = models.CharField(max_length=160,
-                            blank=True, null=True)
+    name = models.CharField(max_length=160, blank=True, null=True)
     template_file = models.CharField(max_length=1024,
                                      blank=False, null=False,
-                                     choices=CMS_PAGE_TEMPLATES or \
-                                     (('', 'No templates found'),))
+                                     choices=CMS_PAGE_TEMPLATES or (('', 'No templates found'),))
     image = models.ImageField(upload_to="images/page_templates_previews",
                               null=True, blank=True, max_length=512)
     note = models.TextField(null=True, blank=True,
@@ -144,11 +143,11 @@ class PageTemplateBlock(TimeStampedModel,
     @property
     def type(self):
         return self.block.type
-    
+
     @property
     def content(self):
         return self.block.content
-    
+
     class Meta:
         verbose_name_plural = _("Page Template Blocks")
 

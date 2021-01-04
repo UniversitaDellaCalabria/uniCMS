@@ -2,7 +2,7 @@ import os
 import shutil
 
 from django.conf import settings
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 from cms.templates.utils import get_unicms_templates
 from cms.templates import settings as app_settings
@@ -28,7 +28,7 @@ class Command(BaseCommand):
     help = 'uniCMS symlink templates'
 
     def add_arguments(self, parser):
-        parser.epilog='Example: ./manage.py unicms_collect_templates'
+        parser.epilog = 'Example: ./manage.py unicms_collect_templates'
         parser.add_argument('-y', required=False, action="store_true",
                             help="clean up preexistent folders")
 
@@ -41,11 +41,11 @@ class Command(BaseCommand):
                 if os.path.isdir(f'{CMS_TEMPLATES_FOLDER}/{target}'):
                     shutil.rmtree(f'{CMS_TEMPLATES_FOLDER}/{target}')
                 os.makedirs(f'{CMS_TEMPLATES_FOLDER}/{target}')
-            
+
             # admin templates
             if not os.path.isdir('templates/admin'):
                 os.makedirs('templates/admin')
-            
+
             for i in get_unicms_templates():
                 if i[1] == 'admin/':
                     dest = f"templates/{''.join(i[1:])}"
@@ -54,9 +54,9 @@ class Command(BaseCommand):
                 src = ''.join(i)
                 print(f'Copying {src} -> {dest}')
                 if os.path.exists(f"{dest}"):
-                  os.remove(f"{dest}")
+                    os.remove(f"{dest}")
                 try:
                     os.symlink(src, dest)
                 except FileExistsError as e:
-                    print(f'ERROR: File Already Exists: {src} -> {dest}')
+                    print(f'ERROR {e}: File Already Exists: {src} -> {dest}')
                 # shutil.copyfile(src, dest)

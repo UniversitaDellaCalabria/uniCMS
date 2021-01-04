@@ -8,7 +8,7 @@ from django.utils.safestring import SafeString
 
 from cms.contexts.utils import handle_faulty_templates
 from cms.menus.models import NavigationBar
-from cms.pages.models import PageMenu, Page
+
 
 logger = logging.getLogger(__name__)
 register = template.Library()

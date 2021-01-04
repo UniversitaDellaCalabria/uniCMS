@@ -1,9 +1,8 @@
 from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import List, Optional
 from pydantic import BaseModel
 
 DEFAULT_LANGUAGE = dict(settings.LANGUAGES)[settings.LANGUAGE].lower()
@@ -40,7 +39,6 @@ class SearchEntry(BaseModel):
 
 def page_to_entry(page_object):
     app_label, model = page_object._meta.label_lower.split('.')
-    contentype = ContentType.objects.get(app_label=app_label, model=model)
     sites = [page_object.webpath.site.domain]
     data = {
         "title": page_object.name,
@@ -66,7 +64,6 @@ def page_to_entry(page_object):
 
 def publication_to_entry(pub_object):
     app_label, model = pub_object._meta.label_lower.split('.')
-    contentype = ContentType.objects.get(app_label=app_label, model=model)
     contexts = pub_object.publicationcontext_set.filter(is_active=True)
     if not contexts:
         # it doesn't have any real publication

@@ -34,10 +34,8 @@ class HtmlBlock(AbstractBlock):
 
 class JSONBlock(AbstractBlock):
     def __init__(self, content='', **kwargs):
+        super(JSONBlock, self).__init__(*args, **kwargs)
         self.content = json.loads(content)
-        self.request = kwargs['request']
-        self.webpath = kwargs['webpath']
-        self.page = kwargs['page']
 
 
 class PlaceHolderBlock(JSONBlock):

@@ -13,8 +13,6 @@ from cms.menus.tests import MenuUnitTest
 from cms.pages.tests import PageUnitTest
 from cms.templates.tests import TemplateUnitTest
 
-from . models import *
-
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

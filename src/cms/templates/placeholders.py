@@ -4,10 +4,7 @@ import string
 
 from django.utils.safestring import SafeString
 
-from cms.carousels.models import Carousel
 from cms.contexts.utils import handle_faulty_templates
-from cms.menus.models import NavigationBar, NavigationBarItem
-from cms.pages.models import PageLink
 
 
 logger = logging.getLogger(__name__)
@@ -18,6 +15,7 @@ def _get_placeholder_by_typestring(page, placeholder_type_str):
 
     ph = [i for i in blocks if i.type == placeholder_type_str]
     return ph
+
 
 def load_carousel_placeholder(context, template):
     _func_name = 'load_carousel_placeholder'
@@ -67,6 +65,7 @@ def load_carousel_placeholder(context, template):
 
         return handle_faulty_templates(template, data, name=_func_name)
 
+
 def load_link_placeholder(context, template):
     _func_name = 'load_link_placeholder'
     _log_msg = f'Template Tag {_func_name}'
@@ -103,6 +102,7 @@ def load_link_placeholder(context, template):
             link._published = True
 
         return handle_faulty_templates(template, data, name=_func_name)
+
 
 def load_publication_content_placeholder(context, template):
     _func_name = 'load_publication_content_placeholder'
@@ -146,6 +146,7 @@ def load_publication_content_placeholder(context, template):
             pub._published = True
             return handle_faulty_templates(template, data, name=_func_name)
 
+
 def load_media_placeholder(context, template):
     _func_name = 'load_media_placeholder'
     _log_msg = f'Template Tag {_func_name}'
@@ -184,6 +185,7 @@ def load_media_placeholder(context, template):
             media._published = True
 
         return handle_faulty_templates(template, data, name=_func_name)
+
 
 def load_menu_placeholder(context, template):
     _func_name = 'load_menu_placeholder'

@@ -31,19 +31,19 @@ class CreatedModifiedBy(models.Model):
                                     null=True, blank=True,
                                     on_delete=models.CASCADE,
                                     related_name='%(class)s_modified_by')
-    
+
     class Meta:
         abstract = True
 
 
 class WebSite(models.Model):
-    name = models.CharField(max_length=254, 
+    name = models.CharField(max_length=254,
                             unique=True,
                             blank=False, null=False)
-    domain = models.CharField(max_length=254, 
+    domain = models.CharField(max_length=254,
                               blank=False, null=False,
                               unique=True)
-    is_active   = models.BooleanField(default=False, blank=True)
+    is_active = models.BooleanField(default=False, blank=True)
 
     class Meta:
         verbose_name_plural = _("Sites")
@@ -58,7 +58,7 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
     A editor/moderator can belong to one or more Context
     The same for Page Templates
     """
-    site = models.ForeignKey(WebSite, 
+    site = models.ForeignKey(WebSite,
                              null=True, blank=True,
                              on_delete=models.CASCADE)
     name = models.CharField(max_length=254, blank=False, null=False)
@@ -69,11 +69,11 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
                                help_text=_('path be prefixed with '
                                            'the parent one, on save'))
     alias = models.ForeignKey('WebPath',
-                           null=True, blank=True,
-                           on_delete=models.CASCADE,
-                           related_name="alias_path",
-                           help_text=_('Alias that would be '
-                                       'redirected to ...'))
+                              null=True, blank=True,
+                              on_delete=models.CASCADE,
+                              related_name="alias_path",
+                              help_text=_('Alias that would be '
+                                          'redirected to ...'))
     alias_url = models.TextField(max_length=2048,
                                  null=True, blank=True)
     path = models.TextField(max_length=2048, null=False, blank=False)

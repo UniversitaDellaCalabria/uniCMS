@@ -15,7 +15,7 @@ class PageTemplateAdmin(admin.ModelAdmin):
 # @admin.register(PageTemplateBlock)
 class PageTemplateBlockAdmin(admin.ModelAdmin):
     list_display  = ('block', 'section', 'order', 'is_active')
-    # search_fields   = ('block__name')
+    # search_fields = ('block__name')
     # list_filter = ('type', 'section')
 
 
@@ -23,5 +23,5 @@ class PageTemplateBlockAdmin(admin.ModelAdmin):
 class TemplateBlockAdmin(admin.ModelAdmin):
     list_display  = ('name', 'description', 'type', 'is_active',
                      'image_as_html')
-    search_fields   = ('name',)
+    search_fields = ('name',)
     list_filter = ('type',)
