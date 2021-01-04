@@ -89,7 +89,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
     class Meta:
         verbose_name_plural = _("Pages")
 
-    
+
     def clean_related_caches(self):
         deleted = []
         for i in self.__dict__.keys():
@@ -99,8 +99,8 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                     deleted.append(i)
         logger.debug(f'Deleted from page {self}, these related caches: '
                      f'{"".join(deleted)}')
-    
-    
+
+
     def get_blocks(self, section=None):
         # something that caches ...
         if hasattr(self, f'_blocks_{section}'):
@@ -129,14 +129,14 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             order_pk.add(i)
         ordered = list(order_pk)
         ordered.sort(key=lambda x:x[0])
-        
+
         _blocks = []
         # add a on-the-fly section attribute on the blocks ...
         for block in ordered:
             _block = TemplateBlock.objects.get(pk=block[1])
             _block.section = block[2]
             _blocks.append(_block)
-            
+
         if _blocks:
             # cache result ...
             setattr(self, f'_blocks_{section}', _blocks)
