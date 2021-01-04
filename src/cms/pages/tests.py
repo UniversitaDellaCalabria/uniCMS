@@ -13,6 +13,7 @@ from cms.menus.tests import MenuUnitTest
 from cms.menus.templatetags.unicms_menus import load_menu
 from cms.pages.templatetags.unicms_pages import load_link, load_page_title
 from cms.templates.tests import TemplateUnitTest
+from cms.templates.templatetags.unicms_templates import blocks_in_position
 
 from . models import *
 from . utils import copy_page_as_draft
@@ -228,6 +229,27 @@ class PageUnitTest(TestCase):
         
         lm = load_link(**data)
         assert lm
+
+
+    # templatetag
+    def test_blocks_in_position(self):
+        req = RequestFactory().get('/')
+        page = self.create_page()
+        
+        # add a block in a sub section
+        block_data = {'name': 'Test block', 
+                      'content': 'Hello world'}
+        block_section = 'section-1'
+        tb = TemplateUnitTest.create_block_template(**block_data)
+        page.clean_related_caches()
+        PageBlock.objects.create(page=page, block=tb, 
+                                 is_active=1, section=block_section)
+        
+        template_context = dict(request=req, 
+                                page=page, webpath=page.webpath)
+        data = dict(context=template_context, section=block_section)
+        lm = blocks_in_position(**data)
+        self.assertTrue(lm)
 
 
     # templatetag

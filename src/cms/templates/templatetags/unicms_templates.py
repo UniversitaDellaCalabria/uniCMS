@@ -22,29 +22,29 @@ def supported_languages(): # pragma: no cover
 
 
 @register.simple_tag(takes_context=True)
-def blocks_in_position(context, position):
+def blocks_in_position(context, section):
     request = context['request']
     page = context['page']
     webpath = context['webpath']
 
     positions_dict = dict(CMS_TEMPLATE_BLOCK_SECTIONS)
-
-    if isinstance(positions_dict.get(position), tuple):
-        sub_positions = positions_dict[position]
-        for item in sub_positions:
-            page_blocks = page.get_blocks(section=item[0])
-            for block in page_blocks:
-                obj = import_string_block(block=block,
-                                          request=request,
-                                          page=page,
-                                          webpath=webpath)
-                if obj: return True
-    else:
-        page_blocks = page.get_blocks(section=position)
-        for block in page_blocks:
-            obj = import_string_block(block=block,
-                                      request=request,
-                                      page=page,
-                                      webpath=webpath)
-            if obj: return True
-    return False
+    page_blocks = page.get_blocks()
+    
+    for block in page_blocks:        
+        if isinstance(positions_dict.get(block.section), tuple):
+            sub_positions = positions_dict.get(section)
+            if not sub_positions: # pragma: no cover
+                logger.warning(f'Block {block} in a not existent sub '
+                               f'section: {block.section}')
+                return False
+            
+            for item in sub_positions:
+                return import_string_block(block=block,
+                                           request=request,
+                                           page=page,
+                                           webpath=webpath)
+        else:
+            return import_string_block(block=block,
+                                       request=request,
+                                       page=page,
+                                       webpath=webpath)

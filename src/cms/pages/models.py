@@ -89,7 +89,18 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
     class Meta:
         verbose_name_plural = _("Pages")
 
-
+    
+    def clean_related_caches(self):
+        deleted = []
+        for i in self.__dict__.keys():
+            for e in '_blocks_', '_pubs', '_carousels', '_medias', '_links':
+                if e in i:
+                    delattr(self, i)
+                    delete.append(i)
+        logger.debug(f'Deleted from page {self}, these related caches: '
+                     f'{"".join(deleted)}')
+    
+    
     def get_blocks(self, section=None):
         # something that caches ...
         if hasattr(self, f'_blocks_{section}'):
@@ -103,7 +114,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                           **query_params,
                                           block__is_active=True).\
                                    order_by('section', 'order').\
-                                   values_list('order', 'block__pk')
+                                   values_list('order', 'block__pk', 'section')
         excluded_blocks = PageBlock.objects.filter(page=self,
                                                    is_active=False).\
                                    values_list('block__pk', flat=True)
@@ -112,16 +123,23 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                             filter(**query_params).\
                             exclude(pk__in=excluded_blocks).\
                             order_by('section', 'order').\
-                            values_list('order', 'block__pk')
+                            values_list('order', 'block__pk', 'section')
         order_pk = set()
         for i in chain(blocks, template_blocks):
             order_pk.add(i)
-        ordered = sorted(list(order_pk))
-        _blocks = [TemplateBlock.objects.get(pk=v)
-                   for k,v in ordered]
-
-        # cache result ...
-        setattr(self, f'_blocks_{section}', _blocks)
+        ordered = list(order_pk)
+        ordered.sort(key=lambda x:x[0])
+        
+        _blocks = []
+        # add a on-the-fly section attribute on the blocks ...
+        for block in ordered:
+            _block = TemplateBlock.objects.get(pk=block[1])
+            _block.section = block[2]
+            _blocks.append(_block)
+            
+        if _blocks:
+            # cache result ...
+            setattr(self, f'_blocks_{section}', _blocks)
 
         return _blocks
 

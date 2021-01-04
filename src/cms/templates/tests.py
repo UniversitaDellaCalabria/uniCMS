@@ -48,8 +48,9 @@ class TemplateUnitTest(TestCase):
         tb.__str__()
         return tb
 
+
     @classmethod
-    def create_page_block_template(cls, page_data={}, block_data={}):
+    def create_page_block_template(cls, page_data={}, block_data={}, **kwargs):
         if page_data:
             pt = cls.create_page_template(**page_data)
         else:
@@ -59,8 +60,14 @@ class TemplateUnitTest(TestCase):
             bt = cls.create_block_template(**block_data)
         else:
             bt = cls.create_block_template()
-        return PageTemplateBlock.objects.create(template=pt, block=bt, 
-                                                section='banner', is_active=1)
+        data = kwargs.copy()
+        data['template'] = pt
+        data['block'] = bt
+        data['section'] = 'banner'
+        data['is_active'] = True
+        for k,v in kwargs.items():
+            data[k] = v
+        return PageTemplateBlock.objects.create(**data)
 
         
     def test_template_page_block(self):
