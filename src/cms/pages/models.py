@@ -96,7 +96,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             for e in '_blocks_', '_pubs', '_carousels', '_medias', '_links':
                 if e in i:
                     delattr(self, i)
-                    delete.append(i)
+                    deleted.append(i)
         logger.debug(f'Deleted from page {self}, these related caches: '
                      f'{"".join(deleted)}')
     
