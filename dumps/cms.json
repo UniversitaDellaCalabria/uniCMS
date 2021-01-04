@@ -985,12 +985,12 @@
   "pk": 30,
   "fields": {
     "created": "2020-12-14T16:54:24.981Z",
-    "modified": "2020-12-28T11:40:32.314Z",
+    "modified": "2021-01-04T07:05:49.485Z",
     "is_active": true,
     "name": "Unical - Page Title H1 lighter",
     "description": "",
     "type": "cms.templates.blocks.HtmlBlock",
-    "content": "{% load unicms_pages %}\r\n\r\n<h1 class=\"lighter mb-5\">{% load_page_title page %}</h1>",
+    "content": "{% load unicms_pages %}\r\n\r\n<h1 class=\"lighter mb-5\">{% load_page_title %}</h1>",
     "image": ""
   }
 },
@@ -1593,6 +1593,34 @@
     "alias_url": "",
     "path": "italia/",
     "fullpath": "/italia/",
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.editorialboardeditors",
+  "pk": 1,
+  "fields": {
+    "created": "2021-01-04T08:33:29.757Z",
+    "modified": "2021-01-04T08:51:37.637Z",
+    "created_by": null,
+    "modified_by": null,
+    "user": 2,
+    "permission": "3",
+    "webpath": 1,
+    "is_active": true
+  }
+},
+{
+  "model": "cmscontexts.editorialboardeditors",
+  "pk": 2,
+  "fields": {
+    "created": "2021-01-04T08:51:45.286Z",
+    "modified": "2021-01-04T10:05:34.899Z",
+    "created_by": null,
+    "modified_by": null,
+    "user": 2,
+    "permission": "5",
+    "webpath": 1,
     "is_active": true
   }
 },

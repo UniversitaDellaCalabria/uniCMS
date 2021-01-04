@@ -89,7 +89,6 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
     class Meta:
         verbose_name_plural = _("Pages")
 
-    
     def clean_related_caches(self):
         deleted = []
         for i in self.__dict__.keys():
@@ -99,8 +98,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                     deleted.append(i)
         logger.debug(f'Deleted from page {self}, these related caches: '
                      f'{"".join(deleted)}')
-    
-    
+
     def get_blocks(self, section=None):
         # something that caches ...
         if hasattr(self, f'_blocks_{section}'):
@@ -129,20 +127,19 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             order_pk.add(i)
         ordered = list(order_pk)
         ordered.sort(key=lambda x:x[0])
-        
+
         _blocks = []
         # add a on-the-fly section attribute on the blocks ...
         for block in ordered:
             _block = TemplateBlock.objects.get(pk=block[1])
             _block.section = block[2]
             _blocks.append(_block)
-            
+
         if _blocks:
             # cache result ...
             setattr(self, f'_blocks_{section}', _blocks)
 
         return _blocks
-
 
     def get_blocks_placeholders(self):
         blocks = self.get_blocks()
@@ -151,7 +148,6 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                        [i.__name__
                         for i in import_string(block.type).__bases__]]
         return placeholders
-
 
     def get_publications(self):
         if getattr(self, '_pubs', None):
@@ -162,7 +158,6 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                                     order_by('order')
         return self._pubs
 
-
     def get_carousels(self):
         if getattr(self, '_carousels', None):
             return self._carousels
@@ -171,7 +166,6 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                                       carousel__is_active=True).\
                                                       order_by('order')
         return self._carousels
-
 
     def get_medias(self):
         if getattr(self, '_medias', None):
@@ -182,7 +176,6 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                                 order_by('order')
         return self._medias
 
-
     def get_menus(self):
         if getattr(self, '_menus', None):
             return self._menus
@@ -192,7 +185,6 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                               order_by('order')
         return self._menus
 
-
     def get_links(self):
         if getattr(self, '_links', None):
             return self._links
@@ -200,11 +192,9 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                               order_by('order')
         return self._links
 
-
     def delete(self, *args, **kwargs):
         PageRelated.objects.filter(related_page=self).delete()
         super(self.__class__, self).delete(*args, **kwargs)
-
 
     def save(self, *args, **kwargs):
         super(self.__class__, self).save(*args, **kwargs)
