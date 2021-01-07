@@ -3,7 +3,10 @@ import json
 from django.template import Context, Template
 from django.utils.safestring import mark_safe
 
-from cms.templates.placeholders import *
+from cms.templates.placeholders import (SafeString, load_carousel_placeholder,
+                                        load_link_placeholder, load_media_placeholder,
+                                        load_menu_placeholder,
+                                        load_publication_content_placeholder)
 
 
 class AbstractBlock(object):
@@ -41,6 +44,7 @@ class JSONBlock(AbstractBlock):
 class PlaceHolderBlock(JSONBlock):
     """
     """
+
     def get_template(self):
         template = self.content.get('template', '')
         return template
@@ -50,6 +54,7 @@ class CarouselPlaceholderBlock(PlaceHolderBlock):
     """
     Carousel PlaceHolder
     """
+
     def render(self):
         template = self.get_template()
         if not template: return SafeString('')
@@ -62,6 +67,7 @@ class LinkPlaceholderBlock(PlaceHolderBlock):
     """
     Link PlaceHolder
     """
+
     def render(self):
         template = self.get_template()
         if not template: return SafeString('')
@@ -74,6 +80,7 @@ class MediaPlaceholderBlock(PlaceHolderBlock):
     """
     Media PlaceHolder
     """
+
     def render(self):
         template = self.get_template()
         if not template: return SafeString('')
@@ -86,6 +93,7 @@ class MenuPlaceholderBlock(PlaceHolderBlock):
     """
     Menu PlaceHolder
     """
+
     def render(self):
         template = self.get_template()
         if not template: return SafeString('')
@@ -98,6 +106,7 @@ class PublicationContentPlaceholderBlock(PlaceHolderBlock):
     """
     Publication PlaceHolder
     """
+
     def render(self):
         template = self.get_template()
         if not template: return SafeString('')

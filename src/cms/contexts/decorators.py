@@ -1,11 +1,10 @@
 import logging
 
-from django.conf import settings
 from django.http import HttpResponse
 
 from . cache import (get_from_cache, set_to_cache,
                      is_cache_available,
-                     is_request_cacheable, 
+                     is_request_cacheable,
                      is_response_cacheable)
 from . utils import detect_user_language
 
@@ -33,7 +32,7 @@ def unicms_cache(func_to_decorate):
                 cache_get = get_from_cache(request)
                 if cache_get:
                     return HttpResponse(cache_get)
-                    
+
             # otherwise ...
             res = func_to_decorate(*original_args, **original_kwargs)
             if cacheable and is_response_cacheable(res):

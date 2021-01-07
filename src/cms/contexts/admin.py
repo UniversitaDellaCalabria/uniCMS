@@ -1,19 +1,6 @@
-import json
-
-from copy import deepcopy
 from django.contrib import admin
-from django.contrib import messages
-from django.forms.utils import ErrorList
-from django.http import (HttpResponse,
-                         Http404,
-                         HttpResponseBadRequest,
-                         HttpResponseRedirect)
-from django.urls import reverse
-from django.utils import timezone
-from django.utils.safestring import mark_safe
-from django.utils.translation import gettext, gettext_lazy as _
 
-from . models import *
+from . models import EditorialBoardEditors, EditorialBoardLocks, WebPath, WebSite
 
 
 class AbstractCreatedModifiedBy(admin.ModelAdmin):
@@ -60,5 +47,5 @@ class EditorialBoardEditorsAdmin(AbstractCreatedModifiedBy):
 @admin.register(EditorialBoardLocks)
 class EditorialBoardLocksAdmin(admin.ModelAdmin):
     list_filter = ('locked_time', )
-    list_display = ('content_type', 'object_id', 
+    list_display = ('content_type', 'object_id',
                     'is_active', 'locked_time', 'locked_by')

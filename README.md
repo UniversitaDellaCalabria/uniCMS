@@ -3,7 +3,7 @@
 ![CI build](https://github.com/UniversitadellaCalabria/uniCMS/workflows/uniCMS/badge.svg)
 ![Python version](https://img.shields.io/badge/license-Apache%202-blue.svg)
 [![codecov](https://codecov.io/gh/UniversitadellaCalabria/uniCMS/branch/main/graph/badge.svg)](https://codecov.io/gh/UniversitadellaCalabria/uniCMS)
-![License](https://img.shields.io/badge/python-3.5%20%7C%203.6%20%7C%203.7%20%7C%203.8%20%7C%203.9-blue.svg)
+![License](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8%20%7C%203.9-blue.svg)
 
 uniCMS is a Web Application Content Management System developed using  **Django Framework**. 
 The project is created by a group of passionate developers who introduces bespoke 
@@ -85,4 +85,19 @@ Tests
 cd example
 coverage erase ; coverage run ./manage.py test cms; coverage report -m
 ````
+
+###### Hints for developers
+
+Please run these before doing new commits
+````
+pip install -r requirements-dev.txt
+
+autopep8 -r --in-place   ../src/cms/
+flake8 ../src/cms --count --exit-zero --statistics 
+
+# auto flake0
+autoflake -r --in-place  --remove-unused-variables --expand-star-imports --remove-all-unused-imports ../src/cms/
+````
+
+
 

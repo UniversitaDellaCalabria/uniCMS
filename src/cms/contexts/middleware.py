@@ -1,8 +1,5 @@
 import logging
-import json
 
-from django.conf import settings
-from django.utils.translation import gettext_lazy as _
 
 from . utils import detect_user_language, toggle_session_state
 

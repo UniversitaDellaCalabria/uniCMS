@@ -18,6 +18,4 @@ CMS_CACHE_TTL = 25
 # set to 0 means infinite
 CMS_CACHE_MAX_ENTRIES = 0
 # request.get_raw_uri() that matches the following would be not cached
-CMS_CACHE_EXCLUDED_MATCHES =  ['/search?',]
-
-
+CMS_CACHE_EXCLUDED_MATCHES = ['/search?',]

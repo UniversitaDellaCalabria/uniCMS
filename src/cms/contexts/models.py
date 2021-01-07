@@ -80,7 +80,7 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
     fullpath = models.TextField(max_length=2048, null=True, blank=True,
                                 help_text=_("final path prefixed with the "
                                             "parent path"))
-    is_active   = models.BooleanField()
+    is_active = models.BooleanField()
 
     class Meta:
         verbose_name_plural = _("Site Contexts (WebPaths)")
@@ -103,7 +103,7 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
         """
         if this webpath is an alias this attribute 
         will be valued with a redirect url
-        """
+        """ # noqa
         if self.alias:
             return self.alias.get_full_path()
         return self.alias_url
@@ -117,12 +117,12 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
     def save(self, *args, **kwargs):
         # manage aliases
         if self.alias:
-            self.site = self.alias.site         
-            
+            self.site = self.alias.site
+
         # alias or alias_url
         if self.alias and self.alias_url: # pragma: no cover
             self.alias = None
-        
+
         # store a correct fullpath
         self.path = append_slash(self.path)
         self.path = sanitize_path(self.path)
@@ -134,7 +134,7 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
             fullpath = self.redirect_url
         else:
             fullpath = self.path
-        
+
         for reserved_word in settings.CMS_HANDLERS_PATHS:
             if reserved_word in fullpath:
                 _msg = f'{fullpath} matches with the reserved word: {reserved_word}'
@@ -165,7 +165,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
     webpath = models.ForeignKey(WebPath,
                                 on_delete=models.CASCADE,
                                 null=True, blank=True)
-    is_active   = models.BooleanField()
+    is_active = models.BooleanField()
 
     class Meta:
         verbose_name_plural = _("Editorial Board Users")
@@ -177,7 +177,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
             return '{} {}'.format(self.user, self.permission)
 
 
-### DEPRECATED - TODO - mode to Redis TTL
+# DEPRECATED - TODO - mode to Redis TTL
 class EditorialBoardLocks(models.Model):
     content_type = models.ForeignKey(
         ContentType,
@@ -187,8 +187,8 @@ class EditorialBoardLocks(models.Model):
     )
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey()
-    
-    locked_by = models.ForeignKey(get_user_model(), 
+
+    locked_by = models.ForeignKey(get_user_model(),
                                   on_delete=models.CASCADE,
                                   null=True, blank=True)
     locked_time = models.DateTimeField(null=True, blank=True)
@@ -196,12 +196,12 @@ class EditorialBoardLocks(models.Model):
     class Meta:
         verbose_name_plural = _("Editorial Board Locks")
         ordering = ('-locked_time',)
-        
+
     @property
     def is_active(self): # pragma: no cover
-        now = timezone.localtime() 
+        now = timezone.localtime()
         unlock_time = self.locked_time + timezone.timedelta(minutes = 1)
         return now < unlock_time
-    
+
     def __str__(self): # pragma: no cover
         return f'{self.content_type} {self.object_id}'

@@ -2,7 +2,7 @@ from copy import deepcopy
 
 from django.utils.translation import gettext_lazy as _
 
-from cms.contexts.models import *
+from cms.contexts.models import CreatedModifiedBy, WebPath, models, settings
 from cms.templates.models import (ActivableModel,
                                   SortableModel,
                                   TimeStampedModel)

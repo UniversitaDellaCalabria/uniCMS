@@ -1,12 +1,9 @@
 import logging
 
 from django import template
-from django.conf import settings
 from django.template.loader import render_to_string
-from django.utils import timezone
 from django.utils.safestring import SafeString
 
-from cms.contexts.decorators import detect_language
 from cms.contexts.utils import handle_faulty_templates
 from cms.pages.models import Category
 from cms.templates.utils import import_string_block
@@ -22,13 +19,13 @@ def load_blocks(context, section=None):
     page = context['page']
     webpath = context['webpath']
     blocks = page.get_blocks(section=section)
-    
+
     logger.debug(f'load_blocks section: {section}')
-    
+
     result = SafeString('')
     if request.user.is_staff and request.session.get('show_template_blocks_sections'):
         result += render_to_string('load_blocks_head.html', {'section': section})
-    
+
     for block in blocks:
         obj = import_string_block(block=block,
                                   request=request,

@@ -1,22 +1,18 @@
 import logging
 
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 from django.utils.module_loading import import_string
-from django.utils.text import slugify
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.models import *
-from cms.contexts.utils import sanitize_path
 from cms.carousels.models import Carousel
 from cms.medias import settings as cms_media_settings
 from cms.medias.models import Media
 from cms.medias.validators import *
 from cms.menus.models import NavigationBar
-from cms.templates.models import (CMS_TEMPLATE_BLOCK_SECTIONS,
-                                  TemplateBlock,
+from cms.templates.models import (TemplateBlock,
                                   ActivableModel,
                                   PageTemplate,
                                   SectionAbstractModel,
@@ -73,8 +69,8 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                       on_delete=models.CASCADE,
                                       limit_choices_to={'is_active': True},)
     description = models.TextField(null=True, blank=True,
-                                    help_text=_("Description"
-                                                "used for SEO."))
+                                   help_text=_("Description"
+                                               "used for SEO."))
     date_start = models.DateTimeField()
     date_end = models.DateTimeField(null=True, blank=True)
     state = models.CharField(choices=PAGE_STATES, max_length=33,
@@ -111,17 +107,17 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         blocks = PageBlock.objects.filter(page=self,
                                           **query_params,
                                           block__is_active=True).\
-                                   order_by('section', 'order').\
-                                   values_list('order', 'block__pk', 'section')
+            order_by('section', 'order').\
+            values_list('order', 'block__pk', 'section')
         excluded_blocks = PageBlock.objects.filter(page=self,
                                                    is_active=False).\
-                                   values_list('block__pk', flat=True)
+            values_list('block__pk', flat=True)
         template_blocks = self.base_template.\
-                            pagetemplateblock_set.\
-                            filter(**query_params).\
-                            exclude(pk__in=excluded_blocks).\
-                            order_by('section', 'order').\
-                            values_list('order', 'block__pk', 'section')
+            pagetemplateblock_set.\
+            filter(**query_params).\
+            exclude(pk__in=excluded_blocks).\
+            order_by('section', 'order').\
+            values_list('order', 'block__pk', 'section')
         order_pk = set()
         for i in chain(blocks, template_blocks):
             order_pk.add(i)
@@ -144,9 +140,9 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
     def get_blocks_placeholders(self):
         blocks = self.get_blocks()
         placeholders = [block for block in blocks
-                       if 'PlaceHolderBlock' in
-                       [i.__name__
-                        for i in import_string(block.type).__bases__]]
+                        if 'PlaceHolderBlock' in
+                        [i.__name__
+                         for i in import_string(block.type).__bases__]]
         return placeholders
 
     def get_publications(self):
@@ -155,7 +151,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         self._pubs = PagePublication.objects.filter(page=self,
                                                     is_active=True,
                                                     publication__is_active=True).\
-                                                    order_by('order')
+            order_by('order')
         return self._pubs
 
     def get_carousels(self):
@@ -164,7 +160,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         self._carousels = PageCarousel.objects.filter(page=self,
                                                       is_active=True,
                                                       carousel__is_active=True).\
-                                                      order_by('order')
+            order_by('order')
         return self._carousels
 
     def get_medias(self):
@@ -173,7 +169,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         self._medias = PageMedia.objects.filter(page=self,
                                                 is_active=True,
                                                 media__is_active=True).\
-                                                order_by('order')
+            order_by('order')
         return self._medias
 
     def get_menus(self):
@@ -182,14 +178,14 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         self._menus = PageMenu.objects.filter(page=self,
                                               is_active=True,
                                               menu__is_active=True).\
-                                              order_by('order')
+            order_by('order')
         return self._menus
 
     def get_links(self):
         if getattr(self, '_links', None):
             return self._links
         self._links = PageLink.objects.filter(page=self).\
-                                              order_by('order')
+            order_by('order')
         return self._links
 
     def delete(self, *args, **kwargs):
@@ -201,11 +197,11 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
 
         # can't remember why I wrote this code ...!
         # for rel in PageRelated.objects.filter(page=self):
-            # if not PageRelated.objects.\
-                    # filter(page=rel.related_page, related_page=self):
-                # PageRelated.objects.\
-                    # create(page=rel.page, related_page=self,
-                           # is_active=True)
+        # if not PageRelated.objects.\
+        # filter(page=rel.related_page, related_page=self):
+        # PageRelated.objects.\
+        # create(page=rel.page, related_page=self,
+        # is_active=True)
 
     def translate_as(self, lang):
         """
@@ -228,7 +224,6 @@ class PageCarousel(SectionAbstractModel, ActivableModel, SortableModel,
     carousel = models.ForeignKey(Carousel, null=False, blank=False,
                                  on_delete=models.CASCADE)
 
-
     class Meta:
         verbose_name_plural = _("Page Carousel")
 
@@ -240,13 +235,14 @@ class PageCarousel(SectionAbstractModel, ActivableModel, SortableModel,
 class PageLocalization(TimeStampedModel, ActivableModel,
                        CreatedModifiedBy):
     title = models.CharField(max_length=256,
-                               null=False, blank=False)
+                             null=False, blank=False)
     page = models.ForeignKey(Page,
                              null=False, blank=False,
                              on_delete=models.CASCADE)
     language = models.CharField(choices=settings.LANGUAGES,
                                 max_length=12, null=False,blank=False,
                                 default='en')
+
     class Meta:
         verbose_name_plural = _("Page Localizations")
 
@@ -291,6 +287,7 @@ class PageBlock(ActivableModel, SectionAbstractModel, SortableModel):
                              on_delete=models.CASCADE)
     block = models.ForeignKey(TemplateBlock, null=False, blank=False,
                               on_delete=models.CASCADE)
+
     class Meta:
         verbose_name_plural = _("Page Block")
 
@@ -347,15 +344,15 @@ class PagePublication(TimeStampedModel, SortableModel, ActivableModel):
 
 
 class Category(TimeStampedModel, CreatedModifiedBy):
-    name        = models.CharField(max_length=160, blank=False,
-                                   null=False, unique=False)
+    name = models.CharField(max_length=160, blank=False,
+                            null=False, unique=False)
     description = models.TextField(max_length=1024,
                                    null=False, blank=False)
-    image       = models.ImageField(upload_to="images/categories",
-                                    null=True, blank=True,
-                                    max_length=512,
-                                    validators=[validate_file_extension,
-                                                validate_file_size])
+    image = models.ImageField(upload_to="images/categories",
+                              null=True, blank=True,
+                              max_length=512,
+                              validators=[validate_file_extension,
+                                          validate_file_size])
 
     class Meta:
         ordering = ['name']
@@ -368,7 +365,7 @@ class Category(TimeStampedModel, CreatedModifiedBy):
         res = ""
         try:
             res = f'<img width={CMS_IMAGE_CATEGORY_SIZE} src="{self.image.url}"/>'
-        except ValueError as e:  # pragma: no cover
+        except ValueError:  # pragma: no cover
             # *** ValueError: The 'image' attribute has no file associated with it.
             res = f"{settings.STATIC_URL}images/no-image.jpg"
         return mark_safe(res) # nosec

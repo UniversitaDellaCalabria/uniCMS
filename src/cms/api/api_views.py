@@ -1,11 +1,9 @@
-import time # debug wait
+import logging
 
 from django.core.exceptions import ValidationError
-from django.utils import timezone
 from django.utils.decorators import method_decorator
 
-from rest_framework import generics, viewsets, permissions
-from rest_framework.decorators import api_view
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -14,15 +12,18 @@ from cms.contexts.models import WebPath
 
 from cms.publications.models import Publication, PublicationContext
 from cms.publications.paginators import Paginator
-from cms.api.serializers import *
+from cms.api.serializers import PublicationSerializer
 from cms.publications.utils import publication_context_base_filter
+
+
+logger = logging.getLogger(__name__)
 
 
 # TODO - better get with filters
 class PublicationDetail(generics.RetrieveAPIView):
     name = 'publication-detail'
     description = 'News'
-    queryset = Publication.objects.filter(is_active=True, 
+    queryset = Publication.objects.filter(is_active=True,
                                           state='published')
     serializer_class = PublicationSerializer
     lookup_field = 'slug'
@@ -35,22 +36,23 @@ class ApiPublicationsByContext(APIView):
     description = 'ApiPublicationsByContext'
     # authentication_classes = [authentication.TokenAuthentication]
     # permission_classes = [permissions.IsAdminUser]
-    
+
     def get(self, request, webpath_id, category_name=None):
         query_params = publication_context_base_filter()
         query_params.update({'webpath__pk': webpath_id,
                              'publication__state': 'published'})
-        
+
         category_name = category_name or request.GET.get('category_name')
         if category_name:
             query_params['publication__category__name__iexact'] = category_name
         pubcontx = PublicationContext.objects.filter(**query_params)
-        count = pubcontx.count()
+        pubcontx.count()
         paginator = Paginator(queryset=pubcontx, request=request)
-        
+
         try:
             page_num = int(request.GET.get('page_number', 1))
-        except: # pragma: no cover
+        except Exception as e: # pragma: no cover
+            logger.error(f'API {self.__class__.__name__} paginator number: {e}')
             raise ValidationError('Wrong page_number value')
 
         paged = paginator.get_page(page_num)
@@ -63,10 +65,9 @@ class ApiContext(APIView): # pragma: no cover
     """
     """
     description = 'Get publications in Context (WebPath)'
-    
+
     def get(self, request):
         webpaths = WebPath.objects.filter(is_active=True)
-        pubs = ({i.pk: f'{i.site.domain}{i.get_full_path()}'} 
-                 for i in webpaths if i.is_publicable)
+        pubs = ({i.pk: f'{i.site.domain}{i.get_full_path()}'}
+                for i in webpaths if i.is_publicable)
         return Response(pubs)
-    

@@ -1,20 +1,18 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from cms.contexts.models import WebPath, CreatedModifiedBy
+from cms.contexts.models import CreatedModifiedBy
 from cms.medias.models import Media
 from cms.templates.models import (CMS_LINKS_LABELS,
-                                  ActivableModel, 
+                                  ActivableModel,
                                   SortableModel,
-                                  SectionAbstractModel,
                                   TimeStampedModel)
 
 
 class Carousel(ActivableModel, TimeStampedModel, CreatedModifiedBy):
-    name        = models.CharField(max_length=160, blank=False,
-                                   null=False, unique=False)
+    name = models.CharField(max_length=160, blank=False,
+                            null=False, unique=False)
     description = models.TextField(max_length=2048,
                                    null=False, blank=False)
 

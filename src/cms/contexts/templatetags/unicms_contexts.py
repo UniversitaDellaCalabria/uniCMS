@@ -3,16 +3,10 @@ import urllib
 
 from django import template
 from django.conf import settings
-from django.template.loader import get_template, render_to_string
-from django.template.exceptions import (TemplateDoesNotExist,
-                                        TemplateSyntaxError)
-from django.utils import timezone
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.models import WebPath, WebSite
 from cms.contexts.utils import handle_faulty_templates, sanitize_path
-from cms.menus.models import NavigationBarItem
 
 logger = logging.getLogger(__name__)
 register = template.Library()

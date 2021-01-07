@@ -6,11 +6,14 @@ from django.db.models.signals import (pre_save, post_save,
 def cms_pre_save(instance, *args, **kwargs):
     load_hooks(instance, 'PRESAVE', *args, **kwargs)
 
+
 def cms_post_save(instance, *args, **kwargs):
     load_hooks(instance, 'POSTSAVE', *args, **kwargs)
 
+
 def cms_pre_delete(instance, *args, **kwargs):
     load_hooks(instance, 'PREDELETE', *args, **kwargs)
+
 
 def cms_post_delete(instance, *args, **kwargs):
     load_hooks(instance, 'POSTDELETE', *args, **kwargs)

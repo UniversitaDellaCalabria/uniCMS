@@ -1,6 +1,9 @@
 from django.contrib import admin
 
-from . models import *
+from . models import (PublicationAttachment, PublicationBlock,
+                      PublicationContext, PublicationGallery,
+                      PublicationLink, PublicationLocalization,
+                      PublicationRelated)
 
 
 class PublicationContextInline(admin.TabularInline):

@@ -1,9 +1,6 @@
 import logging
 
 from django import template
-from django.template.exceptions import (TemplateDoesNotExist,
-                                        TemplateSyntaxError)
-from django.utils import timezone
 from django.utils.safestring import SafeString
 
 from cms.contexts.utils import handle_faulty_templates

@@ -3,7 +3,6 @@ import re
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import get_user_model
 from django.utils import translation
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext as _
@@ -48,7 +47,7 @@ def contextualize_template(template_fname, page):
     # do additional preprocessing on the template here ...
     # get/extends the base template of the page context
     base_template_tag = f'{{% extends "{page.base_template.template_file}" %}}'
-    regexp = "\{\%\s*extends\s*\t*[\'\"a-zA-Z0-9\_\-\.]*\s*\%\}"
+    regexp = r"\{\%\s*extends\s*\t*[\'\"a-zA-Z0-9\_\-\.]*\s*\%\}"
     ext_template_sources = re.sub(regexp, base_template_tag, template_sources)
     # end string processing
     return ext_template_sources

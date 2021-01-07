@@ -6,11 +6,11 @@ from cms.publications.models import *
 class PublicationContextSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PublicationContext
-        # fields = ['webpath', 
-                  # 'publication__date_start',
-                  # 'publication__title',
-                  # 'publication__subheading',
-                  # 'publication__content']
+        # fields = ['webpath',
+        # 'publication__date_start',
+        # 'publication__title',
+        # 'publication__subheading',
+        # 'publication__content']
         fields = '__all__'
         lookup_field = 'pk'
 

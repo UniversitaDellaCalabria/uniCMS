@@ -14,7 +14,7 @@ FILETYPE_TEXT = ('text/plain',
                  'application/msword',
                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 )
-FILETYPE_IMAGE = ('image/webp', 'image/jpeg', 'image/png', 
+FILETYPE_IMAGE = ('image/webp', 'image/jpeg', 'image/png',
                   'image/gif', 'image/x-ms-bmp')
 FILETYPE_P7M = ('application/pkcs7-mime',)
 FILETYPE_SIGNED = FILETYPE_PDF + FILETYPE_P7M

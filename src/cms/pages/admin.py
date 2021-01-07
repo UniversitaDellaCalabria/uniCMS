@@ -2,19 +2,14 @@ import logging
 
 from django.contrib import admin
 from django.contrib import messages
-from django.http import (HttpResponse,
-                         Http404,
-                         HttpResponseBadRequest,
-                         HttpResponseRedirect)
+from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.utils import timezone
 from django.utils.module_loading import import_string
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.admin import AbstractCreatedModifiedBy
 from . admin_inlines import *
 from . models import *
-from . forms import *
 from . utils import copy_page_as_draft
 
 logger = logging.getLogger(__name__)
@@ -47,7 +42,6 @@ class AbstractPreviewableAdmin(admin.ModelAdmin):
 
             self.message_user(request, "Draft being published succesfully")
 
-
         elif "_preview" in request.POST:
             # matching_names_except_this = self.get_queryset(request).filter(name=obj.name).exclude(pk=obj.id)
             # matching_names_except_this.delete()
@@ -61,7 +55,9 @@ class AbstractPreviewableAdmin(admin.ModelAdmin):
 
 def make_page_draft(modeladmin, request, queryset):
     for obj in queryset:
-        draft = copy_page_as_draft(obj)
+        copy_page_as_draft(obj)
+
+
 make_page_draft.short_description = _("Make page Draft")
 
 
@@ -70,20 +66,20 @@ class PageAdmin(AbstractCreatedModifiedBy, nested_admin.NestedModelAdmin):
     change_form_template = "admin/change_form_preview.html"
 
     search_fields = ('name',)
-    list_display  = ('webpath', 'name',
-                     'date_start', 'date_end',
-                     'is_active', 'state')
-    list_filter   = ('webpath__site', 'state', 'is_active', 'type',
-                     'created', 'modified', 'date_start', 'date_end')
+    list_display = ('webpath', 'name',
+                    'date_start', 'date_end',
+                    'is_active', 'state')
+    list_filter = ('webpath__site', 'state', 'is_active', 'type',
+                   'created', 'modified', 'date_start', 'date_end')
     readonly_fields = ('created_by', 'modified_by', 'draft_of')
-    inlines       = (PageLocalizationInline,
-                     PageMenuInline,
-                     PageCarouselInline,
-                     PageBlockInline,
-                     PagePublicationInline,
-                     PageRelatedInline,
-                     PageMediaInline,
-                     PageLinkInline)
+    inlines = (PageLocalizationInline,
+               PageMenuInline,
+               PageCarouselInline,
+               PageBlockInline,
+               PagePublicationInline,
+               PageRelatedInline,
+               PageMediaInline,
+               PageLinkInline)
     actions = AbstractPreviewableAdmin.actions + [make_page_draft,]
     raw_id_fields = ['webpath', 'base_template']
 
@@ -106,7 +102,7 @@ class PageAdmin(AbstractCreatedModifiedBy, nested_admin.NestedModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display  = ('name', 'image_as_html')
+    list_display = ('name', 'image_as_html')
 
     # def delete_model(modeladmin, request, queryset):
-        # obj.delete()
+    # obj.delete()
