@@ -36,6 +36,4 @@ CACHES = {
 DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
 
 MONGO_URL = 'mongodb://localhost:27017'
-MONGO_CONNECTION_PARAMS = dict(connectTimeoutMS=5000,
-                               socketTimeoutMS=5000,
-                               serverSelectionTimeoutMS=5000)
+MONGO_CONNECTION_PARAMS = dict()
