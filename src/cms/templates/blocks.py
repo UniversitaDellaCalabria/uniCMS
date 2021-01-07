@@ -36,7 +36,7 @@ class HtmlBlock(AbstractBlock):
 
 
 class JSONBlock(AbstractBlock):
-    def __init__(self, content='', **kwargs):
+    def __init__(self, content='{}', **kwargs):
         super(JSONBlock, self).__init__(**kwargs)
         self.content = json.loads(content)
 

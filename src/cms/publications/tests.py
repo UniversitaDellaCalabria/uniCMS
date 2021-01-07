@@ -8,13 +8,19 @@ from django.utils import timezone
 from cms.contexts.tests import ContextUnitTest
 from cms.medias.tests import MediaUnitTest
 from cms.menus.tests import MenuUnitTest
+from cms.pages.models import PageBlock, PagePublication
 from cms.pages.tests import PageUnitTest
+from cms.templates.blocks import PublicationContentPlaceholderBlock
+from cms.templates.models import TemplateBlock
+from cms.templates.placeholders import load_publication_content_placeholder
 from cms.templates.tests import TemplateUnitTest
 
 from cms.pages.templatetags.unicms_pages import cms_categories
 from cms.publications.templatetags.unicms_publications import (load_publication,
                                                                load_publications_preview)
-from . models import Publication, PublicationAttachment, PublicationBlock, PublicationContext, PublicationGallery, PublicationLink, PublicationLocalization, PublicationRelated
+from . models import (Publication, PublicationAttachment, PublicationBlock, 
+                      PublicationContext, PublicationGallery, PublicationLink, 
+                      PublicationLocalization, PublicationRelated)
 
 
 logger = logging.getLogger(__name__)
@@ -295,7 +301,7 @@ class PublicationUnitTest(TestCase):
         data['in_evidence'] = True
         lm = load_publications_preview(**data)
         assert not lm
-        
+
 
     # templatetag
     def test_load_publication(self):
@@ -325,4 +331,36 @@ class PublicationUnitTest(TestCase):
         cls.enrich_pub()
         lm = cms_categories()
         assert isinstance(list(lm), list) and len(lm) == 1
- 
+        
+
+    # placeholders
+    def test_load_publication_content_placeholder(self):
+        req = RequestFactory().get('/')
+        pub = self.enrich_pub()
+        webpath=pub.related_contexts[0].webpath
+        page = PageUnitTest.create_page(webpath=webpath)
+        req = RequestFactory().get('/')
+        
+        PagePublication.objects.create(page=page, publication=pub, is_active=1)
+        
+        block = PublicationContentPlaceholderBlock(
+            request = req,
+            webpath = webpath,
+            page = page,
+            content = '{"template": "ph_publication_style_1.html"}'
+        )
+
+        template_block = TemplateBlock.objects.create(
+            name = 'publication test',
+            type = 'cms.templates.blocks.PublicationContentPlaceholderBlock',
+            is_active = True
+        )
+        page_block = PageBlock.objects.create(page=page,
+                                              block = template_block,
+                                              is_active=1)
+
+        template_context = dict(request=req,
+                                page=page, webpath=page.webpath,
+                                block=block)
+        lm = load_publication_content_placeholder(template_context)
+        assert lm

@@ -8,13 +8,18 @@ from django.utils import timezone
 from cms.carousels.templatetags.unicms_carousels import load_carousel
 from cms.carousels.tests import CarouselUnitTest
 from cms.contexts.tests import ContextUnitTest
+from cms.medias.tests import MediaUnitTest
 from cms.menus.tests import MenuUnitTest
 from cms.menus.templatetags.unicms_menus import load_menu
 from cms.pages.templatetags.unicms_pages import load_link, load_page_title
+from cms.templates.models import TemplateBlock
+from cms.templates.blocks import *
+from cms.templates.placeholders import *
 from cms.templates.tests import TemplateUnitTest
 from cms.templates.templatetags.unicms_templates import blocks_in_position
 
-from . models import Category, Page, PageBlock, PageCarousel, PageLink, PageLocalization, PageMenu, PageRelated
+from . models import (Category, Page, PageBlock, PageCarousel, PageLink, 
+                      PageLocalization, PageMedia, PageMenu, PageRelated)
 from . utils import copy_page_as_draft
 
 
@@ -313,3 +318,130 @@ class PageUnitTest(TestCase):
         url = reverse('unicms:cms_dispatch')
         res = self.client.get(f'{url}?show_cms_draft_mode')
         assert res.status_code == 200
+
+    # placeholders
+    @classmethod
+    def test_load_carousel_placeholder(cls):
+        page = cls.create_page()
+        webpath = page.webpath
+        req = RequestFactory().get('/')
+        
+        block = CarouselPlaceholderBlock(
+            request = req,
+            webpath = webpath,
+            page = page,
+            content = '{"template" :"italia_hero_slider.html"}'
+        )
+
+        template_block = TemplateBlock.objects.create(
+            name = 'carousel test',
+            type = 'cms.templates.blocks.CarouselPlaceholderBlock',
+            is_active = True
+        )
+        page_block = PageBlock.objects.create(page=page,
+                                              block = template_block,
+                                              is_active=1)
+        
+        
+        template_context = dict(request=req, 
+                                page=page, webpath=page.webpath,
+                                block=block)
+        lm = load_carousel_placeholder(template_context)
+        assert lm
+        
+    # placeholders
+    @classmethod
+    def test_load_link_placeholder(cls):
+        page = cls.create_page()
+        webpath = page.webpath
+        req = RequestFactory().get('/')
+        
+        block = LinkPlaceholderBlock(
+            request = req,
+            webpath = webpath,
+            page = page,
+            content = '{"template": "italia_iframe_16by9.html"}'
+        )
+
+        template_block = TemplateBlock.objects.create(
+            name = 'link test',
+            type = 'cms.templates.blocks.LinkPlaceholderBlock',
+            is_active = True
+        )
+        page_block = PageBlock.objects.create(page=page,
+                                              block = template_block,
+                                              is_active=1)
+        
+        template_context = dict(request=req, 
+                                page=page, webpath=page.webpath,
+                                block=block)
+        lm = load_link_placeholder(template_context)
+        assert lm
+
+
+    # placeholders
+    @classmethod
+    def test_load_media_placeholder(cls):
+        page = cls.create_page()
+        webpath = page.webpath
+        req = RequestFactory().get('/')
+        
+        media = MediaUnitTest.create_media()
+        page_media = PageMedia.objects.create(page=page, is_active=1,
+                                              media=media)
+        
+        block = MediaPlaceholderBlock(
+            request = req,
+            webpath = webpath,
+            page = page,
+            content = '{"template": "italia_image.html"}'
+        )
+
+        template_block = TemplateBlock.objects.create(
+            name = 'media test',
+            type = 'cms.templates.blocks.MediaPlaceholderBlock',
+            is_active = True
+        )
+        page_block = PageBlock.objects.create(page=page,
+                                              block = template_block,
+                                              is_active=1)
+        
+        template_context = dict(request=req,
+                                page=page, webpath=page.webpath,
+                                block=block)
+        lm = load_media_placeholder(template_context)
+        assert lm
+
+
+    # placeholders
+    @classmethod
+    def test_load_menu_placeholder(cls):
+        page = cls.create_page()
+        webpath = page.webpath
+        req = RequestFactory().get('/')
+        
+        menu = MenuUnitTest.create_menu()
+        page_menu = PageMenu.objects.create(page=page, is_active=1,
+                                            menu=menu)
+        
+        block = MenuPlaceholderBlock(
+            request = req,
+            webpath = webpath,
+            page = page,
+            content = '{"template": "italia_image.html"}'
+        )
+
+        template_block = TemplateBlock.objects.create(
+            name = 'media test',
+            type = 'cms.templates.blocks.MenuPlaceholderBlock',
+            is_active = True
+        )
+        page_block = PageBlock.objects.create(page=page,
+                                              block = template_block,
+                                              is_active=1)
+        
+        template_context = dict(request=req,
+                                page=page, webpath=page.webpath,
+                                block=block)
+        lm = load_menu_placeholder(template_context)
+        assert lm
