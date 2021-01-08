@@ -178,7 +178,7 @@ class EditorWebsiteWebpath(APIView):
         publisher_perms = [6,7,8]
         # if user isn't a publisher
         # or can manage only created by him objects and he is not the webpath creator
-        if not permission in publisher_perms or (permission == 6 and webpath.created_by != request.user):
+        if permission not in publisher_perms or (permission == 6 and webpath.created_by != request.user):
             error_msg = _("You don't have permissions")
             return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
 
@@ -194,7 +194,7 @@ class EditorWebsiteWebpath(APIView):
 
             permission = EditorialBoardEditors.get_permission(webpath=parent,
                                                               user=request.user)
-            if not permission in publisher_perms:
+            if permission not in publisher_perms:
                 error_msg = _("You don't have permissions")
                 return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
 
@@ -267,7 +267,7 @@ class EditorWebsiteWebpathNew(APIView):
         permission = EditorialBoardEditors.get_permission(webpath=parent,
                                                           user=request.user)
         publisher_perms = [6,7,8]
-        if not permission in publisher_perms:
+        if permission not in publisher_perms:
             error_msg = _("You don't have permissions")
             return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
 
@@ -289,15 +289,14 @@ class EditorWebsiteWebpathNew(APIView):
                                          created_by=created_by,
                                          modified_by=created_by)
         if permission != 8:
-            new_permission = EditorialBoardEditors.objects.create(user=request.user,
-                                                                  webpath=webpath,
-                                                                  permission=str(permission),
-                                                                  is_active=True)
+            EditorialBoardEditors.objects.create(user=request.user,
+                                                 webpath=webpath,
+                                                 permission=str(permission),
+                                                 is_active=True)
         url = reverse('unicms_api:editorial-board-site-webpath-edit',
                       kwargs={'site_id': site_id,
                               'webpath_id': webpath.pk})
         return HttpResponseRedirect(url)
-
 
 
 @method_decorator(staff_member_required, name='dispatch')
@@ -335,7 +334,7 @@ class EditorWebsiteWebpathDelete(APIView):
         permission = EditorialBoardEditors.get_permission(webpath=webpath,
                                                           user=request.user)
         publisher_perms = [6,7,8]
-        if not permission in publisher_perms:
+        if permission not in publisher_perms:
             error_msg = _("You don't have permissions")
             return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
 
@@ -360,11 +359,11 @@ class EditorWebsitePages(APIView):
         result['pages'] = {}
 
         lang = getattr(request, 'LANGUAGE_CODE', '')
-        context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
         pages = {}
 
         pages_list = Page.objects.filter(webpath__site=site)
         for page in pages_list:
+            page.translate_as(lang)
             pages[page.pk] = {"name": page.name,
                               "title": page.title,
                               "webpath": page.webpath.__str__(),
@@ -392,7 +391,6 @@ class EditorWebsitePage(APIView):
                                  pk=page_id,
                                  webpath__site__pk=site_id,
                                  webpath__site__is_active=True)
-        context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
         result = {}
         result['site_name'] = page.webpath.site.name
         result['site_domain'] = page.webpath.site.domain

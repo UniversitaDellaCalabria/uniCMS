@@ -12,7 +12,7 @@ CMS_CONTEXT_PERMISSIONS = (
                            ('6', _('can publish content created by them in their own context')),
                            ('7', _('can publish content in their own context')),
                            ('8', _('can publish content in their own context and descendants')),
-                           )
+                          )
 
 CMS_CACHE_ENABLED = True
 CMS_CACHE_KEY_PREFIX = 'unicms_'
