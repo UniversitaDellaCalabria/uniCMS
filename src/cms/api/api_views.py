@@ -27,13 +27,13 @@ class PublicationDetail(generics.RetrieveAPIView):
                                           state='published')
     serializer_class = PublicationSerializer
     lookup_field = 'slug'
-    
+
     def get_queryset(self):
         self.request.user
         for pub in super(PublicationDetail, self).get_queryset():
             if pub.is_publicable:
                 return pub
-    
+
 
 @method_decorator(detect_language, name='dispatch')
 class ApiPublicationsByContext(APIView):
