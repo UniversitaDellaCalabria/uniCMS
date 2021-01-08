@@ -1,7 +1,7 @@
 import logging
+import math
 import re
 import pymongo
-import time # debug wait
 
 from pymongo.errors import ServerSelectionTimeoutError
 
@@ -44,7 +44,7 @@ class ApiSearchEngine(APIView):
         collection = MongoClientFactory().unicms.search
 
         # get only what's really needed
-        search_regexp = re.match('^[\w\+\-\s\(\)\[\]\=\"\'\.\_]*',
+        search_regexp = re.match(r'^[\w\+\-\s\(\)\[\]\=\"\'\.\_]*',
                                  request.GET.get('search', ''),
                                  re.UNICODE)
         query = {}
@@ -114,7 +114,7 @@ class ApiSearchEngine(APIView):
         elements_in_page = getattr(settings, 'SEARCH_ELEMENTS_IN_PAGE', 25)
         total_elements = res.count()
         if total_elements >= elements_in_page:
-            total_pages = round(total_elements / elements_in_page)
+            total_pages = math.ceil(total_elements / elements_in_page)
         else:
             total_pages = 1
 

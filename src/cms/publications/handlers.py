@@ -11,7 +11,7 @@ from cms.pages.models import Page
 
 from . models import PublicationContext
 from . settings import CMS_PUBLICATION_LIST_PREFIX_PATH
-from . utils import publication_base_filter, publication_context_base_filter
+from . utils import publication_context_base_filter
 
 
 class PublicationViewHandler(BaseContentHandler):

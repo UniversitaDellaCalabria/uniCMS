@@ -10,220 +10,173 @@ from cms.contexts.utils import handle_faulty_templates
 logger = logging.getLogger(__name__)
 
 
-def _get_placeholder_by_typestring(page, placeholder_type_str):
-    blocks = page.get_blocks()
+class AbstractPlaceholder(object):
+    collection_name = 'entries'
 
-    ph = [i for i in blocks if i.type == placeholder_type_str]
-    return ph
+    def __init__(self, context:dict, template:str):
+        self.request = context['request']
+        self.block = context.get('block', None)
+        self.page = context['page']
+        self.webpath = context['webpath']
+        self.template = template
 
+        # i18n
+        self.language = getattr(self.request, 'LANGUAGE_CODE', '')
 
-def load_carousel_placeholder(context, template):
-    _func_name = 'load_carousel_placeholder'
-    _log_msg = f'Template Tag {_func_name}'
+    @property
+    def iam(self):
+        return self.__class__.__name__
 
-    request = context['request']
-    context['webpath']
-    block = context.get('block')
-    page = context['page']
+    def hook(self):
+        pass
 
-    carousels = page.get_carousels()
-    if not carousels: return SafeString('')
+    @property
+    def log_msg(self): # pragma: no cover
+        return f'Template Tag {self.iam}'
 
-    if not block:
-        logger.warning(f'{_func_name} cannot get a block object')
-        return SafeString('')
+    def get_entry(self, entry):
+        return entry[1]
 
-    # i18n
-    language = getattr(request, 'LANGUAGE_CODE', '')
+    def is_runnable(self):
+        if not self.block: # pragma: no cover
+            logger.warning(f'{self.iam} cannot get a block object')
+            return SafeString('')
+        if not getattr(self, self.collection_name, None):  # pragma: no cover
+            return SafeString('')
 
-    # random identifier
-    N = 4
-    # using random.choices()
-    # generating random strings
-    identifier = ''.join(random.choices(string.ascii_lowercase +
-                                        string.digits, k = N))
+        return self.get_placeholders()
 
-    blocks = page.get_blocks()
-    ph = [i for i in blocks
-          if i.type ==
-          'cms.templates.blocks.CarouselPlaceholderBlock']
+    def have_valid_placeholders(self):
+        if not self.ph: # pragma: no cover
+            _msg = f"{self.log_msg} doesn't have any page {self.collection_name}"
+            logger.warning(_msg)
+            return SafeString('')
+        return True
 
-    if not ph:
-        _msg = '{} doesn\'t have any page carousel'.format(_log_msg)
-        logger.warning(_msg)
-        return SafeString('')
+    def get_placeholders(self):
+        blocks = self.page.get_blocks()
+        self.ph = [i for i in blocks
+                   if i.type == self.ph_name]
+        return self.have_valid_placeholders()
 
-    for i in zip(ph, carousels):
-        page_carousel = i[1]
-        if block.__class__.__name__ == i[0].type.split('.')[-1]:
-            # already rendered
-            if getattr(page_carousel, '_published', False):
-                continue
-            data = {'carousel_items': page_carousel.carousel.get_items(language),
-                    'carousel_identifier': identifier}
-            page_carousel._published = True
+    def __call__(self):
+        is_runnable = self.is_runnable()
+        if not is_runnable: # pragma: no cover
+            return is_runnable
 
-        return handle_faulty_templates(template, data, name=_func_name)
+        # call optional customizations
+        self.hook()
 
+        for i in zip(self.ph, getattr(self, self.collection_name, [])):
+            self.entry = self.get_entry(i)
+            if self.block.__class__.__name__ == i[0].type.split('.')[-1]:
+                # already rendered
+                if getattr(self.entry, '_published', False): # pragma: no cover
+                    continue
 
-def load_link_placeholder(context, template):
-    _func_name = 'load_link_placeholder'
-    _log_msg = f'Template Tag {_func_name}'
+                data = self.build_data_dict()
+                self.entry._published = True
 
-    context['request']
-    context['webpath']
-    block = context.get('block')
-    page = context['page']
-
-    links = page.get_links()
-    if not links: return SafeString('')
-
-    if not block:
-        logger.warning(f'{_func_name} cannot get a block object')
-        return SafeString('')
-
-    blocks = page.get_blocks()
-    ph = [i for i in blocks
-          if i.type ==
-          'cms.templates.blocks.LinkPlaceholderBlock']
-
-    if not ph:
-        _msg = '{} doesn\'t have any page link'.format(_log_msg)
-        logger.warning(_msg)
-        return SafeString('')
-
-    for i in zip(ph, links):
-        link = i[1]
-        if block.__class__.__name__ == i[0].type.split('.')[-1]:
-            # already rendered
-            if getattr(link, '_published', False):
-                continue
-            data = {'link': link.url,}
-            link._published = True
-
-        return handle_faulty_templates(template, data, name=_func_name)
+                # return first occourrence
+                return handle_faulty_templates(self.template, data, name=self.iam)
 
 
-def load_publication_content_placeholder(context, template):
-    _func_name = 'load_publication_content_placeholder'
-    _log_msg = f'Template Tag {_func_name}'
+class CarouselPlaceHolder(AbstractPlaceholder):
+    collection_name = 'carousels'
+    ph_name = 'cms.templates.blocks.CarouselPlaceholderBlock'
 
-    request = context['request']
-    webpath = context['webpath']
-    block = context.get('block')
-    page = context['page']
+    def __init__(self,
+                 context:dict, template:str = 'italia_hero_slider.html'):
+        super().__init__(context, template)
+        self.carousels = self.page.get_carousels()
 
-    pubs = page.get_publications()
-    if not pubs: return SafeString('')
+    def build_identifier(self):
+        # random identifier using random.choices()
+        N = 4
+        # generating random strings
+        choices = random.choices(string.ascii_lowercase + string.digits, k = N)
+        self.identifier = ''.join(choices)
 
-    # i18n
-    language = getattr(request, 'LANGUAGE_CODE', '')
+    def hook(self):
+        self.build_identifier()
 
-    if not block:
-        logger.warning(f'{_func_name} cannot get a block object')
-        return SafeString('')
-
-    ph = _get_placeholder_by_typestring(page,
-                                        'cms.templates.blocks.PublicationContentPlaceholderBlock')
-
-    if not ph:
-        _msg = '{} doesn\'t have any page publications'.format(_log_msg)
-        logger.warning(_msg)
-        return SafeString('')
-
-    ph_pubs = [i for i in zip(ph, pubs)]
-    for i in ph_pubs:
-        pub = i[1].publication
-        if block.__class__.__name__ == i[0].type.split('.')[-1]:
-            # already rendered
-            if getattr(pub, '_published', False):
-                continue
-
-            # i18n
-            pub.translate_as(lang=language)
-            data = {'publication': pub,
-                    'webpath': webpath}
-            pub._published = True
-            return handle_faulty_templates(template, data, name=_func_name)
+    def build_data_dict(self):
+        return {'carousel_items': self.entry.carousel.get_items(self.language),
+                'carousel_identifier': self.identifier}
 
 
-def load_media_placeholder(context, template):
-    _func_name = 'load_media_placeholder'
-    _log_msg = f'Template Tag {_func_name}'
+class LinkPlaceHolder(AbstractPlaceholder):
+    collection_name = 'links'
+    ph_name = 'cms.templates.blocks.LinkPlaceholderBlock'
 
-    request = context['request']
-    context['webpath']
-    block = context.get('block')
-    page = context['page']
+    def __init__(self,
+                 context:dict, template:str = 'italia_iframe_16by9.html'):
+        super().__init__(context, template)
+        self.links = self.page.get_links()
 
-    medias = page.get_medias()
-    if not medias: return SafeString('')
-
-    if not block:
-        logger.warning(f'{_func_name} cannot get a block object')
-        return SafeString('')
-
-    # i18n
-    getattr(request, 'LANGUAGE_CODE', '')
-
-    blocks = page.get_blocks()
-    ph = [i for i in blocks
-          if i.type ==
-          'cms.templates.blocks.MediaPlaceholderBlock']
-    if not ph:
-        _msg = '{} doesn\'t have any page media'.format(_log_msg)
-        logger.warning(_msg)
-        return SafeString('')
-
-    for i in zip(ph, medias):
-        media = i[1]
-        if block.__class__.__name__ == i[0].type.split('.')[-1]:
-            # already rendered
-            if getattr(media, '_published', False):
-                continue
-            data = {'media': media.media, 'url': media.url}
-            media._published = True
-
-        return handle_faulty_templates(template, data, name=_func_name)
+    def build_data_dict(self):
+        return {'link': self.entry.url}
 
 
-def load_menu_placeholder(context, template):
-    _func_name = 'load_menu_placeholder'
-    _log_msg = f'Template Tag {_func_name}'
+class MediaPlaceHolder(AbstractPlaceholder):
+    collection_name = 'medias'
+    ph_name = 'cms.templates.blocks.MediaPlaceholderBlock'
 
-    request = context['request']
-    context['webpath']
-    block = context.get('block')
-    page = context['page']
+    def __init__(self,
+                 context:dict, template:str = 'italia_image.html'):
+        super().__init__(context, template)
+        self.medias = self.page.get_medias()
 
-    menus = page.get_menus()
-    if not menus: return SafeString('')
+    def build_data_dict(self):
+        return {'media': self.entry.media, 'url': self.entry.url}
 
-    if not block:
-        logger.warning(f'{_func_name} cannot get a block object')
-        return SafeString('')
 
-    # i18n
-    language = getattr(request, 'LANGUAGE_CODE', '')
+class MenuPlaceHolder(AbstractPlaceholder):
+    collection_name = 'menus'
+    ph_name = 'cms.templates.blocks.MenuPlaceholderBlock'
 
-    blocks = page.get_blocks()
-    ph = [i for i in blocks
-          if i.type ==
-          'cms.templates.blocks.MenuPlaceholderBlock']
-    if not ph:
-        _msg = '{} doesn\'t have any page menu'.format(_log_msg)
-        logger.warning(_msg)
-        return SafeString('')
+    def __init__(self,
+                 context:dict, template:str = 'italia_main_menu.html'):
+        super().__init__(context, template)
+        self.menus = self.page.get_menus()
 
-    for i in zip(ph, menus):
-        menu = i[1]
-        if block.__class__.__name__ == i[0].type.split('.')[-1]:
-            # already rendered
-            if getattr(menu, '_published', False):
-                continue
-            items = menu.menu.get_items(lang=language,
-                                        parent__isnull=True)
-            data = {'items': items}
-            menu._published = True
+    def build_data_dict(self):
+        return {'items': self.entry.menu.get_items(lang=self.language,
+                                                   parent__isnull=True)}
 
-        return handle_faulty_templates(template, data, name=_func_name)
+
+class PublicationPlaceHolder(AbstractPlaceholder):
+    collection_name = 'publications'
+    ph_name = 'cms.templates.blocks.PublicationContentPlaceholderBlock'
+
+    def __init__(self,
+                 context:dict, template:str = 'ph_publication_style_1.html'):
+        super().__init__(context, template)
+        self.publications = self.page.get_publications()
+
+    def get_entry(self, entry):
+        return entry[1].publication
+
+    def build_data_dict(self):
+        self.entry.translate_as(lang=self.language)
+        return {'publication': self.entry, 'webpath': self.webpath}
+
+
+def load_media_placeholder(*args, **kwargs):
+    return MediaPlaceHolder(*args, **kwargs)()
+
+
+def load_menu_placeholder(*args, **kwargs):
+    return MenuPlaceHolder(*args, **kwargs)()
+
+
+def load_carousel_placeholder(*args, **kwargs):
+    return CarouselPlaceHolder(*args, **kwargs)()
+
+
+def load_link_placeholder(*args, **kwargs):
+    return LinkPlaceHolder(*args, **kwargs)()
+
+
+def load_publication_content_placeholder(*args, **kwargs):
+    return PublicationPlaceHolder(*args, **kwargs)()

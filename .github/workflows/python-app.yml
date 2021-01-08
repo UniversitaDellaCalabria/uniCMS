@@ -74,7 +74,7 @@ jobs:
         coverage erase
         coverage run ./manage.py test --settings=unicms.settingslocal_test cms
         coverage report -m
-        coverage report --fail-under=91
+        coverage report --fail-under=97
         coverage xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1

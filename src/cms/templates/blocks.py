@@ -3,7 +3,10 @@ import json
 from django.template import Context, Template
 from django.utils.safestring import mark_safe
 
-from cms.templates.placeholders import SafeString, load_carousel_placeholder, load_link_placeholder, load_media_placeholder, load_menu_placeholder, load_publication_content_placeholder
+from cms.templates.placeholders import (SafeString, load_carousel_placeholder,
+                                        load_link_placeholder, load_media_placeholder,
+                                        load_menu_placeholder,
+                                        load_publication_content_placeholder)
 
 
 class AbstractBlock(object):
@@ -33,7 +36,7 @@ class HtmlBlock(AbstractBlock):
 
 
 class JSONBlock(AbstractBlock):
-    def __init__(self, content='', **kwargs):
+    def __init__(self, content='{}', **kwargs):
         super(JSONBlock, self).__init__(**kwargs)
         self.content = json.loads(content)
 

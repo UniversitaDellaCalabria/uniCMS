@@ -28,7 +28,7 @@ def blocks_in_position(context, section):
     if isinstance(sections_dict.get(section), tuple):
         sub_sections = sections_dict.get(section)
         if not sub_sections: # pragma: no cover
-            logger.warning(f'Section {section} hasn\'t sub-sections')
+            logger.warning(f"Section {section} hasn't sub-sections")
             return False
         for sub_section in sub_sections:
             page_blocks = page.get_blocks(section=sub_section[0])

@@ -47,7 +47,7 @@ def contextualize_template(template_fname, page):
     # do additional preprocessing on the template here ...
     # get/extends the base template of the page context
     base_template_tag = f'{{% extends "{page.base_template.template_file}" %}}'
-    regexp = "\{\%\s*extends\s*\t*[\'\"a-zA-Z0-9\_\-\.]*\s*\%\}"
+    regexp = r"\{\%\s*extends\s*\t*[\'\"a-zA-Z0-9\_\-\.]*\s*\%\}"
     ext_template_sources = re.sub(regexp, base_template_tag, template_sources)
     # end string processing
     return ext_template_sources

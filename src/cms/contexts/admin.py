@@ -1,4 +1,3 @@
-
 from django.contrib import admin
 
 from . models import EditorialBoardEditors, EditorialBoardLocks, WebPath, WebSite

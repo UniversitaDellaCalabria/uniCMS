@@ -1,3 +1,4 @@
+import math
 from copy import deepcopy as copy
 
 from django.conf import settings
@@ -99,7 +100,7 @@ class Paginator(object):
 
     def paginate(self):
         if self.count >= CMS_PAGE_SIZE:
-            self.num_pages = round(self.count / CMS_PAGE_SIZE)
+            self.num_pages = math.ceil(self.count / CMS_PAGE_SIZE)
         elif self.count:
             self.num_pages = 1
 

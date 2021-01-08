@@ -1,4 +1,4 @@
-import time # debug wait
+import logging
 
 # from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
@@ -29,6 +29,8 @@ from cms.publications.utils import publication_context_base_filter
 CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
                                   contexts_settings.CMS_CONTEXT_PERMISSIONS)
 
+logger = logging.getLogger(__name__)
+
 
 # TODO - better get with filters
 class PublicationDetail(generics.RetrieveAPIView):
@@ -38,6 +40,12 @@ class PublicationDetail(generics.RetrieveAPIView):
                                           state='published')
     serializer_class = PublicationSerializer
     lookup_field = 'slug'
+
+    def get_queryset(self):
+        self.request.user
+        for pub in super(PublicationDetail, self).get_queryset():
+            if pub.is_publicable:
+                return pub
 
 
 @method_decorator(detect_language, name='dispatch')
@@ -57,12 +65,12 @@ class ApiPublicationsByContext(APIView):
         if category_name:
             query_params['publication__category__name__iexact'] = category_name
         pubcontx = PublicationContext.objects.filter(**query_params)
-        pubcontx.count()
         paginator = Paginator(queryset=pubcontx, request=request)
 
         try:
             page_num = int(request.GET.get('page_number', 1))
-        except: # pragma: no cover
+        except Exception as e: # pragma: no cover
+            logger.error(f'API {self.__class__.__name__} paginator number: {e}')
             raise ValidationError('Wrong page_number value')
 
         paged = paginator.get_page(page_num)
@@ -83,10 +91,6 @@ class ApiContext(APIView): # pragma: no cover
         return Response(pubs)
 
 
-# --------------------------------------------
-
-
-# @method_decorator(login_required, name='dispatch')
 @method_decorator(staff_member_required, name='dispatch')
 class EditorWebsites(APIView):
     """
@@ -295,6 +299,7 @@ class EditorWebsiteWebpathNew(APIView):
         return HttpResponseRedirect(url)
 
 
+
 @method_decorator(staff_member_required, name='dispatch')
 class EditorWebsiteWebpathDelete(APIView):
     """
@@ -354,8 +359,8 @@ class EditorWebsitePages(APIView):
         result['site_domain'] = site.domain
         result['pages'] = {}
 
-        getattr(request, 'LANGUAGE_CODE', '')
-        dict(CMS_CONTEXT_PERMISSIONS)
+        lang = getattr(request, 'LANGUAGE_CODE', '')
+        context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
         pages = {}
 
         pages_list = Page.objects.filter(webpath__site=site)
@@ -387,7 +392,7 @@ class EditorWebsitePage(APIView):
                                  pk=page_id,
                                  webpath__site__pk=site_id,
                                  webpath__site__is_active=True)
-        dict(CMS_CONTEXT_PERMISSIONS)
+        context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
         result = {}
         result['site_name'] = page.webpath.site.name
         result['site_domain'] = page.webpath.site.domain

@@ -365,7 +365,7 @@ class Category(TimeStampedModel, CreatedModifiedBy):
         res = ""
         try:
             res = f'<img width={CMS_IMAGE_CATEGORY_SIZE} src="{self.image.url}"/>'
-        except ValueError as e:  # pragma: no cover
+        except ValueError:  # pragma: no cover
             # *** ValueError: The 'image' attribute has no file associated with it.
             res = f"{settings.STATIC_URL}images/no-image.jpg"
         return mark_safe(res) # nosec

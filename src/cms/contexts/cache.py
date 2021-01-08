@@ -33,7 +33,7 @@ def make_cache_key(request):
     up = urllib.parse.urlparse(v)
     q = urllib.parse.parse_qs(up.query)
     qs = OrderedDict(sorted(q.items()))
-    if not 'lang' in qs.keys():
+    if 'lang' not in qs.keys():
         qs['lang'] = [request.LANGUAGE_CODE]
     qs_ser = json.dumps(dict(qs))
 

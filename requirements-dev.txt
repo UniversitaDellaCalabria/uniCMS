@@ -1,3 +1,5 @@
+autoflake
+autopep8
 coverage
 black
 flake8

@@ -23,8 +23,7 @@ CMS_APP_REGEXP_URLPATHS_LOADED = {import_string(k):v
 
 @unicms_cache
 def cms_dispatch(request):
-    requested_site = re.match('^[a-zA-Z0-9\.\-\_]*',
-                              # request.headers.get('Host', '')
+    requested_site = re.match(r'^[a-zA-Z0-9\.\-\_]*',
                               request.get_host()).group()
     website = get_object_or_404(WebSite, domain = requested_site)
 

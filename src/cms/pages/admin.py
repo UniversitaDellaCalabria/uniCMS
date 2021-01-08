@@ -10,7 +10,6 @@ from django.utils.translation import gettext_lazy as _
 from cms.contexts.admin import AbstractCreatedModifiedBy
 from . admin_inlines import *
 from . models import *
-from . forms import *
 from . utils import copy_page_as_draft
 
 logger = logging.getLogger(__name__)

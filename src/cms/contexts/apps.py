@@ -8,4 +8,4 @@ class CmsContextsConfig(AppConfig):
 
     def ready(self):
         # that actually loads the signals
-        pass
+        import cms.contexts.signals # noqa
