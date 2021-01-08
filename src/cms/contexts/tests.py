@@ -1,9 +1,7 @@
 import logging
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase
-from django.utils import timezone
 
 
 from . exceptions import ReservedWordException
@@ -61,7 +59,7 @@ class ContextUnitTest(TestCase):
     @classmethod
     def create_editorialboard_user(cls, **kwargs):
         if not kwargs:
-            webpath = cls.create_webpath()
+            cls.create_webpath()
             kwargs =  {'user': cls.create_user(),
                        'permission': '1',
                        'webpath': cls.create_webpath(),

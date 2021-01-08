@@ -2,15 +2,11 @@ import logging
 import os
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
-from django.test.client import RequestFactory
-from django.urls import reverse
-from django.utils import timezone
+from django.test import TestCase
 
 from shutil import copyfile
 
-from . models import *
+from . models import Media, MediaCollection, MediaCollectionItem, ValidationError, validate_file_size, validate_image_size_ratio
 from . validators import validate_file_extension
 from . settings import FILE_MAX_SIZE
 

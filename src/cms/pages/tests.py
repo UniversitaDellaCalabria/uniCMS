@@ -1,7 +1,6 @@
 import logging
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -15,7 +14,7 @@ from cms.pages.templatetags.unicms_pages import load_link, load_page_title
 from cms.templates.tests import TemplateUnitTest
 from cms.templates.templatetags.unicms_templates import blocks_in_position
 
-from . models import *
+from . models import Category, Page, PageBlock, PageCarousel, PageLink, PageLocalization, PageMenu, PageRelated
 from . utils import copy_page_as_draft
 
 
@@ -298,7 +297,7 @@ class PageUnitTest(TestCase):
 
 
     def test_show_template_blocks_sections(self):
-        obj = self.create_page()
+        self.create_page()
         user = ContextUnitTest.create_user(is_staff=1)
         self.client.force_login(user)
         url = reverse('unicms:cms_dispatch')
@@ -308,7 +307,7 @@ class PageUnitTest(TestCase):
 
 
     def show_cms_draft_mode(self):
-        obj = self.create_page()
+        self.create_page()
         user = ContextUnitTest.create_user(is_staff=1)
         self.client.force_login(user)
         url = reverse('unicms:cms_dispatch')

@@ -144,7 +144,7 @@ for i in blocks_templates_files[0]:
     CMS_BLOCK_TEMPLATES.append((fname, fname))
 
 CMS_PAGE_TEMPLATES = []
-pages_templates_files = [glob(f"{CMS_TEMPLATES_FOLDER}/pages/*.html") ]
+pages_templates_files = [glob(f"{CMS_TEMPLATES_FOLDER}/pages/*.html")]
 for i in pages_templates_files[0]:
     fname = i.split(os.path.sep)[-1]
     CMS_PAGE_TEMPLATES.append((fname, fname))

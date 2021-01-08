@@ -2,14 +2,10 @@ import logging
 import re
 
 from django.conf import settings
-from django.contrib.sites.shortcuts import get_current_site
-from django.http import (HttpResponse,
-                         Http404,
-                         HttpResponseBadRequest,
+from django.http import (Http404,
                          HttpResponseRedirect)
 from django.shortcuts import render, get_object_or_404
 from django.utils.module_loading import import_string
-from django.utils.translation import gettext_lazy as _
 
 from cms.pages.models import Page
 from urllib.parse import urlparse

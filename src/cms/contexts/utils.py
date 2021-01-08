@@ -3,7 +3,6 @@ import re
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import get_user_model
 from django.utils import translation
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext as _

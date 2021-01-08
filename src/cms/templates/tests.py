@@ -1,14 +1,8 @@
 import logging
-import urllib
 
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
-from django.test.client import RequestFactory
-from django.urls import reverse
-from django.utils import timezone
+from django.test import TestCase
 
-from . models import *
+from . models import PageTemplate, PageTemplateBlock, TemplateBlock
 from . utils import get_unicms_templates
 
 

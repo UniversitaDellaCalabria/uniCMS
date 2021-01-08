@@ -30,7 +30,7 @@ def to_webp(fobj):
     byte_io = BytesIO()
     im = Image.open(fobj)
     try:
-        im.save(byte_io, format = "WebP",  
+        im.save(byte_io, format = "WebP",
                 optimize=True, quality=66)
     except Exception as e: # pragma: no cover
         logger.exception(f'Media Hook image_optimized failed: {e}')

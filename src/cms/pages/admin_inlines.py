@@ -2,7 +2,7 @@ import nested_admin
 
 from django.contrib import admin
 
-from . models import *
+from . models import Page, PageBlock, PageCarousel, PageLink, PageLocalization, PageMedia, PageMenu, PagePublication, PageRelated
 
 
 class PageInline(admin.TabularInline):

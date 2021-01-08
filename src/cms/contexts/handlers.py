@@ -1,6 +1,3 @@
-from django.conf import settings
-from django.template import Template
-from django.template.loader import get_template
 
 from . models import WebPath
 
@@ -12,7 +9,7 @@ class BaseContentHandler(object):
                  webpath:WebPath = None,
                  template_fname:str = None,
                  **kwargs
-        ): # pragma: no cover
+            ): # pragma: no cover
         """
         Checks if a path belongs to a CMS specialized application
         :type webpath: cmscontext.model.WebPath
@@ -37,7 +34,6 @@ class BaseContentHandler(object):
         for k,v in kwargs.items():
             setattr(self, k, v)
 
-
     def match(self) -> bool: # pragma: no cover
         """
         check if settings.CMS_PUBLICATION_URLPATH_REGEXP matches
@@ -45,20 +41,17 @@ class BaseContentHandler(object):
         """
         raise NotImplementedError()
 
-
     def get(self): # pragma: no cover
         """
             returns a queryset with the results
         """
         raise NotImplementedError()
 
-
     def url(self): # pragma: no cover
         """
             returns an absolute url to the render view
         """
         raise NotImplementedError()
-
 
     def as_view(self): # pragma: no cover
         """

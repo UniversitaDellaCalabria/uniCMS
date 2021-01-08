@@ -5,8 +5,6 @@ from django.conf import settings
 
 import cms.templates.settings as app_settings
 
-from cms.templates.utils import import_string_block
-
 
 logger = logging.getLogger(__name__)
 register = template.Library()
@@ -22,9 +20,9 @@ def supported_languages(): # pragma: no cover
 
 @register.simple_tag(takes_context=True)
 def blocks_in_position(context, section):
-    request = context['request']
+    context['request']
     page = context['page']
-    webpath = context['webpath']
+    context['webpath']
 
     sections_dict = dict(CMS_TEMPLATE_BLOCK_SECTIONS)
     if isinstance(sections_dict.get(section), tuple):

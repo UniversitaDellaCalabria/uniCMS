@@ -22,7 +22,7 @@ def load_carousel_placeholder(context, template):
     _log_msg = f'Template Tag {_func_name}'
 
     request = context['request']
-    webpath = context['webpath']
+    context['webpath']
     block = context.get('block')
     page = context['page']
 
@@ -45,7 +45,7 @@ def load_carousel_placeholder(context, template):
 
     blocks = page.get_blocks()
     ph = [i for i in blocks
-          if i.type == \
+          if i.type ==
           'cms.templates.blocks.CarouselPlaceholderBlock']
 
     if not ph:
@@ -70,8 +70,8 @@ def load_link_placeholder(context, template):
     _func_name = 'load_link_placeholder'
     _log_msg = f'Template Tag {_func_name}'
 
-    request = context['request']
-    webpath = context['webpath']
+    context['request']
+    context['webpath']
     block = context.get('block')
     page = context['page']
 
@@ -84,7 +84,7 @@ def load_link_placeholder(context, template):
 
     blocks = page.get_blocks()
     ph = [i for i in blocks
-          if i.type == \
+          if i.type ==
           'cms.templates.blocks.LinkPlaceholderBlock']
 
     if not ph:
@@ -124,7 +124,7 @@ def load_publication_content_placeholder(context, template):
         return SafeString('')
 
     ph = _get_placeholder_by_typestring(page,
-            'cms.templates.blocks.PublicationContentPlaceholderBlock')
+                                        'cms.templates.blocks.PublicationContentPlaceholderBlock')
 
     if not ph:
         _msg = '{} doesn\'t have any page publications'.format(_log_msg)
@@ -152,7 +152,7 @@ def load_media_placeholder(context, template):
     _log_msg = f'Template Tag {_func_name}'
 
     request = context['request']
-    webpath = context['webpath']
+    context['webpath']
     block = context.get('block')
     page = context['page']
 
@@ -164,11 +164,11 @@ def load_media_placeholder(context, template):
         return SafeString('')
 
     # i18n
-    language = getattr(request, 'LANGUAGE_CODE', '')
+    getattr(request, 'LANGUAGE_CODE', '')
 
     blocks = page.get_blocks()
     ph = [i for i in blocks
-          if i.type == \
+          if i.type ==
           'cms.templates.blocks.MediaPlaceholderBlock']
     if not ph:
         _msg = '{} doesn\'t have any page media'.format(_log_msg)
@@ -192,7 +192,7 @@ def load_menu_placeholder(context, template):
     _log_msg = f'Template Tag {_func_name}'
 
     request = context['request']
-    webpath = context['webpath']
+    context['webpath']
     block = context.get('block')
     page = context['page']
 
@@ -208,7 +208,7 @@ def load_menu_placeholder(context, template):
 
     blocks = page.get_blocks()
     ph = [i for i in blocks
-          if i.type == \
+          if i.type ==
           'cms.templates.blocks.MenuPlaceholderBlock']
     if not ph:
         _msg = '{} doesn\'t have any page menu'.format(_log_msg)

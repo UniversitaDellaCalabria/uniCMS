@@ -4,10 +4,9 @@ from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.models import *
 from cms.medias.models import Media, MediaCollection, AbstractMedia
-from cms.pages.models import AbstractPublicable, Category, PAGE_STATES
+from cms.pages.models import AbstractPublicable, PAGE_STATES
 from cms.templates.models import (TemplateBlock,
                                   ActivableModel,
-                                  PageTemplate,
                                   SectionAbstractModel,
                                   SortableModel,
                                   TimeStampedModel)
@@ -27,8 +26,8 @@ class AbstractPublication(TimeStampedModel, ActivableModel):
     subheading = models.TextField(max_length=1024,
                                   null=True,blank=True,
                                   help_text=_("Strap line (press)"))
-    content =  models.TextField(null=True,blank=True,
-                                help_text=_('Content'))
+    content = models.TextField(null=True,blank=True,
+                               help_text=_('Content'))
     content_type = models.CharField(choices=CONTENT_TYPES,
                                     null=False, blank=False,
                                     max_length=33,
@@ -78,7 +77,7 @@ class Publication(AbstractPublication, AbstractPublicable,
 
     def image_url(self):
         if self.presentation_image:
-            image_path =  self.presentation_image.file
+            image_path = self.presentation_image.file
         else: # pragma: no cover
             image_path = self.category.first().image
         return sanitize_path(f'{settings.MEDIA_URL}/{image_path}')
@@ -133,43 +132,36 @@ class Publication(AbstractPublication, AbstractPublicable,
                 PublicationLocalization.objects.filter(publication=self,
                                                        is_active=True)]
 
-
     def title2slug(self):
         return slugify(self.title)
-
 
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = self.title2slug()
         super(self.__class__, self).save(*args, **kwargs)
 
-
     def get_attachments(self):
         return PublicationAttachment.objects.filter(publication=self,
                                                     is_active=True).\
                                              order_by('order')
-
 
     def get_publication_context(self, webpath=None):
         if not webpath: return None
         pub_context = PublicationContext.objects.filter(publication=self,
                                                         webpath=webpath,
                                                         is_active=True).\
-                                                        first()
+            first()
         return pub_context
-
 
     def url(self, webpath=None):
         pub_context = self.get_publication_context(webpath=webpath)
         if not pub_context: return ''
         return pub_context.url
 
-
     def get_url_list(self, webpath=None, category_name=None):
         pub_context = self.get_publication_context(webpath=webpath)
         if not pub_context: return ''
         return pub_context.get_url_list(category_name=category_name)
-
 
     def __str__(self):
         return '{} {}'.format(self.title, self.state)
@@ -182,7 +174,7 @@ class PublicationContext(TimeStampedModel, ActivableModel,
                                     on_delete=models.CASCADE)
     webpath = models.ForeignKey(WebPath, on_delete=models.CASCADE)
     in_evidence_start = models.DateTimeField(null=True,blank=True)
-    in_evidence_end   = models.DateTimeField(null=True,blank=True)
+    in_evidence_end = models.DateTimeField(null=True,blank=True)
 
     class Meta:
         verbose_name_plural = _("Publication Contexts")
@@ -194,7 +186,7 @@ class PublicationContext(TimeStampedModel, ActivableModel,
 
     def get_url_list(self, category_name=None):
         list_prefix = getattr(settings, 'CMS_PUBLICATION_LIST_PREFIX_PATH',
-                                         CMS_PUBLICATION_LIST_PREFIX_PATH)
+                              CMS_PUBLICATION_LIST_PREFIX_PATH)
         url = sanitize_path(f'{self.webpath.get_full_path()}/{list_prefix}')
         if category_name:
             url += f'/?category_name={category_name}'
@@ -234,12 +226,13 @@ class PublicationLink(TimeStampedModel):
         return '{} {}'.format(self.publication, self.name)
 
 
-class PublicationBlock(SectionAbstractModel,TimeStampedModel, 
+class PublicationBlock(SectionAbstractModel,TimeStampedModel,
                        ActivableModel, SortableModel):
     publication = models.ForeignKey(Publication, null=False, blank=False,
                                     on_delete=models.CASCADE)
     block = models.ForeignKey(TemplateBlock, null=False, blank=False,
                               on_delete=models.CASCADE)
+
     class Meta:
         verbose_name_plural = _("Publication Page Block")
 
@@ -254,7 +247,7 @@ class PublicationGallery(TimeStampedModel, ActivableModel, SortableModel):
     publication = models.ForeignKey(Publication,
                                     on_delete=models.CASCADE)
     collection = models.ForeignKey(MediaCollection,
-                                    on_delete=models.CASCADE)
+                                   on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = _("Publication Image Gallery")
@@ -265,8 +258,8 @@ class PublicationGallery(TimeStampedModel, ActivableModel, SortableModel):
 
 class PublicationRelated(TimeStampedModel, SortableModel, ActivableModel):
     publication = models.ForeignKey(Publication, null=False, blank=False,
-                             related_name='parent_page',
-                             on_delete=models.CASCADE)
+                                    related_name='parent_page',
+                                    on_delete=models.CASCADE)
     related = models.ForeignKey(Publication, null=False, blank=False,
                                 on_delete=models.CASCADE,
                                 related_name="related_page")
@@ -292,15 +285,14 @@ class PublicationAttachment(TimeStampedModel, SortableModel, ActivableModel,
                                     related_name='page_attachment',
                                     on_delete=models.CASCADE)
     name = models.CharField(max_length=60, blank=True, null=True,
-                    help_text=_("Specify the container "
-                                "section in the template where "
-                                "this block would be rendered."))
+                            help_text=_("Specify the container "
+                                        "section in the template where "
+                                        "this block would be rendered."))
     file = models.FileField(upload_to=publication_attachment_path)
     description = models.TextField()
 
     class Meta:
         verbose_name_plural = _("Publication Attachments")
-
 
     def __str__(self):
         return '{} {} ({})'.format(self.publication, self.name,
@@ -310,8 +302,8 @@ class PublicationAttachment(TimeStampedModel, SortableModel, ActivableModel,
 class PublicationLocalization(TimeStampedModel, ActivableModel,
                               CreatedModifiedBy):
     title = models.CharField(max_length=256,
-                               null=False, blank=False,
-                               help_text=_("Heading, Headline"))
+                             null=False, blank=False,
+                             help_text=_("Heading, Headline"))
     publication = models.ForeignKey(Publication,
                                     null=False, blank=False,
                                     on_delete=models.CASCADE)
@@ -322,10 +314,10 @@ class PublicationLocalization(TimeStampedModel, ActivableModel,
                                   null=True,blank=True,
                                   help_text=_("Strap line (press)"))
     content = models.TextField(null=True,blank=True,
-                                        help_text=_('Content'))
+                               help_text=_('Content'))
+
     class Meta:
         verbose_name_plural = _("Publication Localizations")
 
     def __str__(self):
         return '{} {}'.format(self.publication, self.language)
-

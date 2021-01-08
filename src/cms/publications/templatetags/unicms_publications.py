@@ -1,14 +1,10 @@
 import logging
 
 from django import template
-from django.conf import settings
-from django.template.loader import render_to_string
 from django.utils import timezone
-from django.utils.module_loading import import_string
 from django.utils.safestring import SafeString
 
 from cms.contexts.utils import handle_faulty_templates
-from cms.pages.models import Category
 from cms.publications.models import Publication, PublicationContext
 
 
@@ -50,7 +46,7 @@ def load_publication(context, template, publication_id):
 
     pub = Publication.objects.filter(pk=publication_id,
                                      is_active=True).\
-                                     first()
+        first()
 
     if not pub:
         _msg = '{} cannot find publication id {}'.format(_log_msg,
@@ -79,8 +75,8 @@ def load_publications_preview(context, template,
                                     tags_csv = tags_csv)
 
     pub_in_context = PublicationContext.objects.\
-                        filter(**query_params).\
-                        order_by('order')[0:number]
+        filter(**query_params).\
+        order_by('order')[0:number]
 
     if not pub_in_context: return SafeString('')
 

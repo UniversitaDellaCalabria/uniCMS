@@ -48,6 +48,10 @@ class WebSite(models.Model):
     class Meta:
         verbose_name_plural = _("Sites")
 
+    def serialize(self):
+        return {'name': self.name,
+                'domain': self.domain}
+
     def __str__(self):
         return self.domain
 
@@ -80,7 +84,7 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
     fullpath = models.TextField(max_length=2048, null=True, blank=True,
                                 help_text=_("final path prefixed with the "
                                             "parent path"))
-    is_active   = models.BooleanField()
+    is_active = models.BooleanField()
 
     class Meta:
         verbose_name_plural = _("Site Contexts (WebPaths)")
@@ -101,7 +105,7 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
     @property
     def redirect_url(self):
         """
-        if this webpath is an alias this attribute 
+        if this webpath is an alias this attribute
         will be valued with a redirect url
         """
         if self.alias:
@@ -117,12 +121,12 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
     def save(self, *args, **kwargs):
         # manage aliases
         if self.alias:
-            self.site = self.alias.site         
-            
+            self.site = self.alias.site
+
         # alias or alias_url
         if self.alias and self.alias_url: # pragma: no cover
             self.alias = None
-        
+
         # store a correct fullpath
         self.path = append_slash(self.path)
         self.path = sanitize_path(self.path)
@@ -134,7 +138,7 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
             fullpath = self.redirect_url
         else:
             fullpath = self.path
-        
+
         for reserved_word in settings.CMS_HANDLERS_PATHS:
             if reserved_word in fullpath:
                 _msg = f'{fullpath} matches with the reserved word: {reserved_word}'
@@ -147,6 +151,21 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
         # update also its childs
         for child_path in WebPath.objects.filter(parent=self):
             child_path.save()
+
+    def get_parent_id(self):
+        return self.parent.pk if self.parent else None
+
+    def get_parent_fullpath(self):
+        return self.parent.get_full_path() if self.parent else ''
+
+    def serialize(self):
+        return {"site_name": self.site.name,
+                "site_domain": self.site.domain,
+                "name": self.name,
+                "parent_id": self.get_parent_id(),
+                "parent_fullpath": self.get_parent_fullpath(),
+                "fullpath": self.get_full_path(),
+                "is_active": self.is_active}
 
     def __str__(self):
         return '{} @ {}{}'.format(self.name, self.site, self.get_full_path())
@@ -165,10 +184,49 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
     webpath = models.ForeignKey(WebPath,
                                 on_delete=models.CASCADE,
                                 null=True, blank=True)
-    is_active   = models.BooleanField()
+    is_active = models.BooleanField()
 
     class Meta:
         verbose_name_plural = _("Editorial Board Users")
+
+    def serialize(self):
+        return {'webpath': f'{self.webpath}',
+                'permission': self.permission}
+
+    @staticmethod
+    def get_permission(webpath, user, check_all=True, verbose=False):
+        if not webpath: return False
+        # if not webpath.is_active: return False
+        if not user: return False
+        permissions = EditorialBoardEditors.objects.filter(user=user,
+                                                           is_active=True)
+        webpath_permissions = permissions.filter(webpath=webpath)
+
+        result = 0
+
+        # search for user permissions in specific webpath
+        for webpath_permission in webpath_permissions:
+            permission = int(webpath_permission.permission)
+            if permission > result: result = permission
+        if result > 0: return result
+
+        # search for user permissions in webpath parents
+        # select only permissions on descendants (2,5,8)
+        permission = EditorialBoardEditors.get_permission(webpath=webpath.parent,
+                                                          user=user,
+                                                          check_all=False)
+        if permission == 2 or permission == 5 or permission == 8:
+            return permission
+
+        # search for user permissions
+        if check_all:
+            all_permissions = permissions.filter(webpath=None)
+            for all_permission in all_permissions:
+                permission = int(all_permission.permission)
+                if permission > result: result = permission
+
+            return result if result > 0 else False
+        return False
 
     def __str__(self):
         if getattr(self, 'webpath'):
@@ -177,7 +235,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
             return '{} {}'.format(self.user, self.permission)
 
 
-### DEPRECATED - TODO - mode to Redis TTL
+# DEPRECATED - TODO - mode to Redis TTL
 class EditorialBoardLocks(models.Model):
     content_type = models.ForeignKey(
         ContentType,
@@ -187,8 +245,8 @@ class EditorialBoardLocks(models.Model):
     )
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey()
-    
-    locked_by = models.ForeignKey(get_user_model(), 
+
+    locked_by = models.ForeignKey(get_user_model(),
                                   on_delete=models.CASCADE,
                                   null=True, blank=True)
     locked_time = models.DateTimeField(null=True, blank=True)
@@ -196,12 +254,12 @@ class EditorialBoardLocks(models.Model):
     class Meta:
         verbose_name_plural = _("Editorial Board Locks")
         ordering = ('-locked_time',)
-        
+
     @property
     def is_active(self): # pragma: no cover
-        now = timezone.localtime() 
+        now = timezone.localtime()
         unlock_time = self.locked_time + timezone.timedelta(minutes = 1)
         return now < unlock_time
-    
+
     def __str__(self): # pragma: no cover
         return f'{self.content_type} {self.object_id}'

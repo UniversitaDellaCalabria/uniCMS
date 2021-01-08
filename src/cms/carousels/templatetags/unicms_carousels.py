@@ -47,7 +47,7 @@ def load_carousel(context, section, template, carousel_id=None):
         page_carousel = PageCarousel.objects.filter(section=section,
                                                     is_active=True,
                                                     page__webpath=context['webpath']).\
-                                                    first()
+            first()
         if not page_carousel: # pragma: no cover
             _msg = '{} cannot find carousel in page {} and section {}'\
                    .format(_func_name, page, section)

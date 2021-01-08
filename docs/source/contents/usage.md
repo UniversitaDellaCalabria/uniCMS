@@ -4,14 +4,17 @@ uniCMS Components
 #### Permissions
 
 ````
-CMS_CONTEXT_PERMISSIONS = (('1', _('edit created by them in their own context')),
-                           ('2', _('edit all pages in their own context')),
-                           ('3', _('edit all pages in their own context and descendants')),
-                           ('4', _('translate all pages in their own context')),
-                           ('5', _('translate all pages in their own context and descendants')),
-                           ('6', _('publish created by them in their own context')),
-                           ('7', _('publish all pages in their own context')),
-                           ('8', _('publish all pages in their own context and descendants')),
+CMS_CONTEXT_PERMISSIONS = (
+                           ('1', _('can translate content in their own context')),
+                           ('2', _('can translate content in their own context and descendants')),
+
+                           ('3', _('can edit content created by them in their own context')),
+                           ('4', _('can edit content in their own context')),
+                           ('5', _('can edit content in their own context and descendants')),
+
+                           ('6', _('can publish content created by them in their own context')),
+                           ('7', _('can publish content in their own context')),
+                           ('8', _('can publish content in their own context and descendants')),
                            )
 ````
 

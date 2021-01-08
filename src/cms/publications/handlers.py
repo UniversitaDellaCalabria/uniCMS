@@ -1,23 +1,16 @@
-import re
 
 from django.conf import settings
 from django.http import (HttpResponse,
-                         Http404,
-                         HttpResponseBadRequest,
-                         HttpResponseRedirect)
-from django.shortcuts import render, get_object_or_404
+                         Http404)
 from django.template import Template, Context
-from django.template.loader import get_template, render_to_string
-from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.handlers import BaseContentHandler
-from cms.contexts.models import WebPath
 from cms.contexts.utils import contextualize_template, sanitize_path
-from cms.pages.models import Category, Page
+from cms.pages.models import Page
 
 from . models import PublicationContext
-from . settings import *
+from . settings import CMS_PUBLICATION_LIST_PREFIX_PATH
 from . utils import publication_base_filter, publication_context_base_filter
 
 
@@ -66,14 +59,13 @@ class PublicationViewHandler(BaseContentHandler):
     @property
     def parent_path_prefix(self):
         return getattr(settings, 'CMS_PUBLICATION_LIST_PREFIX_PATH',
-                                  CMS_PUBLICATION_LIST_PREFIX_PATH)
+                       CMS_PUBLICATION_LIST_PREFIX_PATH)
 
     @property
     def parent_url(self):
         url = f'{self.webpath.get_full_path()}/{self.parent_path_prefix}/'
         return sanitize_path(url)
 
-    
     @property
     def breadcrumbs(self):
         leaf = (self.pub_context.url, getattr(self.pub_context.publication, 'title'))
@@ -93,8 +85,8 @@ class PublicationListHandler(BaseContentHandler):
     def as_view(self):
         match_dict = self.match.groupdict()
         page = Page.objects.filter(is_active=True,
-                           webpath__site=self.website,
-                           webpath__fullpath=match_dict.get('webpath', '/')).first()
+                                   webpath__site=self.website,
+                                   webpath__fullpath=match_dict.get('webpath', '/')).first()
         if not page: # pragma: no cover
             raise Http404('Unknown Web Page')
         data = {'request': self.request,

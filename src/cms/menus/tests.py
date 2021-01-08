@@ -1,11 +1,8 @@
 import logging
 
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.test import RequestFactory, TestCase
-from django.utils import timezone
+from django.test import TestCase
 
-from . models import *
+from . models import NavigationBar, NavigationBarItem, NavigationBarItemLocalization
 
 
 logger = logging.getLogger(__name__)

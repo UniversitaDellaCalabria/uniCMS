@@ -1,7 +1,4 @@
-from django.conf import settings
-from django.conf.urls.static import static
-from django.contrib import admin
-from django.urls import re_path, path, include
+from django.urls import path
 
 from cms.menus.api_views import ApiMenu
 from . import api_views
@@ -33,3 +30,35 @@ urlpatterns += path(f'api/menu',
 urlpatterns += path(f'api/news/view/<str:slug>',
                     api_views.PublicationDetail.as_view(),
                     name='publication-detail'),
+
+# -----------------------------------------------------------------------
+
+
+urlpatterns += path(f'api/editorial-board/site/list/',
+                    api_views.EditorWebsites.as_view(),
+                    name='editorial-board-site-list'),
+
+urlpatterns += path(f'api/editorial-board/site/<int:site_id>/webpath/list/',
+                    api_views.EditorWebsiteWebpaths.as_view(),
+                    name='editorial-board-site-webpath-list'),
+
+urlpatterns += path(f'api/editorial-board/site/<int:site_id>/webpath/<int:webpath_id>/view/',
+                    api_views.EditorWebsiteWebpath.as_view(),
+                    name='editorial-board-site-webpath-view'),
+
+urlpatterns += path(f'api/editorial-board/site/<int:site_id>/webpath/new/',
+                    api_views.EditorWebsiteWebpathNew.as_view(),
+                    name='editorial-board-site-webpath-new'),
+
+urlpatterns += path(f'api/editorial-board/site/<int:site_id>/webpath/<int:webpath_id>/delete/',
+                    api_views.EditorWebsiteWebpathDelete.as_view(),
+                    name='editorial-board-site-webpath-delete'),
+
+
+urlpatterns += path(f'api/editorial-board/site/<int:site_id>/page/list/',
+                    api_views.EditorWebsitePages.as_view(),
+                    name='editorial-board-site-page-list'),
+
+urlpatterns += path(f'api/editorial-board/site/<int:site_id>/page/<int:page_id>/view/',
+                    api_views.EditorWebsitePage.as_view(),
+                    name='editorial-board-site-page-view'),

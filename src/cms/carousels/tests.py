@@ -1,15 +1,10 @@
 import logging
 
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
-from django.test.client import RequestFactory
-from django.urls import reverse
-from django.utils import timezone
+from django.test import TestCase
 
 from cms.medias.tests import MediaUnitTest
 
-from . models import *
+from . models import Carousel, CarouselItem, CarouselItemLink, CarouselItemLinkLocalization, CarouselItemLocalization
 
 
 logger = logging.getLogger(__name__)

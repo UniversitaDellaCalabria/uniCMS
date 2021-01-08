@@ -1,7 +1,7 @@
 import nested_admin
 from django.contrib import admin
 
-from . models import *
+from . models import NavigationBar, NavigationBarItem, NavigationBarItemLocalization
 
 
 class NavigationBarItemLocalizationInline(nested_admin.NestedStackedInline):
@@ -13,7 +13,7 @@ class NavigationBarItemLocalizationInline(nested_admin.NestedStackedInline):
 
 class NavigationBarItemInline(nested_admin.NestedStackedInline):
     model = NavigationBarItem
-    raw_id_fields = ('parent', 'webpath', 
+    raw_id_fields = ('parent', 'webpath',
                      'publication', 'inherited_content')
     extra = 0
     # classes = ['collapse']
@@ -36,8 +36,8 @@ class NavigationBarItemInline(nested_admin.NestedStackedInline):
 
 @admin.register(NavigationBar)
 class NavigationBarAdmin(nested_admin.NestedModelAdmin):
-    list_display  = ('name', 'is_active', 'created')
-    search_fields   = ('name',)
+    list_display = ('name', 'is_active', 'created')
+    search_fields = ('name',)
     list_filter = ('created', 'modified')
     readonly_fields = ('created_by', 'modified_by')
     inlines = (NavigationBarItemInline,)
@@ -45,8 +45,8 @@ class NavigationBarAdmin(nested_admin.NestedModelAdmin):
 
 @admin.register(NavigationBarItem)
 class NavigationBarItemAdmin(nested_admin.NestedModelAdmin):
-    list_display  = ('menu', 'name', 'parent', 'is_active')
-    search_fields   = ('name',)
+    list_display = ('menu', 'name', 'parent', 'is_active')
+    search_fields = ('name',)
     list_filter = ('created', 'modified')
     readonly_fields = ('created_by', 'modified_by')
     inlines = (NavigationBarItemLocalizationInline,)

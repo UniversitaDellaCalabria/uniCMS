@@ -1,11 +1,11 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from . models import *
+from . models import Media, MediaCollection, MediaCollectionItem
 
 
 def preview_image(obj):
-    width="15"
+    width = "15"
     # breakpoint()
     img_tag = f'<img src="{obj.file.url}" style="width: {width}vw;"/>'
     result = mark_safe(img_tag) # nosec
@@ -21,13 +21,12 @@ class MediaCollectionItemInline(admin.TabularInline):
         return preview_image(obj) # nosec
 
 
-
 @admin.register(Media)
 class MediaAdmin(admin.ModelAdmin):
     search_fields = ('title',)
-    list_display  = ('title', 'file_size', 'file_type', 'preview_image')
-    list_filter   = ('file_type',
-                     'created', 'modified')
+    list_display = ('title', 'file_size', 'file_type', 'preview_image')
+    list_filter = ('file_type',
+                   'created', 'modified')
     inlines = (MediaCollectionItemInline,) # MediaLinkInline)
 
     readonly_fields = ("headshot_image", "preview_image",
@@ -35,7 +34,7 @@ class MediaAdmin(admin.ModelAdmin):
                        'created_by', 'modified_by')
 
     def headshot_image(self, obj):
-        width="55"
+        width = "55"
         img_tag = f'<img src="{obj.file.url}" style="width: {width}vw;"/>'
         result = mark_safe(img_tag) # nosec
         return result

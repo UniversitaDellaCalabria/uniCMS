@@ -1,12 +1,10 @@
 import logging
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from cms.carousels.tests import CarouselUnitTest
 from cms.contexts.tests import ContextUnitTest
 from cms.medias.tests import MediaUnitTest
 from cms.menus.tests import MenuUnitTest
@@ -16,7 +14,7 @@ from cms.templates.tests import TemplateUnitTest
 from cms.pages.templatetags.unicms_pages import cms_categories
 from cms.publications.templatetags.unicms_publications import (load_publication,
                                                                load_publications_preview)
-from . models import *
+from . models import Publication, PublicationAttachment, PublicationBlock, PublicationContext, PublicationGallery, PublicationLink, PublicationLocalization, PublicationRelated
 
 
 logger = logging.getLogger(__name__)
@@ -159,7 +157,7 @@ class PublicationUnitTest(TestCase):
             assert res['previous_url'] == None
             assert res['next_url'] == None
         
-        pub = self.enrich_pub()
+        self.enrich_pub()
         url = reverse('unicms_api:api-news-by-contexts', 
                       kwargs={'webpath_id': 1})
         test_call(url)
@@ -173,7 +171,7 @@ class PublicationUnitTest(TestCase):
         req = Client()
         url = reverse('unicms_api:publication-detail', 
                       kwargs={'slug': pub.slug})
-        res = req.get(url).json()
+        req.get(url).json()
     
     
     def test_publication_handler_view(self):
@@ -324,7 +322,7 @@ class PublicationUnitTest(TestCase):
     # templatetag
     @classmethod
     def test_cms_categories(cls):
-        pub = cls.enrich_pub()
+        cls.enrich_pub()
         lm = cms_categories()
         assert isinstance(list(lm), list) and len(lm) == 1
  
