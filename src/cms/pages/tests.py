@@ -206,6 +206,7 @@ class PageUnitTest(TestCase):
         lm = load_carousel(**data)
         assert 'italia_carousel' not in lm
 
+
     # templatetag
     @classmethod
     def test_load_page_title(cls):
@@ -420,7 +421,7 @@ class PageUnitTest(TestCase):
         webpath = page.webpath
         req = RequestFactory().get('/')
         
-        menu = MenuUnitTest.create_menu()
+        menu = MenuUnitTest.create_menu_item().menu
         page_menu = PageMenu.objects.create(page=page, is_active=1,
                                             menu=menu)
         
@@ -443,5 +444,5 @@ class PageUnitTest(TestCase):
         template_context = dict(request=req,
                                 page=page, webpath=page.webpath,
                                 block=block)
-        lm = load_menu_placeholder(template_context)
+        lm = load_menu_placeholder(template_context).replace('\n', '')
         assert lm
