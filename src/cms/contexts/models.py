@@ -159,7 +159,8 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
         return self.parent.get_full_path() if self.parent else ''
 
     def serialize(self):
-        return {"site_name": self.site.name,
+        return {"pk": self.pk,
+                "site_name": self.site.name,
                 "site_domain": self.site.domain,
                 "name": self.name,
                 "parent_id": self.get_parent_id(),

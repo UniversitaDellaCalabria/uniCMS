@@ -122,7 +122,7 @@ class EditorWebsites(APIView):
 
 
 @method_decorator(staff_member_required, name='dispatch')
-class EditorWebsiteWebpaths(APIView):
+class EditorWebsiteWebpathList(APIView):
     """
     """
     description = "Get user editorial boards websites webpath list"
@@ -132,16 +132,16 @@ class EditorWebsiteWebpaths(APIView):
                                  pk=site_id,
                                  is_active=True)
         context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
-        webpaths = {}
+        webpaths = []
 
         webpaths_list = WebPath.objects.filter(site=site)
         for webpath in webpaths_list:
             permission = EditorialBoardEditors.get_permission(user=request.user,
                                                               webpath=webpath)
             serialized_webpath = webpath.serialize()
-            webpaths[webpath.pk] = serialized_webpath
-            webpaths[webpath.pk]["permission_id"] = permission
-            webpaths[webpath.pk]["permission_label"] = context_permissions[str(permission)]
+            serialized_webpath["permission_id"] = permission
+            serialized_webpath["permission_label"] = context_permissions[str(permission)]
+            webpaths.append(serialized_webpath)
 
         return Response(webpaths)
 

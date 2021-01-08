@@ -31,15 +31,12 @@ urlpatterns += path('api/news/view/<str:slug>',
                     api_views.PublicationDetail.as_view(),
                     name='publication-detail'),
 
-# -----------------------------------------------------------------------
-
-
 urlpatterns += path('api/editorial-board/site/list/',
                     api_views.EditorWebsites.as_view(),
                     name='editorial-board-site-list'),
 
 urlpatterns += path('api/editorial-board/site/<int:site_id>/webpath/list/',
-                    api_views.EditorWebsiteWebpaths.as_view(),
+                    api_views.EditorWebsiteWebpathList.as_view(),
                     name='editorial-board-site-webpath-list'),
 
 urlpatterns += path('api/editorial-board/site/<int:site_id>/webpath/<int:webpath_id>/view/',
