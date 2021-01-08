@@ -145,13 +145,17 @@ class Publication(AbstractPublication, AbstractPublicable,
                                                     is_active=True).\
                                              order_by('order')
 
-    def get_publication_context(self, webpath=None):
-        if not webpath: return None
-        pub_context = PublicationContext.objects.filter(publication=self,
-                                                        webpath=webpath,
-                                                        is_active=True).\
-            first()
+    def get_publication_contexts(self, webpath=None):
+        qdict = dict(publication=self, is_active=True)
+        if webpath:
+            qdict['webpath'] = webpath
+        pub_context = PublicationContext.objects.filter(**qdict)
         return pub_context
+
+
+    def get_publication_context(self, webpath=None):
+        return self.get_publication_contexts(webpath=webpath).first()
+
 
     def url(self, webpath=None):
         pub_context = self.get_publication_context(webpath=webpath)

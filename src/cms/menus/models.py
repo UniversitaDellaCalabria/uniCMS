@@ -54,7 +54,8 @@ class NavigationBar(TimeStampedModel, ActivableModel, CreatedModifiedBy,
         for child in NavigationBarItem.objects.filter(is_active=True,
                                                       menu = self,
                                                       parent = None):
-            data.append(child.serialize(deep=True, lang=lang))
+            ser_child = child.serialize(deep=True, lang=lang)
+            data.append(ser_child)
         return dict(name=self.name, is_active=self.is_active, childs=data)
 
     def get_menu(self):
@@ -106,7 +107,8 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
             return self.url
         elif self.webpath:
             if self.publication:
-                return self.publication.get_publication_context(webpath=self.webpath).url
+                webpath = self.publication.get_publication_context(webpath=self.webpath)
+                return webpath.url
             else:
                 return self.webpath.get_full_path()
         else: # pragma: no cover
@@ -137,7 +139,8 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
         if deep:
             data['childs'] = []
             for child in self.get_childs(lang=lang):
-                data['childs'].append(child.serialize(deep=deep))
+                ser_child = child.serialize(deep=deep)
+                data['childs'].append(ser_child)
         return data
 
     def get_childs(self, lang=settings.LANGUAGE):

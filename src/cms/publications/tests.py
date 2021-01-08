@@ -34,13 +34,14 @@ class PublicationUnitTest(TestCase):
 
 
     @classmethod
-    def create_pub(cls, **kwargs):
+    def create_pub(cls, count = 4, **kwargs):
+        media = MediaUnitTest.create_media()
         data = {'is_active': 1,
                 'title':'Papiri, Codex, Libri. La attraverso labora lorem ipsum',
                 'subheading':'Itaque earum rerum hic tenetur a sapiente delectus',
                 'content':'<p>Sed ut perspiciatis unde omnis iste natus error </p>',
                 'content_type': 'html',
-                'presentation_image': MediaUnitTest.create_media(),
+                'presentation_image': media,
                 'state':'published',
                 'date_start': timezone.localtime(),
                 'date_end': timezone.localtime() + timezone.timedelta(hours=1),
@@ -49,21 +50,27 @@ class PublicationUnitTest(TestCase):
         }
         for k,v in kwargs.items():
             data[k] = v
+        
+        webpath = ContextUnitTest.create_webpath()
+        category = PageUnitTest.create_category()
+        for i in range(count):
+            obj = Publication.objects.create(**data)
+            obj.__str__()
+            obj.tags.add('ciao')
+            
+            obj.category.add(category)
+            ploc = PublicationLocalization.objects.create(publication=obj,
+                                                          language='en',
+                                                          title=f'pub eng',
+                                                          subheading='',
+                                                          content='',
+                                                          is_active=1)
+            ploc.__str__()
 
-        obj = Publication.objects.create(**data)
-        obj.__str__()
-        obj.tags.add('ciao')
-        
-        obj.category.add(PageUnitTest.create_category())
-        
-        ploc = PublicationLocalization.objects.create(publication=obj,
-                                                      language='en',
-                                                      title='pub eng',
-                                                      subheading='',
-                                                      content='',
-                                                      is_active=1)
-        ploc.__str__()
-        
+            # PublicationContext - related webpath
+            pubcont = PublicationContext.objects.create(publication=obj,
+                                                        webpath=webpath,
+                                                        is_active=1)
         return obj
 
     
@@ -84,11 +91,9 @@ class PublicationUnitTest(TestCase):
         pubrel.__str__()
         pub.related_publications
         
-        # PublicationContext - related webpath
-        webpath = ContextUnitTest.create_webpath()
-        pubcont = PublicationContext.objects.create(publication=pub,
-                                                    webpath=webpath,
-                                                    is_active=1)
+        pubcont = pub.get_publication_context()
+        webpath = pubcont.webpath
+        
         pubcont.get_url_list(category_name='main')
         pubcont.name
         pubcont.path_prefix
@@ -155,24 +160,41 @@ class PublicationUnitTest(TestCase):
         def test_call(url):
             req = Client()
             res = req.get(url).json()
-            assert len(res['results']) == 1
-            assert res['total_pages'] == 1
-            assert res['count'] == 1
+            assert len(res['results']) == 3
+            assert res['total_pages'] == 2
+            assert res['total'] == 4
+            assert res['count'] == 3
             assert res['page_number'] == 1
             assert res['current_url'] == url
             assert res['previous_url'] == None
-            assert res['next_url'] == None
+            assert res['next_url']
         
-        self.enrich_pub()
+        pub = self.create_pub()
+        webpath = pub.get_publication_context().webpath
         url = reverse('unicms_api:api-news-by-contexts', 
-                      kwargs={'webpath_id': 1})
+                      kwargs={'webpath_id': webpath.pk})
         test_call(url)
 
         url = reverse('unicms_api:api-news-by-contexts-category', 
-                      kwargs={'webpath_id': 1, 'category_name': 'main'})
+                      kwargs={'webpath_id': webpath.pk, 
+                              'category_name': 'main'})
         test_call(url)
+        
+        # test next page
+        url = reverse('unicms_api:api-news-by-contexts', 
+                      kwargs={'webpath_id': webpath.pk})+'?page_number=2'
+        req = Client()
+        res = req.get(url).json()
+        assert len(res['results']) == 1
+        assert res['total_pages'] == 2
+        assert res['total'] == 4
+        assert res['count'] == 1
+        assert res['page_number'] == 2
+        assert res['current_url'] == url
+        assert res['previous_url']
+        assert res['next_url'] == None
     
-    def test_api_context(self):
+    def test_api_pub_detail(self):
         pub = self.enrich_pub()
         req = Client()
         url = reverse('unicms_api:publication-detail', 
@@ -212,9 +234,9 @@ class PublicationUnitTest(TestCase):
 
     def test_api_menu_builder_with_publications(self):
         pub = self.enrich_pub()
-        webpath=pub.related_contexts[0].webpath
+        webpath = pub.related_contexts[0].webpath
         menu = MenuUnitTest.create_menu_item().menu
-        
+
         req = Client()
         url = reverse('unicms_api:api-menu', kwargs={'menu_id': 1})
         res = req.get(url, content_type='application/json')

@@ -1,4 +1,5 @@
 import logging
+import math
 import re
 import pymongo
 
@@ -113,7 +114,7 @@ class ApiSearchEngine(APIView):
         elements_in_page = getattr(settings, 'SEARCH_ELEMENTS_IN_PAGE', 25)
         total_elements = res.count()
         if total_elements >= elements_in_page:
-            total_pages = round(total_elements / elements_in_page)
+            total_pages = math.ceil(total_elements / elements_in_page)
         else:
             total_pages = 1
 

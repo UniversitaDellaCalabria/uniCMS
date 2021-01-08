@@ -27,7 +27,13 @@ class PublicationDetail(generics.RetrieveAPIView):
                                           state='published')
     serializer_class = PublicationSerializer
     lookup_field = 'slug'
-
+    
+    def get_queryset(self):
+        self.request.user
+        for pub in super(PublicationDetail, self).get_queryset():
+            if pub.is_publicable:
+                return pub
+    
 
 @method_decorator(detect_language, name='dispatch')
 class ApiPublicationsByContext(APIView):
@@ -46,7 +52,6 @@ class ApiPublicationsByContext(APIView):
         if category_name:
             query_params['publication__category__name__iexact'] = category_name
         pubcontx = PublicationContext.objects.filter(**query_params)
-        pubcontx.count()
         paginator = Paginator(queryset=pubcontx, request=request)
 
         try:
