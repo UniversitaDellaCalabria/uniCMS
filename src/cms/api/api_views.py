@@ -10,6 +10,7 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import generics, status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -30,6 +31,13 @@ CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
                                   contexts_settings.CMS_CONTEXT_PERMISSIONS)
 
 logger = logging.getLogger(__name__)
+
+
+
+class UniCmsApiPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 
 # TODO - better get with filters
@@ -122,7 +130,7 @@ class EditorWebsites(APIView):
 
 
 @method_decorator(staff_member_required, name='dispatch')
-class EditorWebsiteWebpathList(APIView):
+class EditorWebsiteWebpathList(APIView, UniCmsApiPagination):
     """
     """
     description = "Get user editorial boards websites webpath list"
@@ -143,7 +151,8 @@ class EditorWebsiteWebpathList(APIView):
             serialized_webpath["permission_label"] = context_permissions[str(permission)]
             webpaths.append(serialized_webpath)
 
-        return Response(webpaths)
+        results = self.paginate_queryset(webpaths, request, view=self)
+        return self.get_paginated_response(results)
 
 
 @method_decorator(staff_member_required, name='dispatch')
