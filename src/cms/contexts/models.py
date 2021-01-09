@@ -219,7 +219,6 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
                                                check_all=False)
         if parent_permission in (2, 5, 8):
             return parent_permission
-
         # search for user permissions
         results = set()
         if check_all:

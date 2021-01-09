@@ -44,28 +44,30 @@ class ContextUnitTest(TestCase):
 
     @classmethod
     def create_webpath(cls, **kwargs):
-        if not kwargs:
-            website = cls.create_website()
-            kwargs =  {'site': website,
-                       'name': "Example WebPath",
-                       'parent': None,
-                       'alias': None,
-                       'alias_url': None,
-                       'path': '/',
-                       'is_active': True}
-        webpath = WebPath.objects.create(**kwargs)
-        return webpath
+        data = {'site': cls.create_website(),
+                'name': "Example WebPath",
+                'parent': None,
+                'alias': None,
+                'alias_url': None,
+                'path': '/',
+                'is_active': True}
+        for k,v in kwargs.items():
+            data[k] = v
+        obj = WebPath.objects.create(**data)
+        return obj
+
 
     @classmethod
     def create_editorialboard_user(cls, **kwargs):
-        if not kwargs:
-            kwargs =  {'user': cls.create_user(),
-                       'permission': 1,
-                       'webpath': cls.create_webpath(),
-                       'is_active': True}
-        ebe = EditorialBoardEditors.objects.create(**kwargs)
-        ebe.serialize()
-        return ebe
+        data = {'user': cls.create_user() if not kwargs.get('user') else kwargs['user'],
+                'permission': 1,
+                'webpath': cls.create_webpath(),
+                'is_active': True}
+        for k,v in kwargs.items():
+            data[k] = v
+        obj = EditorialBoardEditors.objects.create(**data)
+        obj.serialize()
+        return obj
 
 
     def test_webpath(self):
@@ -130,27 +132,41 @@ class ContextUnitTest(TestCase):
     def test_editorialboard_user(self):
         ebe = self.create_editorialboard_user()
         ebe.__str__()
-        
+
         perm_dict = dict(CMS_CONTEXT_PERMISSIONS)
-        
+
         ebe_q = dict(webpath = ebe.webpath, user = ebe.user)
-        
+
         for i in range(8):
             # test some permissions
             perm = EditorialBoardEditors.get_permission(**ebe_q)
             logger.debug(f'User {ebe.user} {perm_dict[perm]}')
             ebe.permission += 1
             ebe.save()
-        
+
         # test parent permissions
         ebe_q['check_all'] = 1
         ebe.permission = 1
         ebe.webpath = None
         ebe.save()
-        
+
         perm = EditorialBoardEditors.get_permission(**ebe_q)
         assert perm
-        
+
+        # test parent permissions
+        parent = self.create_webpath()
+        webpath = self.create_webpath(parent=parent)
+        user = ebe.user
+        ebe.delete()
+        parent_ebe = self.create_editorialboard_user(user=user,
+                                                     permission=2,
+                                                     webpath=parent)
+        EditorialBoardEditors.get_permission(user=user, webpath=webpath)
+
+        # test no permission webpath
+        webpath = self.create_webpath()
+        EditorialBoardEditors.get_permission(user=user, webpath=webpath, check_all=False)
+
 
     # start Template tags tests
     def tests_templatetags_breadcrumbs(self):
