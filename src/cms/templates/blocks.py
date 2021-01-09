@@ -24,7 +24,7 @@ class AbstractBlock(object):
                            'block': self})
         return context
 
-    def render(self):
+    def render(self): # pragma: no cover
         return mark_safe(self.content) # nosec
 
 

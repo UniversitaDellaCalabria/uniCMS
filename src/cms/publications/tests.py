@@ -12,7 +12,6 @@ from cms.pages.models import PageBlock, PagePublication
 from cms.pages.tests import PageUnitTest
 from cms.templates.blocks import PublicationContentPlaceholderBlock
 from cms.templates.models import TemplateBlock
-from cms.templates.placeholders import load_publication_content_placeholder
 from cms.templates.tests import TemplateUnitTest
 
 from cms.pages.templatetags.unicms_pages import cms_categories
@@ -363,7 +362,8 @@ class PublicationUnitTest(TestCase):
         page = PageUnitTest.create_page(webpath=webpath)
         req = RequestFactory().get('/')
 
-        PagePublication.objects.create(page=page, publication=pub, is_active=1)
+        pagepub = PagePublication.objects.create(page=page, publication=pub, is_active=1)
+        pagepub.__str__()
 
         block = PublicationContentPlaceholderBlock(
             request = req,
@@ -380,9 +380,5 @@ class PublicationUnitTest(TestCase):
         page_block = PageBlock.objects.create(page=page,
                                               block = template_block,
                                               is_active=1)
-
-        template_context = dict(request=req,
-                                page=page, webpath=page.webpath,
-                                block=block)
-        lm = load_publication_content_placeholder(template_context)
+        lm = block.render()
         assert lm

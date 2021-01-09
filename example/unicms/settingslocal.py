@@ -209,7 +209,7 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'cms.contexts.cache': {
+        'cms.contexts': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,

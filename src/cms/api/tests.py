@@ -1,8 +1,7 @@
 import logging
 
-from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.test import Client, RequestFactory, TestCase
+from django.test import Client, TestCase
 from django.urls import reverse
 
 from cms.contexts.models import WebPath

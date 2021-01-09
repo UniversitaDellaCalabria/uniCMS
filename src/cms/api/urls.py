@@ -48,9 +48,9 @@ urlpatterns += path('api/editorial-board/site/<int:site_id>/webpath/new/',
                     name='editorial-board-site-webpath-new'),
 
 # urlpatterns += path('api/editorial-board/site/<int:site_id>/page/list/',
-                    # api_views.EditorWebsitePages.as_view(),
-                    # name='editorial-board-site-page-list'),
+# api_views.EditorWebsitePages.as_view(),
+# name='editorial-board-site-page-list'),
 
 # urlpatterns += path('api/editorial-board/site/<int:site_id>/page/<int:page_id>/view/',
-                    # api_views.EditorWebsitePage.as_view(),
-                    # name='editorial-board-site-page-view'),
+# api_views.EditorWebsitePage.as_view(),
+# name='editorial-board-site-page-view'),

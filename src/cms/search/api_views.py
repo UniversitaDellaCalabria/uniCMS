@@ -76,7 +76,7 @@ class ApiSearchEngine(APIView):
             try:
                 tags = [i.strip() for i in tags.split(',')]
                 query['tags'] = {'$all': tags}
-            except ValueError:
+            except ValueError: # pragma: no cover
                 logger.debug(f'API Search: Bad tags: {tags}')
 
         # web site
@@ -85,7 +85,7 @@ class ApiSearchEngine(APIView):
             try:
                 sites = [i.strip() for i in sites.split(',')]
                 query['sites'] = {'$all': sites}
-            except ValueError:
+            except ValueError: # pragma: no cover
                 logger.debug(f'API Search: Bad sites: {sites}')
 
         # categories
@@ -94,7 +94,7 @@ class ApiSearchEngine(APIView):
             try:
                 categories = [i.strip() for i in categories.split(',')]
                 query['categories'] = {'$all': categories}
-            except ValueError:
+            except ValueError: # pragma: no cover
                 logger.debug(f'API Search: Bad categories: {categories}')
 
         # run query
@@ -106,7 +106,7 @@ class ApiSearchEngine(APIView):
             else:
                 res = collection.find(query).sort('published',
                                                   pymongo.DESCENDING)
-        except ServerSelectionTimeoutError as e: # pragma; no cover
+        except ServerSelectionTimeoutError as e: # pragma: no cover
             logger.critical(e)
             raise ServiceUnavailable()
 

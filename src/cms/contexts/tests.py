@@ -64,6 +64,7 @@ class ContextUnitTest(TestCase):
                        'webpath': cls.create_webpath(),
                        'is_active': True}
         ebe = EditorialBoardEditors.objects.create(**kwargs)
+        ebe.serialize()
         return ebe
 
 
@@ -129,6 +130,27 @@ class ContextUnitTest(TestCase):
     def test_editorialboard_user(self):
         ebe = self.create_editorialboard_user()
         ebe.__str__()
+        
+        perm_dict = dict(CMS_CONTEXT_PERMISSIONS)
+        
+        ebe_q = dict(webpath = ebe.webpath, user = ebe.user)
+        
+        for i in range(8):
+            # test some permissions
+            perm = EditorialBoardEditors.get_permission(**ebe_q)
+            logger.debug(f'User {ebe.user} {perm_dict[perm]}')
+            ebe.permission += 1
+            ebe.save()
+        
+        # test parent permissions
+        ebe_q['check_all'] = 1
+        ebe.permission = 1
+        ebe.webpath = None
+        ebe.save()
+        
+        perm = EditorialBoardEditors.get_permission(**ebe_q)
+        assert perm
+        
 
     # start Template tags tests
     def tests_templatetags_breadcrumbs(self):

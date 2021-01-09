@@ -25,8 +25,8 @@ CMS_APP_REGEXP_URLPATHS_LOADED = {import_string(k):v
 def cms_dispatch(request):
     requested_site = re.match(r'^[a-zA-Z0-9\.\-\_]*',
                               request.get_host()).group()
-    website = get_object_or_404(WebSite, domain = requested_site)
 
+    website = get_object_or_404(WebSite, domain = requested_site)
     path = urlparse(request.get_full_path()).path.replace(CMS_PATH_PREFIX, '')
 
     _msg_head = 'APP REGEXP URL HANDLERS:'
@@ -47,8 +47,9 @@ def cms_dispatch(request):
         handler = cls(**params)
         try:
             return handler.as_view()
-        except Exception as e:
+        except Exception as e: # pragma: no cover
             logger.exception(f'{path}:{e}')
+            raise Http404("CMS Page not found")
 
     # go further with webpath matching
     path = append_slash(path)

@@ -181,7 +181,8 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
     user = models.ForeignKey(get_user_model(),
                              on_delete=models.CASCADE)
     permission = models.IntegerField(blank=False, null=False,
-                                     choices=CMS_CONTEXT_PERMISSIONS)
+                                     choices=CMS_CONTEXT_PERMISSIONS,
+                                     default=0)
     webpath = models.ForeignKey(WebPath,
                                 on_delete=models.CASCADE,
                                 null=True, blank=True)
@@ -194,50 +195,51 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
         return {'webpath': f'{self.webpath}',
                 'permission': self.permission}
 
-    @staticmethod
-    def get_permission(webpath, user, check_all=True, verbose=False):
-        if not webpath: return False
-        # if not webpath.is_active: return False
-        if not user: return False
+    @classmethod
+    def get_permission(cls, webpath, user, check_all=True):
+
+        # webpath and user must be true
+        if not all((webpath, user)):
+            return False
+
         permissions = EditorialBoardEditors.objects.filter(user=user,
                                                            is_active=True)
         webpath_permissions = permissions.filter(webpath=webpath)
 
-        result = 0
-
         # search for user permissions in specific webpath
         for webpath_permission in webpath_permissions:
             permission = webpath_permission.permission
-            if permission > result: result = permission
-        if result > 0: return result
+            if permission and permission > 0:
+                return permission
 
         # search for user permissions in webpath parents
         # select only permissions on descendants (2,5,8)
-        permission = EditorialBoardEditors.get_permission(webpath=webpath.parent,
-                                                          user=user,
-                                                          check_all=False)
-        if permission == 2 or permission == 5 or permission == 8:
-            return permission
+        parent_permission = cls.get_permission(webpath=webpath.parent,
+                                               user=user,
+                                               check_all=False)
+        if parent_permission in (2, 5, 8):
+            return parent_permission
 
         # search for user permissions
+        results = set()
         if check_all:
             all_permissions = permissions.filter(webpath=None)
-            for all_permission in all_permissions:
-                permission = all_permission.permission
-                if permission > result: result = permission
+            for entry in all_permissions:
+                if entry.permission > 0:
+                    results.add(entry.permission)
+            return list(results)
 
-            return result if result > 0 else False
         return False
 
     def __str__(self):
-        if getattr(self, 'webpath'):
+        if self.webpath:
             return '{} {} in {}'.format(self.user, self.permission, self.webpath)
         else: # pragma: no cover
             return '{} {}'.format(self.user, self.permission)
 
 
 # DEPRECATED - TODO - mode to Redis TTL
-class EditorialBoardLocks(models.Model):
+class EditorialBoardLocks(models.Model): # pragma: no cover
     content_type = models.ForeignKey(
         ContentType,
         on_delete=models.CASCADE,

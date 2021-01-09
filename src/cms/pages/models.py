@@ -87,7 +87,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
 
     def clean_related_caches(self):
         deleted = []
-        for i in self.__dict__.keys():
+        for i in [k for k in self.__dict__.keys()]:
             for e in '_blocks_', '_pubs', '_carousels', '_medias', '_links':
                 if e in i:
                     delattr(self, i)
@@ -146,7 +146,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         return placeholders
 
     def get_publications(self):
-        if getattr(self, '_pubs', None):
+        if getattr(self, '_pubs', None): # pragma: no cover
             return self._pubs
         self._pubs = PagePublication.objects.filter(page=self,
                                                     is_active=True,
@@ -155,7 +155,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         return self._pubs
 
     def get_carousels(self):
-        if getattr(self, '_carousels', None):
+        if getattr(self, '_carousels', None): # pragma: no cover
             return self._carousels
         self._carousels = PageCarousel.objects.filter(page=self,
                                                       is_active=True,
@@ -164,7 +164,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         return self._carousels
 
     def get_medias(self):
-        if getattr(self, '_medias', None):
+        if getattr(self, '_medias', None): # pragma: no cover
             return self._medias
         self._medias = PageMedia.objects.filter(page=self,
                                                 is_active=True,

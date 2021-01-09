@@ -246,7 +246,12 @@ class PageUnitTest(TestCase):
                       'content': 'Hello world'}
         block_section = '1-top-a'
         tb = TemplateUnitTest.create_block_template(**block_data)
+        
+        # test page relateds cache cleanup
+        for i in '_blocks_', '_pubs', '_carousels', '_medias', '_links':
+            setattr(page, i, ['asdasd'])
         page.clean_related_caches()
+        
         PageBlock.objects.create(page=page, block=tb,
                                  is_active=1, section=block_section)
 
@@ -342,12 +347,7 @@ class PageUnitTest(TestCase):
         page_block = PageBlock.objects.create(page=page,
                                               block = template_block,
                                               is_active=1)
-
-
-        template_context = dict(request=req,
-                                page=page, webpath=page.webpath,
-                                block=block)
-        lm = load_carousel_placeholder(template_context)
+        lm = block.render()
         assert lm
 
     # placeholders
@@ -372,11 +372,7 @@ class PageUnitTest(TestCase):
         page_block = PageBlock.objects.create(page=page,
                                               block = template_block,
                                               is_active=1)
-
-        template_context = dict(request=req,
-                                page=page, webpath=page.webpath,
-                                block=block)
-        lm = load_link_placeholder(template_context)
+        lm = block.render()
         assert lm
 
 
@@ -390,7 +386,8 @@ class PageUnitTest(TestCase):
         media = MediaUnitTest.create_media()
         page_media = PageMedia.objects.create(page=page, is_active=1,
                                               media=media)
-
+        page_media.__str__()
+        
         block = MediaPlaceholderBlock(
             request = req,
             webpath = webpath,
@@ -406,11 +403,7 @@ class PageUnitTest(TestCase):
         page_block = PageBlock.objects.create(page=page,
                                               block = template_block,
                                               is_active=1)
-
-        template_context = dict(request=req,
-                                page=page, webpath=page.webpath,
-                                block=block)
-        lm = load_media_placeholder(template_context)
+        lm = block.render()
         assert lm
 
 
@@ -440,9 +433,5 @@ class PageUnitTest(TestCase):
         page_block = PageBlock.objects.create(page=page,
                                               block = template_block,
                                               is_active=1)
-
-        template_context = dict(request=req,
-                                page=page, webpath=page.webpath,
-                                block=block)
-        lm = load_menu_placeholder(template_context).replace('\n', '')
+        lm = block.render().replace('\n', '')
         assert lm

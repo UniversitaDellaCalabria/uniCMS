@@ -20,7 +20,6 @@ from cms.contexts.decorators import detect_language
 from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
 from cms.contexts import settings as contexts_settings
 
-from cms.pages.models import Page
 
 from cms.publications.models import Publication, PublicationContext
 from cms.publications.paginators import Paginator
@@ -31,7 +30,6 @@ CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
                                   contexts_settings.CMS_CONTEXT_PERMISSIONS)
 
 logger = logging.getLogger(__name__)
-
 
 
 class UniCmsApiPagination(PageNumberPagination):
@@ -354,9 +352,6 @@ class EditorWebsiteWebpathNew(APIView):
         return HttpResponseRedirect(url)
 
 
-
-
-
 # @method_decorator(staff_member_required, name='dispatch')
 # class EditorWebsitePages(APIView):
     # """
@@ -366,8 +361,8 @@ class EditorWebsiteWebpathNew(APIView):
     # def get(self, request, site_id):
         # result = {}
         # site = get_object_or_404(WebSite,
-                                 # pk=site_id,
-                                 # is_active=True)
+        # pk=site_id,
+        # is_active=True)
         # result['site_name'] = site.name
         # result['site_domain'] = site.domain
         # result['pages'] = {}
@@ -377,18 +372,18 @@ class EditorWebsiteWebpathNew(APIView):
 
         # pages_list = Page.objects.filter(webpath__site=site)
         # for page in pages_list:
-            # page.translate_as(lang)
-            # pages[page.pk] = {"name": page.name,
-                              # "title": page.title,
-                              # "webpath": page.webpath.__str__(),
-                              # "base_template": page.base_template.__str__(),
-                              # "description": page.description,
-                              # "date_start": page.date_start,
-                              # "date_end": page.date_end,
-                              # "state": page.state,
-                              # "type": page.type,
-                              # "tags": [i.slug for i in page.tags.all()],
-                              # "is_active": page.is_active}
+        # page.translate_as(lang)
+        # pages[page.pk] = {"name": page.name,
+        # "title": page.title,
+        # "webpath": page.webpath.__str__(),
+        # "base_template": page.base_template.__str__(),
+        # "description": page.description,
+        # "date_start": page.date_start,
+        # "date_end": page.date_end,
+        # "state": page.state,
+        # "type": page.type,
+        # "tags": [i.slug for i in page.tags.all()],
+        # "is_active": page.is_active}
         # result['pages'] = pages
         # return Response(result)
 
@@ -402,9 +397,9 @@ class EditorWebsiteWebpathNew(APIView):
 
     # def get(self, request, site_id, page_id):
         # page = get_object_or_404(Page,
-                                 # pk=page_id,
-                                 # webpath__site__pk=site_id,
-                                 # webpath__site__is_active=True)
+        # pk=page_id,
+        # webpath__site__pk=site_id,
+        # webpath__site__is_active=True)
         # result = {}
         # result['site_name'] = page.webpath.site.name
         # result['site_domain'] = page.webpath.site.domain
