@@ -1,7 +1,7 @@
 import logging
 
 # from django.contrib.auth.decorators import login_required
-from django.contrib.admin.views.decorators import staff_member_required
+# from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 class UniCmsApiPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
-    max_page_size = 1000
+    max_page_size = 250
 
 
 # TODO - better get with filters
@@ -99,14 +99,18 @@ class ApiContext(APIView): # pragma: no cover
         return Response(pubs)
 
 
-@method_decorator(staff_member_required, name='dispatch')
-class EditorWebsites(APIView):
+# @method_decorator(staff_member_required, name='dispatch')
+class EditorWebsiteList(APIView, UniCmsApiPagination):
     """
     Editor user available active websites
     """
     description = "Get user editorial boards websites"
 
     def get(self, request):
+        if not request.user.is_staff:
+            error_msg = _("You don't have permissions")
+            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+
         permissions = EditorialBoardEditors.objects.filter(user=request.user,
                                                            is_active=True)
         websites = []
@@ -126,16 +130,21 @@ class EditorWebsites(APIView):
             serialized_site = site.serialize()
             if serialized_site not in websites:
                 websites.append(serialized_site)
-        return Response(websites)
+        results = self.paginate_queryset(websites, request, view=self)
+        return self.get_paginated_response(results)
 
 
-@method_decorator(staff_member_required, name='dispatch')
+# @method_decorator(staff_member_required, name='dispatch')
 class EditorWebsiteWebpathList(APIView, UniCmsApiPagination):
     """
     """
     description = "Get user editorial boards websites webpath list"
 
     def get(self, request, site_id):
+        if not request.user.is_staff:
+            error_msg = _("You don't have permissions")
+            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+
         site = get_object_or_404(WebSite,
                                  pk=site_id,
                                  is_active=True)
@@ -148,21 +157,26 @@ class EditorWebsiteWebpathList(APIView, UniCmsApiPagination):
                                                               webpath=webpath)
             serialized_webpath = webpath.serialize()
             serialized_webpath["permission_id"] = permission
-            serialized_webpath["permission_label"] = context_permissions[str(permission)]
+            webpath_permission = context_permissions[str(permission)] if permission else None
+            serialized_webpath["permission_label"] = webpath_permission
             webpaths.append(serialized_webpath)
 
         results = self.paginate_queryset(webpaths, request, view=self)
         return self.get_paginated_response(results)
 
 
-@method_decorator(staff_member_required, name='dispatch')
-class EditorWebsiteWebpath(APIView):
+# @method_decorator(staff_member_required, name='dispatch')
+class EditorWebsiteWebpathView(APIView):
     """
     Editor user get website webpath permissions
     """
     description = "Get user\'s editorial boards websites single webpath"
 
     def get(self, request, site_id, webpath_id):
+        if not request.user.is_staff:
+            error_msg = _("You don't have permissions")
+            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+
         webpath = get_object_or_404(WebPath,
                                     pk=webpath_id,
                                     site__pk=site_id,
@@ -172,10 +186,15 @@ class EditorWebsiteWebpath(APIView):
 
         permission = EditorialBoardEditors.get_permission(webpath, request.user)
         result["permission_id"] = permission
-        result["permission_label"] = context_permissions[str(permission)]
+        webpath_permission = context_permissions[str(permission)] if permission else None
+        result["permission_label"] = webpath_permission
         return Response(result)
 
     def patch(self, request, site_id, webpath_id):
+        if not request.user.is_staff:
+            error_msg = _("You don't have permissions")
+            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+
         site = get_object_or_404(WebSite,
                                  pk=site_id,
                                  is_active=True)
@@ -241,13 +260,36 @@ class EditorWebsiteWebpath(APIView):
         webpath.modified_by = modified_by
         webpath.save()
 
-        url = reverse('unicms_api:editorial-board-site-webpath-edit',
+        url = reverse('unicms_api:editorial-board-site-webpath-view',
                       kwargs={'site_id': site_id,
                               'webpath_id': webpath_id})
         return HttpResponseRedirect(url)
 
+    def delete(self, request, site_id, webpath_id):
+        if not request.user.is_staff:
+            error_msg = _("You don't have permissions")
+            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
 
-@method_decorator(staff_member_required, name='dispatch')
+        site = get_object_or_404(WebSite,
+                                 pk=site_id,
+                                 is_active=True)
+        webpath = get_object_or_404(WebPath,
+                                    pk=webpath_id,
+                                    is_active=True,
+                                    site=site)
+        permission = EditorialBoardEditors.get_permission(webpath=webpath,
+                                                          user=request.user)
+        publisher_perms = [6,7,8]
+        if permission not in publisher_perms or (permission == 6 and webpath.created_by != request.user):
+            error_msg = _("You don't have permissions")
+            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+
+        webpath.delete()
+
+        return Response(_("Webpath deleted successfully"))
+
+
+# @method_decorator(staff_member_required, name='dispatch')
 class EditorWebsiteWebpathNew(APIView):
     """
     Editor user get website webpath permissions
@@ -255,6 +297,10 @@ class EditorWebsiteWebpathNew(APIView):
     description = ""
 
     def post(self, request, site_id):
+        if not request.user.is_staff:
+            error_msg = _("You don't have permissions")
+            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+
         parent_pk = request.data['parent']
         name = request.data['name']
         alias_pk = request.data.get('alias', None)
@@ -302,116 +348,75 @@ class EditorWebsiteWebpathNew(APIView):
                                                  webpath=webpath,
                                                  permission=str(permission),
                                                  is_active=True)
-        url = reverse('unicms_api:editorial-board-site-webpath-edit',
+        url = reverse('unicms_api:editorial-board-site-webpath-view',
                       kwargs={'site_id': site_id,
                               'webpath_id': webpath.pk})
         return HttpResponseRedirect(url)
 
 
-@method_decorator(staff_member_required, name='dispatch')
-class EditorWebsiteWebpathDelete(APIView):
-    """
-    """
-    description = ""
-
-    def get(self, request, site_id, webpath_id):
-        webpath = get_object_or_404(WebPath,
-                                    pk=webpath_id,
-                                    site__pk=site_id,
-                                    site__is_active=True,
-                                    is_active=True)
-        context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
-        result = {}
-        result['site_name'] = webpath.site.name
-        result['site_domain'] = webpath.site.domain
-        result['name'] = webpath.name
-        result['parent'] = webpath.parent.__str__()
-        result['fullpath'] = webpath.fullpath
-        permission = EditorialBoardEditors.get_permission(webpath, request.user)
-        result['permission'] = permission
-        result['verbose'] = context_permissions[str(permission)]
-        return Response(result)
-
-    def delete(self, request, site_id, webpath_id):
-        site = get_object_or_404(WebSite,
-                                 pk=site_id,
-                                 is_active=True)
-        webpath = get_object_or_404(WebPath,
-                                    pk=webpath_id,
-                                    is_active=True,
-                                    site=site)
-        permission = EditorialBoardEditors.get_permission(webpath=webpath,
-                                                          user=request.user)
-        publisher_perms = [6,7,8]
-        if permission not in publisher_perms:
-            error_msg = _("You don't have permissions")
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
-
-        webpath.delete()
-
-        return Response(_("Webpath deleted successfully"))
 
 
-@method_decorator(staff_member_required, name='dispatch')
-class EditorWebsitePages(APIView):
-    """
-    """
-    description = ""
 
-    def get(self, request, site_id):
-        result = {}
-        site = get_object_or_404(WebSite,
-                                 pk=site_id,
-                                 is_active=True)
-        result['site_name'] = site.name
-        result['site_domain'] = site.domain
-        result['pages'] = {}
+# @method_decorator(staff_member_required, name='dispatch')
+# class EditorWebsitePages(APIView):
+    # """
+    # """
+    # description = ""
 
-        lang = getattr(request, 'LANGUAGE_CODE', '')
-        pages = {}
+    # def get(self, request, site_id):
+        # result = {}
+        # site = get_object_or_404(WebSite,
+                                 # pk=site_id,
+                                 # is_active=True)
+        # result['site_name'] = site.name
+        # result['site_domain'] = site.domain
+        # result['pages'] = {}
 
-        pages_list = Page.objects.filter(webpath__site=site)
-        for page in pages_list:
-            page.translate_as(lang)
-            pages[page.pk] = {"name": page.name,
-                              "title": page.title,
-                              "webpath": page.webpath.__str__(),
-                              "base_template": page.base_template.__str__(),
-                              "description": page.description,
-                              "date_start": page.date_start,
-                              "date_end": page.date_end,
-                              "state": page.state,
-                              "type": page.type,
-                              "tags": [i.slug for i in page.tags.all()],
-                              "is_active": page.is_active}
-        result['pages'] = pages
-        return Response(result)
+        # lang = getattr(request, 'LANGUAGE_CODE', '')
+        # pages = {}
+
+        # pages_list = Page.objects.filter(webpath__site=site)
+        # for page in pages_list:
+            # page.translate_as(lang)
+            # pages[page.pk] = {"name": page.name,
+                              # "title": page.title,
+                              # "webpath": page.webpath.__str__(),
+                              # "base_template": page.base_template.__str__(),
+                              # "description": page.description,
+                              # "date_start": page.date_start,
+                              # "date_end": page.date_end,
+                              # "state": page.state,
+                              # "type": page.type,
+                              # "tags": [i.slug for i in page.tags.all()],
+                              # "is_active": page.is_active}
+        # result['pages'] = pages
+        # return Response(result)
 
 
-@method_decorator(staff_member_required, name='dispatch')
-class EditorWebsitePage(APIView):
-    """
-    Editor user get website webpath permissions
-    """
-    description = "Get user\'s editorial boards websites single webpath"
+# @method_decorator(staff_member_required, name='dispatch')
+# class EditorWebsitePage(APIView):
+    # """
+    # Editor user get website webpath permissions
+    # """
+    # description = "Get user\'s editorial boards websites single webpath"
 
-    def get(self, request, site_id, page_id):
-        page = get_object_or_404(Page,
-                                 pk=page_id,
-                                 webpath__site__pk=site_id,
-                                 webpath__site__is_active=True)
-        result = {}
-        result['site_name'] = page.webpath.site.name
-        result['site_domain'] = page.webpath.site.domain
-        result['name'] = page.name
-        result['title'] = page.title
-        result['webpath'] = page.webpath.__str__()
-        result['base_template'] = page.base_template.__str__()
-        result['description'] = page.description
-        result['date_start'] = page.date_start
-        result['date_end'] = page.date_end
-        result['state'] = page.state
-        result['type'] = page.type
-        result['tags'] = [i.slug for i in page.tags.all()]
-        result['is_active'] = page.is_active
-        return Response(result)
+    # def get(self, request, site_id, page_id):
+        # page = get_object_or_404(Page,
+                                 # pk=page_id,
+                                 # webpath__site__pk=site_id,
+                                 # webpath__site__is_active=True)
+        # result = {}
+        # result['site_name'] = page.webpath.site.name
+        # result['site_domain'] = page.webpath.site.domain
+        # result['name'] = page.name
+        # result['title'] = page.title
+        # result['webpath'] = page.webpath.__str__()
+        # result['base_template'] = page.base_template.__str__()
+        # result['description'] = page.description
+        # result['date_start'] = page.date_start
+        # result['date_end'] = page.date_end
+        # result['state'] = page.state
+        # result['type'] = page.type
+        # result['tags'] = [i.slug for i in page.tags.all()]
+        # result['is_active'] = page.is_active
+        # return Response(result)

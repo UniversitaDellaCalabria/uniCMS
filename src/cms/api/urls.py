@@ -32,7 +32,7 @@ urlpatterns += path('api/news/view/<str:slug>',
                     name='publication-detail'),
 
 urlpatterns += path('api/editorial-board/site/list/',
-                    api_views.EditorWebsites.as_view(),
+                    api_views.EditorWebsiteList.as_view(),
                     name='editorial-board-site-list'),
 
 urlpatterns += path('api/editorial-board/site/<int:site_id>/webpath/list/',
@@ -40,21 +40,17 @@ urlpatterns += path('api/editorial-board/site/<int:site_id>/webpath/list/',
                     name='editorial-board-site-webpath-list'),
 
 urlpatterns += path('api/editorial-board/site/<int:site_id>/webpath/<int:webpath_id>/view/',
-                    api_views.EditorWebsiteWebpath.as_view(),
+                    api_views.EditorWebsiteWebpathView.as_view(),
                     name='editorial-board-site-webpath-view'),
 
 urlpatterns += path('api/editorial-board/site/<int:site_id>/webpath/new/',
                     api_views.EditorWebsiteWebpathNew.as_view(),
                     name='editorial-board-site-webpath-new'),
 
-urlpatterns += path('api/editorial-board/site/<int:site_id>/webpath/<int:webpath_id>/delete/',
-                    api_views.EditorWebsiteWebpathDelete.as_view(),
-                    name='editorial-board-site-webpath-delete'),
+# urlpatterns += path('api/editorial-board/site/<int:site_id>/page/list/',
+                    # api_views.EditorWebsitePages.as_view(),
+                    # name='editorial-board-site-page-list'),
 
-urlpatterns += path('api/editorial-board/site/<int:site_id>/page/list/',
-                    api_views.EditorWebsitePages.as_view(),
-                    name='editorial-board-site-page-list'),
-
-urlpatterns += path('api/editorial-board/site/<int:site_id>/page/<int:page_id>/view/',
-                    api_views.EditorWebsitePage.as_view(),
-                    name='editorial-board-site-page-view'),
+# urlpatterns += path('api/editorial-board/site/<int:site_id>/page/<int:page_id>/view/',
+                    # api_views.EditorWebsitePage.as_view(),
+                    # name='editorial-board-site-page-view'),

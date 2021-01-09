@@ -59,12 +59,10 @@ class ContextUnitTest(TestCase):
     @classmethod
     def create_editorialboard_user(cls, **kwargs):
         if not kwargs:
-            cls.create_webpath()
             kwargs =  {'user': cls.create_user(),
                        'permission': '1',
                        'webpath': cls.create_webpath(),
                        'is_active': True}
-
         ebe = EditorialBoardEditors.objects.create(**kwargs)
         return ebe
 
@@ -73,27 +71,27 @@ class ContextUnitTest(TestCase):
         webpath = self.create_webpath()
         webpath.__str__()
         assert webpath.split() == ['/']
-        
+
         # test without alias
         assert not webpath.is_alias
         assert not webpath.redirect_url
-        
+
         assert webpath.get_full_path() == \
             sanitize_path(f'/{CMS_PATH_PREFIX}/{webpath.path}')
-        
+
         # test reserved words
         webpath.path = 'that/contents/news/view'
         try:
             webpath.save()
         except Exception as e:
             assert isinstance(e, ReservedWordException)
-        
+
         # test split
         webpath.path = '/test/io'
         webpath.save()
         res = webpath.split()
         assert isinstance(res, list) and len(res) > 1
-        
+
         webpath.delete()
 
     def test_parented_webpath(self):
@@ -105,7 +103,7 @@ class ContextUnitTest(TestCase):
         webpath2 = WebPath.objects.create(**kwargs)
         assert webpath2.get_full_path() == \
             sanitize_path(f'/{CMS_PATH_PREFIX}/{webpath.path}/{webpath2.path}')
-        
+
         # covers child updates
         webpath.save()
 
@@ -118,9 +116,9 @@ class ContextUnitTest(TestCase):
         webpath2 = WebPath.objects.create(**kwargs)
         assert webpath2.get_full_path() == \
             sanitize_path(f'/{CMS_PATH_PREFIX}/{webpath.path}')
-        
+
         assert webpath2.redirect_url == webpath.get_full_path()
-        
+
         # change to a third party url
         _url = 'http://example.org'
         webpath2.alias_url = _url
@@ -148,7 +146,7 @@ class ContextUnitTest(TestCase):
     def tests_templatetags_cms_sites(self):
         self.create_website()
         assert len(cms_sites()) == 1
-    
+
     # Template tag
     def tests_templatetags_call(self):
         webpath = self.create_webpath()
@@ -159,5 +157,5 @@ class ContextUnitTest(TestCase):
         req = RequestFactory().get('/')
         template_context = dict(request=req)
         lm = language_menu(context=template_context)
-        assert lm and isinstance(lm, dict) 
+        assert lm and isinstance(lm, dict)
     # end Template tags tests
