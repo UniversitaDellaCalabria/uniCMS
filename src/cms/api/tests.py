@@ -24,11 +24,11 @@ class APIUnitTest(TestCase):
         # two editorialboard_user with different webpaths
         ContextUnitTest.create_editorialboard_user(user=user,
                                                    webpath=webpath,
-                                                   permission='1',
+                                                   permission=1,
                                                    is_active=True)
         ContextUnitTest.create_editorialboard_user(user=user,
                                                    webpath=None,
-                                                   permission='8',
+                                                   permission=8,
                                                    is_active=True)
         url = reverse('unicms_api:editorial-board-site-list')
         # accessible to staff users only
@@ -97,7 +97,7 @@ class APIUnitTest(TestCase):
         # if not publisher permissions
         assert res.status_code == 403
         # if publisher permissions
-        ebu_parent.permission = '7'
+        ebu_parent.permission = 7
         ebu_parent.save()
         res = req.patch(parent_url,
                         data=parent_json,
@@ -109,7 +109,7 @@ class APIUnitTest(TestCase):
         # edit child parent
         ebu_child = ContextUnitTest.create_editorialboard_user(user=user,
                                                                webpath=ContextUnitTest.create_webpath(),
-                                                               permission='3',
+                                                               permission=3,
                                                                is_active=True)
         child = ebu_child.webpath
         child_url = reverse('unicms_api:editorial-board-site-webpath-view',
@@ -137,7 +137,7 @@ class APIUnitTest(TestCase):
         assert res.status_code == 404
 
         # wrong permissions on parent
-        ebu_parent.permission = '3'
+        ebu_parent.permission = 3
         ebu_parent.save()
         child_json = {'parent': parent.pk}
         res = req.patch(child_url,
@@ -147,7 +147,7 @@ class APIUnitTest(TestCase):
         assert res.status_code == 403
 
         # correct data and permissions on parent
-        ebu_parent.permission = '7'
+        ebu_parent.permission = 7
         ebu_parent.save()
 
         # wrong alias
@@ -253,7 +253,7 @@ class APIUnitTest(TestCase):
         assert res.status_code == 403
 
         # update permissions on parent webpath
-        ebu_parent.permission = '7'
+        ebu_parent.permission = 7
         ebu_parent.save()
 
         # invalid alias

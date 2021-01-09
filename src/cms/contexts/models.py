@@ -180,8 +180,8 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
     """
     user = models.ForeignKey(get_user_model(),
                              on_delete=models.CASCADE)
-    permission = models.CharField(max_length=5, blank=False, null=False,
-                                  choices=CMS_CONTEXT_PERMISSIONS)
+    permission = models.IntegerField(blank=False, null=False,
+                                     choices=CMS_CONTEXT_PERMISSIONS)
     webpath = models.ForeignKey(WebPath,
                                 on_delete=models.CASCADE,
                                 null=True, blank=True)
@@ -207,7 +207,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
 
         # search for user permissions in specific webpath
         for webpath_permission in webpath_permissions:
-            permission = int(webpath_permission.permission)
+            permission = webpath_permission.permission
             if permission > result: result = permission
         if result > 0: return result
 
@@ -223,7 +223,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
         if check_all:
             all_permissions = permissions.filter(webpath=None)
             for all_permission in all_permissions:
-                permission = int(all_permission.permission)
+                permission = all_permission.permission
                 if permission > result: result = permission
 
             return result if result > 0 else False

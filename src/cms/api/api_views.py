@@ -157,7 +157,7 @@ class EditorWebsiteWebpathList(APIView, UniCmsApiPagination):
                                                               webpath=webpath)
             serialized_webpath = webpath.serialize()
             serialized_webpath["permission_id"] = permission
-            webpath_permission = context_permissions[str(permission)] if permission else None
+            webpath_permission = context_permissions[permission] if permission else None
             serialized_webpath["permission_label"] = webpath_permission
             webpaths.append(serialized_webpath)
 
@@ -186,7 +186,7 @@ class EditorWebsiteWebpathView(APIView):
 
         permission = EditorialBoardEditors.get_permission(webpath, request.user)
         result["permission_id"] = permission
-        webpath_permission = context_permissions[str(permission)] if permission else None
+        webpath_permission = context_permissions[permission] if permission else None
         result["permission_label"] = webpath_permission
         return Response(result)
 
@@ -346,7 +346,7 @@ class EditorWebsiteWebpathNew(APIView):
         if permission != 8:
             EditorialBoardEditors.objects.create(user=request.user,
                                                  webpath=webpath,
-                                                 permission=str(permission),
+                                                 permission=permission,
                                                  is_active=True)
         url = reverse('unicms_api:editorial-board-site-webpath-view',
                       kwargs={'site_id': site_id,

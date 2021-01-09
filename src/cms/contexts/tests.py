@@ -60,7 +60,7 @@ class ContextUnitTest(TestCase):
     def create_editorialboard_user(cls, **kwargs):
         if not kwargs:
             kwargs =  {'user': cls.create_user(),
-                       'permission': '1',
+                       'permission': 1,
                        'webpath': cls.create_webpath(),
                        'is_active': True}
         ebe = EditorialBoardEditors.objects.create(**kwargs)
