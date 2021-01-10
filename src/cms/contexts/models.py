@@ -152,21 +152,11 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
         for child_path in WebPath.objects.filter(parent=self):
             child_path.save()
 
-    def get_parent_id(self):
-        return self.parent.pk if self.parent else None
+    # def get_parent_id(self):
+        # return self.parent.pk if self.parent else None
 
     def get_parent_fullpath(self):
         return self.parent.get_full_path() if self.parent else ''
-
-    def serialize(self):
-        return {"pk": self.pk,
-                "site_name": self.site.name,
-                "site_domain": self.site.domain,
-                "name": self.name,
-                "parent_id": self.get_parent_id(),
-                "parent_fullpath": self.get_parent_fullpath(),
-                "fullpath": self.get_full_path(),
-                "is_active": self.is_active}
 
     def __str__(self):
         return '{} @ {}{}'.format(self.name, self.site, self.get_full_path())
@@ -200,7 +190,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
 
         # webpath and user must be true
         if not all((webpath, user)):
-            return False
+            return 0
 
         permissions = EditorialBoardEditors.objects.filter(user=user,
                                                            is_active=True)
@@ -219,16 +209,17 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
                                                check_all=False)
         if parent_permission in (2, 5, 8):
             return parent_permission
+
         # search for user permissions
-        results = set()
+        result = 0
         if check_all:
             all_permissions = permissions.filter(webpath=None)
             for entry in all_permissions:
-                if entry.permission > 0:
-                    results.add(entry.permission)
-            return list(results)
+                if entry.permission > result:
+                    result = entry.permission
+            return result
 
-        return False
+        return 0
 
     def __str__(self):
         if self.webpath:

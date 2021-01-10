@@ -137,7 +137,7 @@ class ContextUnitTest(TestCase):
 
         ebe_q = dict(webpath = ebe.webpath, user = ebe.user)
 
-        for i in range(8):
+        for i in range(1,9):
             # test some permissions
             perm = EditorialBoardEditors.get_permission(**ebe_q)
             logger.debug(f'User {ebe.user} {perm_dict[perm]}')

@@ -61,7 +61,7 @@ class APIUnitTest(TestCase):
         webpath = ebu.webpath
         url = reverse('unicms_api:editorial-board-site-webpath-view',
                       kwargs={'site_id': webpath.site.pk,
-                              'webpath_id': webpath.pk})
+                              'pk': webpath.pk})
 
         # accessible to staff users only
         res = req.get(url)
@@ -73,20 +73,33 @@ class APIUnitTest(TestCase):
         res = req.get(url)
         assert isinstance(res.json(), dict)
 
-    def test_webpath_patch(self):
+    def test_webpath_edit(self):
         req = Client()
+        site = ContextUnitTest.create_website()
+        root_webpath = ContextUnitTest.create_webpath(site=site)
         ebu_parent = ContextUnitTest.create_editorialboard_user()
+        ebu_root = ContextUnitTest.create_editorialboard_user(user=ebu_parent.user,
+                                                              webpath=root_webpath,
+                                                              permission=7)
         parent = ebu_parent.webpath
+        parent.site = site
+        parent.parent = root_webpath
+        parent.save()
+
         parent_url = reverse('unicms_api:editorial-board-site-webpath-view',
                              kwargs={'site_id': parent.site.pk,
-                                     'webpath_id': parent.pk})
-        parent_json = {'name': 'edited name'}
+                                     'pk': parent.pk})
+        parent_json = {'site': site.pk,
+                       'parent': root_webpath.pk,
+                       'name': 'edited name',
+                       'path': 'test',
+                       'is_active': True}
 
         # accessible to staff users only
-        res = req.patch(parent_url,
-                        data=parent_json,
-                        content_type='application/json',
-                        follow=1)
+        res = req.put(parent_url,
+                      data=parent_json,
+                      content_type='application/json',
+                      follow=1)
         assert res.status_code == 403
         user = ebu_parent.user
         user.is_staff = True
@@ -98,12 +111,26 @@ class APIUnitTest(TestCase):
         # if publisher permissions
         ebu_parent.permission = 7
         ebu_parent.save()
-        res = req.patch(parent_url,
-                        data=parent_json,
-                        content_type='application/json',
-                        follow=1)
+        res = req.put(parent_url,
+                      data=parent_json,
+                      content_type='application/json',
+                      follow=1)
         parent.refresh_from_db()
         assert parent.name == 'edited name'
+
+        # no site
+        parent_json['site'] = None
+        res = req.put(parent_url, data=parent_json,
+                      content_type='application/json', follow=1)
+        assert res.status_code == 404
+        parent_json['site'] = site.pk
+
+        # no parent
+        parent_json['parent'] = None
+        res = req.put(parent_url, data=parent_json,
+                      content_type='application/json', follow=1)
+        assert res.status_code == 404
+        parent_json['parent'] = root_webpath.pk
 
         # edit child parent
         ebu_child = ContextUnitTest.create_editorialboard_user(user=user,
@@ -112,15 +139,15 @@ class APIUnitTest(TestCase):
                                                                is_active=True)
         child = ebu_child.webpath
         child_url = reverse('unicms_api:editorial-board-site-webpath-view',
-                            kwargs={'site_id': child.site.pk,
-                                    'webpath_id': child.pk})
+                            kwargs={'site_id': site.pk,
+                                    'pk': child.pk})
 
         # wrong child permissions
         child_json = {}
-        res = req.patch(child_url,
-                        data=child_json,
-                        content_type='application/json',
-                        follow=1)
+        res = req.put(child_url,
+                      data=child_json,
+                      content_type='application/json',
+                      follow=1)
         assert res.status_code == 403
 
         # fix child permissions
@@ -128,21 +155,29 @@ class APIUnitTest(TestCase):
         ebu_child.save()
 
         # wrong parent
-        child_json = {'parent': 100023123123123}
-        res = req.patch(child_url,
-                        data=child_json,
-                        content_type='application/json',
-                        follow=1)
+        child_json = {'site': site.pk,
+                      'parent': 100023123123123,
+                      'name': 'child name',
+                      'path': 'test',
+                      'is_active': True}
+        res = req.put(child_url,
+                      data=child_json,
+                      content_type='application/json',
+                      follow=1)
         assert res.status_code == 404
 
         # wrong permissions on parent
         ebu_parent.permission = 3
         ebu_parent.save()
-        child_json = {'parent': parent.pk}
-        res = req.patch(child_url,
-                        data=child_json,
-                        content_type='application/json',
-                        follow=1)
+        child_json = {'site': site.pk,
+                      'parent': parent.pk,
+                      'name': 'child name',
+                      'path': 'test',
+                      'is_active': True}
+        res = req.put(child_url,
+                      data=child_json,
+                      content_type='application/json',
+                      follow=1)
         assert res.status_code == 403
 
         # correct data and permissions on parent
@@ -150,43 +185,70 @@ class APIUnitTest(TestCase):
         ebu_parent.save()
 
         # wrong alias
-        child_json = {'alias': 12312321312}
-        res = req.patch(child_url,
-                        data=child_json,
-                        content_type='application/json',
-                        follow=1)
-        assert res.status_code == 404
+        child_json = {'site': site.pk,
+                      'parent': parent.pk,
+                      'name': 'child name',
+                      'alias': 12312321,
+                      'path': 'test',
+                      'is_active': True}
+        res = req.put(child_url,
+                      data=child_json,
+                      content_type='application/json',
+                      follow=1)
+        assert res.status_code == 400
 
         # correct alias
-        child_json = {'alias': parent.pk}
-        res = req.patch(child_url,
-                        data=child_json,
-                        content_type='application/json',
-                        follow=1)
+        child_json = {'site': site.pk,
+                      'parent': parent.pk,
+                      'name': 'child name',
+                      'alias': parent.pk,
+                      'path': 'test',
+                      'is_active': True}
+        res = req.put(child_url,
+                      data=child_json,
+                      content_type='application/json',
+                      follow=1)
         child.refresh_from_db()
         assert child.alias == parent
 
-        child_json = {'alias': None}
-        res = req.patch(child_url,
-                        data=child_json,
-                        content_type='application/json',
-                        follow=1)
+        child_json = {'site': site.pk,
+                      'parent': parent.pk,
+                      'name': 'child name',
+                      'alias': None,
+                      'path': 'test',
+                      'is_active': True}
+        res = req.put(child_url,
+                      data=child_json,
+                      content_type='application/json',
+                      follow=1)
         child.refresh_from_db()
         assert isinstance(res.json(), dict)
 
-        child_json = {'alias_url': 'https://www.unical.it'}
-        res = req.patch(child_url,
-                        data=child_json,
-                        content_type='application/json',
-                        follow=1)
+        child_json = {'site': site.pk,
+                      'parent': parent.pk,
+                      'name': 'child name',
+                      'alias': parent.pk,
+                      'alias_url': 'https://www.unical.it',
+                      'path': 'test',
+                      'is_active': True}
+        res = req.put(child_url,
+                      data=child_json,
+                      content_type='application/json',
+                      follow=1)
         child.refresh_from_db()
         assert child.alias_url == 'https://www.unical.it'
 
-        child_json = {'is_active': False}
-        res = req.patch(child_url,
-                        data=child_json,
-                        content_type='application/json',
-                        follow=1)
+        child_json = {'site': site.pk,
+                      'parent': parent.pk,
+                      'name': 'child name',
+                      'alias': parent.pk,
+                      'alias_url': 'https://www.unical.it',
+                      'path': 'test',
+                      'is_active': False}
+        res = req.put(child_url,
+                      data=child_json,
+                      content_type='application/json',
+                      follow=1)
         child.refresh_from_db()
         assert child.is_active == False
 
@@ -196,7 +258,7 @@ class APIUnitTest(TestCase):
         webpath = ebu.webpath
         url = reverse('unicms_api:editorial-board-site-webpath-view',
                       kwargs={'site_id': webpath.site.pk,
-                              'webpath_id': webpath.pk})
+                              'pk': webpath.pk})
 
         # accessible to staff users only
         res = req.delete(url)
@@ -225,10 +287,12 @@ class APIUnitTest(TestCase):
         parent = ebu_parent.webpath
 
         # data with wrong parent
-        data = {'parent': 123123123213,
+        data = {'site': parent.site.pk,
+                'parent': 123123123213,
                 'name': 'test webpath',
-                'path': 'test'}
-        url = reverse('unicms_api:editorial-board-site-webpath-new',
+                'path': 'test',
+                'is_active': True}
+        url = reverse('unicms_api:editorial-board-site-webpath-list',
                       kwargs={'site_id': parent.site.pk})
 
         # accessible to staff users only
@@ -239,6 +303,20 @@ class APIUnitTest(TestCase):
         user.is_staff = True
         user.save()
         req.force_login(user)
+
+        # no site
+        data['site'] = None
+        res = req.post(url, data=data,
+                       content_type='application/json', follow=1)
+        assert res.status_code == 404
+        data['site'] = parent.site.pk
+
+        # no parent
+        data['parent'] = None
+        res = req.post(url, data=data,
+                       content_type='application/json', follow=1)
+        assert res.status_code == 404
+        data['parent'] = 123123123213
 
         # wrong parent
         res = req.post(url, data=data,
@@ -259,7 +337,7 @@ class APIUnitTest(TestCase):
         data['alias'] = 1231231
         res = req.post(url, data=data,
                        content_type='application/json', follow=1)
-        assert res.status_code == 404
+        assert res.status_code == 400
 
         # valid alias
         data['alias'] = parent.pk
