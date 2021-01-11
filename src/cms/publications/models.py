@@ -10,6 +10,8 @@ from cms.templates.models import (TemplateBlock,
                                   SectionAbstractModel,
                                   SortableModel,
                                   TimeStampedModel)
+from markdown import markdown
+from markdownify import markdownify
 from taggit.managers import TaggableManager
 
 from . settings import *
@@ -135,9 +137,28 @@ class Publication(AbstractPublication, AbstractPublicable,
     def title2slug(self):
         return slugify(self.title)
 
+    def content_save_switch(self):
+        old_content_type = None
+        if self.pk:
+            current_entry = self.__class__.objects.filter(pk=self.pk).first()
+            if current_entry:
+                old_content_type = current_entry.content_type
+        
+        if (old_content_type and
+            self.content and 
+            self.pk and
+            self.content_type != old_content_type):
+
+            # markdown to html
+            if old_content_type == 'html':
+                self.content = markdownify(self.content)
+            elif old_content_type == 'markdown':
+                self.content = markdown(self.content)
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = self.title2slug()
+        self.content_save_switch()
         super(self.__class__, self).save(*args, **kwargs)
 
     def get_attachments(self):
@@ -165,6 +186,15 @@ class Publication(AbstractPublication, AbstractPublicable,
         if not pub_context: return ''
         return pub_context.get_url_list(category_name=category_name)
 
+    @property
+    def html_content(self):
+        content = ''
+        if self.content_type == 'markdown':
+            content = markdown(self.content)
+        elif self.content_type == 'html':
+            content = self.content
+        return content
+    
     def __str__(self):
         return '{} {}'.format(self.title, self.state)
 

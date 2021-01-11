@@ -38,7 +38,7 @@ class PublicationUnitTest(TestCase):
         data = {'is_active': 1,
                 'title':'Papiri, Codex, Libri. La attraverso labora lorem ipsum',
                 'subheading':'Itaque earum rerum hic tenetur a sapiente delectus',
-                'content':'<p>Sed ut perspiciatis unde omnis iste natus error </p>',
+                'content':'<p>Sed ut <b>perspiciatis</b> unde omnis iste natus error </p>',
                 'content_type': 'html',
                 'presentation_image': media,
                 'state':'published',
@@ -154,6 +154,31 @@ class PublicationUnitTest(TestCase):
         return pub
 
 
+    def test_publication_content_type(self):
+        pub = self.create_pub()
+
+        # html to markdown
+        pub.content_type = 'markdown'
+        pub.save()
+        pub.html_content
+        pub.refresh_from_db()
+        assert '**' in pub.content
+
+        # markdown to html
+        pub.content_type = 'html'
+        pub.save()
+        pub.html_content
+        pub.refresh_from_db()
+        assert '</strong>' in pub.content
+
+        # html to markdown
+        pub.content_type = 'markdown'
+        pub.save()
+        pub.refresh_from_db()
+        assert '**' in pub.content
+
+        assert '</p>' in pub.html_content
+        
     def test_api_pubcont(self):
 
         def test_call(url):
@@ -192,6 +217,7 @@ class PublicationUnitTest(TestCase):
         assert res['current_url'] == url
         assert res['previous_url']
         assert res['next_url'] == None
+
 
     def test_api_pub_detail(self):
         pub = self.enrich_pub()
