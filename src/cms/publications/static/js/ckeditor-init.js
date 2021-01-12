@@ -8,8 +8,15 @@
  * 
  */
 
-window.onload = function() {
 
+// load ckfinder js
+const script = document.createElement('script')
+script.src = 'https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js';
+document.head.append(script)
+
+
+window.onload = function() {
+    
     let content_type = document.querySelector('#id_content_type').value;
     ClassicEditor.defaultConfig = {
         toolbar: {
@@ -20,7 +27,7 @@ window.onload = function() {
                 'bold', 'italic', 'strikethrough', 'underline', 'removeformat', '|',
                 'blockQuote', 'codeBlock', '|',
                 'outdent', 'indent', '|',
-                'imageInsert', 'link', 'horizontalLine', '|',
+                'imageInsert', 'ckfinder', 'link', 'horizontalLine', '|',
                 'bulletedList', 'numberedList', 'todoList', '|',
                 'insertTable', 'specialCharacters', '|',
                 'undo', 'redo', '|',
@@ -71,6 +78,25 @@ window.onload = function() {
                 'imageTextAlternative'
             ]
         },
+
+        ckfinder: {
+            uploadUrl: '/ingoallla/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json',
+            
+            // Open the file manager in the pop-up window.
+            //openerMethod: 'popup',
+            
+            // https://ckeditor.com/docs/ckfinder/ckfinder3/#!/api/CKFinder.Config
+            options: {
+                
+                resourceType: 'Images',
+                readOnly : true,
+                //removeModules : ['UploadFileButton', 'RenameFile', 'Html5Upload', 'FormUpload', 'DeleteFile', 'DeleteFolder'],
+            },
+
+        },
+        table: {
+          contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
+        },
         indentBlock: {
             offset: 15,
             unit: "pk"
@@ -91,6 +117,9 @@ window.onload = function() {
         .create( document.querySelector( '#id_content' ) )
         .then( editor => {
             window.editor = editor;
+            
+            // configuration overload
+            editor.ui.view.editable.element.style.minHeight = "280px";
             //console.log( editor );
             //console.log( Array.from( editor.ui.componentFactory.names() ) );
         } )
@@ -99,3 +128,8 @@ window.onload = function() {
         } );
 
 }
+
+window.addEventListener("load", function(){
+    CKFinder.basePath = '/api/medias/ckfinder';
+    CKFinder._connectors.php = '/api/medias/ckfinder/connector/'
+});

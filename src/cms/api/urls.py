@@ -3,6 +3,8 @@ from django.urls import path
 from cms.menus.api_views import ApiMenu
 from . import api_views
 
+app_name = 'unicms_api'
+
 urlpatterns = []
 
 # Public API Resources
@@ -27,6 +29,20 @@ urlpatterns += path('api/editorial-board/site/<int:site_id>/webpaths/<int:pk>/',
 
 urlpatterns += path('api/medias/', api_views.MediaList.as_view(), name='medias'),
 urlpatterns += path('api/medias/<int:pk>/', api_views.MediaView.as_view(), name='media'),
+
+
+urlpatterns += path('api/medias/ckfinder/config.js', api_views.ckfinder_config, name='media-ckfinder-config'),
+urlpatterns += path('api/medias/ckfinder/skins/neko/skin.js', api_views.ckfinder_nero_skin, name='media-ckfinder-nero-skin'),
+urlpatterns += path('api/medias/ckfinder/libs/jquery.js', api_views.ckfinder_jquery, name='media-ckfinder-jquery'),
+urlpatterns += path('api/medias/ckfinder/libs/jquery.mobile.js', api_views.ckfinder_jquery_mobile, name='media-ckfinder-jquery-mobile'),
+urlpatterns += path('api/medias/ckfinder/libs/jquery.mobile.structure.css', api_views.ckfinder_jquery_mobile_structure_css, name='media-ckfinder-jquery-mobile-css'),
+urlpatterns += path('api/medias/ckfinder/skins/core/ckfinder.css', api_views.ckfinder_css, name='media-ckfinder-css'),
+urlpatterns += path('api/medias/ckfinder/skins/neko/icons.css', api_views.ckfinder_icons_css, name='media-ckfinder-icons-css'),
+urlpatterns += path('api/medias/ckfinder/skins/neko/ckfinder.css', api_views.ckfinder_skins_neko_css, name='media-ckfinder-skins-neko-css'),
+urlpatterns += path('api/medias/ckfinder/lang/en.json', api_views.ckfinder_lang_en, name='media-ckfinder-lang-en'),
+
+urlpatterns += path('api/medias/ckfinder/connector/', api_views.MediaCKFinder.as_view(), name='media-ckfinder-connector'),
+
 
 urlpatterns += path('api/carousels/', api_views.CarouselList.as_view(), name='carousels'),
 urlpatterns += path('api/carousels/<int:pk>/', api_views.CarouselView.as_view(), name='carousel'),

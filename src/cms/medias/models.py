@@ -22,9 +22,14 @@ FILETYPE_ALLOWED = getattr(settings, 'FILETYPE_ALLOWED',
 
 def context_media_path(instance, filename): # pragma: no cover
     # file will be uploaded to MEDIA_ROOT/<year>/<filename>
-    return 'medias/{}/{}'.format(timezone.now().year,
-                                 filename)
-
+    if instance.path:
+        root = f'medias/{instance.path}'
+        if not os.path.isdir(root):
+            os.makedirs(f'{CMS_TEMPLATES_FOLDER}')
+    else:
+        root = f'medias/{timezone.now().year}'
+    return '{}/{}'.format(root, filename) 
+    
 
 class AbstractMedia(models.Model):
     file_size = models.IntegerField(blank=True, null=True)
@@ -67,6 +72,11 @@ class Media(ActivableModel, TimeStampedModel, AbstractMedia, CreatedModifiedBy):
                             validators=[validate_file_extension,
                                         validate_file_size,
                                         validate_image_size_ratio])
+    path = models.FilePathField(path=f'{settings.MEDIA_ROOT}/medias', 
+                                allow_files=False,
+                                allow_folders=True,
+                                # match="that-prefix.*", 
+                                recursive=True)
     description = models.TextField()
 
     class Meta:
@@ -74,7 +84,11 @@ class Media(ActivableModel, TimeStampedModel, AbstractMedia, CreatedModifiedBy):
         ordering = ['pk']
 
     def get_media_path(self):
-        return f'{settings.MEDIA_URL}{self.file}'
+        return f'{settings.MEDIA_URL}{self.path}/{self.file}'
+
+    @property
+    def storage_path(self):
+        return f'{self.path}/{self.file}'
 
     def __str__(self):
         return '{} {}'.format(self.title, self.file_type)
