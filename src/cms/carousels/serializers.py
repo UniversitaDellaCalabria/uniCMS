@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from . models import *
+from . models import Carousel, CarouselItem, CarouselItemLink, CarouselItemLinkLocalization, CarouselItemLocalization
 
 
 class CarouselSerializer(serializers.ModelSerializer):

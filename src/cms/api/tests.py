@@ -8,7 +8,7 @@ from django.test import Client, TestCase
 from django.test.client import encode_multipart
 from django.urls import reverse
 
-from cms.carousels.models import *
+from cms.carousels.models import Carousel, CarouselItem, CarouselItemLink, CarouselItemLinkLocalization, CarouselItemLocalization
 from cms.carousels.tests import CarouselUnitTest
 
 from cms.contexts.models import WebPath

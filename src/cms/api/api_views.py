@@ -559,7 +559,7 @@ class CarouselItemView(generics.RetrieveUpdateDestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         # get carousel
-        carousel_id = kwargs['carousel_id']
+        kwargs['carousel_id']
         carousel = get_object_or_404(Carousel, pk=kwargs['carousel_id'])
         # check permissions on carousel
         permission = check_user_permission_on_object(request.user,
@@ -938,11 +938,6 @@ class CarouselItemLinkLocalizationView(generics.RetrieveUpdateDestroyAPIView):
             error_msg = _("You don't have permissions on carousel")
             return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
         return super().delete(request, *args, **kwargs)
-
-
-
-
-
 
 
 # @method_decorator(staff_member_required, name='dispatch')
