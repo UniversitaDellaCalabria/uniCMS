@@ -143,11 +143,11 @@ class Publication(AbstractPublication, AbstractPublicable,
             current_entry = self.__class__.objects.filter(pk=self.pk).first()
             if current_entry:
                 old_content_type = current_entry.content_type
-        
+
         if (old_content_type and
-            self.content and 
+            self.content and
             self.pk and
-            self.content_type != old_content_type):
+                self.content_type != old_content_type):
 
             # markdown to html
             if old_content_type == 'html':
@@ -194,7 +194,7 @@ class Publication(AbstractPublication, AbstractPublicable,
         elif self.content_type == 'html':
             content = self.content
         return content
-    
+
     def __str__(self):
         return '{} {}'.format(self.title, self.state)
 

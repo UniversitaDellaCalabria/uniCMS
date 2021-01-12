@@ -11,11 +11,9 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import generics, status
-from rest_framework.decorators import permission_classes
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import (BasePermission,
-                                        DjangoModelPermissions,
-                                        IsAdminUser, IsAuthenticated,
+                                        IsAdminUser,
                                         SAFE_METHODS)
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -34,7 +32,7 @@ from cms.publications.models import Publication, PublicationContext
 from cms.publications.paginators import Paginator
 from cms.publications.utils import publication_context_base_filter
 
-from . utils import *
+from . utils import check_user_permission_on_object
 
 
 CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
@@ -258,7 +256,7 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
         return Response(error_msg, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def put(self, request, *args, **kwargs):
-        context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
+        dict(CMS_CONTEXT_PERMISSIONS)
         site_id = kwargs['site_id']
         webpath = self.get_queryset()
         permission = EditorialBoardEditors.get_permission(webpath=webpath,
@@ -328,6 +326,7 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
 class UserCanAddMediaOrAdminReadonly(BasePermission):
     """
     """
+
     def has_permission(self, request, view):
         user = request.user
         if user.is_superuser and user.is_staff: return True
@@ -388,13 +387,6 @@ class MediaView(generics.RetrieveUpdateDestroyAPIView):
         media = self.get_queryset().first()
         os.remove(media.file.path)
         return super().delete(request, *args, **kwargs)
-
-
-
-
-
-
-
 
 
 # @method_decorator(staff_member_required, name='dispatch')

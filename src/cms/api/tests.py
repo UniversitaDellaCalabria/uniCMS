@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase
 from django.test.client import encode_multipart
 from django.urls import reverse
@@ -363,7 +362,7 @@ class APIUnitTest(TestCase):
 
     def test_media_list(self):
         req = Client()
-        media = MediaUnitTest.create_media()
+        MediaUnitTest.create_media()
         user = ContextUnitTest.create_user()
 
         url = reverse('unicms_api:media-list')
