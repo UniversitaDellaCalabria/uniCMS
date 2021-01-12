@@ -266,7 +266,7 @@ class APIUnitTest(TestCase):
         child.refresh_from_db()
         assert child.is_active == False
 
-        # patch method not allowed
+        # PATCH method not allowed
         res = req.patch(parent_url,
                         data={},
                         content_type='application/json',
@@ -406,7 +406,7 @@ class APIUnitTest(TestCase):
         user.save()
         req.force_login(user)
 
-        # post
+        # POST
         img_file = open(path,'rb')
         data['file'] = img_file
         # user hasn't permission
@@ -420,14 +420,14 @@ class APIUnitTest(TestCase):
         media = Media.objects.filter(title='media1 api-test').first()
         assert media.file
 
-        # get, patch, put, delete
+        # GET, patch, put, delete
         url = reverse('unicms_api:media-view', kwargs={'pk': media.pk})
 
-        # get
+        # GET
         res = req.get(url, content_type='application/json',)
         assert isinstance(res.json(), dict)
 
-        # patch
+        # PATCH
         data = {'title': 'patched'}
         # user hasn't permission
         req.force_login(user2)
@@ -449,7 +449,7 @@ class APIUnitTest(TestCase):
         media.refresh_from_db()
         assert media.title == 'patched'
 
-        # put
+        # PUT
         media.created_by = None
         media.save()
         img_file.seek(0)
@@ -470,7 +470,7 @@ class APIUnitTest(TestCase):
         assert media.title == 'media1 api-test'
         assert not media.is_active
 
-        # delete
+        # DELETE
         # user hasn't permission
         req.force_login(user2)
         res = req.delete(url)
@@ -507,7 +507,7 @@ class APIUnitTest(TestCase):
         res = req.get(url, {'is_active': True})
         assert isinstance(res.json(), dict)
 
-        # post
+        # POST
         data = {'name': 'posted name',
                 'description': 'posted description',
                 'is_active': 0}
@@ -520,14 +520,14 @@ class APIUnitTest(TestCase):
         res = req.post(url, data=data, follow=1)
         assert Carousel.objects.filter(name='posted name').first()
 
-        # get, patch, put, delete
+        # GET, patch, put, delete
         url = reverse('unicms_api:carousel', kwargs={'pk': carousel.pk})
 
-        # get
+        # GET
         res = req.get(url, content_type='application/json',)
         assert isinstance(res.json(), dict)
 
-        # patch
+        # PATCH
         data = {'name': 'patched'}
         # user hasn't permission
         req.force_login(user2)
@@ -549,7 +549,7 @@ class APIUnitTest(TestCase):
         carousel.refresh_from_db()
         assert carousel.name == 'patched'
 
-        # put
+        # PUT
         carousel.created_by = None
         carousel.save()
         data = {'name': 'carousel api-test',
@@ -568,7 +568,7 @@ class APIUnitTest(TestCase):
         assert carousel.name == 'carousel api-test'
         assert not carousel.is_active
 
-        # delete
+        # DELETE
         # user hasn't permission
         req.force_login(user2)
         res = req.delete(url)
@@ -606,7 +606,7 @@ class APIUnitTest(TestCase):
         res = req.get(url, {'is_active': True})
         assert isinstance(res.json(), dict)
 
-        # post
+        # POST
         data = {'carousel': carousel.pk,
                 'image': carousel_item.image.pk,
                 'pre_heading': 'posted pre_heading',
@@ -627,16 +627,16 @@ class APIUnitTest(TestCase):
         res = req.post(url, data=data, follow=1)
         assert CarouselItem.objects.filter(pre_heading='posted pre_heading').first()
 
-        # get, patch, put, delete
+        # GET, patch, put, delete
         url = reverse('unicms_api:carousel-item',
                       kwargs={'carousel_id': carousel.pk,
                               'pk': carousel_item.pk})
 
-        # get
+        # GET
         res = req.get(url, content_type='application/json',)
         assert isinstance(res.json(), dict)
 
-        # patch
+        # PATCH
         # wrong carousel id
         data = {'carousel': 1221321312}
         res = req.patch(url, data,
@@ -665,7 +665,7 @@ class APIUnitTest(TestCase):
         carousel_item.refresh_from_db()
         assert carousel_item.pre_heading == 'patched'
 
-        # put
+        # PUT
         carousel.created_by = None
         carousel.save()
         data = {'carousel': carousel_item.carousel.pk,
@@ -694,7 +694,7 @@ class APIUnitTest(TestCase):
         assert carousel_item.pre_heading == 'putted pre_heading'
         assert not carousel_item.is_active
 
-        # delete
+        # DELETE
         # user hasn't permission
         req.force_login(user2)
         res = req.delete(url)
@@ -734,7 +734,7 @@ class APIUnitTest(TestCase):
         res = req.get(url, {'is_active': True})
         assert isinstance(res.json(), dict)
 
-        # post
+        # POST
         data = {'carousel_item': carousel_item.pk,
                 'language': 'en',
                 'pre_heading': 'posted pre_heading',
@@ -764,17 +764,17 @@ class APIUnitTest(TestCase):
         res = req.post(url, data=data, follow=1)
         assert CarouselItemLocalization.objects.filter(pre_heading='posted pre_heading').first()
 
-        # get, patch, put, delete
+        # GET, patch, put, delete
         url = reverse('unicms_api:carousel-item-localization',
                       kwargs={'carousel_id': carousel.pk,
                               'carousel_item_id': carousel_item.pk,
                               'pk': carousel_item_localization.pk})
 
-        # get
+        # GET
         res = req.get(url, content_type='application/json',)
         assert isinstance(res.json(), dict)
 
-        # patch
+        # PATCH
         # wrong parent carousel
         data = {'carousel_item': 11121}
         res = req.patch(url, data=data,
@@ -803,7 +803,7 @@ class APIUnitTest(TestCase):
         carousel_item_localization.refresh_from_db()
         assert carousel_item_localization.pre_heading == 'patched'
 
-        # put
+        # PUT
         carousel.created_by = None
         carousel.save()
         data = {'carousel_item': carousel_item.pk,
@@ -832,7 +832,7 @@ class APIUnitTest(TestCase):
         assert carousel_item_localization.pre_heading == 'putted pre_heading'
         assert not carousel_item_localization.is_active
 
-        # delete
+        # DELETE
         # user hasn't permission
         req.force_login(user2)
         res = req.delete(url)
@@ -872,7 +872,7 @@ class APIUnitTest(TestCase):
         res = req.get(url, {'is_active': True})
         assert isinstance(res.json(), dict)
 
-        # post
+        # POST
         data = {'carousel_item': carousel_item.pk,
                 'title_preset': carousel_item_link.title_preset,
                 'title': 'posted title',
@@ -901,17 +901,17 @@ class APIUnitTest(TestCase):
         res = req.post(url, data=data, follow=1)
         assert CarouselItemLink.objects.filter(title='posted title').first()
 
-        # get, patch, put, delete
+        # GET, patch, put, delete
         url = reverse('unicms_api:carousel-item-link',
                       kwargs={'carousel_id': carousel.pk,
                               'carousel_item_id': carousel_item.pk,
                               'pk': carousel_item_link.pk})
 
-        # get
+        # GET
         res = req.get(url, content_type='application/json',)
         assert isinstance(res.json(), dict)
 
-        # patch
+        # PATCH
         # wrong parent carousel
         data = {'carousel_item': 11121}
         res = req.patch(url, data=data,
@@ -940,7 +940,7 @@ class APIUnitTest(TestCase):
         carousel_item_link.refresh_from_db()
         assert carousel_item_link.title == 'patched'
 
-        # put
+        # PUT
         carousel.created_by = None
         carousel.save()
         data = {'carousel_item': carousel_item.pk,
@@ -968,7 +968,7 @@ class APIUnitTest(TestCase):
         assert carousel_item_link.title == 'putted title'
         assert not carousel_item_link.is_active
 
-        # delete
+        # DELETE
         # user hasn't permission
         req.force_login(user2)
         res = req.delete(url)
@@ -1010,7 +1010,7 @@ class APIUnitTest(TestCase):
         res = req.get(url, {'is_active': True})
         assert isinstance(res.json(), dict)
 
-        # post
+        # POST
         data = {'carousel_item_link': carousel_item_link.id,
                 'language': 'en',
                 'title': 'posted title',
@@ -1039,18 +1039,18 @@ class APIUnitTest(TestCase):
         res = req.post(url, data=data, follow=1)
         assert CarouselItemLinkLocalization.objects.filter(title='posted title').first()
 
-        # get, patch, put, delete
+        # GET, patch, put, delete
         url = reverse('unicms_api:carousel-item-link-localization',
                       kwargs={'carousel_id': carousel.pk,
                               'carousel_item_id': carousel_item.pk,
                               'carousel_item_link_id': carousel_item_link.pk,
                               'pk': carousel_item_link_localization.pk})
 
-        # get
+        # GET
         res = req.get(url, content_type='application/json',)
         assert isinstance(res.json(), dict)
 
-        # patch
+        # PATCH
         # wrong parent carousel
         data = {'carousel_item_link': 11121}
         res = req.patch(url, data=data,
@@ -1079,7 +1079,7 @@ class APIUnitTest(TestCase):
         carousel_item_link_localization.refresh_from_db()
         assert carousel_item_link_localization.title == 'patched'
 
-        # put
+        # PUT
         carousel.created_by = None
         carousel.save()
         data = {'carousel_item_link': carousel_item_link.id,
@@ -1106,7 +1106,7 @@ class APIUnitTest(TestCase):
         assert carousel_item_link_localization.title == 'putted title'
         assert not carousel_item_link_localization.is_active
 
-        # delete
+        # DELETE
         # user hasn't permission
         req.force_login(user2)
         res = req.delete(url)
