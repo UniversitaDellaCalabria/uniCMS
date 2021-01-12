@@ -71,6 +71,7 @@ class Media(ActivableModel, TimeStampedModel, AbstractMedia, CreatedModifiedBy):
 
     class Meta:
         verbose_name_plural = _("Media")
+        ordering = ['pk']
 
     def get_media_path(self):
         return f'{settings.MEDIA_URL}{self.file}'

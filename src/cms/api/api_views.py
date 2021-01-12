@@ -1,4 +1,5 @@
 import logging
+import os
 
 # from django.contrib.auth.decorators import login_required
 # from django.contrib.admin.views.decorators import staff_member_required
@@ -10,8 +11,12 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import generics, status
+from rest_framework.decorators import permission_classes
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import (BasePermission,
+                                        DjangoModelPermissions,
+                                        IsAdminUser, IsAuthenticated,
+                                        SAFE_METHODS)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -22,10 +27,14 @@ from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
 from cms.contexts.serializers import WebPathSerializer
 from cms.contexts import settings as contexts_settings
 
+from cms.medias.models import Media
+from cms.medias.serializers import MediaSerializer
 
 from cms.publications.models import Publication, PublicationContext
 from cms.publications.paginators import Paginator
 from cms.publications.utils import publication_context_base_filter
+
+from . utils import *
 
 
 CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
@@ -140,19 +149,19 @@ class EditorWebsiteWebpathList(generics.ListCreateAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = WebPathSerializer
 
-    def get_queryset(self): # pragma: no cover
+    def get_queryset(self):
         """
         """
-        pass
+        site_id = self.kwargs['site_id']
+        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        webpaths = WebPath.objects.filter(site=site)
+        return webpaths
 
-    def get(self, request, site_id):
-        site = get_object_or_404(WebSite,
-                                 pk=site_id,
-                                 is_active=True)
+    def get(self, request, *args, **kwargs):
+        webpaths_list = self.get_queryset()
         context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
         webpaths = []
 
-        webpaths_list = WebPath.objects.filter(site=site)
         for webpath in webpaths_list:
             permission = EditorialBoardEditors.get_permission(user=request.user,
                                                               webpath=webpath)
@@ -225,20 +234,18 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = WebPathSerializer
 
-    def get_queryset(self): # pragma: no cover
+    def get_queryset(self):
         """
         """
-        pass
+        site_id = self.kwargs['site_id']
+        pk = self.kwargs['pk']
+        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        webpath = get_object_or_404(WebPath, pk=pk, site=site)
+        return webpath
 
-    def get(self, request, site_id, pk):
-        site = get_object_or_404(WebSite,
-                                 pk=site_id,
-                                 is_active=True)
+    def get(self, request, *args, **kwargs):
         context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
-        webpath = get_object_or_404(WebPath,
-                                    pk=pk,
-                                    site__pk=site_id,
-                                    site__is_active=True)
+        webpath = self.get_queryset()
         result = WebPathSerializer(webpath).data
         permission = EditorialBoardEditors.get_permission(webpath, request.user)
         result["permission_id"] = permission
@@ -246,13 +253,14 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
         result["permission_label"] = webpath_permission
         return Response(result)
 
-    def put(self, request, site_id, pk):
-        site = get_object_or_404(WebSite,
-                                 pk=site_id,
-                                 is_active=True)
-        webpath = get_object_or_404(WebPath,
-                                    pk=pk,
-                                    site=site)
+    def patch(self, request, *args, **kwargs):
+        error_msg = _("Method not allowed. Use put instead")
+        return Response(error_msg, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def put(self, request, *args, **kwargs):
+        context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
+        site_id = kwargs['site_id']
+        webpath = self.get_queryset()
         permission = EditorialBoardEditors.get_permission(webpath=webpath,
                                                           user=request.user)
         publisher_perms = [6,7,8]
@@ -263,9 +271,9 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
             return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
 
         # site in request.data
-        site_pk = request.data.get('site', None)
-        if not site_pk or int(site_pk) != site_id:
-            error_msg = _("Site must be {}").format(site)
+        site_pk = request.data['site']
+        if site_pk != site_id:
+            error_msg = _("Site must be {}").format(webpath.site)
             return Response(error_msg, status=status.HTTP_404_NOT_FOUND)
 
         # parent in request data
@@ -275,8 +283,8 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
             return Response(error_msg, status=status.HTTP_404_NOT_FOUND)
 
         # get active parent
-        parent = WebPath.objects.filter(pk=int(parent_pk),
-                                        site=site).first()
+        parent = WebPath.objects.filter(pk=parent_pk,
+                                        site=webpath.site).first()
         if not parent:
             error_msg = _("Parent not found")
             return Response(error_msg, status=status.HTTP_404_NOT_FOUND)
@@ -315,6 +323,78 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
 
         webpath.delete()
         return Response(_("Webpath deleted successfully"))
+
+
+class UserCanAddMediaOrAdminReadonly(BasePermission):
+    """
+    """
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser and user.is_staff: return True
+        if not user.is_staff: return False
+        if request.method in SAFE_METHODS: return True
+        return user.has_perm('cmsmedias.add_media')
+
+
+class MediaList(generics.ListCreateAPIView):
+    """
+    """
+    description = ""
+    pagination_class = UniCmsApiPagination
+    permission_classes = [UserCanAddMediaOrAdminReadonly]
+    serializer_class = MediaSerializer
+    queryset = Media.objects.filter(is_active=True)
+
+
+class MediaView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+    serializer_class = MediaSerializer
+
+    def get_queryset(self):
+        """
+        """
+        media_id = self.kwargs['pk']
+        media = Media.objects.filter(pk=media_id)
+        return media
+
+    def patch(self, request, *args, **kwargs):
+        permission = check_user_permission_on_object(request.user,
+                                                     self.get_queryset().first(),
+                                                     'cmsmedias.change_media')
+        if not permission:
+            error_msg = _("You don't have permissions")
+            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+        return super().patch(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        permission = check_user_permission_on_object(request.user,
+                                                     self.get_queryset().first(),
+                                                     'cmsmedias.change_media')
+        if not permission:
+            error_msg = _("You don't have permissions")
+            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+        return super().put(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        permission = check_user_permission_on_object(request.user,
+                                                     self.get_queryset().first(),
+                                                     'cmsmedias.delete_media')
+        if not permission:
+            error_msg = _("You don't have permissions")
+            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+        media = self.get_queryset().first()
+        os.remove(media.file.path)
+        return super().delete(request, *args, **kwargs)
+
+
+
+
+
+
+
 
 
 # @method_decorator(staff_member_required, name='dispatch')

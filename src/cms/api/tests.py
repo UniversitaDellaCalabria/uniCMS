@@ -1,11 +1,19 @@
 import logging
 
+from django.conf import settings
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase
+from django.test.client import encode_multipart
 from django.urls import reverse
 
 from cms.contexts.models import WebPath
 from cms.contexts.tests import ContextUnitTest
+
+from cms.medias.models import Media
+from cms.medias.tests import MediaUnitTest
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -89,11 +97,12 @@ class APIUnitTest(TestCase):
         parent_url = reverse('unicms_api:editorial-board-site-webpath-view',
                              kwargs={'site_id': parent.site.pk,
                                      'pk': parent.pk})
+
         parent_json = {'site': site.pk,
                        'parent': root_webpath.pk,
                        'name': 'edited name',
                        'path': 'test',
-                       'is_active': True}
+                       'is_active': 1}
 
         # accessible to staff users only
         res = req.put(parent_url,
@@ -159,7 +168,7 @@ class APIUnitTest(TestCase):
                       'parent': 100023123123123,
                       'name': 'child name',
                       'path': 'test',
-                      'is_active': True}
+                      'is_active': 1}
         res = req.put(child_url,
                       data=child_json,
                       content_type='application/json',
@@ -173,7 +182,7 @@ class APIUnitTest(TestCase):
                       'parent': parent.pk,
                       'name': 'child name',
                       'path': 'test',
-                      'is_active': True}
+                      'is_active': 1}
         res = req.put(child_url,
                       data=child_json,
                       content_type='application/json',
@@ -190,7 +199,7 @@ class APIUnitTest(TestCase):
                       'name': 'child name',
                       'alias': 12312321,
                       'path': 'test',
-                      'is_active': True}
+                      'is_active': 1}
         res = req.put(child_url,
                       data=child_json,
                       content_type='application/json',
@@ -203,7 +212,7 @@ class APIUnitTest(TestCase):
                       'name': 'child name',
                       'alias': parent.pk,
                       'path': 'test',
-                      'is_active': True}
+                      'is_active': 1}
         res = req.put(child_url,
                       data=child_json,
                       content_type='application/json',
@@ -216,7 +225,7 @@ class APIUnitTest(TestCase):
                       'name': 'child name',
                       'alias': None,
                       'path': 'test',
-                      'is_active': True}
+                      'is_active': 1}
         res = req.put(child_url,
                       data=child_json,
                       content_type='application/json',
@@ -230,7 +239,7 @@ class APIUnitTest(TestCase):
                       'alias': parent.pk,
                       'alias_url': 'https://www.unical.it',
                       'path': 'test',
-                      'is_active': True}
+                      'is_active': 1}
         res = req.put(child_url,
                       data=child_json,
                       content_type='application/json',
@@ -244,13 +253,20 @@ class APIUnitTest(TestCase):
                       'alias': parent.pk,
                       'alias_url': 'https://www.unical.it',
                       'path': 'test',
-                      'is_active': False}
+                      'is_active': 0}
         res = req.put(child_url,
                       data=child_json,
                       content_type='application/json',
                       follow=1)
         child.refresh_from_db()
         assert child.is_active == False
+
+        # patch method not allowed
+        res = req.patch(parent_url,
+                        data={},
+                        content_type='application/json',
+                        follow=1)
+        assert res.status_code == 405
 
     def test_webpath_delete(self):
         req = Client()
@@ -291,7 +307,7 @@ class APIUnitTest(TestCase):
                 'parent': 123123123213,
                 'name': 'test webpath',
                 'path': 'test',
-                'is_active': True}
+                'is_active': 1}
         url = reverse('unicms_api:editorial-board-site-webpath-list',
                       kwargs={'site_id': parent.site.pk})
 
@@ -344,3 +360,118 @@ class APIUnitTest(TestCase):
         res = req.post(url, data=data,
                        content_type='application/json', follow=1)
         assert WebPath.objects.filter(name='test webpath').first()
+
+    def test_media_list(self):
+        req = Client()
+        media = MediaUnitTest.create_media()
+        user = ContextUnitTest.create_user()
+
+        url = reverse('unicms_api:media-list')
+
+        # accessible to staff users only
+        res = req.get(url)
+        assert res.status_code == 403
+        user.is_staff = True
+        user.save()
+        req.force_login(user)
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
+    def test_media(self):
+        req = Client()
+        user = ContextUnitTest.create_user()
+        user2 = ContextUnitTest.create_user(username='staff',
+                                            is_staff=True)
+        # media data
+        path = f'{settings.MEDIA_ROOT}/images/categories/eventi.jpg'
+
+        data = {'title': 'media1 api-test',
+                'description': 'blah blah',
+                'is_active': 1}
+        url = reverse('unicms_api:media-list')
+
+        # accessible to staff users only
+        res = req.post(url, data=data,
+                       content_type='application/json', follow=1)
+        assert res.status_code == 403
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
+        req.force_login(user)
+
+        # create
+        img_file = open(path,'rb')
+        data['file'] = img_file
+        # user hasn't permission
+        req.force_login(user2)
+        res = req.post(url, data=data, follow=1)
+        assert res.status_code == 403
+        # user has permission
+        req.force_login(user)
+        img_file.seek(0)
+        res = req.post(url, data=data, follow=1)
+        media = Media.objects.filter(title='media1 api-test').first()
+        assert media.file
+
+        # get, patch, put, delete
+        url = reverse('unicms_api:media-view', kwargs={'pk': media.pk})
+
+        # get
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
+        # patch
+        data = {'title': 'patched'}
+        # user hasn't permission
+        req.force_login(user2)
+        res = req.patch(url, data,
+                        content_type='application/json',
+                        follow=1)
+        assert res.status_code == 403
+        # user has permission
+        media.created_by = user2
+        media.save()
+        content_type = ContentType.objects.get_for_model(Media)
+        edit_perm = Permission.objects.get(content_type=content_type, codename='change_media')
+        user2.user_permissions.add(edit_perm)
+        user2.refresh_from_db()
+        req.force_login(user2)
+        res = req.patch(url, data,
+                        content_type='application/json',
+                        follow=1)
+        media.refresh_from_db()
+        assert media.title == 'patched'
+
+        # put
+        media.created_by = None
+        media.save()
+        img_file.seek(0)
+        data = {'title': 'media1 api-test',
+                'description': 'put',
+                'file': img_file,
+                'is_active': 0}
+        content = encode_multipart('put_data', data)
+        content_type = 'multipart/form-data; boundary=put_data'
+        # user hasn't permission
+        req.force_login(user2)
+        res = req.put(url, content, content_type=content_type)
+        assert res.status_code == 403
+        # user has permission
+        req.force_login(user)
+        res = req.put(url, content, content_type=content_type)
+        media.refresh_from_db()
+        assert media.title == 'media1 api-test'
+        assert not media.is_active
+
+        # delete
+        # user hasn't permission
+        req.force_login(user2)
+        res = req.delete(url)
+        assert res.status_code == 403
+        # user has permission
+        req.force_login(user)
+        res = req.delete(url)
+        try:
+            media.refresh_from_db()
+        except ObjectDoesNotExist:
+            assert True

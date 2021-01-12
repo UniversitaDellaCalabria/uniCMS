@@ -20,7 +20,7 @@ FILETYPE_IMAGE_YX_RATIO_MAX = getattr(settings, 'FILETYPE_IMAGE_YX_RATIO_MAX',
 
 
 def validate_file_size(value):
-    if not hasattr(value._file, 'size'): # pragma: no cover
+    if not hasattr(value.file, 'size'): # pragma: no cover
         return
     content_size = None
     try:
@@ -35,7 +35,7 @@ def validate_file_size(value):
 
 
 def validate_file_extension(value):
-    if not hasattr(value._file, 'file'): # pragma: no cover
+    if not hasattr(value.file, 'file'): # pragma: no cover
         return
 
     mimetype = magic.Magic(mime=True).from_buffer(value._file.file.read())
@@ -46,7 +46,7 @@ def validate_file_extension(value):
 
 
 def validate_image_size_ratio(value):
-    if not hasattr(value._file, 'content_type'): # pragma: no cover
+    if not hasattr(value.file, 'content_type'): # pragma: no cover
         return
 
     mimetype = magic.Magic(mime=True).from_buffer(value._file.file.read())

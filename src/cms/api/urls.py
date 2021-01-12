@@ -43,6 +43,14 @@ urlpatterns += path('api/editorial-board/site/<int:site_id>/webpath/<int:pk>/vie
                     api_views.EditorWebsiteWebpathView.as_view(),
                     name='editorial-board-site-webpath-view'),
 
+urlpatterns += path('api/media/list/',
+                    api_views.MediaList.as_view(),
+                    name='media-list'),
+
+urlpatterns += path('api/media/<int:pk>/view/',
+                    api_views.MediaView.as_view(),
+                    name='media-view'),
+
 # urlpatterns += path('api/editorial-board/site/<int:site_id>/page/list/',
 # api_views.EditorWebsitePages.as_view(),
 # name='editorial-board-site-page-list'),
