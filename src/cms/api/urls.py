@@ -19,14 +19,14 @@ urlpatterns += path('api/news/view/<str:slug>', api_views.PublicationDetail.as_v
 urlpatterns += path('api/menu/<int:menu_id>', ApiMenu.as_view(), name='api-menu'),
 urlpatterns += path('api/menu', ApiMenu.as_view(), name='api-menu-post'),
 
-urlpatterns += path('api/editorial-board/site/list/', api_views.EditorWebsiteList.as_view(), name='editorial-board-site-list'),
-urlpatterns += path('api/editorial-board/site/<int:site_id>/webpath/list/',
-                    api_views.EditorWebsiteWebpathList.as_view(), name='editorial-board-site-webpath-list'),
-urlpatterns += path('api/editorial-board/site/<int:site_id>/webpath/<int:pk>/view/',
-                    api_views.EditorWebsiteWebpathView.as_view(), name='editorial-board-site-webpath-view'),
+urlpatterns += path('api/editorial-board/sites/', api_views.EditorWebsiteList.as_view(), name='editorial-board-sites'),
+urlpatterns += path('api/editorial-board/sites/<int:site_id>/webpaths/',
+                    api_views.EditorWebsiteWebpathList.as_view(), name='editorial-board-site-webpaths'),
+urlpatterns += path('api/editorial-board/site/<int:site_id>/webpaths/<int:pk>/',
+                    api_views.EditorWebsiteWebpathView.as_view(), name='editorial-board-site-webpath'),
 
-urlpatterns += path('api/medias/', api_views.MediaList.as_view(), name='media-list'),
-urlpatterns += path('api/medias/<int:pk>/', api_views.MediaView.as_view(), name='media-view'),
+urlpatterns += path('api/medias/', api_views.MediaList.as_view(), name='medias'),
+urlpatterns += path('api/medias/<int:pk>/', api_views.MediaView.as_view(), name='media'),
 
 urlpatterns += path('api/carousels/', api_views.CarouselList.as_view(), name='carousels'),
 urlpatterns += path('api/carousels/<int:pk>/', api_views.CarouselView.as_view(), name='carousel'),

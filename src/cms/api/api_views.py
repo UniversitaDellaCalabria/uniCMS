@@ -223,7 +223,7 @@ class EditorWebsiteWebpathList(generics.ListCreateAPIView):
                                                      webpath=webpath,
                                                      permission=permission,
                                                      is_active=True)
-            url = reverse('unicms_api:editorial-board-site-webpath-view',
+            url = reverse('unicms_api:editorial-board-site-webpath',
                           kwargs={'site_id': site_id,
                                   'pk': webpath.pk})
             return HttpResponseRedirect(url)
@@ -306,7 +306,7 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
             webpath = serializer.save()
             webpath.modified_by = request.user
             webpath.save()
-            url = reverse('unicms_api:editorial-board-site-webpath-view',
+            url = reverse('unicms_api:editorial-board-site-webpath',
                           kwargs={'site_id': site_id,
                                   'pk': webpath.pk})
             return HttpResponseRedirect(url)

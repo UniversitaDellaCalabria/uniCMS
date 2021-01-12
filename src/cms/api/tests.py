@@ -42,7 +42,7 @@ class APIUnitTest(TestCase):
                                                    webpath=None,
                                                    permission=8,
                                                    is_active=True)
-        url = reverse('unicms_api:editorial-board-site-list')
+        url = reverse('unicms_api:editorial-board-sites')
         # accessible to staff users only
         res = req.get(url)
         assert res.status_code == 403
@@ -55,7 +55,7 @@ class APIUnitTest(TestCase):
     def test_webpath_list(self):
         req = Client()
         ebu = ContextUnitTest.create_editorialboard_user()
-        url = reverse('unicms_api:editorial-board-site-webpath-list',
+        url = reverse('unicms_api:editorial-board-site-webpaths',
                       kwargs={'site_id': ebu.webpath.site.pk})
 
         # accessible to staff users only
@@ -72,7 +72,7 @@ class APIUnitTest(TestCase):
         req = Client()
         ebu = ContextUnitTest.create_editorialboard_user()
         webpath = ebu.webpath
-        url = reverse('unicms_api:editorial-board-site-webpath-view',
+        url = reverse('unicms_api:editorial-board-site-webpath',
                       kwargs={'site_id': webpath.site.pk,
                               'pk': webpath.pk})
 
@@ -99,7 +99,7 @@ class APIUnitTest(TestCase):
         parent.parent = root_webpath
         parent.save()
 
-        parent_url = reverse('unicms_api:editorial-board-site-webpath-view',
+        parent_url = reverse('unicms_api:editorial-board-site-webpath',
                              kwargs={'site_id': parent.site.pk,
                                      'pk': parent.pk})
 
@@ -152,7 +152,7 @@ class APIUnitTest(TestCase):
                                                                permission=3,
                                                                is_active=True)
         child = ebu_child.webpath
-        child_url = reverse('unicms_api:editorial-board-site-webpath-view',
+        child_url = reverse('unicms_api:editorial-board-site-webpath',
                             kwargs={'site_id': site.pk,
                                     'pk': child.pk})
 
@@ -277,7 +277,7 @@ class APIUnitTest(TestCase):
         req = Client()
         ebu = ContextUnitTest.create_editorialboard_user()
         webpath = ebu.webpath
-        url = reverse('unicms_api:editorial-board-site-webpath-view',
+        url = reverse('unicms_api:editorial-board-site-webpath',
                       kwargs={'site_id': webpath.site.pk,
                               'pk': webpath.pk})
 
@@ -313,7 +313,7 @@ class APIUnitTest(TestCase):
                 'name': 'test webpath',
                 'path': 'test',
                 'is_active': 1}
-        url = reverse('unicms_api:editorial-board-site-webpath-list',
+        url = reverse('unicms_api:editorial-board-site-webpaths',
                       kwargs={'site_id': parent.site.pk})
 
         # accessible to staff users only
@@ -378,7 +378,7 @@ class APIUnitTest(TestCase):
 
         # media list
         MediaUnitTest.create_media()
-        url = reverse('unicms_api:media-list')
+        url = reverse('unicms_api:medias')
 
         # accessible to staff users only
         res = req.get(url)
@@ -395,7 +395,7 @@ class APIUnitTest(TestCase):
         data = {'title': 'media1 api-test',
                 'description': 'blah blah',
                 'is_active': 1}
-        url = reverse('unicms_api:media-list')
+        url = reverse('unicms_api:medias')
 
         # accessible to staff users only
         res = req.post(url, data=data,
@@ -421,7 +421,7 @@ class APIUnitTest(TestCase):
         assert media.file
 
         # GET, patch, put, delete
-        url = reverse('unicms_api:media-view', kwargs={'pk': media.pk})
+        url = reverse('unicms_api:media', kwargs={'pk': media.pk})
 
         # GET
         res = req.get(url, content_type='application/json',)
