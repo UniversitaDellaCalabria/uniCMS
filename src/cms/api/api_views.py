@@ -20,6 +20,9 @@ from rest_framework.views import APIView
 
 from cms.api.serializers import PublicationSerializer, settings
 
+from cms.carousels.models import Carousel
+from cms.carousels.serializers import CarouselSerializer
+
 from cms.contexts.decorators import detect_language
 from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
 from cms.contexts.serializers import WebPathSerializer
@@ -342,7 +345,7 @@ class MediaList(generics.ListCreateAPIView):
     pagination_class = UniCmsApiPagination
     permission_classes = [UserCanAddMediaOrAdminReadonly]
     serializer_class = MediaSerializer
-    queryset = Media.objects.filter(is_active=True)
+    queryset = Media.objects.all()
 
 
 class MediaView(generics.RetrieveUpdateDestroyAPIView):
@@ -387,6 +390,39 @@ class MediaView(generics.RetrieveUpdateDestroyAPIView):
         media = self.get_queryset().first()
         os.remove(media.file.path)
         return super().delete(request, *args, **kwargs)
+
+
+class UserCanAddCarouselOrAdminReadonly(BasePermission):
+    """
+    """
+
+    def has_permission(self, request, view):
+        user = request.user
+        if user.is_superuser and user.is_staff: return True
+        if not user.is_staff: return False
+        if request.method in SAFE_METHODS: return True
+        return user.has_perm('cmscarousels.add_carousel')
+
+
+class CarouselList(generics.ListCreateAPIView):
+    """
+    """
+    description = ""
+    pagination_class = UniCmsApiPagination
+    permission_classes = [UserCanAddCarouselOrAdminReadonly]
+    serializer_class = CarouselSerializer
+    queryset = Carousel.objects.all()
+
+
+
+
+
+
+
+
+
+
+
 
 
 # @method_decorator(staff_member_required, name='dispatch')

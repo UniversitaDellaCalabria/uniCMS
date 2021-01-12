@@ -51,6 +51,10 @@ urlpatterns += path('api/media/<int:pk>/view/',
                     api_views.MediaView.as_view(),
                     name='media-view'),
 
+urlpatterns += path('api/carousel/list/',
+                    api_views.CarouselList.as_view(),
+                    name='carousel-list'),
+
 # urlpatterns += path('api/editorial-board/site/<int:site_id>/page/list/',
 # api_views.EditorWebsitePages.as_view(),
 # name='editorial-board-site-page-list'),

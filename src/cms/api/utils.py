@@ -1,6 +1,3 @@
-
-
-
 def check_permission(user, permission):
     """
     check if user has a specific permission
