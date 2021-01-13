@@ -1,55 +1,61 @@
 from django.urls import path
 
 from cms.menus.api_views import ApiMenu
-from . import api_views
+
+from . views import (carousel, carousel_item, carousel_item_link,
+                     carousel_item_link_localization,
+                     carousel_item_localization,
+                     media, page, publication,
+                     website, webpath)
+
 
 urlpatterns = []
 
 # Public API Resources
-urlpatterns += path('api/contexts', api_views.ApiContext.as_view(), name='api-contexts'),
+urlpatterns += path('api/contexts', publication.ApiContext.as_view(), name='api-contexts'),
 
 # I would have preferred a regexp .. but openapi schema generator ...
 # re_path('api/news/by-context/(?P<webpath_id>\d+)/?(?P<category_name>[a-zA-Z0-9]*)?'
 
-urlpatterns += path('api/news/by-context/<int:webpath_id>', api_views.ApiPublicationsByContext.as_view(), name='api-news-by-contexts'),
+urlpatterns += path('api/news/by-context/<int:webpath_id>', publication.ApiPublicationsByContext.as_view(), name='api-news-by-contexts'),
 urlpatterns += path('api/news/by-context/<int:webpath_id>/<str:category_name>',
-                    api_views.ApiPublicationsByContext.as_view(), name='api-news-by-contexts-category'),
-urlpatterns += path('api/news/view/<str:slug>', api_views.PublicationDetail.as_view(), name='publication-detail'),
+                    publication.ApiPublicationsByContext.as_view(), name='api-news-by-contexts-category'),
+urlpatterns += path('api/news/view/<str:slug>', publication.PublicationDetail.as_view(), name='publication-detail'),
 
 urlpatterns += path('api/menu/<int:menu_id>', ApiMenu.as_view(), name='api-menu'),
 urlpatterns += path('api/menu', ApiMenu.as_view(), name='api-menu-post'),
 
-urlpatterns += path('api/editorial-board/sites/', api_views.EditorWebsiteList.as_view(), name='editorial-board-sites'),
+urlpatterns += path('api/editorial-board/sites/', website.EditorWebsiteList.as_view(), name='editorial-board-sites'),
 urlpatterns += path('api/editorial-board/sites/<int:site_id>/webpaths/',
-                    api_views.EditorWebsiteWebpathList.as_view(), name='editorial-board-site-webpaths'),
-urlpatterns += path('api/editorial-board/site/<int:site_id>/webpaths/<int:pk>/',
-                    api_views.EditorWebsiteWebpathView.as_view(), name='editorial-board-site-webpath'),
+                    webpath.EditorWebsiteWebpathList.as_view(), name='editorial-board-site-webpaths'),
+urlpatterns += path('api/editorial-board/sites/<int:site_id>/webpaths/<int:pk>/',
+                    webpath.EditorWebsiteWebpathView.as_view(), name='editorial-board-site-webpath'),
 
-urlpatterns += path('api/medias/', api_views.MediaList.as_view(), name='medias'),
-urlpatterns += path('api/medias/<int:pk>/', api_views.MediaView.as_view(), name='media'),
+urlpatterns += path('api/medias/', media.MediaList.as_view(), name='medias'),
+urlpatterns += path('api/medias/<int:pk>/', media.MediaView.as_view(), name='media'),
 
-urlpatterns += path('api/carousels/', api_views.CarouselList.as_view(), name='carousels'),
-urlpatterns += path('api/carousels/<int:pk>/', api_views.CarouselView.as_view(), name='carousel'),
-urlpatterns += path('api/carousels/<int:carousel_id>/items/', api_views.CarouselItemList.as_view(), name='carousel-items'),
-urlpatterns += path('api/carousels/<int:carousel_id>/items/<int:pk>/', api_views.CarouselItemView.as_view(), name='carousel-item'),
+urlpatterns += path('api/carousels/', carousel.CarouselList.as_view(), name='carousels'),
+urlpatterns += path('api/carousels/<int:pk>/', carousel.CarouselView.as_view(), name='carousel'),
+urlpatterns += path('api/carousels/<int:carousel_id>/items/', carousel_item.CarouselItemList.as_view(), name='carousel-items'),
+urlpatterns += path('api/carousels/<int:carousel_id>/items/<int:pk>/', carousel_item.CarouselItemView.as_view(), name='carousel-item'),
 urlpatterns += path('api/carousels/<int:carousel_id>/items/<int:carousel_item_id>/localizations/',
-                    api_views.CarouselItemLocalizationList.as_view(), name='carousel-item-localizations'),
+                    carousel_item_localization.CarouselItemLocalizationList.as_view(), name='carousel-item-localizations'),
 urlpatterns += path('api/carousels/<int:carousel_id>/items/<int:carousel_item_id>/localizations/<int:pk>/',
-                    api_views.CarouselItemLocalizationView.as_view(), name='carousel-item-localization'),
+                    carousel_item_localization.CarouselItemLocalizationView.as_view(), name='carousel-item-localization'),
 urlpatterns += path('api/carousels/<int:carousel_id>/items/<int:carousel_item_id>/links/',
-                    api_views.CarouselItemLinkList.as_view(), name='carousel-item-links'),
+                    carousel_item_link.CarouselItemLinkList.as_view(), name='carousel-item-links'),
 urlpatterns += path('api/carousels/<int:carousel_id>/items/<int:carousel_item_id>/links/<int:pk>/',
-                    api_views.CarouselItemLinkView.as_view(), name='carousel-item-link'),
+                    carousel_item_link.CarouselItemLinkView.as_view(), name='carousel-item-link'),
 urlpatterns += path('api/carousels/<int:carousel_id>/items/<int:carousel_item_id>/links/<int:carousel_item_link_id>/localizations/',
-                    api_views.CarouselItemLinkLocalizationList.as_view(), name='carousel-item-link-localizations'),
+                    carousel_item_link_localization.CarouselItemLinkLocalizationList.as_view(), name='carousel-item-link-localizations'),
 urlpatterns += path('api/carousels/<int:carousel_id>/items/<int:carousel_item_id>/links/<int:carousel_item_link_id>/localizations/<int:pk>/',
-                    api_views.CarouselItemLinkLocalizationView.as_view(), name='carousel-item-link-localization'),
+                    carousel_item_link_localization.CarouselItemLinkLocalizationView.as_view(), name='carousel-item-link-localization'),
 
 
 # urlpatterns += path('api/editorial-board/site/<int:site_id>/page/list/',
-# api_views.EditorWebsitePages.as_view(),
+# EditorWebsitePages.as_view(),
 # name='editorial-board-site-page-list'),
 
 # urlpatterns += path('api/editorial-board/site/<int:site_id>/page/<int:page_id>/view/',
-# api_views.EditorWebsitePage.as_view(),
+# EditorWebsitePage.as_view(),
 # name='editorial-board-site-page-view'),

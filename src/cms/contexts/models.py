@@ -49,8 +49,10 @@ class WebSite(models.Model):
         verbose_name_plural = _("Sites")
 
     def serialize(self):
-        return {'name': self.name,
-                'domain': self.domain}
+        return {'id': self.pk,
+                'name': self.name,
+                'domain': self.domain,
+                'is_active': self.is_active}
 
     def __str__(self):
         return self.domain
