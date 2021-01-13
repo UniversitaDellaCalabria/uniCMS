@@ -89,4 +89,4 @@ jobs:
         # verbose: true    
     - name: Bandit Security Scan
       run: |
-        bandit -r -x tests.py  src/cms/*
+        bandit -r -x tests.py,src/cms/api/tests src/cms/*
