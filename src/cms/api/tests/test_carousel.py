@@ -4,7 +4,6 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
-from django.test.client import encode_multipart
 from django.urls import reverse
 
 from cms.carousels.models import Carousel
@@ -93,15 +92,13 @@ class CarouselAPIUnitTest(TestCase):
         data = {'name': 'carousel api-test',
                 'description': 'put description',
                 'is_active': 0}
-        content = encode_multipart('put_data', data)
-        content_type = 'multipart/form-data; boundary=put_data'
         # user hasn't permission
         req.force_login(user2)
-        res = req.put(url, content, content_type=content_type)
+        res = req.put(url, data, content_type='application/json')
         assert res.status_code == 403
         # user has permission
         req.force_login(user)
-        res = req.put(url, content, content_type=content_type)
+        res = req.put(url, data, content_type='application/json')
         carousel.refresh_from_db()
         assert carousel.name == 'carousel api-test'
         assert not carousel.is_active

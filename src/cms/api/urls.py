@@ -5,7 +5,8 @@ from cms.menus.api_views import ApiMenu
 from . views import (carousel, carousel_item, carousel_item_link,
                      carousel_item_link_localization,
                      carousel_item_localization,
-                     media, page, publication,
+                     media, media_collection, media_collection_item,
+                     page, publication,
                      website, webpath)
 
 
@@ -33,6 +34,13 @@ urlpatterns += path('api/editorial-board/sites/<int:site_id>/webpaths/<int:pk>/'
 
 urlpatterns += path('api/medias/', media.MediaList.as_view(), name='medias'),
 urlpatterns += path('api/medias/<int:pk>/', media.MediaView.as_view(), name='media'),
+
+urlpatterns += path('api/media-collections/', media_collection.MediaCollectionList.as_view(), name='media-collections'),
+urlpatterns += path('api/media-collections/<int:pk>/', media_collection.MediaCollectionView.as_view(), name='media-collection'),
+urlpatterns += path('api/media-collections/<int:collection_id>/items/',
+                    media_collection_item.MediaCollectionItemList.as_view(), name='media-collection-items'),
+urlpatterns += path('api/media-collections/<int:collection_id>/items/<int:pk>/',
+                    media_collection_item.MediaCollectionItemView.as_view(), name='media-collection-item'),
 
 urlpatterns += path('api/carousels/', carousel.CarouselList.as_view(), name='carousels'),
 urlpatterns += path('api/carousels/<int:pk>/', carousel.CarouselView.as_view(), name='carousel'),

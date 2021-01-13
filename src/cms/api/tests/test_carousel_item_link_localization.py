@@ -4,7 +4,6 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
-from django.test.client import encode_multipart
 from django.urls import reverse
 
 from cms.carousels.models import Carousel, CarouselItemLinkLocalization
@@ -62,16 +61,21 @@ class CarouselItemLinkLocalizationAPIUnitTest(TestCase):
         # user has permission
         req.force_login(user)
         # wrong carousel_item
-        data['carousel_item_link'] = 11121
+        carousel_item_link_2 = CarouselUnitTest.create_carousel_item_link()
+        data['carousel_item_link'] = carousel_item_link_2.pk
         res = req.post(url, data=data, follow=1)
         assert res.status_code == 403
+        # wrong carousel_item
+        data['carousel_item_link'] = 11121
+        res = req.post(url, data=data, follow=1)
+        assert res.status_code == 400
         data['carousel_item_link'] = carousel_item_link.pk
         # wrong parent carousel
         url = reverse('unicms_api:carousel-item-links',
                       kwargs={'carousel_id': 12321321,
                               'carousel_item_id': carousel_item.pk})
         res = req.post(url, data=data, follow=1)
-        assert res.status_code == 404
+        assert res.status_code == 400
         url = reverse('unicms_api:carousel-item-link-localizations',
                       kwargs={'carousel_id': carousel.pk,
                               'carousel_item_id': carousel_item.pk,
@@ -126,8 +130,6 @@ class CarouselItemLinkLocalizationAPIUnitTest(TestCase):
                 'language': 'en',
                 'title': 'putted title',
                 'is_active': 0}
-        content = encode_multipart('put_data', data)
-        content_type = 'multipart/form-data; boundary=put_data'
         # wrong carousel item id
         data['carousel_item_link'] = 1221321312
         res = req.put(url, data,
@@ -137,11 +139,11 @@ class CarouselItemLinkLocalizationAPIUnitTest(TestCase):
         data['carousel_item_link'] = carousel_item_link.pk
         # user hasn't permission
         req.force_login(user2)
-        res = req.put(url, content, content_type=content_type)
+        res = req.put(url, data, content_type='application/json')
         assert res.status_code == 403
         # user has permission
         req.force_login(user)
-        res = req.put(url, content, content_type=content_type)
+        res = req.put(url, data, content_type='application/json')
         carousel_item_link_localization.refresh_from_db()
         assert carousel_item_link_localization.title == 'putted title'
         assert not carousel_item_link_localization.is_active

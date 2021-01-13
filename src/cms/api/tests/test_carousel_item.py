@@ -62,7 +62,13 @@ class CarouselItemAPIUnitTest(TestCase):
         # wrong parent carousel
         data['carousel'] = 11121
         res = req.post(url, data=data, follow=1)
+        assert res.status_code == 400
+        # wrong parent carousel
+        carousel_2 = CarouselUnitTest.create_carousel()
+        data['carousel'] = carousel_2.pk
+        res = req.post(url, data=data, follow=1)
         assert res.status_code == 403
+        # correct data
         data['carousel'] = carousel.pk
         res = req.post(url, data=data, follow=1)
         assert CarouselItem.objects.filter(pre_heading='posted pre_heading').first()

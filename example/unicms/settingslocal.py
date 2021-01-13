@@ -31,8 +31,9 @@ INSTALLED_APPS = [
 
     'sass_processor',
     'bootstrap_italia_template',
-    
+
     'taggit',
+    'taggit_serializer',
     'nested_admin',
 
     'cms.templates',

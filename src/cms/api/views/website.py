@@ -1,22 +1,14 @@
 import logging
 
-# from django.contrib.auth.decorators import login_required
-# from django.contrib.admin.views.decorators import staff_member_required
+from django.conf import settings
 
 from rest_framework.permissions import IsAdminUser
 from rest_framework.views import APIView
 
-from cms.api.serializers import settings
-
-
 from cms.contexts.models import EditorialBoardEditors, WebSite
 from cms.contexts import settings as contexts_settings
 
-
-
 from .. pagination import UniCmsApiPagination
-from .. permissions import (UserCanAddCarouselOrAdminReadonly,
-                            UserCanAddMediaOrAdminReadonly)
 
 
 CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',

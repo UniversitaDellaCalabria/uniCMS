@@ -1,7 +1,6 @@
 import logging
 
-# from django.contrib.auth.decorators import login_required
-# from django.contrib.admin.views.decorators import staff_member_required
+from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -11,20 +10,12 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from cms.api.serializers import settings
-
-from cms.carousels.models import *
-from cms.carousels.serializers import *
 
 from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
 from cms.contexts.serializers import WebPathSerializer
 from cms.contexts import settings as contexts_settings
 
-
-
 from .. pagination import UniCmsApiPagination
-from .. permissions import (UserCanAddCarouselOrAdminReadonly,
-                            UserCanAddMediaOrAdminReadonly)
 
 
 CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
@@ -74,34 +65,30 @@ class EditorWebsiteWebpathList(generics.ListCreateAPIView):
                                  pk=site_id,
                                  is_active=True)
 
-        # site in request.data
-        site_pk = request.data.get('site', None)
-        if not site_pk or int(site_pk) != site_id:
-            error_msg = _("Site must be {}").format(site)
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
-
-        # parent in request data
-        parent_pk = request.data.get('parent', None)
-        if not parent_pk:
-            error_msg = _("Parent empty")
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
-
-        # get parent
-        parent = WebPath.objects.filter(pk=parent_pk, site=site).first()
-        if not parent:
-            error_msg = _("Parent not found")
-            return Response(error_msg, status=status.HTTP_404_NOT_FOUND)
-
-        # check permissions on parent
-        permission = EditorialBoardEditors.get_permission(webpath=parent,
-                                                          user=request.user)
-        publisher_perms = [6,7,8]
-        if permission not in publisher_perms or (permission == 6 and parent.created_by != request.user):
-            error_msg = _("You don't have permissions")
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
-
         serializer = WebPathSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
+
+            # site in request.data
+            site_pk = request.data.get('site')
+            if not site_pk or int(site_pk) != site_id:
+                error_msg = _("Site must be {}").format(site)
+                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+
+            # get parent
+            parent_pk = request.data.get('parent')
+            parent = WebPath.objects.filter(pk=parent_pk, site=site).first()
+            if not parent:
+                error_msg = _("Parent not found")
+                return Response(error_msg, status=status.HTTP_404_NOT_FOUND)
+
+            # check permissions on parent
+            permission = EditorialBoardEditors.get_permission(webpath=parent,
+                                                              user=request.user)
+            publisher_perms = [6,7,8]
+            if permission not in publisher_perms or (permission == 6 and parent.created_by != request.user):
+                error_msg = _("You don't have permissions")
+                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+
             webpath = serializer.save()
             webpath.created_by = request.user
             webpath.modified_by = request.user
@@ -192,35 +179,38 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
             error_msg = _("You don't have permissions on webpath {}").format(webpath)
             return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
 
-        # site in request.data
-        site_pk = request.data.get('site')
-        if not site_pk or int(site_pk) != site_id:
-            error_msg = _("Site must be {}").format(webpath.site)
-            return Response(error_msg, status=status.HTTP_404_NOT_FOUND)
-
-        # parent in request data
-        parent_pk = request.data.get('parent')
-        if not parent_pk:
-            error_msg = _("Parent empty")
-            return Response(error_msg, status=status.HTTP_404_NOT_FOUND)
-
-        # get active parent
-        parent = WebPath.objects.filter(pk=parent_pk,
-                                        site=webpath.site).first()
-        if not parent:
-            error_msg = _("Parent not found")
-            return Response(error_msg, status=status.HTTP_404_NOT_FOUND)
-
-        # check permissions on parent
-        parent_permission = EditorialBoardEditors.get_permission(webpath=parent,
-                                                                 user=request.user)
-        if parent_permission not in publisher_perms or (parent_permission == 6 and parent.created_by != request.user):
-            error_msg = _("You don't have permissions on webpath {}").format(parent)
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
-
         serializer = WebPathSerializer(instance=webpath,
                                        data=request.data)
         if serializer.is_valid(raise_exception=True):
+            # site in request.data
+            site_pk = request.data.get('site')
+            if not site_pk or int(site_pk) != site_id:
+                error_msg = _("Site must be {}").format(webpath.site)
+                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+
+            # parent in request data
+            parent_pk = request.data.get('parent')
+            if not parent_pk:
+                error_msg = _("Parent empty")
+                return Response(error_msg, status=status.HTTP_404_NOT_FOUND)
+
+            # get active parent
+            parent = WebPath.objects.filter(pk=parent_pk,
+                                            site=webpath.site).first()
+            if not parent:
+                error_msg = _("Parent not found")
+                return Response(error_msg, status=status.HTTP_404_NOT_FOUND)
+
+            # check permissions on parent
+            parent_permission = EditorialBoardEditors.get_permission(webpath=parent,
+                                                                     user=request.user)
+            if parent_permission not in publisher_perms or (parent_permission == 6 and parent.created_by != request.user):
+                error_msg = _("You don't have permissions on webpath {}").format(parent)
+                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+
+            # ToDo
+            # modified_by autosaved by default!
+            # use super().put()
             webpath = serializer.save()
             webpath.modified_by = request.user
             webpath.save()
@@ -229,7 +219,9 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
                                   'pk': webpath.pk})
             return HttpResponseRedirect(url)
 
-    def delete(self, request, site_id, pk):
+    def delete(self, request, *args, **kwargs):
+        site_id = kwargs['site_id']
+        pk = kwargs['pk']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         webpath = get_object_or_404(WebPath, pk=pk, site=site)
         permission = EditorialBoardEditors.get_permission(webpath=webpath,
@@ -239,5 +231,4 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
             error_msg = _("You don't have permissions on webpath {}").format(webpath)
             return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
 
-        webpath.delete()
-        return Response(_("Webpath deleted successfully"))
+        return super().delete(request, *args, **kwargs)

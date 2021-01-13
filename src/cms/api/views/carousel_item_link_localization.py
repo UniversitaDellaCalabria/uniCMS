@@ -1,7 +1,6 @@
 import logging
 
-# from django.contrib.auth.decorators import login_required
-# from django.contrib.admin.views.decorators import staff_member_required
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
@@ -9,18 +8,12 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from cms.api.serializers import settings
-
 from cms.carousels.models import *
 from cms.carousels.serializers import *
 
 from cms.contexts import settings as contexts_settings
 
-
-
 from .. pagination import UniCmsApiPagination
-from .. permissions import (UserCanAddCarouselOrAdminReadonly,
-                            UserCanAddMediaOrAdminReadonly)
 from .. utils import check_user_permission_on_object
 
 
@@ -57,24 +50,26 @@ class CarouselItemLinkLocalizationList(generics.ListCreateAPIView):
         carousel_id = self.kwargs['carousel_id']
         carousel_item_id = self.kwargs['carousel_item_id']
         carousel_item_link_id = self.kwargs['carousel_item_link_id']
-        # can edit carousel defined in URL
-        if int(request.data['carousel_item_link']) != carousel_item_link_id:
-            error_msg = _("Carousel Item Link ID must be {}").format(carousel_item_link_id)
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
-        # get carousel item
-        carousel_item_link = get_object_or_404(CarouselItemLink,
-                                               pk=carousel_item_link_id,
-                                               carousel_item__pk=carousel_item_id,
-                                               carousel_item__carousel__pk=carousel_id)
-        # check permissions on carousel
-        carousel = carousel_item_link.carousel_item.carousel
-        permission = check_user_permission_on_object(request.user,
-                                                     carousel,
-                                                     'cmscarousels.change_carousel')
-        if not permission:
-            return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+        serializer = CarouselItemLinkLocalizationSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            # can edit carousel defined in URL
+            if int(request.data['carousel_item_link']) != carousel_item_link_id:
+                error_msg = _("Carousel Item Link ID must be {}").format(carousel_item_link_id)
+                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+            # get carousel item
+            carousel_item_link = get_object_or_404(CarouselItemLink,
+                                                   pk=carousel_item_link_id,
+                                                   carousel_item__pk=carousel_item_id,
+                                                   carousel_item__carousel__pk=carousel_id)
+            # check permissions on carousel
+            carousel = carousel_item_link.carousel_item.carousel
+            permission = check_user_permission_on_object(request.user,
+                                                         carousel,
+                                                         'cmscarousels.change_carousel')
+            if not permission:
+                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
 
-        return super().post(request, *args, **kwargs)
+            return super().post(request, *args, **kwargs)
 
 
 class CarouselItemLinkLocalizationView(generics.RetrieveUpdateDestroyAPIView):

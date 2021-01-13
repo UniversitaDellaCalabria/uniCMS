@@ -4,7 +4,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
 from django.urls import reverse
 
-
 from cms.contexts.models import WebPath
 from cms.contexts.tests import ContextUnitTest
 
@@ -147,7 +146,6 @@ class WebpathAPIUnitTest(TestCase):
         user.is_staff = True
         user.save()
         req.force_login(user)
-
         # if not publisher permissions
         assert res.status_code == 403
         # if publisher permissions
@@ -164,11 +162,18 @@ class WebpathAPIUnitTest(TestCase):
         parent_json['site'] = None
         res = req.put(parent_url, data=parent_json,
                       content_type='application/json', follow=1)
-        assert res.status_code == 404
+        assert res.status_code == 403
         parent_json['site'] = site.pk
 
         # no parent
         parent_json['parent'] = None
+        res = req.put(parent_url, data=parent_json,
+                      content_type='application/json', follow=1)
+        assert res.status_code == 404
+
+        # wrong parent
+        parent_2 = ContextUnitTest.create_webpath(site=None)
+        parent_json['parent'] = parent_2.pk
         res = req.put(parent_url, data=parent_json,
                       content_type='application/json', follow=1)
         assert res.status_code == 404
@@ -206,7 +211,7 @@ class WebpathAPIUnitTest(TestCase):
                       data=child_json,
                       content_type='application/json',
                       follow=1)
-        assert res.status_code == 404
+        assert res.status_code == 400
 
         # wrong permissions on parent
         ebu_parent.permission = 3
@@ -347,23 +352,24 @@ class WebpathAPIUnitTest(TestCase):
         req.force_login(user)
 
         # no site
+        data['parent'] = parent.pk
         data['site'] = None
         res = req.post(url, data=data,
                        content_type='application/json', follow=1)
         assert res.status_code == 403
         data['site'] = parent.site.pk
 
-        # no parent
+        # no parent (not required in model)
         data['parent'] = None
         res = req.post(url, data=data,
                        content_type='application/json', follow=1)
-        assert res.status_code == 403
-        data['parent'] = 123123123213
+        assert res.status_code == 404
 
         # wrong parent
+        data['parent'] = 123123123213
         res = req.post(url, data=data,
                        content_type='application/json', follow=1)
-        assert res.status_code == 404
+        assert res.status_code == 400
 
         # correct parent but invalid permissions
         data['parent'] = parent.pk

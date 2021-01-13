@@ -1,28 +1,26 @@
 import logging
 
-from django.conf import settings
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
-from django.test.client import encode_multipart
 from django.urls import reverse
 
 from cms.contexts.tests import ContextUnitTest
 
-from cms.medias.models import Media
+from cms.medias.models import MediaCollection
 from cms.medias.tests import MediaUnitTest
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-class MediaAPIUnitTest(TestCase):
+class MediaCollectionAPIUnitTest(TestCase):
 
     def setUp(self):
         pass
 
-    def test_media(self):
+    def test_media_collection(self):
         """
         Media API
         """
@@ -32,8 +30,8 @@ class MediaAPIUnitTest(TestCase):
                                             is_staff=True)
 
         # media list
-        MediaUnitTest.create_media()
-        url = reverse('unicms_api:medias')
+        MediaUnitTest.create_media_collection()
+        url = reverse('unicms_api:media-collections')
 
         # accessible to staff users only
         res = req.get(url)
@@ -45,12 +43,10 @@ class MediaAPIUnitTest(TestCase):
         assert isinstance(res.json(), dict)
 
         # media data
-        path = f'{settings.MEDIA_ROOT}/images/categories/eventi.jpg'
-
-        data = {'title': 'media1 api-test',
+        data = {'name': 'media collections api-test',
                 'description': 'blah blah',
+                'tags': ["test","unit"],
                 'is_active': 1}
-        url = reverse('unicms_api:medias')
 
         # accessible to staff users only
         res = req.post(url, data=data,
@@ -62,28 +58,28 @@ class MediaAPIUnitTest(TestCase):
         req.force_login(user)
 
         # POST
-        img_file = open(path,'rb')
-        data['file'] = img_file
         # user hasn't permission
         req.force_login(user2)
         res = req.post(url, data=data, follow=1)
         assert res.status_code == 403
         # user has permission
         req.force_login(user)
-        img_file.seek(0)
-        res = req.post(url, data=data, follow=1)
-        media = Media.objects.filter(title='media1 api-test').first()
-        assert media.file
+        res = req.post(url, data=data,
+                       content_type='application/json',
+                       follow=1)
+        collection = MediaCollection.objects.filter(name='media collections api-test').first()
+        assert collection
 
         # GET, patch, put, delete
-        url = reverse('unicms_api:media', kwargs={'pk': media.pk})
+        url = reverse('unicms_api:media-collection',
+                      kwargs={'pk': collection.pk})
 
         # GET
         res = req.get(url, content_type='application/json',)
         assert isinstance(res.json(), dict)
 
         # PATCH
-        data = {'title': 'patched'}
+        data = {'name': 'patched'}
         # user hasn't permission
         req.force_login(user2)
         res = req.patch(url, data,
@@ -91,39 +87,36 @@ class MediaAPIUnitTest(TestCase):
                         follow=1)
         assert res.status_code == 403
         # user has permission
-        media.created_by = user2
-        media.save()
-        content_type = ContentType.objects.get_for_model(Media)
-        edit_perm = Permission.objects.get(content_type=content_type, codename='change_media')
+        collection.created_by = user2
+        collection.save()
+        content_type = ContentType.objects.get_for_model(MediaCollection)
+        edit_perm = Permission.objects.get(content_type=content_type, codename='change_mediacollection')
         user2.user_permissions.add(edit_perm)
         user2.refresh_from_db()
         req.force_login(user2)
         res = req.patch(url, data,
                         content_type='application/json',
                         follow=1)
-        media.refresh_from_db()
-        assert media.title == 'patched'
+        collection.refresh_from_db()
+        assert collection.name == 'patched'
 
         # PUT
-        media.created_by = None
-        media.save()
-        img_file.seek(0)
-        data = {'title': 'media1 api-test',
+        collection.created_by = None
+        collection.save()
+        data = {'name': 'media collection api-test',
                 'description': 'put',
-                'file': img_file,
+                'tags': ["hi","tag"],
                 'is_active': 0}
-        content = encode_multipart('put_data', data)
-        content_type = 'multipart/form-data; boundary=put_data'
         # user hasn't permission
         req.force_login(user2)
-        res = req.put(url, content, content_type=content_type)
+        res = req.put(url, data, content_type='application/json')
         assert res.status_code == 403
         # user has permission
         req.force_login(user)
-        res = req.put(url, content, content_type=content_type)
-        media.refresh_from_db()
-        assert media.title == 'media1 api-test'
-        assert not media.is_active
+        res = req.put(url, data, content_type='application/json')
+        collection.refresh_from_db()
+        assert collection.description == 'put'
+        assert not collection.is_active
 
         # DELETE
         # user hasn't permission
@@ -134,6 +127,6 @@ class MediaAPIUnitTest(TestCase):
         req.force_login(user)
         res = req.delete(url)
         try:
-            media.refresh_from_db()
+            collection.refresh_from_db()
         except ObjectDoesNotExist:
             assert True

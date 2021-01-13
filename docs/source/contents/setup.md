@@ -31,10 +31,11 @@ INSTALLED_APPS = [
     'bootstrap_italia_template',
     'unicms_template_italia', # for example
     'unicms_template_unical', # for example
-    
+
     # unicms
     'nested_admin', # for admin CRUD
-    'taggit', # page and publication tags 
+    'taggit', # page and publication tags
+    'taggit-serializer', # taggit tags serializer
     'rest_framework' # api
     'cms.templates',
     'cms.contexts',
@@ -75,28 +76,28 @@ Go to `/admin` and submit superuser credentials to start.
 
 #### URLs
 
-uniCMS URLs are fully managed with `cms.context` via admin interface. 
+uniCMS URLs are fully managed with `cms.context` via admin interface.
 This feature enable users to load/import third-party django applications. It's important to keep in mind that the user should configure django application URLs before defining uniCMS's own URLs. Otherwise uniCMS will intercept those parameters and there is a good chance that the user will hit 404 page. The user can set the environment variable `CMS_PATH_PREFIX` to a desidered path, eg: `portale/`, to restrict uniCMS URL matching to specified root path.
 
-Here is an example of project urls.py 
+Here is an example of project urls.py
 ````
 if 'cms.contexts' in settings.INSTALLED_APPS:
-    urlpatterns += path('', 
-                        include(('cms.contexts.urls', 'cms'), 
-                                 namespace="unicms"), 
+    urlpatterns += path('',
+                        include(('cms.contexts.urls', 'cms'),
+                                 namespace="unicms"),
                         name="unicms"),
 
 if 'cms.api' in settings.INSTALLED_APPS:
-    urlpatterns += path('', 
-                        include(('cms.api.urls', 'cms'), 
-                                namespace="unicms_api"), 
+    urlpatterns += path('',
+                        include(('cms.api.urls', 'cms'),
+                                namespace="unicms_api"),
                         name="unicms_api"),
 
 
 if 'cms.search' in settings.INSTALLED_APPS:
-    urlpatterns += path('', 
-                        include(('cms.search.urls', 'cms_search'), 
-                                namespace="unicms_search"), 
+    urlpatterns += path('',
+                        include(('cms.search.urls', 'cms_search'),
+                                namespace="unicms_search"),
                         name="unicms_search"),
 ````
 
@@ -152,7 +153,7 @@ FILETYPE_TEXT = ('text/plain',
                  'application/msword',
                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 )
-FILETYPE_IMAGE = ('image/webp', 'image/jpeg', 'image/png', 
+FILETYPE_IMAGE = ('image/webp', 'image/jpeg', 'image/png',
                   'image/gif', 'image/x-ms-bmp')
 FILETYPE_P7M = ('application/pkcs7-mime',)
 FILETYPE_SIGNED = FILETYPE_PDF + FILETYPE_P7M
@@ -204,7 +205,7 @@ CMS_HOOKS = {
 
 ````
 # see unicms-templates
-CMS_TEMPLATE_BLOCK_SECTIONS = 
+CMS_TEMPLATE_BLOCK_SECTIONS =
 
 CMS_BLOCK_TYPES = (
                    ('cms.templates.blocks.HtmlBlock', 'HTML Block'),
@@ -333,7 +334,7 @@ SEARCH_ELEMENTS_IN_PAGE = 25
 ````
 
 
-Create your fulltext indexes with the help of **cms.search** CLI. 
+Create your fulltext indexes with the help of **cms.search** CLI.
 Remember that default_language is set to italian. Do the following to set your own language:
 ````
 ./manage.py cms_search_create_mongo_index -default_language english

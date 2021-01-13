@@ -1,7 +1,6 @@
 import logging
 
-# from django.contrib.auth.decorators import login_required
-# from django.contrib.admin.views.decorators import staff_member_required
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.decorators import method_decorator
 
@@ -9,20 +8,15 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from cms.api.serializers import PublicationSerializer, settings
-
+from cms.api.serializers import PublicationSerializer
 
 from cms.contexts.decorators import detect_language
 from cms.contexts.models import WebPath
 from cms.contexts import settings as contexts_settings
 
-
 from cms.publications.models import Publication, PublicationContext
 from cms.publications.paginators import Paginator
 from cms.publications.utils import publication_context_base_filter
-
-from .. permissions import (UserCanAddCarouselOrAdminReadonly,
-                            UserCanAddMediaOrAdminReadonly)
 
 
 CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
