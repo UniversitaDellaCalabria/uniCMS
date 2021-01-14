@@ -50,7 +50,7 @@ class EditorWebsiteWebpathList(generics.ListCreateAPIView):
         for webpath in self.get_queryset():
             permission = EditorialBoardEditors.get_permission(user=request.user,
                                                               webpath=webpath)
-            webpath_data = WebPathSerializer(webpath).data
+            webpath_data = self.get_serializer(instance=webpath).data
             webpath_data["permission_id"] = permission
             permission_label = context_permissions[permission] if permission else ''
             webpath_data["permission_label"] = permission_label
@@ -65,34 +65,24 @@ class EditorWebsiteWebpathList(generics.ListCreateAPIView):
                                  pk=site_id,
                                  is_active=True)
 
-        serializer = WebPathSerializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-
-            # site in request.data
-            site_pk = request.data.get('site')
-            if not site_pk or int(site_pk) != site_id:
-                error_msg = _("Site must be {}").format(site)
-                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
-
             # get parent
             parent_pk = request.data.get('parent')
             parent = WebPath.objects.filter(pk=parent_pk, site=site).first()
-            if not parent:
-                error_msg = _("Parent not found")
-                return Response(error_msg, status=status.HTTP_404_NOT_FOUND)
-
             # check permissions on parent
             permission = EditorialBoardEditors.get_permission(webpath=parent,
                                                               user=request.user)
-            publisher_perms = [6,7,8]
+            publisher_perms = (6,7,8)
             if permission not in publisher_perms or (permission == 6 and parent.created_by != request.user):
                 error_msg = _("You don't have permissions")
                 return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
 
             webpath = serializer.save()
-            webpath.created_by = request.user
-            webpath.modified_by = request.user
-            webpath.save()
+            # ToDo HOOK ON SAVE
+            # webpath.created_by = request.user
+            # webpath.modified_by = request.user
+            # webpath.save()
             # add permission to webpath
             if permission != 8:
                 EditorialBoardEditors.objects.create(user=request.user,
@@ -126,7 +116,7 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
     def get(self, request, *args, **kwargs):
         context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
         webpath = self.get_queryset().first()
-        result = WebPathSerializer(webpath).data
+        result = self.get_serializer(instance=webpath).data
         permission = EditorialBoardEditors.get_permission(webpath, request.user)
         result["permission_id"] = permission
         webpath_permission = context_permissions[permission] if permission else None
@@ -157,7 +147,7 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
             parent = new_parent
 
         # check permissions on parent
-        publisher_perms = [6,7,8]
+        publisher_perms = (6,7,8)
         parent_permission = EditorialBoardEditors.get_permission(webpath=parent,
                                                                  user=request.user)
         if parent_permission not in publisher_perms or (parent_permission == 6 and parent.created_by != request.user):
@@ -172,35 +162,21 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
         webpath = self.get_queryset().first()
         permission = EditorialBoardEditors.get_permission(webpath=webpath,
                                                           user=request.user)
-        publisher_perms = [6,7,8]
+        publisher_perms = (6,7,8)
         # if user isn't a publisher
         # or can manage only created by him objects and he is not the webpath creator
         if permission not in publisher_perms or (permission == 6 and webpath.created_by != request.user):
             error_msg = _("You don't have permissions on webpath {}").format(webpath)
             return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
 
-        serializer = WebPathSerializer(instance=webpath,
-                                       data=request.data)
+        serializer = self.get_serializer(instance=webpath,
+                                         data=request.data)
         if serializer.is_valid(raise_exception=True):
-            # site in request.data
-            site_pk = request.data.get('site')
-            if not site_pk or int(site_pk) != site_id:
-                error_msg = _("Site must be {}").format(webpath.site)
-                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
-
             # parent in request data
             parent_pk = request.data.get('parent')
-            if not parent_pk:
-                error_msg = _("Parent empty")
-                return Response(error_msg, status=status.HTTP_404_NOT_FOUND)
-
             # get active parent
             parent = WebPath.objects.filter(pk=parent_pk,
                                             site=webpath.site).first()
-            if not parent:
-                error_msg = _("Parent not found")
-                return Response(error_msg, status=status.HTTP_404_NOT_FOUND)
-
             # check permissions on parent
             parent_permission = EditorialBoardEditors.get_permission(webpath=parent,
                                                                      user=request.user)
@@ -208,16 +184,7 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
                 error_msg = _("You don't have permissions on webpath {}").format(parent)
                 return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
 
-            # ToDo
-            # modified_by autosaved by default!
-            # use super().put()
-            webpath = serializer.save()
-            webpath.modified_by = request.user
-            webpath.save()
-            url = reverse('unicms_api:editorial-board-site-webpath',
-                          kwargs={'site_id': site_id,
-                                  'pk': webpath.pk})
-            return HttpResponseRedirect(url)
+            return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         site_id = kwargs['site_id']
@@ -226,7 +193,7 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
         webpath = get_object_or_404(WebPath, pk=pk, site=site)
         permission = EditorialBoardEditors.get_permission(webpath=webpath,
                                                           user=request.user)
-        publisher_perms = [6,7,8]
+        publisher_perms = (6,7,8)
         if permission not in publisher_perms or (permission == 6 and webpath.created_by != request.user):
             error_msg = _("You don't have permissions on webpath {}").format(webpath)
             return Response(error_msg, status=status.HTTP_403_FORBIDDEN)

@@ -162,21 +162,24 @@ class WebpathAPIUnitTest(TestCase):
         parent_json['site'] = None
         res = req.put(parent_url, data=parent_json,
                       content_type='application/json', follow=1)
-        assert res.status_code == 403
+        # assert res.status_code == 403
+        assert res.status_code == 400
         parent_json['site'] = site.pk
 
         # no parent
         parent_json['parent'] = None
         res = req.put(parent_url, data=parent_json,
                       content_type='application/json', follow=1)
-        assert res.status_code == 404
+        # assert res.status_code == 404
+        assert res.status_code == 400
 
         # wrong parent
         parent_2 = ContextUnitTest.create_webpath(site=None)
         parent_json['parent'] = parent_2.pk
         res = req.put(parent_url, data=parent_json,
                       content_type='application/json', follow=1)
-        assert res.status_code == 404
+        # assert res.status_code == 404
+        assert res.status_code == 400
         parent_json['parent'] = root_webpath.pk
 
         # edit child parent
@@ -356,14 +359,16 @@ class WebpathAPIUnitTest(TestCase):
         data['site'] = None
         res = req.post(url, data=data,
                        content_type='application/json', follow=1)
-        assert res.status_code == 403
+        # assert res.status_code == 403
+        assert res.status_code == 400
         data['site'] = parent.site.pk
 
         # no parent (not required in model)
         data['parent'] = None
         res = req.post(url, data=data,
                        content_type='application/json', follow=1)
-        assert res.status_code == 404
+        # assert res.status_code == 404
+        assert res.status_code == 400
 
         # wrong parent
         data['parent'] = 123123123213
