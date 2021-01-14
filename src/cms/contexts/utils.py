@@ -111,7 +111,5 @@ def fill_created_modified_by(request, obj):
         if not hasattr(obj, field_name):
             continue
 
-        if (field_name == 'modified_by' or 
-            not getattr(obj, field_name, None)):
+        if (field_name == 'modified_by' or not getattr(obj, field_name, None)):
             setattr(obj, field_name, request.user)
-        

@@ -6,7 +6,7 @@ from . views import (carousel, carousel_item, carousel_item_link,
                      carousel_item_link_localization,
                      carousel_item_localization,
                      media, media_collection, media_collection_item,
-                     page, publication,
+                     publication,
                      website, webpath, webpath_publications)
 
 

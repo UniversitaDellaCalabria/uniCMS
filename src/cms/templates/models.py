@@ -113,7 +113,7 @@ class PageTemplate(TimeStampedModel, ActivableModel, AbstractTemplate,
     class Meta:
         ordering = ['name']
         verbose_name_plural = _("Page Templates")
-        
+
     def __str__(self):
         return '{} ({})'.format(self.name, self.template_file)
 
@@ -136,7 +136,7 @@ class TemplateBlock(AbstractPageBlock, AbstractTemplate, CreatedModifiedBy):
     class Meta:
         ordering = ['name']
         verbose_name_plural = _("Template Blocks")
-        
+
     def __str__(self):
         return self.name if self.name else self.path
 
@@ -164,7 +164,7 @@ class PageTemplateBlock(TimeStampedModel,
 
     class Meta:
         verbose_name_plural = _("Page Template Blocks")
-        
+
     def __str__(self):
         return '({}) {} {}:{}'.format(self.template, self.block,
                                       self.order or 0,

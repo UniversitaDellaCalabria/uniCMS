@@ -147,7 +147,7 @@ class Publication(AbstractPublication, AbstractPublicable,
         if (old_content_type and
             self.content and
             self.pk and
-                self.content_type != old_content_type):
+            self.content_type != old_content_type):
 
             # markdown to html
             if old_content_type == 'html':
