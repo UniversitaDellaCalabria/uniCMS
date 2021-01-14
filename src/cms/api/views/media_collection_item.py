@@ -74,9 +74,6 @@ class MediaCollectionItemView(generics.RetrieveUpdateDestroyAPIView):
                                                    collection__pk=collection_id)
         return items
 
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
     def patch(self, request, *args, **kwargs):
         # get collection
         collection = get_object_or_404(MediaCollection,

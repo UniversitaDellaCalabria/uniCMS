@@ -82,9 +82,6 @@ class CarouselItemView(generics.RetrieveUpdateDestroyAPIView):
                                             carousel__pk=carousel_id)
         return items
 
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
-
     def patch(self, request, *args, **kwargs):
         carousel_id = kwargs['carousel_id']
         if request.data.get('carousel') and int(request.data['carousel']) != carousel_id:
