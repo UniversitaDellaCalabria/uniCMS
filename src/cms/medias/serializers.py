@@ -5,6 +5,15 @@ from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
 
+class MediaCollectionForeignKey(serializers.PrimaryKeyRelatedField):
+    def get_queryset(self):
+        request = self.context.get('request', None)
+        if request:
+            collection_id = self.context['request'].parser_context['kwargs']['collection_id']
+            return MediaCollection.objects.filter(pk=collection_id)
+        return None
+
+
 class MediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Media
@@ -28,6 +37,8 @@ class MediaCollectionSerializer(TaggitSerializer, serializers.ModelSerializer):
 
 
 class MediaCollectionItemSerializer(serializers.ModelSerializer):
+    collection = MediaCollectionForeignKey()
+
     class Meta:
         model = MediaCollectionItem
         fields = ['id',

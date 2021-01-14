@@ -69,7 +69,7 @@ class MediaCollectionItemAPIUnitTest(TestCase):
         data['collection'] = collection_2.pk
         res = req.post(url, data=data,
                        content_type='application/json', follow=1)
-        assert res.status_code == 403
+        assert res.status_code == 400
         # correct data but...
         data['collection'] = collection.pk
         # ...user hasn't permission
@@ -102,7 +102,7 @@ class MediaCollectionItemAPIUnitTest(TestCase):
         res = req.patch(url, data=data,
                         content_type='application/json',
                         follow=1)
-        assert res.status_code == 403
+        assert res.status_code == 400
         # correct data but...
         data['collection'] = collection.pk
         # user hasn't permission

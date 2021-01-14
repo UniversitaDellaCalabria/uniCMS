@@ -44,12 +44,8 @@ class MediaCollectionItemList(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         collection_id = kwargs['collection_id']
-        serializer = MediaCollectionItemSerializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            # can edit collection defined in URL
-            if int(request.data['collection']) != collection_id:
-                error_msg = _("Collection ID must be {}").format(collection_id)
-                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
             # get collection
             collection = get_object_or_404(MediaCollection,
                                            pk=kwargs['collection_id'])
@@ -84,9 +80,6 @@ class MediaCollectionItemView(generics.RetrieveUpdateDestroyAPIView):
 
     def patch(self, request, *args, **kwargs):
         collection_id = kwargs['collection_id']
-        if request.data.get('collection') and int(request.data['collection']) != collection_id:
-            error_msg = _("Collection ID must be {}").format(collection_id)
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
         # get collection
         collection = get_object_or_404(MediaCollection,
                                        pk=kwargs['collection_id'])
@@ -100,10 +93,6 @@ class MediaCollectionItemView(generics.RetrieveUpdateDestroyAPIView):
 
     def put(self, request, *args, **kwargs):
         collection_id = kwargs['collection_id']
-        # can edit carousel defined in URL
-        if int(request.data['collection']) != collection_id:
-            error_msg = _("Collection ID must be {}").format(collection_id)
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
         # get collection
         collection = get_object_or_404(MediaCollection,
                                        pk=kwargs['collection_id'])
