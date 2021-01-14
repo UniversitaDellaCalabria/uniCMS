@@ -7,7 +7,7 @@ from . views import (carousel, carousel_item, carousel_item_link,
                      carousel_item_localization,
                      media, media_collection, media_collection_item,
                      page, publication,
-                     website, webpath)
+                     website, webpath, webpath_publications)
 
 
 urlpatterns = []
@@ -25,12 +25,6 @@ urlpatterns += path('api/news/view/<str:slug>', publication.PublicationDetail.as
 
 urlpatterns += path('api/menu/<int:menu_id>', ApiMenu.as_view(), name='api-menu'),
 urlpatterns += path('api/menu', ApiMenu.as_view(), name='api-menu-post'),
-
-urlpatterns += path('api/editorial-board/sites/', website.EditorWebsiteList.as_view(), name='editorial-board-sites'),
-urlpatterns += path('api/editorial-board/sites/<int:site_id>/webpaths/',
-                    webpath.EditorWebsiteWebpathList.as_view(), name='editorial-board-site-webpaths'),
-urlpatterns += path('api/editorial-board/sites/<int:site_id>/webpaths/<int:pk>/',
-                    webpath.EditorWebsiteWebpathView.as_view(), name='editorial-board-site-webpath'),
 
 urlpatterns += path('api/medias/', media.MediaList.as_view(), name='medias'),
 urlpatterns += path('api/medias/<int:pk>/', media.MediaView.as_view(), name='media'),
@@ -58,6 +52,14 @@ urlpatterns += path('api/carousels/<int:carousel_id>/items/<int:carousel_item_id
                     carousel_item_link_localization.CarouselItemLinkLocalizationList.as_view(), name='carousel-item-link-localizations'),
 urlpatterns += path('api/carousels/<int:carousel_id>/items/<int:carousel_item_id>/links/<int:carousel_item_link_id>/localizations/<int:pk>/',
                     carousel_item_link_localization.CarouselItemLinkLocalizationView.as_view(), name='carousel-item-link-localization'),
+
+urlpatterns += path('api/editorial-board/sites/', website.EditorWebsiteList.as_view(), name='editorial-board-sites'),
+urlpatterns += path('api/editorial-board/sites/<int:site_id>/webpaths/',
+                    webpath.EditorWebsiteWebpathList.as_view(), name='editorial-board-site-webpaths'),
+urlpatterns += path('api/editorial-board/sites/<int:site_id>/webpaths/<int:pk>/',
+                    webpath.EditorWebsiteWebpathView.as_view(), name='editorial-board-site-webpath'),
+urlpatterns += path('api/editorial-board/sites/<int:site_id>/webpaths/<int:webpath_id>/publications/',
+                    webpath_publications.EditorWebpathPublicationContextList.as_view(), name='editorial-board-site-webpath-publication-contexts'),
 
 
 # urlpatterns += path('api/editorial-board/site/<int:site_id>/page/list/',

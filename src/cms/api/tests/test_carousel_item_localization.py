@@ -135,7 +135,7 @@ class CarouselItemLocalizationAPIUnitTest(TestCase):
         res = req.put(url, data,
                       content_type='application/json',
                       follow=1)
-        assert res.status_code == 403
+        assert res.status_code == 400
         data['carousel_item'] = carousel_item.pk
         # user hasn't permission
         req.force_login(user2)

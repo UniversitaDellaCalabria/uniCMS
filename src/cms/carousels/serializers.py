@@ -9,7 +9,7 @@ class CarouselForeignKey(serializers.PrimaryKeyRelatedField):
         if request:
             carousel_id = self.context['request'].parser_context['kwargs']['carousel_id']
             return Carousel.objects.filter(pk=carousel_id)
-        return None
+        return None # pragma: no cover
 
 
 class CarouselItemForeignKey(serializers.PrimaryKeyRelatedField):
@@ -20,7 +20,7 @@ class CarouselItemForeignKey(serializers.PrimaryKeyRelatedField):
             item_id = self.context['request'].parser_context['kwargs']['carousel_item_id']
             return CarouselItem.objects.filter(pk=item_id,
                                                carousel__pk=carousel_id)
-        return None
+        return None # pragma: no cover
 
 
 class CarouselItemLinkForeignKey(serializers.PrimaryKeyRelatedField):
@@ -33,7 +33,7 @@ class CarouselItemLinkForeignKey(serializers.PrimaryKeyRelatedField):
             return CarouselItemLink.objects.filter(pk=link_id,
                                                    carousel_item__pk=item_id,
                                                    carousel_item__carousel__pk=carousel_id)
-        return None
+        return None # pragma: no cover
 
 
 class CarouselSerializer(serializers.ModelSerializer):

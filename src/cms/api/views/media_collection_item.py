@@ -1,12 +1,12 @@
 import logging
 
 from django.conf import settings
-from django.shortcuts import get_object_or_404
+from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
 from cms.contexts import settings as contexts_settings
 
-from cms.medias.models import MediaCollection, MediaCollectionItem
+from cms.medias.models import MediaCollectionItem
 from cms.medias.serializers import MediaCollectionItemSerializer
 
 from rest_framework import generics, status
@@ -46,8 +46,7 @@ class MediaCollectionItemList(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             # get collection
-            collection = get_object_or_404(MediaCollection,
-                                           pk=kwargs['collection_id'])
+            collection = serializer.validated_data.get('collection')
             # check permissions on carousel
             permission = check_user_permission_on_object(request.user,
                                                          collection,
@@ -75,33 +74,40 @@ class MediaCollectionItemView(generics.RetrieveUpdateDestroyAPIView):
         return items
 
     def patch(self, request, *args, **kwargs):
-        # get collection
-        collection = get_object_or_404(MediaCollection,
-                                       pk=kwargs['collection_id'])
-        # check permissions on collection
-        permission = check_user_permission_on_object(request.user,
-                                                     collection,
-                                                     'cmsmedias.change_mediacollection')
-        if not permission:
-            return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
-        return super().patch(request, *args, **kwargs)
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        collection = item.collection
+        serializer = self.get_serializer(instance=item,
+                                         data=request.data,
+                                         partial=True)
+        if serializer.is_valid(raise_exception=True):
+            # check permissions on collection
+            permission = check_user_permission_on_object(request.user,
+                                                         collection,
+                                                         'cmsmedias.change_mediacollection')
+            if not permission:
+                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+            return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        # get collection
-        collection = get_object_or_404(MediaCollection,
-                                       pk=kwargs['collection_id'])
-        # check permissions on collection
-        permission = check_user_permission_on_object(request.user,
-                                                     collection,
-                                                     'cmsmedias.change_mediacollection')
-        if not permission:
-            return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
-        return super().put(request, *args, **kwargs)
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        collection = item.collection
+        serializer = self.get_serializer(instance=item,
+                                         data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            # check permissions on collection
+            permission = check_user_permission_on_object(request.user,
+                                                         collection,
+                                                         'cmsmedias.change_mediacollection')
+            if not permission:
+                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+            return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        # get collection
-        collection = get_object_or_404(MediaCollection,
-                                       pk=kwargs['collection_id'])
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        collection = item.collection
         # check permissions on carousel
         permission = check_user_permission_on_object(request.user,
                                                      collection,
