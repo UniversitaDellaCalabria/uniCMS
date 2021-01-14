@@ -158,7 +158,6 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
 
     def put(self, request, *args, **kwargs):
         dict(CMS_CONTEXT_PERMISSIONS)
-        kwargs['site_id']
         webpath = self.get_queryset().first()
         permission = EditorialBoardEditors.get_permission(webpath=webpath,
                                                           user=request.user)
