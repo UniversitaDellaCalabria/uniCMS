@@ -101,3 +101,17 @@ def load_hooks(obj, flow_type, *args, **kwargs):
             hook(obj)
         except Exception as e: # pragma: no cover
             logger.exception(_msg_hook_exp.format(flow_type, hook, e))
+
+
+def fill_created_modified_by(request, obj):
+    if not request.user.is_authenticated:
+        return False
+
+    for field_name in ('created_by', 'modified_by'):
+        if not hasattr(obj, field_name):
+            continue
+
+        if (field_name == 'modified_by' or 
+            not getattr(obj, field_name, None)):
+            setattr(obj, field_name, request.user)
+        

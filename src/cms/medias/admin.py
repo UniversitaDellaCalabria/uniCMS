@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
+from cms.contexts.admin import AbstractCreatedModifiedBy
 from . models import Media, MediaCollection, MediaCollectionItem
 
 
@@ -22,7 +23,7 @@ class MediaCollectionItemInline(admin.TabularInline):
 
 
 @admin.register(Media)
-class MediaAdmin(admin.ModelAdmin):
+class MediaAdmin(AbstractCreatedModifiedBy):
     search_fields = ('title',)
     list_display = ('title', 'file_size', 'file_type', 'preview_image')
     list_filter = ('file_type',
@@ -44,7 +45,7 @@ class MediaAdmin(admin.ModelAdmin):
 
 
 @admin.register(MediaCollection)
-class MediaCollectionAdmin(admin.ModelAdmin):
+class MediaCollectionAdmin(AbstractCreatedModifiedBy):
     search_fields = ('name',)
     readonly_fields = ('created_by', 'modified_by')
     inlines = (MediaCollectionItemInline,)

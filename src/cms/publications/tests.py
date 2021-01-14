@@ -1,11 +1,13 @@
 import logging
 
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
 from cms.contexts.tests import ContextUnitTest
+from cms.contexts.utils import fill_created_modified_by
 from cms.medias.tests import MediaUnitTest
 from cms.menus.tests import MenuUnitTest
 from cms.pages.models import PageBlock, PagePublication
@@ -378,6 +380,27 @@ class PublicationUnitTest(TestCase):
         cls.enrich_pub()
         lm = cms_categories()
         assert isinstance(list(lm), list) and len(lm) == 1
+    
+    
+    def test_fill_created_modified_by(self):
+        req = RequestFactory().get('/')
+
+        req.user = AnonymousUser()
+        
+        pub = self.create_pub()
+        fill_created_modified_by(req, pub)
+        pub.refresh_from_db()
+        
+        assert not pub.created_by
+        assert not pub.modified_by
+        
+        req.user = ContextUnitTest.create_user(is_staff=1)
+        fill_created_modified_by(req, pub)
+        pub.save()
+        pub.refresh_from_db()
+        
+        assert pub.created_by
+        assert pub.modified_by
 
 
     # placeholders

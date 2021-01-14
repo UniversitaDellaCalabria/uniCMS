@@ -1,6 +1,7 @@
 import nested_admin
 from django.contrib import admin
 
+from cms.contexts.admin import AbstractCreatedModifiedBy
 from . models import NavigationBar, NavigationBarItem, NavigationBarItemLocalization
 
 
@@ -35,7 +36,8 @@ class NavigationBarItemInline(nested_admin.NestedStackedInline):
 
 
 @admin.register(NavigationBar)
-class NavigationBarAdmin(nested_admin.NestedModelAdmin):
+class NavigationBarAdmin(AbstractCreatedModifiedBy,
+                         nested_admin.NestedModelAdmin):
     list_display = ('name', 'is_active', 'created')
     search_fields = ('name',)
     list_filter = ('created', 'modified')
@@ -44,7 +46,8 @@ class NavigationBarAdmin(nested_admin.NestedModelAdmin):
 
 
 @admin.register(NavigationBarItem)
-class NavigationBarItemAdmin(nested_admin.NestedModelAdmin):
+class NavigationBarItemAdmin(AbstractCreatedModifiedBy,
+                             nested_admin.NestedModelAdmin):
     list_display = ('menu', 'name', 'parent', 'is_active')
     search_fields = ('name',)
     list_filter = ('created', 'modified')

@@ -15,7 +15,7 @@ from . utils import copy_page_as_draft
 logger = logging.getLogger(__name__)
 
 
-class AbstractPreviewableAdmin(admin.ModelAdmin):
+class AbstractPreviewableAdmin(AbstractCreatedModifiedBy):
     change_form_template = "admin/change_form_preview.html"
 
     def response_change(self, request, obj):
@@ -101,7 +101,7 @@ class PageAdmin(AbstractCreatedModifiedBy, nested_admin.NestedModelAdmin):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(AbstractCreatedModifiedBy):
     list_display = ('name', 'image_as_html')
 
     # def delete_model(modeladmin, request, queryset):

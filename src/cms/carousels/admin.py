@@ -2,6 +2,7 @@ import nested_admin
 
 from django.contrib import admin
 
+from cms.contexts.admin import AbstractCreatedModifiedBy
 from . models import Carousel, CarouselItem, CarouselItemLink, CarouselItemLinkLocalization, CarouselItemLocalization
 
 
@@ -37,7 +38,7 @@ class CarouselItemInline(nested_admin.NestedStackedInline):
 
 
 @admin.register(Carousel)
-class CarouselAdmin(nested_admin.NestedModelAdmin):
+class CarouselAdmin(AbstractCreatedModifiedBy, nested_admin.NestedModelAdmin):
     list_display = ('name', 'is_active')
     search_fields = ('name',)
     list_filter = ('created', 'modified')

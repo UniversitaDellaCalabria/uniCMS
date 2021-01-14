@@ -1,10 +1,15 @@
 from django.contrib import admin
 
 from . models import EditorialBoardEditors, EditorialBoardLocks, WebPath, WebSite
+from . utils import fill_created_modified_by
 
 
 class AbstractCreatedModifiedBy(admin.ModelAdmin):
     readonly_fields = ('created_by', 'modified_by')
+
+    def save_model(self, request, obj, form, change):
+        fill_created_modified_by(request, obj)
+        super().save_model(request, obj, form, change)
 
 
 class WebPathAdminInline(admin.TabularInline):
@@ -27,7 +32,7 @@ class EditorialBoardEditorsAdminInline(admin.TabularInline):
 
 
 @admin.register(WebPath)
-class WebPathAdmin(admin.ModelAdmin):
+class WebPathAdmin(AbstractCreatedModifiedBy):
     list_display = ('name', 'path', 'site', 'is_active')
     list_filter = ('site', 'created', 'modified', 'is_active')
     search_fields = ('name', 'path',)
