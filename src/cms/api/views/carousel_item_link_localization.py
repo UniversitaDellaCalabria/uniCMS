@@ -50,12 +50,8 @@ class CarouselItemLinkLocalizationList(generics.ListCreateAPIView):
         carousel_id = self.kwargs['carousel_id']
         carousel_item_id = self.kwargs['carousel_item_id']
         carousel_item_link_id = self.kwargs['carousel_item_link_id']
-        serializer = CarouselItemLinkLocalizationSerializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            # can edit carousel defined in URL
-            if int(request.data['carousel_item_link']) != carousel_item_link_id:
-                error_msg = _("Carousel Item Link ID must be {}").format(carousel_item_link_id)
-                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
             # get carousel item
             carousel_item_link = get_object_or_404(CarouselItemLink,
                                                    pk=carousel_item_link_id,
@@ -97,10 +93,6 @@ class CarouselItemLinkLocalizationView(generics.RetrieveUpdateDestroyAPIView):
         carousel_id = self.kwargs['carousel_id']
         carousel_item_id = self.kwargs['carousel_item_id']
         carousel_item_link_id = self.kwargs['carousel_item_link_id']
-        # can edit carousel defined in URL
-        if request.data.get('carousel_item_link') and int(request.data['carousel_item_link']) != carousel_item_link_id:
-            error_msg = _("Carousel Item Link ID must be {}").format(carousel_item_link_id)
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
         # get carousel item
         carousel_item_link = get_object_or_404(CarouselItemLink,
                                                pk=carousel_item_link_id,
@@ -119,10 +111,6 @@ class CarouselItemLinkLocalizationView(generics.RetrieveUpdateDestroyAPIView):
         carousel_id = self.kwargs['carousel_id']
         carousel_item_id = self.kwargs['carousel_item_id']
         carousel_item_link_id = self.kwargs['carousel_item_link_id']
-        # can edit carousel defined in URL
-        if request.data.get('carousel_item_link') and int(request.data['carousel_item_link']) != carousel_item_link_id:
-            error_msg = _("Carousel Item Link ID must be {}").format(carousel_item_link_id)
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
         # get carousel item
         carousel_item_link = get_object_or_404(CarouselItemLink,
                                                pk=carousel_item_link_id,

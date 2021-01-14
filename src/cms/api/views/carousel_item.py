@@ -47,7 +47,7 @@ class CarouselItemList(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         carousel_id = kwargs['carousel_id']
-        serializer = CarouselItemSerializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             # can edit carousel defined in URL
             if int(request.data['carousel']) != carousel_id:

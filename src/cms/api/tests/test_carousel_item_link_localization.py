@@ -64,7 +64,7 @@ class CarouselItemLinkLocalizationAPIUnitTest(TestCase):
         carousel_item_link_2 = CarouselUnitTest.create_carousel_item_link()
         data['carousel_item_link'] = carousel_item_link_2.pk
         res = req.post(url, data=data, follow=1)
-        assert res.status_code == 403
+        assert res.status_code == 400
         # wrong carousel_item
         data['carousel_item_link'] = 11121
         res = req.post(url, data=data, follow=1)
@@ -100,7 +100,7 @@ class CarouselItemLinkLocalizationAPIUnitTest(TestCase):
         res = req.patch(url, data=data,
                         content_type='application/json',
                         follow=1)
-        assert res.status_code == 403
+        assert res.status_code == 400
         # correct data
         data = {'title': 'patched'}
         # user hasn't permission

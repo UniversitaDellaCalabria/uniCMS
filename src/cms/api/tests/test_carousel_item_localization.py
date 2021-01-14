@@ -64,7 +64,7 @@ class CarouselItemLocalizationAPIUnitTest(TestCase):
         carousel_item_2 = CarouselUnitTest.create_carousel_item(carousel=carousel)
         data['carousel_item'] = carousel_item_2.pk
         res = req.post(url, data=data, follow=1)
-        assert res.status_code == 403
+        assert res.status_code == 400
         # wrong carousel_item
         data['carousel_item'] = 11121
         res = req.post(url, data=data, follow=1)
@@ -75,7 +75,7 @@ class CarouselItemLocalizationAPIUnitTest(TestCase):
                       kwargs={'carousel_id': 12321321,
                               'carousel_item_id': carousel_item.pk})
         res = req.post(url, data=data, follow=1)
-        assert res.status_code == 404
+        assert res.status_code == 400
         url = reverse('unicms_api:carousel-item-localizations',
                       kwargs={'carousel_id': carousel.pk,
                               'carousel_item_id': carousel_item.pk})
@@ -98,7 +98,7 @@ class CarouselItemLocalizationAPIUnitTest(TestCase):
         res = req.patch(url, data=data,
                         content_type='application/json',
                         follow=1)
-        assert res.status_code == 403
+        assert res.status_code == 400
         # correct data
         data = {'pre_heading': 'patched'}
         # user hasn't permission

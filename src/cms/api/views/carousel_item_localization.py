@@ -49,12 +49,8 @@ class CarouselItemLocalizationList(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         carousel_id = kwargs['carousel_id']
         carousel_item_id = kwargs['carousel_item_id']
-        serializer = CarouselItemLocalizationSerializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            # can edit carousel defined in URL
-            if int(request.data['carousel_item']) != carousel_item_id:
-                error_msg = _("Carousel Item ID must be {}").format(carousel_item_id)
-                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
             # get carousel item
             carousel_item = get_object_or_404(CarouselItem,
                                               pk=carousel_item_id,
@@ -91,10 +87,6 @@ class CarouselItemLocalizationView(generics.RetrieveUpdateDestroyAPIView):
     def patch(self, request, *args, **kwargs):
         carousel_id = kwargs['carousel_id']
         carousel_item_id = self.kwargs['carousel_item_id']
-        # can edit carousel defined in URL
-        if request.data.get('carousel_item') and int(request.data['carousel_item']) != carousel_item_id:
-            error_msg = _("Carousel item ID must be {}").format(carousel_item_id)
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
         # get carousel item
         carousel_item = get_object_or_404(CarouselItem,
                                           pk=carousel_item_id,
@@ -110,10 +102,6 @@ class CarouselItemLocalizationView(generics.RetrieveUpdateDestroyAPIView):
     def put(self, request, *args, **kwargs):
         carousel_id = kwargs['carousel_id']
         carousel_item_id = self.kwargs['carousel_item_id']
-        # can edit carousel defined in URL
-        if int(request.data['carousel_item']) != carousel_item_id:
-            error_msg = _("Carousel item ID must be {}").format(carousel_item_id)
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
         # get carousel item
         carousel_item = get_object_or_404(CarouselItem,
                                           pk=carousel_item_id,

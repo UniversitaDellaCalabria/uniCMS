@@ -67,7 +67,7 @@ class CarouselItemLinkAPIUnitTest(TestCase):
         carousel_item_2 = CarouselUnitTest.create_carousel_item()
         data['carousel_item'] = carousel_item_2.pk
         res = req.post(url, data=data, follow=1)
-        assert res.status_code == 403
+        assert res.status_code == 400
         # correct data
         data['carousel_item'] = carousel_item.pk
         # wrong parent carousel
@@ -75,7 +75,7 @@ class CarouselItemLinkAPIUnitTest(TestCase):
                       kwargs={'carousel_id': 12321321,
                               'carousel_item_id': carousel_item.pk})
         res = req.post(url, data=data, follow=1)
-        assert res.status_code == 404
+        assert res.status_code == 400
         url = reverse('unicms_api:carousel-item-links',
                       kwargs={'carousel_id': carousel.pk,
                               'carousel_item_id': carousel_item.pk})
@@ -98,7 +98,7 @@ class CarouselItemLinkAPIUnitTest(TestCase):
         res = req.patch(url, data=data,
                         content_type='application/json',
                         follow=1)
-        assert res.status_code == 403
+        assert res.status_code == 400
         # correct data
         data = {'title': 'patched'}
         # user hasn't permission

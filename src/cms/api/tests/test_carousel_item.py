@@ -67,7 +67,7 @@ class CarouselItemAPIUnitTest(TestCase):
         carousel_2 = CarouselUnitTest.create_carousel()
         data['carousel'] = carousel_2.pk
         res = req.post(url, data=data, follow=1)
-        assert res.status_code == 403
+        assert res.status_code == 400
         # correct data
         data['carousel'] = carousel.pk
         res = req.post(url, data=data, follow=1)
