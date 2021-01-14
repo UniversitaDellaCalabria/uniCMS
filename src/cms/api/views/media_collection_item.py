@@ -43,7 +43,7 @@ class MediaCollectionItemList(generics.ListCreateAPIView):
         return items
 
     def post(self, request, *args, **kwargs):
-        collection_id = kwargs['collection_id']
+        kwargs['collection_id']
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             # get collection
@@ -79,7 +79,7 @@ class MediaCollectionItemView(generics.RetrieveUpdateDestroyAPIView):
         return super().get(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
-        collection_id = kwargs['collection_id']
+        kwargs['collection_id']
         # get collection
         collection = get_object_or_404(MediaCollection,
                                        pk=kwargs['collection_id'])
@@ -92,7 +92,7 @@ class MediaCollectionItemView(generics.RetrieveUpdateDestroyAPIView):
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        collection_id = kwargs['collection_id']
+        kwargs['collection_id']
         # get collection
         collection = get_object_or_404(MediaCollection,
                                        pk=kwargs['collection_id'])
