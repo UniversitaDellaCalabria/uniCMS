@@ -78,14 +78,14 @@ class WebpathAPIUnitTest(TestCase):
                         content_type='application/json',
                         follow=1)
         # invalid site
-        assert res.status_code == 403
+        assert res.status_code == 400
         # invalid parent
         data = {'parent': 123123123}
         res = req.patch(url,
                         data=data,
                         content_type='application/json',
                         follow=1)
-        assert res.status_code == 404
+        assert res.status_code == 400
         # valid data but...
         data = {'name': 'patched name',
                 'is_active': 0}

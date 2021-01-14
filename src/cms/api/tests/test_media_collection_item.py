@@ -136,7 +136,7 @@ class MediaCollectionItemAPIUnitTest(TestCase):
         res = req.put(url, data=data,
                       content_type='application/json',
                       follow=1)
-        assert res.status_code == 403
+        assert res.status_code == 400
         # correct collection but...
         data['collection'] = collection.pk
         # user hasn't permission

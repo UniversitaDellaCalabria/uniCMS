@@ -88,7 +88,7 @@ class CarouselItemAPIUnitTest(TestCase):
         res = req.patch(url, data,
                         content_type='application/json',
                         follow=1)
-        assert res.status_code == 403
+        assert res.status_code == 400
         # correct data
         data = {'pre_heading': 'patched'}
         # user hasn't permission
@@ -127,7 +127,7 @@ class CarouselItemAPIUnitTest(TestCase):
         res = req.put(url, data,
                       content_type='application/json',
                       follow=1)
-        assert res.status_code == 403
+        assert res.status_code == 400
         data['carousel'] = carousel.pk
         # user hasn't permission
         req.force_login(user2)

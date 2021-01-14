@@ -1,7 +1,7 @@
 import logging
 
 from django.conf import settings
-from django.shortcuts import get_object_or_404
+from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import generics, status
@@ -46,15 +46,10 @@ class CarouselItemList(generics.ListCreateAPIView):
         return localized
 
     def post(self, request, *args, **kwargs):
-        carousel_id = kwargs['carousel_id']
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            # can edit carousel defined in URL
-            if int(request.data['carousel']) != carousel_id:
-                error_msg = _("Carousel ID must be {}").format(carousel_id)
-                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
             # get carousel
-            carousel = get_object_or_404(Carousel, pk=kwargs['carousel_id'])
+            carousel = serializer.validated_data.get('carousel')
             # check permissions on carousel
             permission = check_user_permission_on_object(request.user,
                                                          carousel,
@@ -83,39 +78,45 @@ class CarouselItemView(generics.RetrieveUpdateDestroyAPIView):
         return items
 
     def patch(self, request, *args, **kwargs):
-        carousel_id = kwargs['carousel_id']
-        if request.data.get('carousel') and int(request.data['carousel']) != carousel_id:
-            error_msg = _("Carousel ID must be {}").format(carousel_id)
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
-        # get carousel
-        carousel = get_object_or_404(Carousel, pk=kwargs['carousel_id'])
-        # check permissions on carousel
-        permission = check_user_permission_on_object(request.user,
-                                                     carousel,
-                                                     'cmscarousels.change_carousel')
-        if not permission:
-            return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
-        return super().patch(request, *args, **kwargs)
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        carousel = item.carousel
+        serializer = self.get_serializer(instance=item,
+                                         data=request.data,
+                                         partial=True)
+        if serializer.is_valid(raise_exception=True):
+            new_carousel = serializer.validated_data.get('carousel')
+            # check permissions on carousel
+            if new_carousel:
+                carousel = new_carousel
+            permission = check_user_permission_on_object(request.user,
+                                                         carousel,
+                                                         'cmscarousels.change_carousel')
+            if not permission:
+                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+            return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        carousel_id = kwargs['carousel_id']
-        # can edit carousel defined in URL
-        if int(request.data['carousel']) != carousel_id:
-            error_msg = _("Carousel ID must be {}").format(carousel_id)
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
-        # get carousel
-        carousel = get_object_or_404(Carousel, pk=kwargs['carousel_id'])
-        # check permissions on carousel
-        permission = check_user_permission_on_object(request.user,
-                                                     carousel,
-                                                     'cmscarousels.change_carousel')
-        if not permission:
-            return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
-        return super().put(request, *args, **kwargs)
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        serializer = self.get_serializer(instance=item,
+                                         data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            # get carousel
+            carousel = serializer.validated_data.get('carousel')
+            # check permissions on carousel
+            permission = check_user_permission_on_object(request.user,
+                                                         carousel,
+                                                         'cmscarousels.change_carousel')
+            if not permission:
+                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+            return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
         # get carousel
-        carousel = get_object_or_404(Carousel, pk=kwargs['carousel_id'])
+        carousel = item.carousel
         # check permissions on carousel
         permission = check_user_permission_on_object(request.user,
                                                      carousel,

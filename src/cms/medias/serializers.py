@@ -11,7 +11,7 @@ class MediaCollectionForeignKey(serializers.PrimaryKeyRelatedField):
         if request:
             collection_id = self.context['request'].parser_context['kwargs']['collection_id']
             return MediaCollection.objects.filter(pk=collection_id)
-        return None
+        return None # pragma: no cover
 
 
 class MediaSerializer(serializers.ModelSerializer):
