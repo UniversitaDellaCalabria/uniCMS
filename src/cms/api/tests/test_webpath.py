@@ -77,6 +77,15 @@ class WebpathAPIUnitTest(TestCase):
                         data=data,
                         content_type='application/json',
                         follow=1)
+        # no permission on webpath
+        assert res.status_code == 403
+        # set permission
+        ebu.permission = 7
+        ebu.save()
+        res = req.patch(url,
+                        data=data,
+                        content_type='application/json',
+                        follow=1)
         # invalid site
         assert res.status_code == 400
         # invalid parent
@@ -88,6 +97,7 @@ class WebpathAPIUnitTest(TestCase):
         assert res.status_code == 400
         # valid data but...
         data = {'name': 'patched name',
+                'parent': ebu.webpath.parent.pk,
                 'is_active': 0}
         res = req.patch(url,
                         data=data,

@@ -115,27 +115,30 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
     def patch(self, request, *args, **kwargs):
         webpath = self.get_queryset().first()
         if not webpath: raise Http404
-        parent = webpath.parent
         dict(CMS_CONTEXT_PERMISSIONS)
+
+        publisher_perms = (6,7,8)
+        # check permission on direct webpath
+        webpath_permission = EditorialBoardEditors.get_permission(webpath=webpath,
+                                                                  user=request.user)
+        if webpath_permission not in publisher_perms or (webpath_permission == 6 and webpath.created_by != request.user):
+            error_msg = _("You don't have permissions on webpath {}").format(webpath)
+            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
 
         serializer = self.get_serializer(instance=webpath,
                                          data=request.data,
                                          partial=True)
         if serializer.is_valid(raise_exception=True):
-            # parent in request data
+            # if parent in request data, check permission on parent
             new_parent = serializer.validated_data.get('parent')
             if new_parent:
-                # get active parent
-                parent = new_parent
+                # check permissions on parent
 
-            # check permissions on parent
-            publisher_perms = (6,7,8)
-            parent_permission = EditorialBoardEditors.get_permission(webpath=parent,
-                                                                     user=request.user)
-            if parent_permission not in publisher_perms or (parent_permission == 6 and parent.created_by != request.user):
-                error_msg = _("You don't have permissions on webpath {}").format(parent)
-                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
-
+                parent_permission = EditorialBoardEditors.get_permission(webpath=new_parent,
+                                                                         user=request.user)
+                if parent_permission not in publisher_perms or (parent_permission == 6 and parent.created_by != request.user):
+                    error_msg = _("You don't have permissions on webpath {}").format(new_parent)
+                    return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):

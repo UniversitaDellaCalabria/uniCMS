@@ -36,7 +36,8 @@ class PublicationSerializer(TaggitSerializer, serializers.ModelSerializer):
                   'category',
                   'note',
                   'tags',
-                  'relevance']
+                  'relevance',
+                  'is_active']
 
 
 class PublicationContextSerializer(serializers.ModelSerializer):

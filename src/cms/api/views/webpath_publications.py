@@ -45,19 +45,3 @@ class EditorWebpathPublicationList(generics.ListCreateAPIView):
             publications = publications.filter(is_active=is_active)
         return publications
 
-    # def get(self, request, *args, **kwargs):
-        # context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
-        # webpath = get_object_or_404(WebPath,
-        # pk=kwargs['webpath_id'],
-        # site=kwargs['site_id'])
-
-        # for publication in self.get_queryset():
-        # permission = EditorialBoardEditors.get_permission(user=request.user,
-        # webpath=webpath)
-        # webpath_data = self.get_serializer(instance=webpath).data
-        # webpath_data["permission_id"] = permission
-        # permission_label = context_permissions[permission] if permission else ''
-        # webpath_data["permission_label"] = permission_label
-        # webpaths.append(webpath_data)
-        # results = self.paginate_queryset(webpaths)
-        # return self.get_paginated_response(results)
