@@ -1,19 +1,11 @@
 from django.contrib import admin
 
+from cms.templates.admin import AbstractCreatedModifiedBy
 from . models import (EditorialBoardEditors, 
                       EditorialBoardLocks, 
                       WebPath, 
                       WebSite,
                       EntryUsedBy)
-from . utils import fill_created_modified_by
-
-
-class AbstractCreatedModifiedBy(admin.ModelAdmin):
-    readonly_fields = ('created_by', 'modified_by')
-
-    def save_model(self, request, obj, form, change): # pragma: no cover
-        fill_created_modified_by(request, obj)
-        super().save_model(request, obj, form, change)
 
 
 class WebPathAdminInline(admin.TabularInline):
