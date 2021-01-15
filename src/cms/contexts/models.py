@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.utils import sanitize_path
-from cms.templates.models import TimeStampedModel
+from cms.templates.models import TimeStampedModel, CreatedModifiedBy
 
 from . import settings as app_settings
 from . exceptions import ReservedWordException
@@ -20,20 +20,6 @@ logger = logging.getLogger(__name__)
 CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
                                   app_settings.CMS_CONTEXT_PERMISSIONS)
 CMS_PATH_PREFIX = getattr(settings, 'CMS_PATH_PREFIX', '')
-
-
-class CreatedModifiedBy(models.Model):
-    created_by = models.ForeignKey(get_user_model(),
-                                   null=True, blank=True,
-                                   on_delete=models.CASCADE,
-                                   related_name='%(class)s_created_by')
-    modified_by = models.ForeignKey(get_user_model(),
-                                    null=True, blank=True,
-                                    on_delete=models.CASCADE,
-                                    related_name='%(class)s_modified_by')
-
-    class Meta:
-        abstract = True
 
 
 class WebSite(models.Model):
@@ -266,3 +252,33 @@ class EditorialBoardLocks(models.Model): # pragma: no cover
 
     def __str__(self): # pragma: no cover
         return f'{self.content_type} {self.object_id}'
+
+
+class EntryUsedBy(models.Model):
+    content_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        verbose_name=_("content type"),
+        related_name="%(app_label)s_%(class)s_entry",
+    )
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
+
+    used_by_content_type = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        verbose_name=_("used by content type"),
+        related_name="%(app_label)s_%(class)s_usedby",
+    )
+    used_by_object_id = models.PositiveIntegerField()
+    used_by_content_object = GenericForeignKey()
+    
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = _("Entries Used By")
+
+    def __str__(self): # pragma: no cover
+        return (f'{self.content_type} {self.object_id} used by '
+                f'{self.usedby_content_type} {self.usedby_object_id}')
+    
