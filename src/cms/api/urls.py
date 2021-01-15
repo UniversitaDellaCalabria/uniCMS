@@ -59,7 +59,7 @@ urlpatterns += path('api/editorial-board/sites/<int:site_id>/webpaths/',
 urlpatterns += path('api/editorial-board/sites/<int:site_id>/webpaths/<int:pk>/',
                     webpath.EditorWebsiteWebpathView.as_view(), name='editorial-board-site-webpath'),
 urlpatterns += path('api/editorial-board/sites/<int:site_id>/webpaths/<int:webpath_id>/publications/',
-                    webpath_publications.EditorWebpathPublicationContextList.as_view(), name='editorial-board-site-webpath-publication-contexts'),
+                    webpath_publications.EditorWebpathPublicationList.as_view(), name='editorial-board-site-webpath-publications'),
 
 
 # urlpatterns += path('api/editorial-board/site/<int:site_id>/page/list/',

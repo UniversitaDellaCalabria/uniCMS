@@ -21,7 +21,7 @@ CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
 logger = logging.getLogger(__name__)
 
 
-class EditorWebpathPublicationContextList(generics.ListCreateAPIView):
+class EditorWebpathPublicationList(generics.ListCreateAPIView):
     """
     """
     description = ""

@@ -188,7 +188,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
                 'permission': self.permission}
 
     @classmethod
-    def get_permission(cls, webpath, user, check_all=True):
+    def get_permission(cls, webpath, user, check_all=True, consider_zero=True):
 
         # webpath and user must be true
         if not all((webpath, user)):
@@ -201,18 +201,26 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
         # search for user permissions in specific webpath
         for webpath_permission in webpath_permissions:
             permission = webpath_permission.permission
-            if permission and permission > 0:
+            # consider zero value?
+            if permission and consider_zero and permission >= 0:
+                return permission
+            # or not
+            if permission and not consider_zero and permission > 0:
                 return permission
 
         # search for user permissions in webpath parents
         # select only permissions on descendants (2,5,8)
         parent_permission = cls.get_permission(webpath=webpath.parent,
                                                user=user,
-                                               check_all=False)
+                                               check_all=False,
+                                               consider_zero=False)
+                                               # consider zero on parent?
+                                               # consider_zero=True)
+        # if consider zero on parent (0,2,5,8)
         if parent_permission in (2, 5, 8):
             return parent_permission
 
-        # search for user permissions
+        # search for global permissions
         result = 0
         if check_all:
             all_permissions = permissions.filter(webpath=None)

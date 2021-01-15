@@ -5,6 +5,8 @@ uniCMS Components
 
 ````
 CMS_CONTEXT_PERMISSIONS = (
+                           (0, _('no permissions in context')),
+
                            (1, _('can translate content in their own context')),
                            (2, _('can translate content in their own context and descendants')),
 
