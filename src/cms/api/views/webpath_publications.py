@@ -11,7 +11,7 @@ from rest_framework.response import Response
 
 from cms.contexts import settings as contexts_settings
 from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
-from cms.contexts.utils import is_editor
+from cms.contexts.utils import is_editor, is_publisher
 
 from cms.publications.models import PublicationContext
 from cms.publications.serializers import PublicationContextSerializer
@@ -64,9 +64,10 @@ class EditorWebpathPublicationList(generics.ListCreateAPIView):
                 error_msg = _("You don't have permissions")
                 return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
 
+            publisher_perms = is_publisher(permission)
             publication = serializer.validated_data.get('publication')
             state = publication['state']
-            if state == 'published' and permission not in publisher_perms:
+            if state == 'published' and not publisher_perms:
                 error_msg = _("You don't have permissions to save a published item, set draft instead")
                 return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
             return super().post(request, *args, **kwargs)
