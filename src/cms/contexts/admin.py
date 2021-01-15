@@ -1,15 +1,12 @@
 from django.contrib import admin
 
-from . models import EditorialBoardEditors, EditorialBoardLocks, WebPath, WebSite
-from . utils import fill_created_modified_by
-
-
-class AbstractCreatedModifiedBy(admin.ModelAdmin):
-    readonly_fields = ('created_by', 'modified_by')
-
-    def save_model(self, request, obj, form, change):
-        fill_created_modified_by(request, obj)
-        super().save_model(request, obj, form, change)
+from cms.templates.admin import AbstractCreatedModifiedBy
+from . models import (EditorialBoardEditors, 
+                      EditorialBoardLock,
+                      EditorialBoardLockUser, 
+                      WebPath, 
+                      WebSite,
+                      EntryUsedBy)
 
 
 class WebPathAdminInline(admin.TabularInline):
@@ -49,8 +46,23 @@ class EditorialBoardEditorsAdmin(AbstractCreatedModifiedBy):
     readonly_fields = ('created', 'modified')
 
 
-@admin.register(EditorialBoardLocks)
-class EditorialBoardLocksAdmin(admin.ModelAdmin):
+class EditorialBoardLockUserAdminInline(admin.TabularInline):
+    model = EditorialBoardLockUser
+    extra = 0
+    # readonly_fields = ('lock__locked_time',)
+    raw_id_fields = ('lock', 'user')
+
+
+@admin.register(EditorialBoardLock)
+class EditorialBoardLockAdmin(admin.ModelAdmin):
     list_filter = ('locked_time', )
-    list_display = ('content_type', 'object_id',
-                    'is_active', 'locked_time', 'locked_by')
+    list_display = ('content_type', 'object_id', 'locked_time')
+    inlines = (EditorialBoardLockUserAdminInline,)
+    
+
+@admin.register(EntryUsedBy)
+class EntryUsedByAdmin(admin.ModelAdmin):
+    list_filter = ('created', )
+    list_display = ('content_type', 'content_object',
+                    'used_by_content_type', 'used_by_content_object')
+    # raw_id_fields = ('object_id', 'used_by_object_id')

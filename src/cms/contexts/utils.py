@@ -84,12 +84,6 @@ def toggle_session_state(request, arg_name) -> None:
                              _('You entered in {}').format(arg_name.upper()))
 
 
-def set_created_modified_by(obj, user): # pragma: no cover
-    if not obj.created_by:
-        obj.created_by = user
-    obj.modified_by = user
-
-
 def load_hooks(obj, flow_type, *args, **kwargs):
     _msg_hook_exp = '{} Hook {} failed with: {}'
     type_hooks = CMS_HOOKS.get(obj.__class__.__name__, {})
