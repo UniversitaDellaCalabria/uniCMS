@@ -1,0 +1,20 @@
+ckfinder = """obfuscated js code here as string"""
+
+def S(e):
+    e = e.encode() if isinstance(e, str) else e
+    n = e[0]
+    t = ''
+    for i in range(len(e)):
+        if i == 0: continue
+        t += chr(e[i] ^ i + n & 127);
+    return t
+
+
+to_deob = re.findall('(S\("([^\s))]*)"\))', ckfinder)
+
+
+new = ''.join([i for i in ckfinder])
+for i in to_deob:
+    res = S(i[1])
+    print(i[0], ' -> ', res)
+    new = new.replace(i[0], f'"{res}"')

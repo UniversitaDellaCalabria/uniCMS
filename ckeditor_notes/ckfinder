@@ -1,0 +1,220 @@
+https://ckeditor.com/apps/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json
+
+basePath = https://ckeditor.com/apps/ckfinder/3.5.0
+connector = /core/connector/php/connector.php
+
+basePath = /api
+CKFinder._connectors.php = /
+
+# prima chiamata
+https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=Init&lang=en&type=Images
+# risposta
+{
+    "enabled":true,
+    "s":"",
+    "c":"FD6FHE82DWH",
+    "thumbs":["150x150","300x300","500x500"],
+    "images":{"max":"1600x1200",
+           "sizes":{"small":"480x320","medium":"600x480","large":"800x600"}
+           },
+    "resourceTypes":[{"name":"Images",
+                      "allowedExtensions":"gif,jpeg,jpg,png,webp",
+                      "deniedExtensions":"",
+                      "hash":"f635e3acdc080f11",
+                      "acl":1023,
+                      "maxSize":2097152,
+                      "hasChildren":true,
+                      "url":"https:\/\/ckeditor.com\/apps\/ckfinder\/userfiles\/images\/"}
+                    ],
+    "uploadMaxSize":2097152,
+    "uploadCheckImages":false
+}
+
+{
+    "enabled": true,
+    "s": "",
+    "c": "FD6FHE82DWH",
+    "thumbs": [
+        "150x150",
+        "300x300",
+        "500x500"
+    ],
+    "": {
+        "max": "1600x1200",
+        "sizes": {
+            "small": "480x320",
+            "medium": "600x480",
+            "large": "800x600"
+        }
+    },
+    "resourceTypes": [
+        {
+            "name": "Images",
+            "allowedExtensions": "gif,jpeg,jpg,png,webp",
+            "deniedExtensions": "",
+            "hash": "f635e3acdc080f11",
+            "acl": 1023,
+            "maxSize": 209715266,
+            "hasChildren": true,
+            "url": "http://test.unical.it:8000/media/medias"
+        }
+    ],
+    "uploadMaxSize": 209715266,
+    "uploadCheckImages": false
+}
+
+
+
+// get folders
+https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=GetFolders&lang=en&type=Images&currentFolder=%2F&hash=f635e3acdc080f11
+
+{
+   "resourceType":"Images",
+   "currentFolder":{
+      "path":"\/",
+      "acl":1023,
+      "url":"https:\/\/ckeditor.com\/apps\/ckfinder\/userfiles\/images\/"
+   },
+   "folders":[
+      {
+         "name":"Animals",
+         "hasChildren":false,
+         "acl":1023
+      },
+      {
+         "name":"Cars",
+         "hasChildren":false,
+         "acl":1023
+      },
+      {
+         "name":"Food",
+         "hasChildren":false,
+         "acl":1023
+      }
+   ]
+}
+
+
+// get images
+https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=GetFiles&lang=en&type=Images&currentFolder=%2F&hash=f635e3acdc080f11
+
+{
+   "resourceType":"Images",
+   "currentFolder":{
+      "path":"\/",
+      "acl":1023,
+      "url":"https:\/\/ckeditor.com\/apps\/ckfinder\/userfiles\/images\/"
+   },
+   "files":[
+      {
+         "name":"4(1).jpg",
+         "date":"20210112093043",
+         "size":213
+      },
+      {
+         "name":"4(2).jpg",
+         "date":"20210112095525",
+         "size":213
+      },
+      {
+         "name":"4.jpg",
+         "date":"20210112093029",
+         "size":213
+      },
+      {
+         "name":"catwalk.jpg",
+         "date":"20210112093001",
+         "size":323
+      },
+      {
+         "name":"countryside.jpg",
+         "date":"20210112093001",
+         "size":159
+      },
+      {
+         "name":"loginsadfdf.png",
+         "date":"20210112091313",
+         "size":264
+      },
+      {
+         "name":"magic sea.jpg",
+         "date":"20210112093001",
+         "size":235
+      },
+      {
+         "name":"meadow.jpg",
+         "date":"20210112093001",
+         "size":128
+      },
+      {
+         "name":"pebbles.jpg",
+         "date":"20210112093001",
+         "size":468
+      },
+      {
+         "name":"railway.jpg",
+         "date":"20210112093001",
+         "size":213
+      },
+      {
+         "name":"riii.jpeg",
+         "date":"20210112081438",
+         "size":76
+      },
+      {
+         "name":"river.jpg",
+         "date":"20210112093001",
+         "size":344
+      },
+      {
+         "name":"river2.jpg",
+         "date":"20210112093001",
+         "size":410
+      },
+      {
+         "name":"sally.jpg",
+         "date":"20210112080356",
+         "size":17
+      },
+      {
+         "name":"sky is the limit.jpg",
+         "date":"20210112093001",
+         "size":223
+      },
+      {
+         "name":"spring.jpg",
+         "date":"20210112093001",
+         "size":520
+      },
+      {
+         "name":"S__48029702.jpg",
+         "date":"20210112090314",
+         "size":13
+      },
+      {
+         "name":"S__48037891.jpg",
+         "date":"20210112091418",
+         "size":39
+      },
+      {
+         "name":"two towers.jpg",
+         "date":"20210112093001",
+         "size":259
+      },
+      {
+         "name":"waterfall.jpg",
+         "date":"20210112093001",
+         "size":89
+      },
+      {
+         "name":"winter is coming.jpg",
+         "date":"20210112093001",
+         "size":439
+      }
+   ]
+}
+
+// get image
+https://ckeditor.com/apps/ckfinder/3.5.0/core/connector/php/connector.php?command=Thumbnail&lang=en&type=Images&currentFolder=%2F&hash=f635e3acdc080f11&fileName=4.jpg&date=20210112093029&fileSize=213&size=150x150
+
+https://ckeditor.com/apps/ckfinder/userfiles/images/loginsadfdf.png
