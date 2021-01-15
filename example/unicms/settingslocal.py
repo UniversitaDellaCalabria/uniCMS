@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 
     'unicms_template_unical',
     'unicms_template_italia',
-    'rest_framework'
+    'rest_framework',
 ]
 
 # Database

@@ -89,6 +89,12 @@ class CarouselItemAPIUnitTest(TestCase):
                         content_type='application/json',
                         follow=1)
         assert res.status_code == 400
+        # patch carousel id
+        data = {'carousel': carousel_item.carousel.pk}
+        res = req.patch(url, data,
+                        content_type='application/json',
+                        follow=1)
+        assert res.status_code == 200
         # correct data
         data = {'pre_heading': 'patched'}
         # user hasn't permission

@@ -5,6 +5,7 @@ from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import generics, status
+from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
@@ -27,6 +28,8 @@ class CarouselItemList(generics.ListCreateAPIView):
     """
     """
     description = ""
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['pre_heading', 'heading', 'description']
     pagination_class = UniCmsApiPagination
     permission_classes = [IsAdminUser]
     serializer_class = CarouselItemSerializer
@@ -40,10 +43,7 @@ class CarouselItemList(generics.ListCreateAPIView):
         is_active = self.request.GET.get('is_active')
         if is_active:
             items = items.filter(is_active=is_active)
-        localized = []
-        for item in items:
-            localized.append(item.localized(self.request.LANGUAGE_CODE))
-        return localized
+        return items
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

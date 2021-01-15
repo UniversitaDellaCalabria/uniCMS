@@ -77,15 +77,6 @@ class WebpathAPIUnitTest(TestCase):
                         data=data,
                         content_type='application/json',
                         follow=1)
-        # no permission on webpath
-        assert res.status_code == 403
-        # set permission
-        ebu.permission = 7
-        ebu.save()
-        res = req.patch(url,
-                        data=data,
-                        content_type='application/json',
-                        follow=1)
         # invalid site
         assert res.status_code == 400
         # invalid parent
@@ -202,18 +193,6 @@ class WebpathAPIUnitTest(TestCase):
                             kwargs={'site_id': site.pk,
                                     'pk': child.pk})
 
-        # wrong child permissions
-        child_json = {}
-        res = req.put(child_url,
-                      data=child_json,
-                      content_type='application/json',
-                      follow=1)
-        assert res.status_code == 403
-
-        # fix child permissions
-        ebu_child.permission = 7
-        ebu_child.save()
-
         # wrong parent
         child_json = {'site': site.pk,
                       'parent': 100023123123123,
@@ -316,6 +295,9 @@ class WebpathAPIUnitTest(TestCase):
         req = Client()
         ebu = ContextUnitTest.create_editorialboard_user()
         webpath = ebu.webpath
+        ebu_parent = ContextUnitTest.create_editorialboard_user(user=ebu.user)
+        webpath.parent = ebu_parent.webpath
+        webpath.save()
         url = reverse('unicms_api:editorial-board-site-webpath',
                       kwargs={'site_id': webpath.site.pk,
                               'pk': webpath.pk})
@@ -328,13 +310,13 @@ class WebpathAPIUnitTest(TestCase):
         user.save()
         req.force_login(user)
 
-        # wrong permissions
+        # wrong permissions on parent
         res = req.delete(url)
         assert res.status_code == 403
 
-        # publisher permission on webpath
-        ebu.permission = 7
-        ebu.save()
+        # publisher permission on parent webpath
+        ebu_parent.permission = 7
+        ebu_parent.save()
         res = req.delete(url)
         try:
             webpath.refresh_from_db()

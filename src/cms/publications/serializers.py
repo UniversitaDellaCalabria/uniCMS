@@ -1,4 +1,5 @@
 from cms.contexts.models import WebPath
+from cms.pages.models import Category
 
 from rest_framework import serializers
 from taggit_serializer.serializers import (TagListSerializerField,
@@ -43,6 +44,17 @@ class PublicationSerializer(TaggitSerializer, serializers.ModelSerializer):
 class PublicationContextSerializer(serializers.ModelSerializer):
     webpath = WebPathForeignKey()
     publication = PublicationSerializer()
+
+    # nested serializers need custom create() method
+    def create(self, validated_data):
+        pub_data = validated_data.pop('publication')
+        categories = pub_data.pop('category')
+        pub = Publication.objects.create(**pub_data)
+        # many-to-many relation on category
+        pub.category.set(categories)
+        pub_cxt = PublicationContext.objects.create(**validated_data,
+                                                    publication=pub)
+        return pub_cxt
 
     class Meta:
         model = PublicationContext

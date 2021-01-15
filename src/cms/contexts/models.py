@@ -214,9 +214,6 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
                                                user=user,
                                                check_all=False,
                                                consider_zero=False)
-                                               # consider zero on parent?
-                                               # consider_zero=True)
-        # if consider zero on parent (0,2,5,8)
         if parent_permission in (2, 5, 8):
             return parent_permission
 

@@ -113,3 +113,38 @@ def fill_created_modified_by(request, obj):
 
         if (field_name == 'modified_by' or not getattr(obj, field_name, None)):
             setattr(obj, field_name, request.user)
+
+
+def is_translator(permission):
+    """
+    based on settings.CMS_CONTEXT_PERMISSIONS
+    given a permission code (int)
+    returns a dict{} with translator permission info
+    """
+    if not permission > 0: return {}
+    allow_descendant = True if permission > 1 else False
+    return {'only_created_by': False,
+            'allow_descendant': allow_descendant}
+
+def is_editor(permission):
+    """
+    based on settings.CMS_CONTEXT_PERMISSIONS
+    given a permission code (int)
+    returns a dict{} with editor permission info
+    """
+    if not permission > 2: return {}
+    allow_descendant = True if permission > 4 else False
+    only_created_by = True if permission == 3 else False
+    return {'only_created_by': only_created_by,
+            'allow_descendant': allow_descendant}
+
+def is_publisher(permission):
+    """
+    based on settings.CMS_CONTEXT_PERMISSIONS
+    given a permission code (int)
+    returns a dict{} with publiser permission info
+    """
+    if not permission > 5: return {}
+    allow_descendant = True if permission > 7 else False
+    return {'only_created_by': False,
+            'allow_descendant': allow_descendant}

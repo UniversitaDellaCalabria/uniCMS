@@ -10,6 +10,7 @@ from cms.medias.models import MediaCollection
 from cms.medias.serializers import MediaCollectionSerializer
 
 from rest_framework import generics, status
+from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
@@ -28,6 +29,8 @@ class MediaCollectionList(generics.ListCreateAPIView):
     """
     """
     description = ""
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['name', 'description', 'tags__name']
     pagination_class = UniCmsApiPagination
     permission_classes = [UserCanAddMediaCollectionOrAdminReadonly]
     serializer_class = MediaCollectionSerializer

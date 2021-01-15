@@ -10,6 +10,7 @@ from cms.medias.models import MediaCollectionItem
 from cms.medias.serializers import MediaCollectionItemSerializer
 
 from rest_framework import generics, status
+# from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 

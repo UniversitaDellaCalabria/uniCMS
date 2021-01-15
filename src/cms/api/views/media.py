@@ -6,6 +6,7 @@ from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import generics, status
+from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
@@ -29,6 +30,8 @@ class MediaList(generics.ListCreateAPIView):
     """
     """
     description = ""
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['title', 'file', 'description']
     pagination_class = UniCmsApiPagination
     permission_classes = [UserCanAddMediaOrAdminReadonly]
     serializer_class = MediaSerializer
