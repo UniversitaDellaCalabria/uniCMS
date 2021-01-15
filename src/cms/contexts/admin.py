@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from cms.templates.admin import AbstractCreatedModifiedBy
 from . models import (EditorialBoardEditors, 
-                      EditorialBoardLocks, 
+                      EditorialBoardLock,
+                      EditorialBoardLockUser, 
                       WebPath, 
                       WebSite,
                       EntryUsedBy)
@@ -45,12 +46,19 @@ class EditorialBoardEditorsAdmin(AbstractCreatedModifiedBy):
     readonly_fields = ('created', 'modified')
 
 
-@admin.register(EditorialBoardLocks)
-class EditorialBoardLocksAdmin(admin.ModelAdmin):
-    list_filter = ('locked_time', )
-    list_display = ('content_type', 'object_id',
-                    'is_active', 'locked_time', 'locked_by')
+class EditorialBoardLockUserAdminInline(admin.TabularInline):
+    model = EditorialBoardLockUser
+    extra = 0
+    # readonly_fields = ('lock__locked_time',)
+    raw_id_fields = ('lock', 'user')
 
+
+@admin.register(EditorialBoardLock)
+class EditorialBoardLockAdmin(admin.ModelAdmin):
+    list_filter = ('locked_time', )
+    list_display = ('content_type', 'object_id', 'locked_time')
+    inlines = (EditorialBoardLockUserAdminInline,)
+    
 
 @admin.register(EntryUsedBy)
 class EntryUsedByAdmin(admin.ModelAdmin):

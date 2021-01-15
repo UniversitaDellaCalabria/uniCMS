@@ -224,8 +224,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
             return '{} {}'.format(self.user, self.permission)
 
 
-# DEPRECATED - TODO - mode to Redis TTL
-class EditorialBoardLocks(models.Model): # pragma: no cover
+class EditorialBoardLock(models.Model):
     content_type = models.ForeignKey(
         ContentType,
         on_delete=models.CASCADE,
@@ -234,24 +233,29 @@ class EditorialBoardLocks(models.Model): # pragma: no cover
     )
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey()
-
-    locked_by = models.ForeignKey(get_user_model(),
-                                  on_delete=models.CASCADE,
-                                  null=True, blank=True)
-    locked_time = models.DateTimeField(null=True, blank=True)
+    locked_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = _("Editorial Board Locks")
         ordering = ('-locked_time',)
 
-    @property
-    def is_active(self): # pragma: no cover
-        now = timezone.localtime()
-        unlock_time = self.locked_time + timezone.timedelta(minutes = 1)
-        return now < unlock_time
-
     def __str__(self): # pragma: no cover
         return f'{self.content_type} {self.object_id}'
+
+
+class EditorialBoardLockUser(models.Model):
+    lock = models.ForeignKey(EditorialBoardLock,
+                             on_delete=models.CASCADE,
+                             null=False, blank=False)
+    user = models.ForeignKey(get_user_model(),
+                             on_delete=models.CASCADE,
+                             null=False, blank=False)
+    
+    class Meta:
+        verbose_name_plural = _("Editorial Board Locks Owners")
+
+    def __str__(self): # pragma: no cover
+        return f'{self.lock} {self.user}'
 
 
 class EntryUsedBy(models.Model):

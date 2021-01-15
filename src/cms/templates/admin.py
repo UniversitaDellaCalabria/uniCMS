@@ -19,6 +19,7 @@ class AbstractCreatedModifiedBySave(object):
                 created_by = request.user
             )
 
+
 class AbstractCreatedModifiedBy(AbstractCreatedModifiedBySave, admin.ModelAdmin):
     readonly_fields = ('created_by', 'modified_by')
     

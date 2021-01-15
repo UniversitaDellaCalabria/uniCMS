@@ -3,7 +3,8 @@ import os
 
 from django.conf import settings
 from django.test import TestCase
-
+from django.utils import timezone
+from glob import glob
 from shutil import copyfile
 
 from . models import Media, MediaCollection, MediaCollectionItem, ValidationError, validate_file_size, validate_image_size_ratio
@@ -103,4 +104,8 @@ class MediaUnitTest(TestCase):
             validate_image_size_ratio(media.file)
         except Exception as e:
             assert isinstance(e, ValidationError)
-
+    
+    def tearDown(self):
+        match = f'{settings.MEDIA_ROOT}/medias/{timezone.now().year}/eventi_*.*'
+        for i in glob(match):
+            os.remove(i)
