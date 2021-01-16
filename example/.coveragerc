@@ -12,3 +12,4 @@ omit =
     */tests.py
     */pages/admin.py
     */medias/admin.py
+    */templates/admin.py

@@ -300,20 +300,22 @@ MODEL_TO_MONGO_MAP = {
 CMS_HOOKS = {
     'Publication': {
         'PRESAVE': [],
-        'POSTSAVE': ['cms.search.hooks.publication_se_insert',],
+        'POSTSAVE': ['cms.search.hooks.publication_se_insert',
+                     'cms.contexts.hooks.used_by'],
         'PREDELETE': ['cms.search.hooks.searchengine_entry_remove',],
         'POSTDELETE': []
     },
     'Page': {
         'PRESAVE': [],
-        'POSTSAVE': ['cms.search.hooks.page_se_insert',],
+        'POSTSAVE': ['cms.search.hooks.page_se_insert',
+                     'cms.contexts.hooks.used_by'],
         'PREDELETE': ['cms.search.hooks.searchengine_entry_remove',],
         'POSTDELETE': []
     },
     'Media': {
         'PRESAVE': ['cms.medias.hooks.set_file_meta',
                     'cms.medias.hooks.webp_image_optimizer'],
-        'POSTSAVE': [],
+        'POSTSAVE': ['cms.contexts.hooks.used_by'],
         'PREDELETE': [],
         'POSTDELETE': ['cms.medias.hooks.remove_file']
     },
@@ -322,6 +324,12 @@ CMS_HOOKS = {
         'POSTSAVE': [],
         'PREDELETE': [],
         'POSTDELETE': ['cms.medias.hooks.remove_file']
+    },
+    'Carousel': {
+        'POSTSAVE': ['cms.contexts.hooks.used_by'],
+    },
+    'PageNavigationBar': {
+        'POSTSAVE': ['cms.contexts.hooks.used_by'],
     },
     'PublicationAttachment': {
         'PRESAVE': ['cms.medias.hooks.set_file_meta',],

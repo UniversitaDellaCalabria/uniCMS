@@ -12,10 +12,12 @@ from django.template.exceptions import (TemplateDoesNotExist,
                                         TemplateSyntaxError)
 
 logger = logging.getLogger(__name__)
-
-CMS_HOOKS = {k:{kk:[import_string(i) for i in vv] for kk,vv in v.items()}
-             for k,v in getattr(settings, 'CMS_HOOKS', {}).items()}
 CMS_PATH_PREFIX = getattr(settings, 'CMS_PATH_PREFIX', '')
+
+
+def get_CMS_HOOKS():
+    return {k:{kk:[import_string(i) for i in vv] for kk,vv in v.items()}
+            for k,v in getattr(settings, 'CMS_HOOKS', {}).items()}
 
 
 def detect_user_language(request):
@@ -86,7 +88,7 @@ def toggle_session_state(request, arg_name) -> None:
 
 def load_hooks(obj, flow_type, *args, **kwargs):
     _msg_hook_exp = '{} Hook {} failed with: {}'
-    type_hooks = CMS_HOOKS.get(obj.__class__.__name__, {})
+    type_hooks = get_CMS_HOOKS().get(obj.__class__.__name__, {})
     flow_hooks = type_hooks.get(flow_type, [])
 
     # pre-Save HOOKS call
@@ -104,7 +106,7 @@ def fill_created_modified_by(request, obj):
     for field_name in ('created_by', 'modified_by'):
         if not hasattr(obj, field_name):
             continue
-
+        
         if (field_name == 'modified_by' or not getattr(obj, field_name, None)):
             setattr(obj, field_name, request.user)
 
@@ -120,6 +122,7 @@ def is_translator(permission):
     return {'only_created_by': False,
             'allow_descendant': allow_descendant}
 
+
 def is_editor(permission):
     """
     based on settings.CMS_CONTEXT_PERMISSIONS
@@ -131,6 +134,7 @@ def is_editor(permission):
     only_created_by = True if permission == 3 else False
     return {'only_created_by': only_created_by,
             'allow_descendant': allow_descendant}
+
 
 def is_publisher(permission):
     """

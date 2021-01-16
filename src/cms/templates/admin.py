@@ -14,10 +14,11 @@ class AbstractCreatedModifiedBySave(object):
         form.save_m2m()
         for formset in formsets:
             self.save_formset(request, form, formset, change=change)
-            formset.queryset.update(
-                modified_by = request.user,
-                created_by = request.user
-            )
+            if not formset.queryset: continue
+            if hasattr(formset.queryset[0], 'modified_by'):
+                formset.queryset.update(modified_by = request.user)
+            if hasattr(formset.queryset[0], 'created_by'):
+                formset.queryset.update(created_by = request.user)
 
 
 class AbstractCreatedModifiedBy(AbstractCreatedModifiedBySave, admin.ModelAdmin):
