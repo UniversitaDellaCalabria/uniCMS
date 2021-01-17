@@ -51,3 +51,10 @@ class TemplateUnitTest(TestCase):
         res = req.get(url+f'?date_start={timezone.now().strftime("%Y-%m-%d")}', content_type='application/json')
         assert isinstance(res.json(), dict)
         
+        # date_end
+        res = req.get(url+f'?date_end={timezone.now().strftime("%Y-%m-%d")}', content_type='application/json')
+        assert isinstance(res.json(), dict)
+
+        # wrong page number
+        res = req.get(url+f'?page_number=a', content_type='application/json')
+        assert isinstance(res.json(), dict)

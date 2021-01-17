@@ -29,7 +29,7 @@ class EditorWebsiteWebpathList(generics.ListCreateAPIView):
     """
     """
     description = "Get user editorial boards websites webpath list"
-    #ToDo - not work because get() returns a []
+    # ToDo - not work because get() returns a []
     # filter_backends = [filters.SearchFilter]
     # search_fields = ['name','path']
     pagination_class = UniCmsApiPagination

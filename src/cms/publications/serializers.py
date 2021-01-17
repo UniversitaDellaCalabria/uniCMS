@@ -1,5 +1,4 @@
 from cms.contexts.models import WebPath
-from cms.pages.models import Category
 
 from rest_framework import serializers
 from taggit_serializer.serializers import (TagListSerializerField,

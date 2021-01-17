@@ -5,7 +5,6 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from cms.templates.models import TimeStampedModel, CreatedModifiedBy
@@ -246,7 +245,7 @@ class EditorialBoardLockUser(models.Model):
     user = models.ForeignKey(get_user_model(),
                              on_delete=models.CASCADE,
                              null=False, blank=False)
-    
+
     class Meta:
         verbose_name_plural = _("Editorial Board Locks Owners")
 
@@ -271,14 +270,14 @@ class EntryUsedBy(models.Model):
         related_name="%(app_label)s_%(class)s_usedby",
     )
     used_by_object_id = models.PositiveIntegerField()
-    used_by_content_object = GenericForeignKey('used_by_content_type', 
+    used_by_content_object = GenericForeignKey('used_by_content_type',
                                                'used_by_object_id')
-    
+
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = _("Entries Used By")
-    
+
     @property
     def object(self): # pragma: no cover
         return self.content_object
@@ -286,8 +285,7 @@ class EntryUsedBy(models.Model):
     @property
     def used_by(self): # pragma: no cover
         return self.used_by_content_object
-    
+
     def __str__(self): # pragma: no cover
         return (f'{self.content_type} {self.object_id} used by '
                 f'{self.used_by_content_type} {self.used_by_object_id}')
-    

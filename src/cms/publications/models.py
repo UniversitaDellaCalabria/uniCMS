@@ -144,10 +144,10 @@ class Publication(AbstractPublication, AbstractPublicable,
             if current_entry:
                 old_content_type = current_entry.content_type
 
-        if (old_content_type and
-            self.content and
-            self.pk and
-            self.content_type != old_content_type):
+        if all((old_content_type,
+                self.content,
+                self.pk,
+                self.content_type != old_content_type)):
 
             # markdown to html
             if old_content_type == 'html':
@@ -196,7 +196,7 @@ class Publication(AbstractPublication, AbstractPublicable,
         return content
 
     def __str__(self):
-        return '{} {}'.format(self.title, self.state)
+        return '{} [{}]'.format(self.title, self.state)
 
 
 class PublicationContext(TimeStampedModel, ActivableModel,

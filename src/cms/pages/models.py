@@ -214,7 +214,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             self.title = trans.title
 
     def __str__(self):
-        return '{} {}'.format(self.name, self.state)
+        return '{} [{}]'.format(self.name, self.state)
 
 
 class PageCarousel(SectionAbstractModel, ActivableModel, SortableModel,

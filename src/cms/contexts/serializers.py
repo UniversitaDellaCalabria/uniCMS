@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from . models import EditorialBoardEditors, WebPath, WebSite
+from . models import WebPath, WebSite
 
 
 class WebSiteForeignKey(serializers.PrimaryKeyRelatedField):

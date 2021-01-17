@@ -9,8 +9,6 @@ from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from cms.api.serializers import settings
-
 from cms.carousels.models import *
 from cms.carousels.serializers import *
 

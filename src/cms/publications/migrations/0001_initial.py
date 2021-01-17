@@ -7,8 +7,7 @@ import django.db.models.deletion
 import taggit.managers
 
 from cms.medias.settings import FILETYPE_ALLOWED
-from cms.templates.models import (CMS_BLOCK_TYPES,
-                                  CMS_TEMPLATE_BLOCK_SECTIONS)
+from cms.templates.models import CMS_TEMPLATE_BLOCK_SECTIONS
 
 class Migration(migrations.Migration):
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from . models import *
+from . models import PageTemplate, PageTemplateBlock, TemplateBlock
 from cms.contexts.utils import fill_created_modified_by
 
 
@@ -23,7 +23,7 @@ class AbstractCreatedModifiedBySave(object):
 
 class AbstractCreatedModifiedBy(AbstractCreatedModifiedBySave, admin.ModelAdmin):
     readonly_fields = ('created_by', 'modified_by')
-    
+
 
 class AbstractCreatedModifiedByTabInline(admin.TabularInline):
     readonly_fields = ('created_by', 'modified_by')

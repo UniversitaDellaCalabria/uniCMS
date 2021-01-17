@@ -1,10 +1,10 @@
 from django.contrib import admin
 
 from cms.templates.admin import AbstractCreatedModifiedBy
-from . models import (EditorialBoardEditors, 
+from . models import (EditorialBoardEditors,
                       EditorialBoardLock,
-                      EditorialBoardLockUser, 
-                      WebPath, 
+                      EditorialBoardLockUser,
+                      WebPath,
                       WebSite,
                       EntryUsedBy)
 
@@ -58,7 +58,7 @@ class EditorialBoardLockAdmin(admin.ModelAdmin):
     list_filter = ('locked_time', )
     list_display = ('content_type', 'object_id', 'locked_time')
     inlines = (EditorialBoardLockUserAdminInline,)
-    
+
 
 @admin.register(EntryUsedBy)
 class EntryUsedByAdmin(admin.ModelAdmin):
