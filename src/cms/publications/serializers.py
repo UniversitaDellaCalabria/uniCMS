@@ -5,7 +5,16 @@ from rest_framework import serializers
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
-from . models import Publication, PublicationContext
+from . models import *
+
+
+class PublicationForeignKey(serializers.PrimaryKeyRelatedField):
+    def get_queryset(self):
+        request = self.context.get('request', None)
+        if request:
+            publication_id = self.context['request'].parser_context['kwargs']['publication_id']
+            return Publication.objects.filter(pk=publication_id)
+        return None
 
 
 class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
@@ -24,22 +33,8 @@ class PublicationSerializer(TaggitSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = Publication
-        fields = ['id',
-                  'title',
-                  'slug',
-                  'subheading',
-                  'content',
-                  'content_type',
-                  'presentation_image',
-                  'state',
-                  'date_start',
-                  'date_end',
-                  'category',
-                  'note',
-                  'tags',
-                  'relevance',
-                  'is_active']
-        read_only_fields = ['state']
+        fields = '__all__'
+        read_only_fields = ['is_active']
 
 
 class PublicationContextFullSerializer(serializers.ModelSerializer):
@@ -59,12 +54,8 @@ class PublicationContextFullSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PublicationContext
-        fields = ['id',
-                  'publication',
-                  'webpath',
-                  'in_evidence_start',
-                  'in_evidence_end',
-                  'is_active']
+        fields = '__all__'
+        read_only_fields = ['created_by', 'modified_by']
 
 
 class PublicationContextSerializer(serializers.ModelSerializer):
@@ -72,9 +63,42 @@ class PublicationContextSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PublicationContext
-        fields = ['id',
-                  'publication',
-                  'webpath',
-                  'in_evidence_start',
-                  'in_evidence_end',
-                  'is_active']
+        fields = '__all__'
+        read_only_fields = ['created_by', 'modified_by']
+
+
+class PublicationAttachmentSerializer(serializers.ModelSerializer):
+    publication = PublicationForeignKey()
+
+    class Meta:
+        model = PublicationAttachment
+        fields = '__all__'
+        read_only_fields = ['created_by', 'modified_by',
+                            'file_size','file_type']
+
+
+class PublicationGallerySerializer(serializers.ModelSerializer):
+    publication = PublicationForeignKey()
+
+    class Meta:
+        model = PublicationGallery
+        fields = '__all__'
+        read_only_fields = ['created_by', 'modified_by']
+
+
+class PublicationLinkSerializer(serializers.ModelSerializer):
+    publication = PublicationForeignKey()
+
+    class Meta:
+        model = PublicationLink
+        fields = '__all__'
+        read_only_fields = ['created_by', 'modified_by']
+
+
+class PublicationLocalizationSerializer(serializers.ModelSerializer):
+    publication = PublicationForeignKey()
+
+    class Meta:
+        model = PublicationLocalization
+        fields = '__all__'
+        read_only_fields = ['created_by', 'modified_by']

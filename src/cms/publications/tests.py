@@ -43,9 +43,9 @@ class PublicationUnitTest(TestCase):
                 'content':'<p>Sed ut <b>perspiciatis</b> unde omnis iste natus error </p>',
                 'content_type': 'html',
                 'presentation_image': media,
-                'state':'published',
-                'date_start': timezone.localtime(),
-                'date_end': timezone.localtime() + timezone.timedelta(hours=1),
+                # 'state':'published',
+                # 'date_start': timezone.localtime(),
+                # 'date_end': timezone.localtime() + timezone.timedelta(hours=1),
                 'note':'',
                 'relevance':'0',
         }
@@ -90,7 +90,7 @@ class PublicationUnitTest(TestCase):
                                                    related=pub,
                                                    is_active=1)
         pubrel.__str__()
-        pub.related_publications
+        # pub.related_publications
 
         pubcont = pub.get_publication_context()
         webpath = pubcont.webpath
@@ -180,7 +180,7 @@ class PublicationUnitTest(TestCase):
         assert '**' in pub.content
 
         assert '</p>' in pub.html_content
-        
+
     def test_api_pubcont(self):
 
         def test_call(url):
@@ -380,25 +380,25 @@ class PublicationUnitTest(TestCase):
         cls.enrich_pub()
         lm = cms_categories()
         assert isinstance(list(lm), list) and len(lm) == 1
-    
-    
+
+
     def test_fill_created_modified_by(self):
         req = RequestFactory().get('/')
 
         req.user = AnonymousUser()
-        
+
         pub = self.create_pub()
         fill_created_modified_by(req, pub)
         pub.refresh_from_db()
-        
+
         assert not pub.created_by
         assert not pub.modified_by
-        
+
         req.user = ContextUnitTest.create_user(is_staff=1)
         fill_created_modified_by(req, pub)
         pub.save()
         pub.refresh_from_db()
-        
+
         assert pub.created_by
         assert pub.modified_by
 

@@ -39,10 +39,7 @@ class CarouselItemLinkForeignKey(serializers.PrimaryKeyRelatedField):
 class CarouselSerializer(serializers.ModelSerializer):
     class Meta:
         model = Carousel
-        fields = ['id',
-                  'name',
-                  'description',
-                  'is_active']
+        fields = '__all__'
 
 
 class CarouselItemSerializer(serializers.ModelSerializer):
@@ -50,13 +47,7 @@ class CarouselItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CarouselItem
-        fields = ['id',
-                  'carousel',
-                  'image',
-                  'pre_heading',
-                  'heading',
-                  'description',
-                  'is_active',]
+        fields = '__all__'
 
 
 class CarouselItemLocalizationSerializer(serializers.ModelSerializer):
@@ -64,13 +55,7 @@ class CarouselItemLocalizationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CarouselItemLocalization
-        fields = ['id',
-                  'carousel_item',
-                  'language',
-                  'pre_heading',
-                  'heading',
-                  'description',
-                  'is_active',]
+        fields = '__all__'
 
 
 class CarouselItemLinkSerializer(serializers.ModelSerializer):
@@ -78,12 +63,7 @@ class CarouselItemLinkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CarouselItemLink
-        fields = ['id',
-                  'carousel_item',
-                  'title_preset',
-                  'title',
-                  'url',
-                  'is_active',]
+        fields = '__all__'
 
 
 class CarouselItemLinkLocalizationSerializer(serializers.ModelSerializer):
@@ -91,8 +71,4 @@ class CarouselItemLinkLocalizationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CarouselItemLinkLocalization
-        fields = ['id',
-                  'carousel_item_link',
-                  'language',
-                  'title',
-                  'is_active',]
+        fields = '__all__'
