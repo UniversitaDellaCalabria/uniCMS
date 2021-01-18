@@ -180,27 +180,26 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
         if not all((webpath, user)):
             return 0
 
-        permissions = EditorialBoardEditors.objects.filter(user=user,
-                                                           is_active=True)
-        webpath_permissions = permissions.filter(webpath=webpath)
-
-        # search for user permissions in specific webpath
-        for webpath_permission in webpath_permissions:
+        permissions = cls.objects.filter(user=user, is_active=True).\
+                                  order_by('-permission')
+        webpath_permission = permissions.filter(webpath=webpath).first()
+        if webpath_permission:
             permission = webpath_permission.permission
             # consider zero value?
-            if permission and consider_zero and permission >= 0:
+            if consider_zero and permission >= 0:
                 return permission
             # or not
-            if permission and not consider_zero and permission > 0:
+            if not consider_zero and permission > 0:
                 return permission
 
         # search for user permissions in webpath parents
-        # select only permissions on descendants (2,5,8)
+        # select only permissions on descendants (2,5,7)
+        # refer cms.contexts.settings.CMS_CONTEXT_PERMISSIONS
         parent_permission = cls.get_permission(webpath=webpath.parent,
                                                user=user,
                                                check_all=False,
                                                consider_zero=False)
-        if parent_permission in (2, 5, 8):
+        if parent_permission in (2, 5, 7):
             return parent_permission
 
         # search for global permissions
@@ -247,7 +246,7 @@ class EditorialBoardLockUser(models.Model):
     user = models.ForeignKey(get_user_model(),
                              on_delete=models.CASCADE,
                              null=False, blank=False)
-    
+
     class Meta:
         verbose_name_plural = _("Editorial Board Locks Owners")
 
@@ -273,7 +272,7 @@ class EntryUsedBy(models.Model):
     )
     used_by_object_id = models.PositiveIntegerField()
     used_by_content_object = GenericForeignKey()
-    
+
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -282,4 +281,4 @@ class EntryUsedBy(models.Model):
     def __str__(self): # pragma: no cover
         return (f'{self.content_type} {self.object_id} used by '
                 f'{self.usedby_content_type} {self.usedby_object_id}')
-    
+

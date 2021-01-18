@@ -1625,26 +1625,6 @@
   }
 },
 {
-  "model": "cmscontexts.editorialboardlocks",
-  "pk": 1,
-  "fields": {
-    "content_type": 28,
-    "object_id": 1,
-    "locked_by": 1,
-    "locked_time": "2020-11-22T14:36:44Z"
-  }
-},
-{
-  "model": "cmscontexts.editorialboardlocks",
-  "pk": 2,
-  "fields": {
-    "content_type": 21,
-    "object_id": 3,
-    "locked_by": 1,
-    "locked_time": "2020-11-22T14:38:50Z"
-  }
-},
-{
   "model": "cmscarousels.carousel",
   "pk": 1,
   "fields": {

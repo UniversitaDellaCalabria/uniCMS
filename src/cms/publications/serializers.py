@@ -39,9 +39,10 @@ class PublicationSerializer(TaggitSerializer, serializers.ModelSerializer):
                   'tags',
                   'relevance',
                   'is_active']
+        read_only_fields = ['state']
 
 
-class PublicationContextSerializer(serializers.ModelSerializer):
+class PublicationContextFullSerializer(serializers.ModelSerializer):
     webpath = WebPathForeignKey()
     publication = PublicationSerializer()
 
@@ -55,6 +56,19 @@ class PublicationContextSerializer(serializers.ModelSerializer):
         pub_cxt = PublicationContext.objects.create(**validated_data,
                                                     publication=pub)
         return pub_cxt
+
+    class Meta:
+        model = PublicationContext
+        fields = ['id',
+                  'publication',
+                  'webpath',
+                  'in_evidence_start',
+                  'in_evidence_end',
+                  'is_active']
+
+
+class PublicationContextSerializer(serializers.ModelSerializer):
+    webpath = WebPathForeignKey()
 
     class Meta:
         model = PublicationContext

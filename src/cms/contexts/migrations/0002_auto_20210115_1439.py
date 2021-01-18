@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Editorial Board Locks Owners',
             },
         ),
-        migrations.DeleteModel(
-            name='EditorialBoardLocks',
-        ),
+        # migrations.DeleteModel(
+            # name='EditorialBoardLocks',
+        # ),
     ]
