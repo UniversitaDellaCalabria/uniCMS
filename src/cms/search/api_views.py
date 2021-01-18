@@ -128,10 +128,12 @@ class ApiSearchEngine(APIView):
         # get page
         end = elements_in_page * page
         start = end - elements_in_page
-        if total_elements == total_pages:
-            page_number = total_elements
-        else:
-            page_number = int(end / elements_in_page)
+
+        # this commented if should be checked!
+        # if total_elements == total_pages:
+        # page_number = total_elements
+        # else:
+        page_number = int(end / elements_in_page)
 
         entries = res[start:end]
         # dumped = dumps(result)

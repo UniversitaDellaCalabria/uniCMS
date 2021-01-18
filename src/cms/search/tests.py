@@ -58,3 +58,7 @@ class TemplateUnitTest(TestCase):
         # wrong page number
         res = req.get(url+f'?page_number=a', content_type='application/json')
         assert isinstance(res.json(), dict)
+
+        # wrong page number #2
+        res = req.get(url+f'?page_number=1024', content_type='application/json')
+        assert isinstance(res.json(), dict)
