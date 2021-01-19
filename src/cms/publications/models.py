@@ -96,7 +96,7 @@ class Publication(AbstractPublication, CreatedModifiedBy):
         related = PublicationRelated.objects.filter(publication=self,
                                                     related__is_active=True)
         # return [i for i in related if i.related.is_publicable]
-        return [i for i in related if i.related.is_active]
+        return [i for i in related]
 
     @property
     def related_contexts(self):

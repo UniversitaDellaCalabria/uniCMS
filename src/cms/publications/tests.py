@@ -90,7 +90,7 @@ class PublicationUnitTest(TestCase):
                                                    related=pub,
                                                    is_active=1)
         pubrel.__str__()
-        # pub.related_publications
+        pub.related_publications
 
         pubcont = pub.get_publication_context()
         webpath = pubcont.webpath
