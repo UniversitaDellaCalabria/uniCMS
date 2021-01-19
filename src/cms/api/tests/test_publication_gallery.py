@@ -10,7 +10,6 @@ from cms.contexts.tests import ContextUnitTest
 
 from cms.medias.tests import MediaUnitTest
 
-from cms.pages.tests import PageUnitTest
 
 from cms.publications.models import Publication, PublicationGallery
 from cms.publications.tests import PublicationUnitTest

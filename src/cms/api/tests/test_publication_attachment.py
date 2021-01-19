@@ -10,11 +10,9 @@ from django.urls import reverse
 
 from cms.contexts.tests import ContextUnitTest
 
-from cms.medias.tests import MediaUnitTest
 
-from cms.pages.tests import PageUnitTest
 
-from cms.publications.models import Publication, PublicationAttachment, publication_attachment_path
+from cms.publications.models import Publication, PublicationAttachment
 from cms.publications.tests import PublicationUnitTest
 
 

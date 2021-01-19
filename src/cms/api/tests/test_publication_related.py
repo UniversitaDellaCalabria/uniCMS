@@ -8,12 +8,10 @@ from django.urls import reverse
 
 from cms.contexts.tests import ContextUnitTest
 
-from cms.pages.tests import PageUnitTest
 
 from cms.publications.models import Publication, PublicationRelated
 from cms.publications.tests import PublicationUnitTest
 
-from cms.templates.tests import TemplateUnitTest
 
 
 logger = logging.getLogger(__name__)

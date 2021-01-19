@@ -1,4 +1,3 @@
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
@@ -236,7 +235,7 @@ class Publication(AbstractPublication, CreatedModifiedBy):
         # check if user has Django permissions to change object
         permission = check_user_permission_on_object(user, self,
                                                      'cmspublications.change_publication')
-         # if permission
+        # if permission
         if permission['granted']: return True
 
         # if no permissions and no locked

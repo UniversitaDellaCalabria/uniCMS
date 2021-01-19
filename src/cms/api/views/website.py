@@ -5,7 +5,7 @@ from django.conf import settings
 from rest_framework.permissions import IsAdminUser
 from rest_framework.views import APIView
 
-from cms.contexts.models import EditorialBoardEditors, WebSite
+from cms.contexts.models import WebSite
 from cms.contexts import settings as contexts_settings
 
 from .. pagination import UniCmsApiPagination

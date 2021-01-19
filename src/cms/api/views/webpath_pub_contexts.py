@@ -12,11 +12,11 @@ from rest_framework.response import Response
 
 from cms.contexts import settings as contexts_settings
 from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
-from cms.contexts.utils import is_editor, is_publisher
+from cms.contexts.utils import is_publisher
 
 from cms.publications.models import PublicationContext
 from cms.publications.serializers import PublicationContextSerializer
-from cms.contexts.utils import is_editor, is_publisher
+from cms.contexts.utils import is_publisher
 
 from .. pagination import UniCmsApiPagination
 
