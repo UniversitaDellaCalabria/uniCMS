@@ -1,6 +1,7 @@
 import logging
 
 from django.conf import settings
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
@@ -152,8 +153,8 @@ class EditorWebpathPublicationContextList(generics.ListCreateAPIView):
             # check permissions on webpath
             permission = EditorialBoardEditors.get_permission(webpath=webpath,
                                                               user=request.user)
-            is_publisher(permission)
-            if not editor_perms:
+            publisher_perms = is_publisher(permission)
+            if not publisher_perms:
                 error_msg = _("You don't have permissions")
                 return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
             return super().post(request, *args, **kwargs)
