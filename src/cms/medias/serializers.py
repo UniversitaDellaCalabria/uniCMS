@@ -17,11 +17,7 @@ class MediaCollectionForeignKey(serializers.PrimaryKeyRelatedField):
 class MediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Media
-        fields = ['id',
-                  'title',
-                  'file',
-                  'description',
-                  'is_active']
+        fields = '__all__'
 
 
 class MediaCollectionSerializer(TaggitSerializer, serializers.ModelSerializer):
@@ -29,11 +25,7 @@ class MediaCollectionSerializer(TaggitSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = MediaCollection
-        fields = ['id',
-                  'name',
-                  'description',
-                  'tags',
-                  'is_active']
+        fields = '__all__'
 
 
 class MediaCollectionItemSerializer(serializers.ModelSerializer):
@@ -41,7 +33,4 @@ class MediaCollectionItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MediaCollectionItem
-        fields = ['id',
-                  'media',
-                  'collection',
-                  'is_active']
+        fields = '__all__'

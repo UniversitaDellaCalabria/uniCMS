@@ -12,9 +12,11 @@ logger = logging.getLogger(__name__)
 @admin.register(Publication)
 class PublicationAdmin(AbstractCreatedModifiedBy):
     search_fields = ('title', 'slug',)
-    list_display = ('title', 'slug', 'date_start', 'date_end', 'is_active',)
-    list_filter = ('state', 'is_active',
-                   'created', 'modified', 'date_start', 'date_end')
+    # list_display = ('title', 'slug', 'date_start', 'date_end', 'is_active',)
+    list_display = ('title', 'slug', 'is_active',)
+    # list_filter = ('state', 'is_active',
+                   # 'created', 'modified', 'date_start', 'date_end')
+    list_filter = ('is_active', 'created', 'modified')
     inlines = (PublicationLocalizationInline,
                PublicationContextInline,
                PublicationRelatedInline,
@@ -34,5 +36,6 @@ class PublicationAdmin(AbstractCreatedModifiedBy):
 class PublicationLocalizationAdmin(AbstractCreatedModifiedBy):
     search_fields = ('publication__title', 'publication__slug')
     list_display = ('publication', 'language', 'is_active',)
-    list_filter = ('publication__state', 'is_active',
-                   'created', 'modified', 'language')
+    # list_filter = ('publication__state', 'is_active',
+                   # 'created', 'modified', 'language')
+    list_filter = ('is_active', 'created', 'modified', 'language')

@@ -62,12 +62,14 @@ def page_to_entry(page_object):
     return search_entry.dict()
 
 
-def publication_to_entry(pub_object):
+def publication_to_entry(pub_object, contexts=None):
     app_label, model = pub_object._meta.label_lower.split('.')
-    contexts = pub_object.publicationcontext_set.filter(is_active=True)
+    # contexts = pub_object.publicationcontext_set.filter(is_active=True).\
+                                                 # order_by('date_start')
     if not contexts:
         # it doesn't have any real publication
         return
+    first_context = contexts.first()
     urls = set([f'//{i.webpath.site.domain}{i.url}' for i in contexts])
     sites = set([f'{i.webpath.site.domain}' for i in contexts])
     data = {
@@ -88,12 +90,12 @@ def publication_to_entry(pub_object):
                          }
                          for i in pub_object.available_in_languages],
         "indexed": timezone.localtime(),
-        "published": pub_object.date_start,
+        "published": first_context.date_start,
         "viewed": 0,
         "language": DEFAULT_LANGUAGE,
-        "day": pub_object.date_start.day,
-        "month": pub_object.date_start.month,
-        "year": pub_object.date_start.year
+        "day": first_context.date_start.day,
+        "month": first_context.date_start.month,
+        "year": first_context.date_start.year
     }
     search_entry = SearchEntry(**data)
     return search_entry.dict()

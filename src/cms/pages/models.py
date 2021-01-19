@@ -44,10 +44,10 @@ class AbstractPublicable(models.Model):
     def is_publicable(self) -> bool:
         now = timezone.localtime()
         result = False
-        if self.is_active and \
-           self.state == 'published' and \
-           self.date_start <= now :
+        if self.is_active and self.date_start <= now :
             result = True
+        if getattr(self, 'state', False) != 'published':
+            result = False
         if self.date_end and self.date_end <= now:
             result = False
         return result

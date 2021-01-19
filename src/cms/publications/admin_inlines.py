@@ -19,7 +19,7 @@ class PublicationLocalizationInline(admin.StackedInline):
     classes = ['collapse']
 
 
-class PublicationRelatedInline(admin.StackedInline):
+class PublicationRelatedInline(admin.TabularInline):
     model = PublicationRelated
     extra = 0
     fk_name = 'publication'
@@ -41,7 +41,7 @@ class PublicationLinkInline(admin.StackedInline):
     classes = ['collapse']
 
 
-class PublicationGalleryInline(admin.StackedInline):
+class PublicationGalleryInline(admin.TabularInline):
     model = PublicationGallery
     extra = 0
     classes = ['collapse']

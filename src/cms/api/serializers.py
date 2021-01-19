@@ -15,13 +15,10 @@ class PublicationContextSerializer(serializers.HyperlinkedModelSerializer):
         lookup_field = 'pk'
 
 
-class PublicationSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Publication
-        fields = ['date_start',
-                  'title',
-                  'subheading',
-                  'content',
-                  # 'tags',
-                  # 'categories'
-                  ]
+# class PublicationSerializer(serializers.HyperlinkedModelSerializer):
+    # class Meta:
+        # model = Publication
+        # fields = ['title',
+                  # 'subheading',
+                  # 'content',
+                  # ]

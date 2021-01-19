@@ -1,6 +1,7 @@
 import logging
 
 from django.conf import settings as global_settings
+from django.utils import timezone
 
 from . import mongo_collection
 from . models import page_to_entry, publication_to_entry
@@ -31,7 +32,11 @@ def page_se_insert(page_object):
 
 def publication_se_insert(pub_object):
     collection = mongo_collection()
-    search_entry = publication_to_entry(pub_object)
+
+    contexts = pub_object.publicationcontext_set.filter(is_active=True).\
+                                                 order_by('date_start')
+
+    search_entry = publication_to_entry(pub_object, contexts)
     if search_entry:
         search_entry = search_entry
     else:
@@ -44,7 +49,12 @@ def publication_se_insert(pub_object):
         collection.delete_many(doc_query)
         logger.info(f'{pub_object} removed from search engine')
 
-    if pub_object.is_publicable:
+    now = timezone.localtime()
+    publicable_context = contexts.filter(date_start__lte=now,
+                                         date_end__gt=now)
+
+    # if pub_object.is_publicable:
+    if publicable_context:
         doc = collection.insert_one(search_entry)
 
     logger.info(f'{pub_object} succesfully indexed in search engine')

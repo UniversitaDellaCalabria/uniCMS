@@ -18,8 +18,9 @@ def _get_pub_qparams(context, webpath, section = None, in_evidence=False,
     query_params = dict(webpath=context['webpath'],
                         is_active=True,
                         publication__is_active=True,
-                        publication__date_start__lte=now,
-                        publication__state="published")
+                        date_start__lte=now,
+                        date_end__gt=now)
+                        # publication__state="published")
     if section:
         query_params['section'] = section
     if in_evidence:
@@ -45,8 +46,7 @@ def load_publication(context, template, publication_id):
     language = getattr(request, 'LANGUAGE_CODE', '')
 
     pub = Publication.objects.filter(pk=publication_id,
-                                     is_active=True).\
-        first()
+                                     is_active=True).first()
 
     if not pub:
         _msg = '{} cannot find publication id {}'.format(_log_msg,
@@ -67,12 +67,12 @@ def load_publications_preview(context, template,
                               categories_csv=None, tags_csv=None):
     request = context['request']
     webpath = context['webpath']
-    query_params = _get_pub_qparams(context = context ,
+    query_params = _get_pub_qparams(context=context ,
                                     webpath=webpath,
-                                    section = section,
-                                    in_evidence = in_evidence,
-                                    categories_csv = categories_csv,
-                                    tags_csv = tags_csv)
+                                    section=section,
+                                    in_evidence=in_evidence,
+                                    categories_csv=categories_csv,
+                                    tags_csv=tags_csv)
 
     pub_in_context = PublicationContext.objects.\
         filter(**query_params).\
