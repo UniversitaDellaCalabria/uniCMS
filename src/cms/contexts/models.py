@@ -38,6 +38,15 @@ class WebSite(models.Model):
                 'domain': self.domain,
                 'is_active': self.is_active}
 
+    def is_managed_by(self, user):
+        if user.is_superuser: return True
+        permissions = EditorialBoardEditors.objects.filter(webpath__site=self,
+                                                           user=user,
+                                                           is_active=True,
+                                                           permission__gt=0)
+        if permissions: return True
+        return False
+
     def __str__(self):
         return self.domain
 
@@ -177,6 +186,8 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
         # webpath and user must be true
         if not all((webpath, user)):
             return 0
+
+        if user.is_superuser: return 7
 
         permissions = cls.objects.filter(user=user, is_active=True).\
             order_by('-permission')

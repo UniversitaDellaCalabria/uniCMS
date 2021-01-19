@@ -149,6 +149,34 @@ class PublicationView(generics.RetrieveUpdateDestroyAPIView):
         permission = check_user_permission_on_object(request.user,
                                                      item,
                                                      'cmspublications.delete_publication')
-        if not permission:
+        if not permission['granted']:
             return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
         return super().delete(request, *args, **kwargs)
+
+
+class PublicationChangeStateView(generics.RetrieveAPIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+    serializer_class = PublicationSerializer
+    error_msg = _("You don't have permissions")
+
+    def get_queryset(self):
+        """
+        """
+        pub_id = self.kwargs['pk']
+        publications = Publication.objects.filter(pk=pub_id)
+        return publications
+
+    def get(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        permission = check_user_permission_on_object(request.user,
+                                                     item,
+                                                     'cmspublications.delete_publication')
+        if permission['granted']:
+            item.is_active = not item.is_active
+            item.save()
+            return super().get(request, *args, **kwargs)
+        return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)

@@ -43,9 +43,6 @@ class PublicationUnitTest(TestCase):
                 'content':'<p>Sed ut <b>perspiciatis</b> unde omnis iste natus error </p>',
                 'content_type': 'html',
                 'presentation_image': media,
-                # 'state':'published',
-                # 'date_start': timezone.localtime(),
-                # 'date_end': timezone.localtime() + timezone.timedelta(hours=1),
                 'note':'',
                 'relevance':'0',
         }

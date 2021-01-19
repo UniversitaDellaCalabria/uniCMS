@@ -54,7 +54,7 @@ class CarouselItemList(generics.ListCreateAPIView):
             permission = check_user_permission_on_object(request.user,
                                                          carousel,
                                                          'cmscarousels.change_carousel')
-            if not permission:
+            if not permission['granted']:
                 return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
 
             return super().post(request, *args, **kwargs)
@@ -92,7 +92,7 @@ class CarouselItemView(generics.RetrieveUpdateDestroyAPIView):
             permission = check_user_permission_on_object(request.user,
                                                          carousel,
                                                          'cmscarousels.change_carousel')
-            if not permission:
+            if not permission['granted']:
                 return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
             return super().patch(request, *args, **kwargs)
 
@@ -108,7 +108,7 @@ class CarouselItemView(generics.RetrieveUpdateDestroyAPIView):
             permission = check_user_permission_on_object(request.user,
                                                          carousel,
                                                          'cmscarousels.change_carousel')
-            if not permission:
+            if not permission['granted']:
                 return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
             return super().put(request, *args, **kwargs)
 
@@ -121,6 +121,6 @@ class CarouselItemView(generics.RetrieveUpdateDestroyAPIView):
         permission = check_user_permission_on_object(request.user,
                                                      carousel,
                                                      'cmscarousels.change_carousel')
-        if not permission:
+        if not permission['granted']:
             return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
         return super().delete(request, *args, **kwargs)

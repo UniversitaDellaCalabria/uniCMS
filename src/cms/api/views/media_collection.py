@@ -68,7 +68,7 @@ class MediaCollectionView(generics.RetrieveUpdateDestroyAPIView):
             permission = check_user_permission_on_object(request.user,
                                                          item,
                                                          'cmsmedias.change_mediacollection')
-            if not permission:
+            if not permission['granted']:
                 return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
             return super().patch(request, *args, **kwargs)
 
@@ -81,7 +81,7 @@ class MediaCollectionView(generics.RetrieveUpdateDestroyAPIView):
             permission = check_user_permission_on_object(request.user,
                                                          item,
                                                          'cmsmedias.change_mediacollection')
-            if not permission:
+            if not permission['granted']:
                 return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
             return super().put(request, *args, **kwargs)
 
@@ -91,6 +91,6 @@ class MediaCollectionView(generics.RetrieveUpdateDestroyAPIView):
         permission = check_user_permission_on_object(request.user,
                                                      item,
                                                      'cmsmedias.delete_mediacollection')
-        if not permission:
+        if not permission['granted']:
             return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
         return super().delete(request, *args, **kwargs)

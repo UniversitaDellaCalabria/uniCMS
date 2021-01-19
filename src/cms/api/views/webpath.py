@@ -41,6 +41,8 @@ class EditorWebsiteWebpathList(generics.ListCreateAPIView):
         """
         site_id = self.kwargs['site_id']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        if not site.is_managed_by(self.request.user):
+            raise Http404
         webpaths = WebPath.objects.filter(site=site)
         is_active = self.request.GET.get('is_active')
         if is_active:
@@ -54,6 +56,7 @@ class EditorWebsiteWebpathList(generics.ListCreateAPIView):
         for webpath in self.get_queryset():
             permission = EditorialBoardEditors.get_permission(user=request.user,
                                                               webpath=webpath)
+            print(webpath, permission)
             webpath_data = self.get_serializer(instance=webpath).data
             webpath_data["permission_id"] = permission
             permission_label = context_permissions[permission]
@@ -103,6 +106,8 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
         site_id = self.kwargs['site_id']
         pk = self.kwargs['pk']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        if not site.is_managed_by(self.request.user):
+            raise Http404
         webpaths = WebPath.objects.filter(pk=pk, site=site)
         return webpaths
 

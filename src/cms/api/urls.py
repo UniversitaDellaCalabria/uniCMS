@@ -10,7 +10,7 @@ from . views import (carousel, carousel_item, carousel_item_link,
                      publication_link, publication_localization,
                      publication_gallery, publication_block,
                      publication_related,
-                     website, webpath, webpath_publications)
+                     website, webpath, webpath_pub_contexts)
 
 
 urlpatterns = []
@@ -91,20 +91,11 @@ urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:pk>/',
                     webpath.EditorWebsiteWebpathView.as_view(),
                     name='editorial-board-site-webpath'),
 
-# publication_contexts with publication data
-urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/publications/',
-                    webpath_publications.EditorWebpathPublicationList.as_view(),
-                    name='editorial-board-site-webpath-publications'),
-urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/publications/<int:pk>/',
-                    webpath_publications.EditorWebpathPublicationView.as_view(),
-                    name='editorial-board-site-webpath-publication'),
-# end publication_contexts with publication data
-
 urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/publication-contexts/',
-                    webpath_publications.EditorWebpathPublicationContextList.as_view(),
+                    webpath_pub_contexts.EditorWebpathPublicationContextList.as_view(),
                     name='editorial-board-site-webpath-publication-contexts'),
 urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/publication-contexts/<int:pk>/',
-                    webpath_publications.EditorWebpathPublicationContextView.as_view(),
+                    webpath_pub_contexts.EditorWebpathPublicationContextView.as_view(),
                     name='editorial-board-site-webpath-publication-context'),
 
 urlpatterns += path(f'{eb_prefix}/publications/',
@@ -113,6 +104,9 @@ urlpatterns += path(f'{eb_prefix}/publications/',
 urlpatterns += path(f'{eb_prefix}/publications/<int:pk>/',
                     publication.PublicationView.as_view(),
                     name='editorial-board-publication'),
+urlpatterns += path(f'{eb_prefix}/publications/<int:pk>/change-status/',
+                    publication.PublicationChangeStateView.as_view(),
+                    name='editorial-board-publication-change-status'),
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/attachments/',
                     publication_attachment.PublicationAttachmentList.as_view(),
                     name='editorial-board-publication-attachments'),
@@ -121,10 +115,10 @@ urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/attachments/
                     name='editorial-board-publication-attachment'),
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/blocks/',
                     publication_block.PublicationBlockList.as_view(),
-                    name='editorial-board-publication-attachments'),
+                    name='editorial-board-publication-blocks'),
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/blocks/<int:pk>/',
                     publication_block.PublicationBlockView.as_view(),
-                    name='editorial-board-publication-attachment'),
+                    name='editorial-board-publication-block'),
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/links/',
                     publication_link.PublicationLinkList.as_view(),
                     name='editorial-board-publication-links'),

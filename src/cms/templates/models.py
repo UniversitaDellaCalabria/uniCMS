@@ -53,7 +53,7 @@ class SortableModel(models.Model):
 
 
 class ActivableModel(models.Model):
-    is_active = models.BooleanField()
+    is_active = models.BooleanField(default=False)
 
     class Meta:
         abstract = True

@@ -6,8 +6,12 @@ from django.utils.translation import gettext_lazy as _
 from cms.api.utils import check_user_permission_on_object
 
 from cms.contexts.models import *
+from cms.contexts.utils import is_editor, is_translator
+
 from cms.medias.models import Media, MediaCollection, AbstractMedia
+
 from cms.pages.models import AbstractPublicable
+
 from cms.templates.models import (TemplateBlock,
                                   ActivableModel,
                                   SectionAbstractModel,
@@ -202,32 +206,26 @@ class Publication(AbstractPublication, CreatedModifiedBy):
     def is_localizable_by(self, user=None):
         if not user: return False
 
-        # check for locks on publication
-        pub_type = ContentType.objects.get(app_label='cmspublications',
-                                           model='publication')
-        eblo = EditorialBoardLockUser
-        locks = eblo.objects.filter(lock__content_type=pub_type,
-                                    lock__object_id=self.pk)
-        if locks and not locks.filter(user=user):
-            return False
-
         # check if user has Django permissions to change object
         permission = check_user_permission_on_object(user, self,
                                                      'cmspublications.change_publication')
-        if permission: return True
+        # if permission
+        if permission['granted']: return True
 
-        # check if user has EditorialBoard translator permissions on object
-        pub_ctxs = self.get_publication_contexts()
-        for pub_ctx in pub_ctxs:
-            webpath = pub_ctx.webpath
-            eb_permission = EditorialBoardEditors.get_permission(webpath,
-                                                                 request.user)
-            localization_perms = is_translator(permission)
-            if localization_perms:
-                if localization_perms['only_created_by'] == False:
-                    return True
-                elif self.created_by == user:
-                    return True
+        # if no permissions and no locked
+        if not permission.get('locked', False):
+            # check if user has EditorialBoard translator permissions on object
+            pub_ctxs = self.get_publication_contexts()
+            for pub_ctx in pub_ctxs:
+                webpath = pub_ctx.webpath
+                eb_permission = EditorialBoardEditors.get_permission(webpath,
+                                                                     user)
+                localization_perms = is_translator(eb_permission)
+                if localization_perms:
+                    if localization_perms['only_created_by'] == False:
+                        return True
+                    elif self.created_by == user:
+                        return True
 
         # if no permissions
         return False
@@ -235,32 +233,26 @@ class Publication(AbstractPublication, CreatedModifiedBy):
     def is_editable_by(self, user=None):
         if not user: return False
 
-        # check for locks on object
-        pub_type = ContentType.objects.get(app_label='cmspublications',
-                                           model='publication')
-        eblo = EditorialBoardLockUser
-        locks = eblo.objects.filter(lock__content_type=pub_type,
-                                    lock__object_id=self.pk)
-        if locks and not locks.filter(user=user):
-            return False
-
         # check if user has Django permissions to change object
         permission = check_user_permission_on_object(user, self,
                                                      'cmspublications.change_publication')
-        if permission: return True
+         # if permission
+        if permission['granted']: return True
 
-        # check if user has EditorialBoard editor permissions on object
-        pub_ctxs = self.get_publication_contexts()
-        for pub_ctx in pub_ctxs:
-            webpath = pub_ctx.webpath
-            eb_permission = EditorialBoardEditors.get_permission(webpath,
-                                                                 request.user)
-            editor_perms = is_editor(permission)
-            if editor_perms:
-                if editor_perms['only_created_by'] == False:
-                    return True
-                elif self.created_by == user:
-                    return True
+        # if no permissions and no locked
+        if not permission.get('locked', False):
+            # check if user has EditorialBoard editor permissions on object
+            pub_ctxs = self.get_publication_contexts()
+            for pub_ctx in pub_ctxs:
+                webpath = pub_ctx.webpath
+                eb_permission = EditorialBoardEditors.get_permission(webpath,
+                                                                     user)
+                editor_perms = is_editor(eb_permission)
+                if editor_perms:
+                    if editor_perms['only_created_by'] == False:
+                        return True
+                    elif self.created_by == user:
+                        return True
 
         # if no permissions
         return False

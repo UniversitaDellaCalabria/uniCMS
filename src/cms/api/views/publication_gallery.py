@@ -34,6 +34,7 @@ class PublicationGalleryList(generics.ListCreateAPIView):
     pagination_class = UniCmsApiPagination
     permission_classes = [IsAdminUser]
     serializer_class = PublicationGallerySerializer
+    error_msg = _("You don't have permissions")
 
     def get_queryset(self):
         """

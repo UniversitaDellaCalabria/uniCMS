@@ -13,7 +13,7 @@ class PublicationForeignKey(serializers.PrimaryKeyRelatedField):
         if request:
             publication_id = self.context['request'].parser_context['kwargs']['publication_id']
             return Publication.objects.filter(pk=publication_id)
-        return None
+        return None # pragma: nocover
 
 
 class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
@@ -24,7 +24,7 @@ class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
             webpath_id = self.context['request'].parser_context['kwargs']['webpath_id']
             return WebPath.objects.filter(pk=webpath_id,
                                           site__id=site_id)
-        return None
+        return None # pragma: nocover
 
 
 class PublicationSerializer(TaggitSerializer, serializers.ModelSerializer):
@@ -34,27 +34,6 @@ class PublicationSerializer(TaggitSerializer, serializers.ModelSerializer):
         model = Publication
         fields = '__all__'
         read_only_fields = ['is_active', 'created_by', 'modified_by']
-
-
-class PublicationContextFullSerializer(serializers.ModelSerializer):
-    webpath = WebPathForeignKey()
-    publication = PublicationSerializer()
-
-    # nested serializers need custom create() method
-    def create(self, validated_data):
-        pub_data = validated_data.pop('publication')
-        categories = pub_data.pop('category')
-        pub = Publication.objects.create(**pub_data)
-        # many-to-many relation on category
-        pub.category.set(categories)
-        pub_cxt = PublicationContext.objects.create(**validated_data,
-                                                    publication=pub)
-        return pub_cxt
-
-    class Meta:
-        model = PublicationContext
-        fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']
 
 
 class PublicationContextSerializer(serializers.ModelSerializer):
