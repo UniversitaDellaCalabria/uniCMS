@@ -34,7 +34,7 @@ def publication_se_insert(pub_object):
     collection = mongo_collection()
 
     contexts = pub_object.publicationcontext_set.filter(is_active=True).\
-                                                 order_by('date_start')
+        order_by('date_start')
 
     search_entry = publication_to_entry(pub_object, contexts)
     if search_entry:

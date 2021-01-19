@@ -1,4 +1,3 @@
-from django.contrib.auth import get_user_model
 
 
 def check_if_user_has_created(user, obj):

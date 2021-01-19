@@ -7,7 +7,7 @@ from cms.api.utils import check_user_permission_on_object
 
 from cms.contexts.models import *
 from cms.medias.models import Media, MediaCollection, AbstractMedia
-from cms.pages.models import AbstractPublicable, PAGE_STATES
+from cms.pages.models import AbstractPublicable
 from cms.templates.models import (TemplateBlock,
                                   ActivableModel,
                                   SectionAbstractModel,
@@ -40,8 +40,8 @@ class AbstractPublication(TimeStampedModel, ActivableModel):
     presentation_image = models.ForeignKey(Media, null=True, blank=True,
                                            on_delete=models.CASCADE)
     # state = models.CharField(choices=PAGE_STATES,
-                             # max_length=33,
-                             # default='draft')
+    # max_length=33,
+    # default='draft')
     # date_start = models.DateTimeField()
     # date_end = models.DateTimeField()
     category = models.ManyToManyField('cmspages.Category')

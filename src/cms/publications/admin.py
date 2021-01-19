@@ -15,7 +15,7 @@ class PublicationAdmin(AbstractCreatedModifiedBy):
     # list_display = ('title', 'slug', 'date_start', 'date_end', 'is_active',)
     list_display = ('title', 'slug', 'is_active',)
     # list_filter = ('state', 'is_active',
-                   # 'created', 'modified', 'date_start', 'date_end')
+    # 'created', 'modified', 'date_start', 'date_end')
     list_filter = ('is_active', 'created', 'modified')
     inlines = (PublicationLocalizationInline,
                PublicationContextInline,
@@ -37,5 +37,5 @@ class PublicationLocalizationAdmin(AbstractCreatedModifiedBy):
     search_fields = ('publication__title', 'publication__slug')
     list_display = ('publication', 'language', 'is_active',)
     # list_filter = ('publication__state', 'is_active',
-                   # 'created', 'modified', 'language')
+    # 'created', 'modified', 'language')
     list_filter = ('is_active', 'created', 'modified', 'language')

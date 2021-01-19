@@ -1,32 +1,23 @@
 import logging
 
 from django.conf import settings
-from django.core.exceptions import ValidationError
 from django.http import Http404
-from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 # from cms.api.serializers import PublicationSerializer
 
-from cms.contexts.decorators import detect_language
-from cms.contexts.models import WebPath
 from cms.contexts import settings as contexts_settings
 
 from cms.publications.models import *
-from cms.publications.paginators import Paginator
 from cms.publications.serializers import *
-from cms.publications.utils import publication_context_base_filter
 
 from rest_framework import filters
 
 from .. pagination import UniCmsApiPagination
-from .. permissions import UserCanAddPublicationOrAdminReadonly
-from .. utils import check_user_permission_on_object
 
 
 CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',

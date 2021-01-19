@@ -179,7 +179,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
             return 0
 
         permissions = cls.objects.filter(user=user, is_active=True).\
-                                  order_by('-permission')
+            order_by('-permission')
         webpath_permission = permissions.filter(webpath=webpath).first()
         if webpath_permission:
             permission = webpath_permission.permission

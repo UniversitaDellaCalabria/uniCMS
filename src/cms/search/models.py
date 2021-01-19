@@ -65,7 +65,7 @@ def page_to_entry(page_object):
 def publication_to_entry(pub_object, contexts=None):
     app_label, model = pub_object._meta.label_lower.split('.')
     # contexts = pub_object.publicationcontext_set.filter(is_active=True).\
-                                                 # order_by('date_start')
+    # order_by('date_start')
     if not contexts:
         # it doesn't have any real publication
         return

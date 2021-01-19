@@ -14,7 +14,7 @@ from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
 from cms.contexts.utils import is_editor, is_publisher
 
 from cms.publications.models import PublicationContext
-from cms.publications.serializers import PublicationSerializer, PublicationContextSerializer, PublicationContextFullSerializer
+from cms.publications.serializers import PublicationContextFullSerializer, PublicationContextSerializer
 from cms.contexts.utils import is_editor, is_publisher
 
 from .. pagination import UniCmsApiPagination
@@ -152,7 +152,7 @@ class EditorWebpathPublicationContextList(generics.ListCreateAPIView):
             # check permissions on webpath
             permission = EditorialBoardEditors.get_permission(webpath=webpath,
                                                               user=request.user)
-            publisher_perms = is_publisher(permission)
+            is_publisher(permission)
             if not editor_perms:
                 error_msg = _("You don't have permissions")
                 return Response(error_msg, status=status.HTTP_403_FORBIDDEN)

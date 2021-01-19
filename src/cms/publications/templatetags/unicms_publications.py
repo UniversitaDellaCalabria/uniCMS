@@ -20,7 +20,7 @@ def _get_pub_qparams(context, webpath, section = None, in_evidence=False,
                         publication__is_active=True,
                         date_start__lte=now,
                         date_end__gt=now)
-                        # publication__state="published")
+    # publication__state="published")
     if section:
         query_params['section'] = section
     if in_evidence:

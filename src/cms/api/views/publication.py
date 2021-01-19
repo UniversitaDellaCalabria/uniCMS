@@ -40,7 +40,7 @@ class PublicationDetail(generics.RetrieveAPIView):
     name = 'publication-detail'
     description = 'News'
     queryset = Publication.objects.filter(is_active=True)
-                                          # state='published')
+    # state='published')
     serializer_class = PublicationSerializer
     lookup_field = 'slug'
 
@@ -61,7 +61,7 @@ class ApiPublicationsByContext(APIView):
     def get(self, request, webpath_id, category_name=None):
         query_params = publication_context_base_filter()
         query_params.update({'webpath__pk': webpath_id})
-                             # 'publication__state': 'published'})
+        # 'publication__state': 'published'})
 
         category_name = category_name or request.GET.get('category_name')
         if category_name:

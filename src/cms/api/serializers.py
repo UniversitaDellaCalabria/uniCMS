@@ -19,6 +19,6 @@ class PublicationContextSerializer(serializers.HyperlinkedModelSerializer):
     # class Meta:
         # model = Publication
         # fields = ['title',
-                  # 'subheading',
-                  # 'content',
-                  # ]
+        # 'subheading',
+        # 'content',
+        # ]
