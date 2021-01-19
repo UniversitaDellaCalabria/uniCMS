@@ -119,4 +119,3 @@ class PublicationRelatedSerializer(serializers.ModelSerializer):
     class Meta:
         model = PublicationRelated
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']
