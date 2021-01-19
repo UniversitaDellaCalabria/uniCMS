@@ -127,7 +127,7 @@ class PublicationView(generics.RetrieveUpdateDestroyAPIView):
                                          data=request.data,
                                          partial=True)
         if serializer.is_valid(raise_exception=True):
-            has_permission = item.can_be_edited_by(request.user)
+            has_permission = item.is_editable_by(request.user)
             if not has_permission:
                 return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
             return super().patch(request, *args, **kwargs)
@@ -138,7 +138,7 @@ class PublicationView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance=item,
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
-            has_permission = item.can_be_edited_by(request.user)
+            has_permission = item.is_editable_by(request.user)
             if not has_permission:
                 return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
             return super().put(request, *args, **kwargs)

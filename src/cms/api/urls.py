@@ -8,7 +8,8 @@ from . views import (carousel, carousel_item, carousel_item_link,
                      media, media_collection, media_collection_item,
                      publication, publication_attachment,
                      publication_link, publication_localization,
-                     publication_gallery,
+                     publication_gallery, publication_block,
+                     publication_related,
                      website, webpath, webpath_publications)
 
 
@@ -118,6 +119,12 @@ urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/attachments/
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/attachments/<int:pk>/',
                     publication_attachment.PublicationAttachmentView.as_view(),
                     name='editorial-board-publication-attachment'),
+urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/blocks/',
+                    publication_block.PublicationBlockList.as_view(),
+                    name='editorial-board-publication-attachments'),
+urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/blocks/<int:pk>/',
+                    publication_block.PublicationBlockView.as_view(),
+                    name='editorial-board-publication-attachment'),
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/links/',
                     publication_link.PublicationLinkList.as_view(),
                     name='editorial-board-publication-links'),
@@ -136,6 +143,12 @@ urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/localization
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/localizations/<int:pk>/',
                     publication_localization.PublicationLocalizationView.as_view(),
                     name='editorial-board-publication-localization'),
+urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/related/',
+                    publication_related.PublicationRelatedList.as_view(),
+                    name='editorial-board-publication-related-list'),
+urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/related/<int:pk>/',
+                    publication_related.PublicationRelatedView.as_view(),
+                    name='editorial-board-publication-related'),
 
 
 # urlpatterns += path(f'{eb_prefix}/site/<int:site_id>/page/list/',

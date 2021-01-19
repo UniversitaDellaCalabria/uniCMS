@@ -77,6 +77,15 @@ class PublicationAttachmentSerializer(serializers.ModelSerializer):
                             'file_size','file_type']
 
 
+class PublicationBlockSerializer(serializers.ModelSerializer):
+    publication = PublicationForeignKey()
+
+    class Meta:
+        model = PublicationBlock
+        fields = '__all__'
+        read_only_fields = ['created_by', 'modified_by']
+
+
 class PublicationGallerySerializer(serializers.ModelSerializer):
     publication = PublicationForeignKey()
 
@@ -100,5 +109,14 @@ class PublicationLocalizationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PublicationLocalization
+        fields = '__all__'
+        read_only_fields = ['created_by', 'modified_by']
+
+
+class PublicationRelatedSerializer(serializers.ModelSerializer):
+    publication = PublicationForeignKey()
+
+    class Meta:
+        model = PublicationRelated
         fields = '__all__'
         read_only_fields = ['created_by', 'modified_by']

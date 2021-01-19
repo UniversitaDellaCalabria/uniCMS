@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
@@ -90,11 +91,12 @@ class Publication(AbstractPublication, CreatedModifiedBy):
     def categories(self):
         return self.category.all()
 
-    # @property
-    # def related_publications(self):
-        # related = PublicationRelated.objects.filter(publication=self,
-                                                    # related__is_active=True)
+    @property
+    def related_publications(self):
+        related = PublicationRelated.objects.filter(publication=self,
+                                                    related__is_active=True)
         # return [i for i in related if i.related.is_publicable]
+        return [i for i in related if i.related.is_active]
 
     @property
     def related_contexts(self):
@@ -197,13 +199,24 @@ class Publication(AbstractPublication, CreatedModifiedBy):
             content = self.content
         return content
 
-    def can_be_localized_by(self, user):
+    def is_localizable_by(self, user=None):
         if not user: return False
 
+        # check for locks on publication
+        pub_type = ContentType.objects.get(app_label='cmspublications',
+                                           model='publication')
+        eblo = EditorialBoardLockUser
+        locks = eblo.objects.filter(lock__content_type=pub_type,
+                                    lock__object_id=self.pk)
+        if locks and not locks.filter(user=user):
+            return False
+
+        # check if user has Django permissions to change object
         permission = check_user_permission_on_object(user, self,
                                                      'cmspublications.change_publication')
         if permission: return True
 
+        # check if user has EditorialBoard translator permissions on object
         pub_ctxs = self.get_publication_contexts()
         for pub_ctx in pub_ctxs:
             webpath = pub_ctx.webpath
@@ -215,15 +228,28 @@ class Publication(AbstractPublication, CreatedModifiedBy):
                     return True
                 elif self.created_by == user:
                     return True
+
+        # if no permissions
         return False
 
-    def can_be_edited_by(self, user):
+    def is_editable_by(self, user=None):
         if not user: return False
 
+        # check for locks on object
+        pub_type = ContentType.objects.get(app_label='cmspublications',
+                                           model='publication')
+        eblo = EditorialBoardLockUser
+        locks = eblo.objects.filter(lock__content_type=pub_type,
+                                    lock__object_id=self.pk)
+        if locks and not locks.filter(user=user):
+            return False
+
+        # check if user has Django permissions to change object
         permission = check_user_permission_on_object(user, self,
                                                      'cmspublications.change_publication')
         if permission: return True
 
+        # check if user has EditorialBoard editor permissions on object
         pub_ctxs = self.get_publication_contexts()
         for pub_ctx in pub_ctxs:
             webpath = pub_ctx.webpath
@@ -235,6 +261,8 @@ class Publication(AbstractPublication, CreatedModifiedBy):
                     return True
                 elif self.created_by == user:
                     return True
+
+        # if no permissions
         return False
 
     def __str__(self):
@@ -296,20 +324,20 @@ class PublicationContext(TimeStampedModel, ActivableModel,
         return '{} {}'.format(self.publication, self.webpath)
 
 
-class PublicationContextRelated(TimeStampedModel, SortableModel, ActivableModel):
-    publication_context = models.ForeignKey(PublicationContext, null=False, blank=False,
-                                            related_name='parent_publication_context',
-                                            on_delete=models.CASCADE)
-    related = models.ForeignKey(PublicationContext, null=False, blank=False,
+class PublicationRelated(TimeStampedModel, SortableModel, ActivableModel):
+    publication = models.ForeignKey(Publication, null=False, blank=False,
+                                    related_name='parent_publication',
+                                    on_delete=models.CASCADE)
+    related = models.ForeignKey(Publication, null=False, blank=False,
                                 on_delete=models.CASCADE,
-                                related_name="related_publication_context")
+                                related_name="related_publication")
 
     class Meta:
-        verbose_name_plural = _("Related Publication Contexts")
-        unique_together = ("publication_context", "related")
+        verbose_name_plural = _("Related Publications")
+        unique_together = ("publication", "related")
 
     def __str__(self):
-        return '{} {}'.format(self.publication_context, self.related)
+        return '{} {}'.format(self.publication, self.related)
 
 
 class PublicationLink(TimeStampedModel):

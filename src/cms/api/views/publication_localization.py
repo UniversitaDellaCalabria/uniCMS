@@ -57,11 +57,9 @@ class PublicationLocalizationList(generics.ListCreateAPIView):
         if serializer.is_valid(raise_exception=True):
             # get publication
             publication = serializer.validated_data.get('publication')
-            # check permissions on carousel
-            permission = check_user_permission_on_object(request.user,
-                                                         publication,
-                                                         'cmspublications.change_publications')
-            if not permission:
+            # check permissions on publication
+            has_permission = publication.is_localizable_by(request.user)
+            if not has_permission:
                 return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
 
             return super().post(request, *args, **kwargs)
@@ -92,10 +90,9 @@ class PublicationLocalizationView(generics.RetrieveUpdateDestroyAPIView):
                                          partial=True)
         if serializer.is_valid(raise_exception=True):
             publication = item.publication
-            permission = check_user_permission_on_object(request.user,
-                                                         publication,
-                                                         'cmspublications.change_publication')
-            if not permission:
+            # check permissions on publication
+            has_permission = publication.is_localizable_by(request.user)
+            if not has_permission:
                 return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
             return super().patch(request, *args, **kwargs)
 
@@ -106,10 +103,9 @@ class PublicationLocalizationView(generics.RetrieveUpdateDestroyAPIView):
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
             publication = item.publication
-            permission = check_user_permission_on_object(request.user,
-                                                         publication,
-                                                         'cmspublications.change_publication')
-            if not permission:
+            # check permissions on publication
+            has_permission = publication.is_localizable_by(request.user)
+            if not has_permission:
                 return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
             return super().put(request, *args, **kwargs)
 
@@ -117,9 +113,8 @@ class PublicationLocalizationView(generics.RetrieveUpdateDestroyAPIView):
         item = self.get_queryset().first()
         if not item: raise Http404
         publication = item.publication
-        permission = check_user_permission_on_object(request.user,
-                                                     publication,
-                                                     'cmspublications.change_publication')
-        if not permission:
+        # check permissions on publication
+        has_permission = publication.is_localizable_by(request.user)
+        if not has_permission:
             return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
         return super().delete(request, *args, **kwargs)

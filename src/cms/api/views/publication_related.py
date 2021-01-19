@@ -17,9 +17,9 @@ from cms.contexts.decorators import detect_language
 from cms.contexts.models import WebPath
 from cms.contexts import settings as contexts_settings
 
-from cms.publications.models import Publication, PublicationAttachment, PublicationContext
+from cms.publications.models import *
 from cms.publications.paginators import Paginator
-from cms.publications.serializers import PublicationSerializer, PublicationAttachmentSerializer
+from cms.publications.serializers import *
 from cms.publications.utils import publication_context_base_filter
 
 from rest_framework import filters
@@ -35,24 +35,20 @@ CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
 logger = logging.getLogger(__name__)
 
 
-class PublicationAttachmentList(generics.ListCreateAPIView):
+class PublicationRelatedList(generics.ListCreateAPIView):
     """
     """
     description = ""
     filter_backends = [filters.SearchFilter]
-    search_fields = ['name', 'file', 'descripion']
     pagination_class = UniCmsApiPagination
     permission_classes = [IsAdminUser]
-    serializer_class = PublicationAttachmentSerializer
+    serializer_class = PublicationRelatedSerializer
 
     def get_queryset(self):
         """
         """
         pub_id = self.kwargs['publication_id']
-        items = PublicationAttachment.objects.filter(publication__pk=pub_id)
-        is_active = self.request.GET.get('is_active')
-        if is_active:
-            items = items.filter(is_active=is_active)
+        items = PublicationRelated.objects.filter(publication__pk=pub_id)
         return items
 
     def post(self, request, *args, **kwargs):
@@ -68,12 +64,12 @@ class PublicationAttachmentList(generics.ListCreateAPIView):
             return super().post(request, *args, **kwargs)
 
 
-class PublicationAttachmentView(generics.RetrieveUpdateDestroyAPIView):
+class PublicationRelatedView(generics.RetrieveUpdateDestroyAPIView):
     """
     """
     description = ""
     permission_classes = [IsAdminUser]
-    serializer_class = PublicationAttachmentSerializer
+    serializer_class = PublicationRelatedSerializer
     error_msg = _("You don't have permissions")
 
     def get_queryset(self):
@@ -81,8 +77,8 @@ class PublicationAttachmentView(generics.RetrieveUpdateDestroyAPIView):
         """
         pub_id = self.kwargs['publication_id']
         pk = self.kwargs['pk']
-        attachments = PublicationAttachment.objects.filter(pk=pk,
-                                                           publication__pk=pub_id)
+        attachments = PublicationRelated.objects.filter(pk=pk,
+                                                        publication__pk=pub_id)
         return attachments
 
     def patch(self, request, *args, **kwargs):

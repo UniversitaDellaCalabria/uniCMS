@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 @admin.register(Publication)
-class PublicationAdmin(AbstractCreatedModifiedBy, nested_admin.NestedModelAdmin):
+class PublicationAdmin(AbstractCreatedModifiedBy):
     search_fields = ('title', 'slug',)
     # list_display = ('title', 'slug', 'date_start', 'date_end', 'is_active',)
     list_display = ('title', 'slug', 'is_active',)
@@ -19,6 +19,7 @@ class PublicationAdmin(AbstractCreatedModifiedBy, nested_admin.NestedModelAdmin)
     list_filter = ('is_active', 'created', 'modified')
     inlines = (PublicationLocalizationInline,
                PublicationContextInline,
+               PublicationRelatedInline,
                PublicationLinkInline,
                PublicationAttachmentInline,
                PublicationGalleryInline,
