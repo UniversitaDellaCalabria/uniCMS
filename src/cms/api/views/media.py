@@ -2,13 +2,13 @@ import logging
 import os
 
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
-from rest_framework.response import Response
 
 from cms.contexts import settings as contexts_settings
 
@@ -70,7 +70,7 @@ class MediaView(generics.RetrieveUpdateDestroyAPIView):
                                                          item,
                                                          'cmsmedias.change_media')
             if not permission['granted']:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -83,7 +83,7 @@ class MediaView(generics.RetrieveUpdateDestroyAPIView):
                                                          item,
                                                          'cmsmedias.change_media')
             if not permission['granted']:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -93,7 +93,7 @@ class MediaView(generics.RetrieveUpdateDestroyAPIView):
                                                      item,
                                                      'cmsmedias.delete_media')
         if not permission['granted']:
-            return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+            raise PermissionDenied()
         media = self.get_queryset().first()
         os.remove(media.file.path)
         return super().delete(request, *args, **kwargs)

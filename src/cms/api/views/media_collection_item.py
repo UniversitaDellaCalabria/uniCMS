@@ -1,6 +1,7 @@
 import logging
 
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
@@ -9,10 +10,9 @@ from cms.contexts import settings as contexts_settings
 from cms.medias.models import MediaCollectionItem
 from cms.medias.serializers import MediaCollectionItemSerializer
 
-from rest_framework import generics, status
+from rest_framework import generics
 # from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
-from rest_framework.response import Response
 
 from .. pagination import UniCmsApiPagination
 from .. utils import check_user_permission_on_object
@@ -53,7 +53,7 @@ class MediaCollectionItemList(generics.ListCreateAPIView):
                                                          collection,
                                                          'cmscarousels.change_mediacollection')
             if not permission['granted']:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
             return super().post(request, *args, **kwargs)
 
 
@@ -87,7 +87,7 @@ class MediaCollectionItemView(generics.RetrieveUpdateDestroyAPIView):
                                                          collection,
                                                          'cmsmedias.change_mediacollection')
             if not permission['granted']:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -102,7 +102,7 @@ class MediaCollectionItemView(generics.RetrieveUpdateDestroyAPIView):
                                                          collection,
                                                          'cmsmedias.change_mediacollection')
             if not permission['granted']:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -114,5 +114,5 @@ class MediaCollectionItemView(generics.RetrieveUpdateDestroyAPIView):
                                                      collection,
                                                      'cmsmedias.change_mediacollection')
         if not permission['granted']:
-            return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+            raise PermissionDenied()
         return super().delete(request, *args, **kwargs)

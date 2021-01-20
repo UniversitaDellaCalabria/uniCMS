@@ -1,12 +1,12 @@
 import logging
 
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.http import Http404
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -129,7 +129,7 @@ class PublicationView(generics.RetrieveUpdateDestroyAPIView):
         if serializer.is_valid(raise_exception=True):
             has_permission = item.is_editable_by(request.user)
             if not has_permission:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -140,7 +140,7 @@ class PublicationView(generics.RetrieveUpdateDestroyAPIView):
         if serializer.is_valid(raise_exception=True):
             has_permission = item.is_editable_by(request.user)
             if not has_permission:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -150,7 +150,7 @@ class PublicationView(generics.RetrieveUpdateDestroyAPIView):
                                                      item,
                                                      'cmspublications.delete_publication')
         if not permission['granted']:
-            return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+            raise PermissionDenied()
         return super().delete(request, *args, **kwargs)
 
 
@@ -179,4 +179,4 @@ class PublicationChangeStateView(generics.RetrieveAPIView):
             item.is_active = not item.is_active
             item.save()
             return super().get(request, *args, **kwargs)
-        return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+        raise PermissionDenied()

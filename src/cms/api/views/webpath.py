@@ -1,6 +1,7 @@
 import logging
 
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -42,7 +43,7 @@ class EditorWebsiteWebpathList(generics.ListCreateAPIView):
         site_id = self.kwargs['site_id']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
-            raise Http404
+            raise PermissionDenied()
         webpaths = WebPath.objects.filter(site=site)
         is_active = self.request.GET.get('is_active')
         if is_active:
@@ -75,8 +76,7 @@ class EditorWebsiteWebpathList(generics.ListCreateAPIView):
                                                               user=request.user)
             publisher_perms = is_publisher(permission)
             if not publisher_perms:
-                error_msg = _("You don't have permissions")
-                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
 
             webpath = serializer.save()
             # add permission to webpath
@@ -107,7 +107,7 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
         pk = self.kwargs['pk']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
-            raise Http404
+            raise PermissionDenied()
         webpaths = WebPath.objects.filter(pk=pk, site=site)
         return webpaths
 
@@ -139,8 +139,7 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
                                                                          user=request.user)
                 publisher_perms = is_publisher(parent_permission)
                 if not publisher_perms:
-                    error_msg = _("You don't have permissions on webpath {}").format(new_parent)
-                    return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+                    raise PermissionDenied()
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -156,8 +155,7 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
                                                                      user=request.user)
             publisher_perms = is_publisher(parent_permission)
             if not publisher_perms:
-                error_msg = _("You don't have permissions on webpath {}").format(parent)
-                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
 
             return super().put(request, *args, **kwargs)
 

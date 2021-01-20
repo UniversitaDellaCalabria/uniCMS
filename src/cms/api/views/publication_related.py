@@ -1,12 +1,12 @@
 import logging
 
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
-from rest_framework.response import Response
 
 # from cms.api.serializers import PublicationSerializer
 
@@ -51,7 +51,7 @@ class PublicationRelatedList(generics.ListCreateAPIView):
             # check permissions on publication
             has_permission = publication.is_editable_by(request.user)
             if not has_permission:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
 
             return super().post(request, *args, **kwargs)
 
@@ -84,7 +84,7 @@ class PublicationRelatedView(generics.RetrieveUpdateDestroyAPIView):
             # check permissions on publication
             has_permission = publication.is_editable_by(request.user)
             if not has_permission:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -97,7 +97,7 @@ class PublicationRelatedView(generics.RetrieveUpdateDestroyAPIView):
             # check permissions on publication
             has_permission = publication.is_editable_by(request.user)
             if not has_permission:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -107,5 +107,5 @@ class PublicationRelatedView(generics.RetrieveUpdateDestroyAPIView):
         # check permissions on publication
         has_permission = publication.is_editable_by(request.user)
         if not has_permission:
-            return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+            raise PermissionDenied()
         return super().delete(request, *args, **kwargs)

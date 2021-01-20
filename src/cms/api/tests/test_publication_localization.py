@@ -9,7 +9,7 @@ from django.urls import reverse
 from cms.contexts.tests import ContextUnitTest
 
 
-from cms.publications.models import Publication, PublicationLocalization
+from cms.publications.models import EditorialBoardLock, EditorialBoardLockUser, Publication, PublicationLocalization
 from cms.publications.tests import PublicationUnitTest
 
 
@@ -82,9 +82,19 @@ class PublicationLocalizationAPIUnitTest(TestCase):
                         follow=1)
         assert res.status_code == 403
         # user has permission
-        pub.created_by = user2
-        pub.save()
         content_type = ContentType.objects.get_for_model(Publication)
+        lock_on_pub = EditorialBoardLock.objects.create(content_type=content_type,
+                                                        object_id=pub.pk)
+        user_lock = EditorialBoardLockUser.objects.create(lock=lock_on_pub,
+                                                          user=user)
+        user2_lock = EditorialBoardLockUser.objects.create(lock=lock_on_pub,
+                                                           user=user2)
+        # user has a lock but he hasn't django permissions
+        res = req.patch(url, data,
+                        content_type='application/json',
+                        follow=1)
+        assert res.status_code == 403
+        # with permissions
         edit_perm = Permission.objects.get(content_type=content_type, codename='change_publication')
         user2.user_permissions.add(edit_perm)
         user2.refresh_from_db()
@@ -96,8 +106,8 @@ class PublicationLocalizationAPIUnitTest(TestCase):
         assert localization.title == 'test en patched'
 
         # PUT
-        pub.created_by = None
-        pub.save()
+        # pub.created_by = None
+        # pub.save()
         data = {'publication': pub.pk,
                 'title': 'test en putted',
                 'subheading': 'test en',
@@ -105,6 +115,8 @@ class PublicationLocalizationAPIUnitTest(TestCase):
                 'language': 'en',
         }
         # user hasn't permission
+        # delete lock
+        user2_lock.delete()
         req.force_login(user2)
         res = req.put(url, data, content_type='application/json')
         assert res.status_code == 403

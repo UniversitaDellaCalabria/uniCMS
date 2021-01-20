@@ -30,6 +30,15 @@ class WebpathAPIUnitTest(TestCase):
         user.is_staff = True
         user.save()
         req.force_login(user)
+        # site is not managed
+        # (user is not superuser and not EditorialPermissions)
+        ebu.is_active = False
+        ebu.save()
+        res = req.get(url)
+        assert res.status_code == 403
+        # site is managed again
+        ebu.is_active = True
+        ebu.save()
         res = req.get(url, {'is_active': True})
         assert isinstance(res.json(), dict)
 
@@ -48,6 +57,15 @@ class WebpathAPIUnitTest(TestCase):
         user.is_staff = True
         user.save()
         req.force_login(user)
+        # site is not managed
+        # (user is not superuser and not EditorialPermissions)
+        ebu.is_active = False
+        ebu.save()
+        res = req.get(url)
+        assert res.status_code == 403
+        # site is managed again
+        ebu.is_active = True
+        ebu.save()
         res = req.get(url)
         assert isinstance(res.json(), dict)
 

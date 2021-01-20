@@ -7,7 +7,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
 
-from cms.templates.models import TimeStampedModel, CreatedModifiedBy
+from cms.templates.models import ActivableModel, TimeStampedModel, CreatedModifiedBy
 
 from . import settings as app_settings
 from . exceptions import ReservedWordException
@@ -157,7 +157,7 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
         return '{} @ {}{}'.format(self.name, self.site, self.get_full_path())
 
 
-class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
+class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy, ActivableModel):
     """
     A Page can belong to one or more Context
     A editor/moderator can belong to one or more Context
@@ -171,7 +171,6 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
     webpath = models.ForeignKey(WebPath,
                                 on_delete=models.CASCADE,
                                 null=True, blank=True)
-    is_active = models.BooleanField()
 
     class Meta:
         verbose_name_plural = _("Editorial Board Users")
@@ -187,6 +186,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy):
         if not all((webpath, user)):
             return 0
 
+        # return max value
         if user.is_superuser: return 7
 
         permissions = cls.objects.filter(user=user, is_active=True).\

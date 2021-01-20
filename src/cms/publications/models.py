@@ -211,7 +211,7 @@ class Publication(AbstractPublication, CreatedModifiedBy):
         # if permission
         if permission['granted']: return True
 
-        # if no permissions and no locked
+        # if no permissions and no locks
         if not permission.get('locked', False):
             # check if user has EditorialBoard translator permissions on object
             pub_ctxs = self.get_publication_contexts()
@@ -238,7 +238,7 @@ class Publication(AbstractPublication, CreatedModifiedBy):
         # if permission
         if permission['granted']: return True
 
-        # if no permissions and no locked
+        # if no permissions and no locks
         if not permission.get('locked', False):
             # check if user has EditorialBoard editor permissions on object
             pub_ctxs = self.get_publication_contexts()

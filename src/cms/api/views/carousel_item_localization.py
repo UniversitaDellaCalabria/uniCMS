@@ -1,13 +1,13 @@
 import logging
 
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
-from rest_framework.response import Response
 
 from cms.carousels.models import *
 from cms.carousels.serializers import *
@@ -57,7 +57,7 @@ class CarouselItemLocalizationList(generics.ListCreateAPIView):
                                                          carousel_item.carousel,
                                                          'cmscarousels.change_carousel')
             if not permission['granted']:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
 
             return super().post(request, *args, **kwargs)
 
@@ -94,7 +94,7 @@ class CarouselItemLocalizationView(generics.RetrieveUpdateDestroyAPIView):
                                                          carousel_item.carousel,
                                                          'cmscarousels.change_carousel')
             if not permission['granted']:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -109,7 +109,7 @@ class CarouselItemLocalizationView(generics.RetrieveUpdateDestroyAPIView):
                                                          carousel_item.carousel,
                                                          'cmscarousels.change_carousel')
             if not permission['granted']:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -121,5 +121,5 @@ class CarouselItemLocalizationView(generics.RetrieveUpdateDestroyAPIView):
                                                      carousel_item.carousel,
                                                      'cmscarousels.change_carousel')
         if not permission['granted']:
-            return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+            raise PermissionDenied()
         return super().delete(request, *args, **kwargs)

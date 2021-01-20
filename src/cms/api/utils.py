@@ -33,10 +33,8 @@ def check_user_permission_on_object(user, obj, permission):
     locks = eblo.objects.filter(lock__content_type=content_type,
                                 lock__object_id=obj.pk)
     # if there is not lock, no permission
-    if not locks:
-        return {'granted': False}
+    if not locks: return {'granted': False}
     # if user is in lock user list, has permissions
-    if locks.filter(user=user):
-        return {'granted': True, 'locked': True}
+    if locks.filter(user=user): return {'granted': True, 'locked': True}
     # else no permissions but obj is locked
     return {'granted': False, 'locked':True}

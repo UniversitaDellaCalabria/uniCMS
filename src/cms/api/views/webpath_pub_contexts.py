@@ -1,14 +1,14 @@
 import logging
 
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
-from rest_framework.response import Response
 
 from cms.contexts import settings as contexts_settings
 from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
@@ -44,7 +44,7 @@ class EditorWebpathPublicationContextList(generics.ListCreateAPIView):
         webpath_id = self.kwargs['webpath_id']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
-            raise Http404
+            raise PermissionDenied()
         webpath = get_object_or_404(WebPath,
                                     pk=webpath_id,
                                     site=site)
@@ -65,8 +65,7 @@ class EditorWebpathPublicationContextList(generics.ListCreateAPIView):
                                                               user=request.user)
             publisher_perms = is_publisher(permission)
             if not publisher_perms:
-                error_msg = _("You don't have permissions")
-                return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
             return super().post(request, *args, **kwargs)
 
 
@@ -84,7 +83,7 @@ class EditorWebpathPublicationContextView(generics.RetrieveUpdateDestroyAPIView)
         site_id = self.kwargs['site_id']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
-            raise Http404
+            raise PermissionDenied()
         webpath_id = self.kwargs['webpath_id']
         pk = self.kwargs['pk']
         contexts = PublicationContext.objects.filter(pk=pk,
@@ -104,7 +103,7 @@ class EditorWebpathPublicationContextView(generics.RetrieveUpdateDestroyAPIView)
                                                               user=request.user)
             publisher_perms = is_publisher(permission)
             if not publisher_perms:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -118,7 +117,7 @@ class EditorWebpathPublicationContextView(generics.RetrieveUpdateDestroyAPIView)
                                                               user=request.user)
             publisher_perms = is_publisher(permission)
             if not publisher_perms:
-                return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+                raise PermissionDenied()
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -129,5 +128,5 @@ class EditorWebpathPublicationContextView(generics.RetrieveUpdateDestroyAPIView)
                                                           user=request.user)
         publisher_perms = is_publisher(permission)
         if not publisher_perms:
-            return Response(self.error_msg, status=status.HTTP_403_FORBIDDEN)
+            raise PermissionDenied()
         return super().delete(request, *args, **kwargs)
