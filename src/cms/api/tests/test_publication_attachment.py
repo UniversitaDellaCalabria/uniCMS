@@ -134,3 +134,8 @@ class PublicationAttachmentAPIUnitTest(TestCase):
             attachment.refresh_from_db()
         except ObjectDoesNotExist:
             assert True
+
+    def tearDown(self):
+        match = f'{settings.MEDIA_ROOT}/publications_attachments/*/eventi_*.*'
+        for i in glob(match):
+            os.remove(i)
