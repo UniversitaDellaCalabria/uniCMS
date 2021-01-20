@@ -1,29 +1,14 @@
-import logging
-
-from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.http import Http404
-from django.utils.translation import gettext_lazy as _
 
-from rest_framework import generics
+from rest_framework import filters, generics
 from rest_framework.permissions import IsAdminUser
 
-# from cms.api.serializers import PublicationSerializer
-
-from cms.contexts import settings as contexts_settings
 
 from cms.publications.models import *
 from cms.publications.serializers import *
 
-from rest_framework import filters
-
+from .. exceptions import LoggedPermissionDenied
 from .. pagination import UniCmsApiPagination
-
-
-CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
-                                  contexts_settings.CMS_CONTEXT_PERMISSIONS)
-
-logger = logging.getLogger(__name__)
 
 
 class PublicationLinkList(generics.ListCreateAPIView):
@@ -51,8 +36,8 @@ class PublicationLinkList(generics.ListCreateAPIView):
             # check permissions on publication
             has_permission = publication.is_editable_by(request.user)
             if not has_permission:
-                raise PermissionDenied()
-
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             return super().post(request, *args, **kwargs)
 
 
@@ -83,7 +68,8 @@ class PublicationLinkView(generics.RetrieveUpdateDestroyAPIView):
             # check permissions on publication
             has_permission = publication.is_editable_by(request.user)
             if not has_permission:
-                raise PermissionDenied()
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -96,7 +82,8 @@ class PublicationLinkView(generics.RetrieveUpdateDestroyAPIView):
             # check permissions on publication
             has_permission = publication.is_editable_by(request.user)
             if not has_permission:
-                raise PermissionDenied()
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -106,5 +93,6 @@ class PublicationLinkView(generics.RetrieveUpdateDestroyAPIView):
         # check permissions on publication
         has_permission = publication.is_editable_by(request.user)
         if not has_permission:
-            raise PermissionDenied()
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
         return super().delete(request, *args, **kwargs)

@@ -1,9 +1,4 @@
-import logging
-
-from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.http import Http404
-from django.utils.translation import gettext_lazy as _
 
 from rest_framework import generics
 from rest_framework import filters
@@ -12,16 +7,10 @@ from rest_framework.permissions import IsAdminUser
 from cms.carousels.models import *
 from cms.carousels.serializers import *
 
-from cms.contexts import settings as contexts_settings
 
+from .. exceptions import LoggedPermissionDenied
 from .. pagination import UniCmsApiPagination
 from .. utils import check_user_permission_on_object
-
-
-CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
-                                  contexts_settings.CMS_CONTEXT_PERMISSIONS)
-
-logger = logging.getLogger(__name__)
 
 
 class CarouselItemList(generics.ListCreateAPIView):
@@ -54,7 +43,8 @@ class CarouselItemList(generics.ListCreateAPIView):
                                                          carousel,
                                                          'cmscarousels.change_carousel')
             if not permission['granted']:
-                raise PermissionDenied()
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
 
             return super().post(request, *args, **kwargs)
 
@@ -91,7 +81,8 @@ class CarouselItemView(generics.RetrieveUpdateDestroyAPIView):
                                                          carousel,
                                                          'cmscarousels.change_carousel')
             if not permission['granted']:
-                raise PermissionDenied()
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -107,7 +98,8 @@ class CarouselItemView(generics.RetrieveUpdateDestroyAPIView):
                                                          carousel,
                                                          'cmscarousels.change_carousel')
             if not permission['granted']:
-                raise PermissionDenied()
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -120,5 +112,6 @@ class CarouselItemView(generics.RetrieveUpdateDestroyAPIView):
                                                      carousel,
                                                      'cmscarousels.change_carousel')
         if not permission['granted']:
-            raise PermissionDenied()
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
         return super().delete(request, *args, **kwargs)

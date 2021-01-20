@@ -1,13 +1,9 @@
-import logging
-
 from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
 
-from rest_framework import generics, status
+from rest_framework import generics
 # from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -17,13 +13,12 @@ from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
 from cms.contexts.serializers import WebPathSerializer
 from cms.contexts.utils import is_publisher
 
+from .. exceptions import LoggedPermissionDenied
 from .. pagination import UniCmsApiPagination
 
 
 CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
                                   contexts_settings.CMS_CONTEXT_PERMISSIONS)
-
-logger = logging.getLogger(__name__)
 
 
 class EditorWebsiteWebpathList(generics.ListCreateAPIView):
@@ -43,7 +38,8 @@ class EditorWebsiteWebpathList(generics.ListCreateAPIView):
         site_id = self.kwargs['site_id']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
-            raise PermissionDenied()
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
         webpaths = WebPath.objects.filter(site=site)
         is_active = self.request.GET.get('is_active')
         if is_active:
@@ -57,7 +53,6 @@ class EditorWebsiteWebpathList(generics.ListCreateAPIView):
         for webpath in self.get_queryset():
             permission = EditorialBoardEditors.get_permission(user=request.user,
                                                               webpath=webpath)
-            print(webpath, permission)
             webpath_data = self.get_serializer(instance=webpath).data
             webpath_data["permission_id"] = permission
             permission_label = context_permissions[permission]
@@ -76,8 +71,8 @@ class EditorWebsiteWebpathList(generics.ListCreateAPIView):
                                                               user=request.user)
             publisher_perms = is_publisher(permission)
             if not publisher_perms:
-                raise PermissionDenied()
-
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             webpath = serializer.save()
             # add permission to webpath
             if not publisher_perms['allow_descendant']:
@@ -107,7 +102,8 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
         pk = self.kwargs['pk']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
-            raise PermissionDenied()
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
         webpaths = WebPath.objects.filter(pk=pk, site=site)
         return webpaths
 
@@ -125,7 +121,6 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
     def patch(self, request, *args, **kwargs):
         webpath = self.get_queryset().first()
         if not webpath: raise Http404
-        dict(CMS_CONTEXT_PERMISSIONS)
 
         serializer = self.get_serializer(instance=webpath,
                                          data=request.data,
@@ -139,13 +134,14 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
                                                                          user=request.user)
                 publisher_perms = is_publisher(parent_permission)
                 if not publisher_perms:
-                    raise PermissionDenied()
+                    raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                                 resource=request.method)
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
         webpath = self.get_queryset().first()
         if not webpath: raise Http404
-        dict(CMS_CONTEXT_PERMISSIONS)
+
         serializer = self.get_serializer(instance=webpath,
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -155,8 +151,8 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
                                                                      user=request.user)
             publisher_perms = is_publisher(parent_permission)
             if not publisher_perms:
-                raise PermissionDenied()
-
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -166,5 +162,6 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
                                                                  user=request.user)
         publisher_perms = is_publisher(parent_permission)
         if not publisher_perms:
-            raise PermissionDenied()
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
         return super().delete(request, *args, **kwargs)

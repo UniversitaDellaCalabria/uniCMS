@@ -1,9 +1,5 @@
-import logging
-
 from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.http import Http404
-from django.utils.translation import gettext_lazy as _
 
 from cms.contexts import settings as contexts_settings
 
@@ -11,17 +7,11 @@ from cms.medias.models import MediaCollectionItem
 from cms.medias.serializers import MediaCollectionItemSerializer
 
 from rest_framework import generics
-# from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 
+from .. exceptions import LoggedPermissionDenied
 from .. pagination import UniCmsApiPagination
 from .. utils import check_user_permission_on_object
-
-
-CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
-                                  contexts_settings.CMS_CONTEXT_PERMISSIONS)
-
-logger = logging.getLogger(__name__)
 
 
 class MediaCollectionItemList(generics.ListCreateAPIView):
@@ -52,7 +42,8 @@ class MediaCollectionItemList(generics.ListCreateAPIView):
                                                          collection,
                                                          'cmscarousels.change_mediacollection')
             if not permission['granted']:
-                raise PermissionDenied()
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             return super().post(request, *args, **kwargs)
 
 
@@ -85,7 +76,8 @@ class MediaCollectionItemView(generics.RetrieveUpdateDestroyAPIView):
                                                          collection,
                                                          'cmsmedias.change_mediacollection')
             if not permission['granted']:
-                raise PermissionDenied()
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -100,7 +92,8 @@ class MediaCollectionItemView(generics.RetrieveUpdateDestroyAPIView):
                                                          collection,
                                                          'cmsmedias.change_mediacollection')
             if not permission['granted']:
-                raise PermissionDenied()
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -112,5 +105,6 @@ class MediaCollectionItemView(generics.RetrieveUpdateDestroyAPIView):
                                                      collection,
                                                      'cmsmedias.change_mediacollection')
         if not permission['granted']:
-            raise PermissionDenied()
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
         return super().delete(request, *args, **kwargs)

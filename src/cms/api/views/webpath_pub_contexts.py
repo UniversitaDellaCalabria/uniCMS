@@ -1,16 +1,9 @@
-import logging
-
-from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.shortcuts import get_object_or_404
-from django.utils.translation import gettext_lazy as _
 
-from rest_framework import generics
-from rest_framework import filters
+from rest_framework import filters, generics
 from rest_framework.permissions import IsAdminUser
 
-from cms.contexts import settings as contexts_settings
 from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
 from cms.contexts.utils import is_publisher
 
@@ -18,13 +11,8 @@ from cms.publications.models import PublicationContext
 from cms.publications.serializers import PublicationContextSerializer
 from cms.contexts.utils import is_publisher
 
+from .. exceptions import LoggedPermissionDenied
 from .. pagination import UniCmsApiPagination
-
-
-CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
-                                  contexts_settings.CMS_CONTEXT_PERMISSIONS)
-
-logger = logging.getLogger(__name__)
 
 
 class EditorWebpathPublicationContextList(generics.ListCreateAPIView):
@@ -44,7 +32,8 @@ class EditorWebpathPublicationContextList(generics.ListCreateAPIView):
         webpath_id = self.kwargs['webpath_id']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
-            raise PermissionDenied()
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
         webpath = get_object_or_404(WebPath,
                                     pk=webpath_id,
                                     site=site)
@@ -65,7 +54,8 @@ class EditorWebpathPublicationContextList(generics.ListCreateAPIView):
                                                               user=request.user)
             publisher_perms = is_publisher(permission)
             if not publisher_perms:
-                raise PermissionDenied()
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             return super().post(request, *args, **kwargs)
 
 
@@ -82,7 +72,8 @@ class EditorWebpathPublicationContextView(generics.RetrieveUpdateDestroyAPIView)
         site_id = self.kwargs['site_id']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
-            raise PermissionDenied()
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
         webpath_id = self.kwargs['webpath_id']
         pk = self.kwargs['pk']
         contexts = PublicationContext.objects.filter(pk=pk,
@@ -102,7 +93,8 @@ class EditorWebpathPublicationContextView(generics.RetrieveUpdateDestroyAPIView)
                                                               user=request.user)
             publisher_perms = is_publisher(permission)
             if not publisher_perms:
-                raise PermissionDenied()
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -116,7 +108,8 @@ class EditorWebpathPublicationContextView(generics.RetrieveUpdateDestroyAPIView)
                                                               user=request.user)
             publisher_perms = is_publisher(permission)
             if not publisher_perms:
-                raise PermissionDenied()
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -127,5 +120,6 @@ class EditorWebpathPublicationContextView(generics.RetrieveUpdateDestroyAPIView)
                                                           user=request.user)
         publisher_perms = is_publisher(permission)
         if not publisher_perms:
-            raise PermissionDenied()
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
         return super().delete(request, *args, **kwargs)

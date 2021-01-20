@@ -1,12 +1,10 @@
 import logging
 
-from django.conf import settings
-from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.exceptions import ValidationError
 from django.http import Http404
 from django.utils.decorators import method_decorator
-from django.utils.translation import gettext_lazy as _
 
-from rest_framework import generics
+from rest_framework import filters, generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,22 +13,17 @@ from rest_framework.views import APIView
 
 from cms.contexts.decorators import detect_language
 from cms.contexts.models import WebPath
-from cms.contexts import settings as contexts_settings
 
 from cms.publications.models import Publication, PublicationContext
 from cms.publications.paginators import Paginator
 from cms.publications.serializers import PublicationSerializer
 from cms.publications.utils import publication_context_base_filter
 
-from rest_framework import filters
-
+from .. exceptions import LoggedPermissionDenied
 from .. pagination import UniCmsApiPagination
 from .. permissions import UserCanAddPublicationOrAdminReadonly
 from .. utils import check_user_permission_on_object
 
-
-CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
-                                  contexts_settings.CMS_CONTEXT_PERMISSIONS)
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +54,6 @@ class ApiPublicationsByContext(APIView):
     def get(self, request, webpath_id, category_name=None):
         query_params = publication_context_base_filter()
         query_params.update({'webpath__pk': webpath_id})
-        # 'publication__state': 'published'})
 
         category_name = category_name or request.GET.get('category_name')
         if category_name:
@@ -128,7 +120,8 @@ class PublicationView(generics.RetrieveUpdateDestroyAPIView):
         if serializer.is_valid(raise_exception=True):
             has_permission = item.is_editable_by(request.user)
             if not has_permission:
-                raise PermissionDenied()
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -139,7 +132,8 @@ class PublicationView(generics.RetrieveUpdateDestroyAPIView):
         if serializer.is_valid(raise_exception=True):
             has_permission = item.is_editable_by(request.user)
             if not has_permission:
-                raise PermissionDenied()
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -149,7 +143,8 @@ class PublicationView(generics.RetrieveUpdateDestroyAPIView):
                                                      item,
                                                      'cmspublications.delete_publication')
         if not permission['granted']:
-            raise PermissionDenied()
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
         return super().delete(request, *args, **kwargs)
 
 
@@ -177,4 +172,5 @@ class PublicationChangeStateView(generics.RetrieveAPIView):
             item.is_active = not item.is_active
             item.save()
             return super().get(request, *args, **kwargs)
-        raise PermissionDenied()
+        raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                     resource=request.method)

@@ -1,20 +1,10 @@
-import logging
-
-from django.conf import settings
 
 from rest_framework.permissions import IsAdminUser
 from rest_framework.views import APIView
 
 from cms.contexts.models import WebSite
-from cms.contexts import settings as contexts_settings
 
 from .. pagination import UniCmsApiPagination
-
-
-CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
-                                  contexts_settings.CMS_CONTEXT_PERMISSIONS)
-
-logger = logging.getLogger(__name__)
 
 
 class EditorWebsiteList(APIView, UniCmsApiPagination):
