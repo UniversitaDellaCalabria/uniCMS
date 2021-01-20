@@ -31,7 +31,6 @@ class MediaCollectionItemList(generics.ListCreateAPIView):
     pagination_class = UniCmsApiPagination
     permission_classes = [IsAdminUser]
     serializer_class = MediaCollectionItemSerializer
-    error_msg = _("You don't have permissions")
 
     def get_queryset(self):
         """
@@ -63,7 +62,6 @@ class MediaCollectionItemView(generics.RetrieveUpdateDestroyAPIView):
     description = ""
     permission_classes = [IsAdminUser]
     serializer_class = MediaCollectionItemSerializer
-    error_msg = _("You don't have permissions")
 
     def get_queryset(self):
         """

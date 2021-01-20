@@ -50,7 +50,6 @@ class MediaView(generics.RetrieveUpdateDestroyAPIView):
     description = ""
     permission_classes = [IsAdminUser]
     serializer_class = MediaSerializer
-    error_msg = _("You don't have permissions")
 
     def get_queryset(self):
         """

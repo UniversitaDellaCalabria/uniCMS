@@ -166,6 +166,5 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
                                                                  user=request.user)
         publisher_perms = is_publisher(parent_permission)
         if not publisher_perms:
-            error_msg = _("You don't have permissions on webpath {}").format(webpath)
-            return Response(error_msg, status=status.HTTP_403_FORBIDDEN)
+            raise PermissionDenied()
         return super().delete(request, *args, **kwargs)

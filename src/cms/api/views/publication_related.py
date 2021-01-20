@@ -34,7 +34,6 @@ class PublicationRelatedList(generics.ListCreateAPIView):
     pagination_class = UniCmsApiPagination
     permission_classes = [IsAdminUser]
     serializer_class = PublicationRelatedSerializer
-    error_msg = _("You don't have permissions")
 
     def get_queryset(self):
         """
@@ -62,7 +61,6 @@ class PublicationRelatedView(generics.RetrieveUpdateDestroyAPIView):
     description = ""
     permission_classes = [IsAdminUser]
     serializer_class = PublicationRelatedSerializer
-    error_msg = _("You don't have permissions")
 
     def get_queryset(self):
         """

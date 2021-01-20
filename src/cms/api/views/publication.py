@@ -111,7 +111,6 @@ class PublicationView(generics.RetrieveUpdateDestroyAPIView):
     description = ""
     permission_classes = [IsAdminUser]
     serializer_class = PublicationSerializer
-    error_msg = _("You don't have permissions")
 
     def get_queryset(self):
         """
@@ -160,7 +159,6 @@ class PublicationChangeStateView(generics.RetrieveAPIView):
     description = ""
     permission_classes = [IsAdminUser]
     serializer_class = PublicationSerializer
-    error_msg = _("You don't have permissions")
 
     def get_queryset(self):
         """

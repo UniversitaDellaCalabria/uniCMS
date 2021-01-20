@@ -33,7 +33,6 @@ class CarouselItemLinkLocalizationList(generics.ListCreateAPIView):
     pagination_class = UniCmsApiPagination
     permission_classes = [IsAdminUser]
     serializer_class = CarouselItemLinkLocalizationSerializer
-    error_msg = _("You don't have permissions")
 
     def get_queryset(self):
         """
@@ -71,7 +70,6 @@ class CarouselItemLinkLocalizationView(generics.RetrieveUpdateDestroyAPIView):
     description = ""
     permission_classes = [IsAdminUser]
     serializer_class = CarouselItemLinkLocalizationSerializer
-    error_msg = _("You don't have permissions")
 
     def get_queryset(self):
         """

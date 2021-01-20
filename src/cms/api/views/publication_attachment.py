@@ -35,7 +35,6 @@ class PublicationAttachmentList(generics.ListCreateAPIView):
     pagination_class = UniCmsApiPagination
     permission_classes = [IsAdminUser]
     serializer_class = PublicationAttachmentSerializer
-    error_msg = _("You don't have permissions")
 
     def get_queryset(self):
         """
@@ -66,7 +65,6 @@ class PublicationAttachmentView(generics.RetrieveUpdateDestroyAPIView):
     description = ""
     permission_classes = [IsAdminUser]
     serializer_class = PublicationAttachmentSerializer
-    error_msg = _("You don't have permissions")
 
     def get_queryset(self):
         """
