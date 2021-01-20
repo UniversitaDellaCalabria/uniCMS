@@ -1,4 +1,5 @@
 import logging
+import os
 
 from django.conf import settings
 from django.contrib.auth.models import Permission
@@ -14,6 +15,8 @@ from cms.contexts.tests import ContextUnitTest
 
 from cms.publications.models import Publication, PublicationAttachment
 from cms.publications.tests import PublicationUnitTest
+
+from glob import glob
 
 
 logger = logging.getLogger(__name__)
