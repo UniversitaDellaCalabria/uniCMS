@@ -58,3 +58,8 @@ class ApiMenu(APIView):
 
         url = reverse('unicms_api:api-menu', kwargs={'menu_id': menu.pk})
         return HttpResponseRedirect(url)
+
+
+@method_decorator(detect_language, name='dispatch')
+class ApiMenuId(ApiMenu):
+    pass

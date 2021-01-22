@@ -71,6 +71,11 @@ class ApiPublicationsByContext(APIView):
 
 
 @method_decorator(detect_language, name='dispatch')
+class ApiPublicationsByContextCategory(ApiPublicationsByContext):
+    pass
+
+
+@method_decorator(detect_language, name='dispatch')
 class ApiContext(APIView): # pragma: no cover
     """
     """

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from cms.menus.api_views import ApiMenu
+from cms.menus.api_views import ApiMenu, ApiMenuId
 
 from . views import (carousel, carousel_item, carousel_item_link,
                      carousel_item_link_localization,
@@ -21,12 +21,15 @@ urlpatterns += path('api/contexts', publication.ApiContext.as_view(), name='api-
 # I would have preferred a regexp .. but openapi schema generator ...
 # re_path('api/news/by-context/(?P<webpath_id>\d+)/?(?P<category_name>[a-zA-Z0-9]*)?'
 
-urlpatterns += path('api/news/by-context/<int:webpath_id>', publication.ApiPublicationsByContext.as_view(), name='api-news-by-contexts'),
+urlpatterns += path('api/news/by-context/<int:webpath_id>', 
+                    publication.ApiPublicationsByContext.as_view(), name='api-news-by-contexts'),
 urlpatterns += path('api/news/by-context/<int:webpath_id>/<str:category_name>',
-                    publication.ApiPublicationsByContext.as_view(), name='api-news-by-contexts-category'),
-urlpatterns += path('api/news/view/<str:slug>', publication.PublicationDetail.as_view(), name='publication-detail'),
+                    publication.ApiPublicationsByContextCategory.as_view(), 
+                    name='api-news-by-contexts-category'),
+urlpatterns += path('api/news/view/<str:slug>', 
+                    publication.PublicationDetail.as_view(), name='publication-detail'),
 
-urlpatterns += path('api/menu/<int:menu_id>', ApiMenu.as_view(), name='api-menu'),
+urlpatterns += path('api/menu/<int:menu_id>', ApiMenuId.as_view(), name='api-menu'),
 urlpatterns += path('api/menu', ApiMenu.as_view(), name='api-menu-post'),
 
 
