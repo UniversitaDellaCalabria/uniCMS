@@ -40,27 +40,40 @@ class ApiSearchEngineFilter(GenericApiFilter):
         {'name': 'categories',
          'description': 'comma separated values',
          'required': False,
-         'type': 'string'}, 
+         'schema': 
+             {'type': 'string'},
+        },
         {'name': 'year',
          'description': 'Year',
          'required': False,
-         'type': 'int'},
+         'schema': 
+             {'type': 'integer',
+              'format': 'int32'},
+        },
         {'name': 'sites',
-         'description': 'comma separated values',
+         'description': 'comma separated values: www.unical.it,dimes.unical.it',
          'required': False,
-         'type': 'string'}, 
+         'schema': 
+             {'type': 'string'},
+        },
         {'name': 'tags',
          'description': 'comma separated values',
          'required': False,
-         'type': 'string'},
+         'schema': 
+             {'type': 'string'},
+        },
         {'name': 'date_start',
          'description': 'date start YYY-mm-dd',
          'required': False,
-         'type': 'date'}, 
+         'schema': 
+             {'type': 'string'},
+        },
         {'name': 'date_end',
          'description': 'date end YYY-mm-dd',
          'required': False,
-         'type': 'date'}, 
+         'schema': 
+             {'type': 'string'},
+        }
     ]
 
 

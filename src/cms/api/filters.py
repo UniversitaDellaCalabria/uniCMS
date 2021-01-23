@@ -26,9 +26,7 @@ class GenericApiFilter(SearchFilter):
                     'required': search_param.get('required', False),
                     'in': 'query',
                     'description': search_param['description'],
-                    'schema': {
-                        'type': search_param.get('type', 'string'),
-                    },
+                    'schema': search_param.get('schema', {'type':'string'})
                 }
             )
         return params
