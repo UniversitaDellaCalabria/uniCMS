@@ -10,7 +10,10 @@ from . views import (carousel, carousel_item, carousel_item_link,
                      publication_link, publication_localization,
                      publication_gallery, publication_block,
                      publication_related,
-                     website, webpath, webpath_pub_contexts)
+                     website, webpath, webpath_pub_context,
+                     page, page_block, page_carousel, page_link,
+                     page_media, page_menu, page_publication,
+                     page_related, page_localization)
 
 
 urlpatterns = []
@@ -91,13 +94,93 @@ urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:pk>/',
                     webpath.EditorWebsiteWebpathView.as_view(),
                     name='editorial-board-site-webpath'),
 
+# pages
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/',
+                    page.EditorWebpathPageList.as_view(),
+                    name='editorial-board-site-webpath-pages'),
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:pk>/',
+                    page.EditorWebpathPageView.as_view(),
+                    name='editorial-board-site-webpath-page'),
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:pk>/change-status/',
+                    page.PageChangeStateView.as_view(),
+                    name='editorial-board-site-webpath-page-change-status'),
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:pk>/change-publication-status/',
+                    page.PageChangePublicationStatusView.as_view(),
+                    name='editorial-board-site-webpath-page-change-publication-status'),
+
+# page blocks
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/blocks/',
+                    page_block.PageBlockList.as_view(),
+                    name='editorial-board-site-webpath-page-blocks'),
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/blocks/<int:pk>/',
+                    page_block.PageBlockView.as_view(),
+                    name='editorial-board-site-webpath-page-block'),
+
+# page links
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/links/',
+                    page_link.PageLinkList.as_view(),
+                    name='editorial-board-site-webpath-page-links'),
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/links/<int:pk>/',
+                    page_link.PageLinkView.as_view(),
+                    name='editorial-board-site-webpath-page-link'),
+
+# page carousels
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/carousels/',
+                    page_carousel.PageCarouselList.as_view(),
+                    name='editorial-board-site-webpath-page-carousels'),
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/carousels/<int:pk>/',
+                    page_carousel.PageCarouselView.as_view(),
+                    name='editorial-board-site-webpath-page-carousel'),
+
+# page localizations
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/localizations/',
+                    page_localization.PageLocalizationList.as_view(),
+                    name='editorial-board-site-webpath-page-localizations'),
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/localizations/<int:pk>/',
+                    page_localization.PageLocalizationView.as_view(),
+                    name='editorial-board-site-webpath-page-localization'),
+
+# page medias
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/medias/',
+                    page_media.PageMediaList.as_view(),
+                    name='editorial-board-site-webpath-page-medias'),
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/medias/<int:pk>/',
+                    page_media.PageMediaView.as_view(),
+                    name='editorial-board-site-webpath-page-media'),
+
+# page menus
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/menus/',
+                    page_menu.PageMenuList.as_view(),
+                    name='editorial-board-site-webpath-page-menus'),
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/menus/<int:pk>/',
+                    page_menu.PageMenuView.as_view(),
+                    name='editorial-board-site-webpath-page-menu'),
+
+# page publications
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/publications/',
+                    page_publication.PagePublicationList.as_view(),
+                    name='editorial-board-site-webpath-page-publications'),
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/publications/<int:pk>/',
+                    page_publication.PagePublicationView.as_view(),
+                    name='editorial-board-site-webpath-page-publication'),
+
+# page related
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/related/',
+                    page_related.PageRelatedList.as_view(),
+                    name='editorial-board-site-webpath-page-related-list'),
+urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/pages/<int:page_id>/related/<int:pk>/',
+                    page_related.PageRelatedView.as_view(),
+                    name='editorial-board-site-webpath-page-related'),
+
+# publication-contexts
 urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/publication-contexts/',
-                    webpath_pub_contexts.EditorWebpathPublicationContextList.as_view(),
+                    webpath_pub_context.EditorWebpathPublicationContextList.as_view(),
                     name='editorial-board-site-webpath-publication-contexts'),
 urlpatterns += path(f'{eb_prefix}/sites/<int:site_id>/webpaths/<int:webpath_id>/publication-contexts/<int:pk>/',
-                    webpath_pub_contexts.EditorWebpathPublicationContextView.as_view(),
+                    webpath_pub_context.EditorWebpathPublicationContextView.as_view(),
                     name='editorial-board-site-webpath-publication-context'),
 
+# publications
 urlpatterns += path(f'{eb_prefix}/publications/',
                     publication.PublicationList.as_view(),
                     name='editorial-board-publications'),
@@ -107,48 +190,51 @@ urlpatterns += path(f'{eb_prefix}/publications/<int:pk>/',
 urlpatterns += path(f'{eb_prefix}/publications/<int:pk>/change-status/',
                     publication.PublicationChangeStateView.as_view(),
                     name='editorial-board-publication-change-status'),
+
+# publication attachments
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/attachments/',
                     publication_attachment.PublicationAttachmentList.as_view(),
                     name='editorial-board-publication-attachments'),
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/attachments/<int:pk>/',
                     publication_attachment.PublicationAttachmentView.as_view(),
                     name='editorial-board-publication-attachment'),
+
+# publication blocks
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/blocks/',
                     publication_block.PublicationBlockList.as_view(),
                     name='editorial-board-publication-blocks'),
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/blocks/<int:pk>/',
                     publication_block.PublicationBlockView.as_view(),
                     name='editorial-board-publication-block'),
+
+# publication links
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/links/',
                     publication_link.PublicationLinkList.as_view(),
                     name='editorial-board-publication-links'),
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/links/<int:pk>/',
                     publication_link.PublicationLinkView.as_view(),
                     name='editorial-board-publication-link'),
+
+# publication galleries
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/galleries/',
                     publication_gallery.PublicationGalleryList.as_view(),
                     name='editorial-board-publication-galleries'),
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/galleries/<int:pk>/',
                     publication_gallery.PublicationGalleryView.as_view(),
                     name='editorial-board-publication-gallery'),
+
+# publication localizations
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/localizations/',
                     publication_localization.PublicationLocalizationList.as_view(),
                     name='editorial-board-publication-localizations'),
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/localizations/<int:pk>/',
                     publication_localization.PublicationLocalizationView.as_view(),
                     name='editorial-board-publication-localization'),
+
+# publication related
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/related/',
                     publication_related.PublicationRelatedList.as_view(),
                     name='editorial-board-publication-related-list'),
 urlpatterns += path(f'{eb_prefix}/publications/<int:publication_id>/related/<int:pk>/',
                     publication_related.PublicationRelatedView.as_view(),
                     name='editorial-board-publication-related'),
-
-
-# urlpatterns += path(f'{eb_prefix}/site/<int:site_id>/page/list/',
-# EditorWebsitePages.as_view(),
-# name='editorial-board-site-page-list'),
-
-# urlpatterns += path(f'{eb_prefix}/site/<int:site_id>/page/<int:page_id>/view/',
-# EditorWebsitePage.as_view(),
-# name='editorial-board-site-page-view'),

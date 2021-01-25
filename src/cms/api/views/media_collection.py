@@ -22,13 +22,14 @@ class MediaCollectionList(generics.ListCreateAPIView):
     pagination_class = UniCmsApiPagination
     permission_classes = [UserCanAddMediaCollectionOrAdminReadonly]
     serializer_class = MediaCollectionSerializer
+    items = MediaCollection.objects.all()
 
-    def get_queryset(self):
-        items = MediaCollection.objects.all()
-        is_active = self.request.GET.get('is_active')
-        if is_active:
-            items = items.filter(is_active=is_active)
-        return items
+    # def get_queryset(self):
+        # items = MediaCollection.objects.all()
+        # is_active = self.request.GET.get('is_active')
+        # if is_active:
+            # items = items.filter(is_active=is_active)
+        # return items
 
 
 class MediaCollectionView(generics.RetrieveUpdateDestroyAPIView):

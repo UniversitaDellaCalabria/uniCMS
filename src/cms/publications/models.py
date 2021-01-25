@@ -220,12 +220,7 @@ class Publication(AbstractPublication, CreatedModifiedBy):
                 eb_permission = EditorialBoardEditors.get_permission(webpath,
                                                                      user)
                 localization_perms = is_translator(eb_permission)
-                if localization_perms:
-                    if localization_perms['only_created_by'] == False:
-                        return True
-                    elif self.created_by == user:
-                        return True
-
+                if localization_perms: return True
         # if no permissions
         return False
 
@@ -252,7 +247,6 @@ class Publication(AbstractPublication, CreatedModifiedBy):
                         return True
                     elif self.created_by == user:
                         return True
-
         # if no permissions
         return False
 

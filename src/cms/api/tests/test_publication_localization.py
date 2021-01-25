@@ -95,7 +95,8 @@ class PublicationLocalizationAPIUnitTest(TestCase):
                         follow=1)
         assert res.status_code == 403
         # with permissions
-        edit_perm = Permission.objects.get(content_type=content_type, codename='change_publication')
+        edit_perm = Permission.objects.get(content_type=content_type,
+                                           codename='change_publication')
         user2.user_permissions.add(edit_perm)
         user2.refresh_from_db()
         req.force_login(user2)

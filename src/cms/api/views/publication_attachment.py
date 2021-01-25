@@ -11,16 +11,14 @@ from cms.publications.serializers import PublicationAttachmentSerializer
 
 from .. exceptions import LoggedPermissionDenied
 from .. pagination import UniCmsApiPagination
+from .. views.publication import PublicationRelatedObject, PublicationRelatedObjectList
 
 
-class PublicationAttachmentList(generics.ListCreateAPIView):
+class PublicationAttachmentList(PublicationRelatedObjectList):
     """
     """
     description = ""
-    filter_backends = [filters.SearchFilter]
     search_fields = ['name', 'file', 'descripion']
-    pagination_class = UniCmsApiPagination
-    permission_classes = [IsAdminUser]
     serializer_class = PublicationAttachmentSerializer
 
     def get_queryset(self):
@@ -33,24 +31,11 @@ class PublicationAttachmentList(generics.ListCreateAPIView):
             items = items.filter(is_active=is_active)
         return items
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            # get publication
-            publication = serializer.validated_data.get('publication')
-            # check permissions on publication
-            has_permission = publication.is_editable_by(request.user)
-            if not has_permission:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
-            return super().post(request, *args, **kwargs)
 
-
-class PublicationAttachmentView(generics.RetrieveUpdateDestroyAPIView):
+class PublicationAttachmentView(PublicationRelatedObject):
     """
     """
     description = ""
-    permission_classes = [IsAdminUser]
     serializer_class = PublicationAttachmentSerializer
 
     def get_queryset(self):
@@ -61,43 +46,3 @@ class PublicationAttachmentView(generics.RetrieveUpdateDestroyAPIView):
         attachments = PublicationAttachment.objects.filter(pk=pk,
                                                            publication__pk=pub_id)
         return attachments
-
-    def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
-        serializer = self.get_serializer(instance=item,
-                                         data=request.data,
-                                         partial=True)
-        if serializer.is_valid(raise_exception=True):
-            publication = item.publication
-            # check permissions on publication
-            has_permission = publication.is_editable_by(request.user)
-            if not has_permission:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
-            return super().patch(request, *args, **kwargs)
-
-    def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
-        serializer = self.get_serializer(instance=item,
-                                         data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            publication = item.publication
-            # check permissions on publication
-            has_permission = publication.is_editable_by(request.user)
-            if not has_permission:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
-            return super().put(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
-        publication = item.publication
-        # check permissions on publication
-        has_permission = publication.is_editable_by(request.user)
-        if not has_permission:
-            raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                         resource=request.method)
-        return super().delete(request, *args, **kwargs)

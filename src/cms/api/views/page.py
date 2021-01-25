@@ -1,107 +1,310 @@
-# import logging
-# import os
+from django.http import Http404
+from django.shortcuts import get_object_or_404
 
-# from django.core.exceptions import ValidationError
-# from django.http import HttpResponseRedirect
-# from django.shortcuts import get_object_or_404
-# from django.urls import reverse
-# from django.utils.decorators import method_decorator
-# from django.utils.translation import gettext_lazy as _
+from rest_framework import filters, generics
+from rest_framework.permissions import IsAdminUser
 
-# from rest_framework import generics, status
-# from rest_framework.permissions import IsAdminUser
-# from rest_framework.response import Response
-# from rest_framework.views import APIView
+from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
+from cms.contexts.utils import is_editor, is_publisher
 
-# from cms.api.serializers import PublicationSerializer, settings
+from cms.pages.models import Page, PAGE_STATES
+from cms.pages.serializers import PageSerializer, PageWebpathSerializer
 
-# from cms.carousels.models import *
-# from cms.carousels.serializers import *
-
-# from cms.contexts.decorators import detect_language
-# from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
-# from cms.contexts.serializers import WebPathSerializer
-# from cms.contexts import settings as contexts_settings
-
-# from cms.medias.models import Media
-# from cms.medias.serializers import MediaSerializer
-
-# from cms.publications.models import Publication, PublicationContext
-# from cms.publications.paginators import Paginator
-# from cms.publications.utils import publication_context_base_filter
-
-# from . pagination import UniCmsApiPagination
-# from . permissions import (UserCanAddCarouselOrAdminReadonly,
-# UserCanAddMediaOrAdminReadonly)
-# from . utils import check_user_permission_on_object
+from .. exceptions import LoggedPermissionDenied
+from .. pagination import UniCmsApiPagination
 
 
-# CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
-# contexts_settings.CMS_CONTEXT_PERMISSIONS)
+class EditorWebpathPageList(generics.ListCreateAPIView):
+    """
+    """
+    name = "Pages"
+    description = ""
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['in_evidence_start','publication__title']
+    pagination_class = UniCmsApiPagination
+    permission_classes = [IsAdminUser]
+    serializer_class = PageWebpathSerializer
 
-# logger = logging.getLogger(__name__)
+    def get_queryset(self):
+        """
+        """
+        site_id = self.kwargs['site_id']
+        webpath_id = self.kwargs['webpath_id']
+        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        if not site.is_managed_by(self.request.user):
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
+        webpath = get_object_or_404(WebPath,
+                                    pk=webpath_id,
+                                    site=site)
+        pages = Page.objects.filter(webpath=webpath)
+        self.webpath = webpath
+        is_active = self.request.GET.get('is_active')
+        if is_active:
+            pages = pages.filter(is_active=is_active)
+        return pages
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            # get webpath
+            webpath = serializer.validated_data.get('webpath')
+            # check permissions on webpath
+            permission = EditorialBoardEditors.get_permission(webpath=webpath,
+                                                              user=request.user)
+            publisher_perms = is_editor(permission)
+            if not publisher_perms:
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
+            return super().post(request, *args, **kwargs)
 
 
-# @method_decorator(staff_member_required, name='dispatch')
-# class EditorWebsitePages(APIView):
-# """
-# """
-# description = ""
+class EditorWebpathPageView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+    serializer_class = PageSerializer
 
-# def get(self, request, site_id):
-# result = {}
-# site = get_object_or_404(WebSite,
-# pk=site_id,
-# is_active=True)
-# result['site_name'] = site.name
-# result['site_domain'] = site.domain
-# result['pages'] = {}
+    def get_queryset(self):
+        """
+        """
+        site_id = self.kwargs['site_id']
+        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        if not site.is_managed_by(self.request.user):
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
+        webpath_id = self.kwargs['webpath_id']
+        pk = self.kwargs['pk']
+        pages = Page.objects.filter(pk=pk,
+                                    webpath__pk=webpath_id,
+                                    webpath__site__pk=site_id)
+        return pages
 
-# lang = getattr(request, 'LANGUAGE_CODE', '')
-# pages = {}
+    def patch(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        serializer = self.get_serializer(instance=item,
+                                         data=request.data,
+                                         partial=True)
+        if serializer.is_valid(raise_exception=True):
+            # if user hasn't permission to edit page
+            has_permission = item.is_editable_by(request.user)
+            if not has_permission:
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
 
-# pages_list = Page.objects.filter(webpath__site=site)
-# for page in pages_list:
-# page.translate_as(lang)
-# pages[page.pk] = {"name": page.name,
-# "title": page.title,
-# "webpath": page.webpath.__str__(),
-# "base_template": page.base_template.__str__(),
-# "description": page.description,
-# "date_start": page.date_start,
-# "date_end": page.date_end,
-# "state": page.state,
-# "type": page.type,
-# "tags": [i.slug for i in page.tags.all()],
-# "is_active": page.is_active}
-# result['pages'] = pages
-# return Response(result)
+            # if parent in request data, check permission on parent
+            new_webpath = serializer.validated_data.get('webpath')
+            if new_webpath:
+                # check permissions on webpath
+                permission = EditorialBoardEditors.get_permission(webpath=new_webpath,
+                                                                  user=request.user)
+                editor_perms = is_editor(permission)
+                if not editor_perms:
+                    raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                                 resource=request.method)
+            return super().patch(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
+
+        serializer = self.get_serializer(instance=item,
+                                         data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            # if user hasn't permission to edit page
+            has_permission = item.is_editable_by(request.user)
+            if not has_permission:
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
+
+            webpath = serializer.validated_data.get('webpath')
+            # check permissions on webpath
+            permission = EditorialBoardEditors.get_permission(webpath=webpath,
+                                                              user=request.user)
+            editor_perms = is_editor(permission)
+            if not editor_perms:
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
+            return super().put(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        # check permissions on page
+        has_permission = item.is_publicable_by(request.user)
+        if not has_permission:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+        return super().delete(request, *args, **kwargs)
 
 
-# @method_decorator(staff_member_required, name='dispatch')
-# class EditorWebsitePage(APIView):
-# """
-# Editor user get website webpath permissions
-# """
-# description = "Get user\'s editorial boards websites single webpath"
+class PageChangeStateView(generics.RetrieveAPIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+    serializer_class = PageSerializer
 
-# def get(self, request, site_id, page_id):
-# page = get_object_or_404(Page,
-# pk=page_id,
-# webpath__site__pk=site_id,
-# webpath__site__is_active=True)
-# result = {}
-# result['site_name'] = page.webpath.site.name
-# result['site_domain'] = page.webpath.site.domain
-# result['name'] = page.name
-# result['title'] = page.title
-# result['webpath'] = page.webpath.__str__()
-# result['base_template'] = page.base_template.__str__()
-# result['description'] = page.description
-# result['date_start'] = page.date_start
-# result['date_end'] = page.date_end
-# result['state'] = page.state
-# result['type'] = page.type
-# result['tags'] = [i.slug for i in page.tags.all()]
-# result['is_active'] = page.is_active
-# return Response(result)
+    def get_queryset(self):
+        """
+        """
+        site_id = self.kwargs['site_id']
+        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        if not site.is_managed_by(self.request.user):
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
+        webpath_id = self.kwargs['webpath_id']
+        pk = self.kwargs['pk']
+        pages = Page.objects.filter(pk=pk,
+                                    webpath__pk=webpath_id,
+                                    webpath__site__pk=site_id)
+        return pages
+
+    def get(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        has_permission = item.is_publicable_by(request.user)
+        if has_permission:
+            item.is_active = not item.is_active
+            item.save()
+            return super().get(request, *args, **kwargs)
+        raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                     resource=request.method)
+
+
+class PageChangePublicationStatusView(generics.RetrieveAPIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+    serializer_class = PageSerializer
+
+    def get_queryset(self):
+        """
+        """
+        site_id = self.kwargs['site_id']
+        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        if not site.is_managed_by(self.request.user):
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
+        webpath_id = self.kwargs['webpath_id']
+        pk = self.kwargs['pk']
+        pages = Page.objects.filter(pk=pk,
+                                    webpath__pk=webpath_id,
+                                    webpath__site__pk=site_id)
+        return pages
+
+    def get(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        has_permission = item.is_publicable_by(request.user)
+        if has_permission:
+            if item.state == PAGE_STATES[0][0]:
+                item.state = PAGE_STATES[1][0]
+            else: item.state = PAGE_STATES[0][0]
+            item.save()
+            return super().get(request, *args, **kwargs)
+        raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                     resource=request.method)
+
+
+# Abstract API classes for every related object of Page
+
+class PageRelatedObjectList(generics.ListCreateAPIView):
+
+    filter_backends = [filters.SearchFilter]
+    pagination_class = UniCmsApiPagination
+    permission_classes = [IsAdminUser]
+
+    class Meta:
+        abstract = True
+
+    def get_queryset(self):
+        """
+        """
+        site_id = self.kwargs['site_id']
+        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        if not site.is_managed_by(self.request.user):
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
+        webpath_id = self.kwargs['webpath_id']
+        page_id = self.kwargs['page_id']
+        self.page = Page.objects.filter(pk=pk,
+                                        webpath__pk=webpath_id,
+                                        webpath__site__pk=site_id).first()
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            # get page
+            page = serializer.validated_data.get('page')
+            # check permissions on page
+            has_permission = page.is_editable_by(request.user)
+            if not has_permission:
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
+            return super().post(request, *args, **kwargs)
+
+
+class PageRelatedObject(generics.RetrieveUpdateDestroyAPIView):
+
+    filter_backends = [filters.SearchFilter]
+    permission_classes = [IsAdminUser]
+
+    class Meta:
+        abstract = True
+
+    def get_queryset(self):
+        site_id = self.kwargs['site_id']
+        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        if not site.is_managed_by(self.request.user):
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
+        webpath_id = self.kwargs['webpath_id']
+        page_id = self.kwargs['page_id']
+        self.pk = self.kwargs['pk']
+        self.page = Page.objects.filter(pk=page_id,
+                                        webpath__pk=webpath_id,
+                                        webpath__site__pk=site_id).first()
+
+    def patch(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        serializer = self.get_serializer(instance=item,
+                                         data=request.data,
+                                         partial=True)
+        if serializer.is_valid(raise_exception=True):
+            page = item.page
+            # check permissions on page
+            has_permission = page.is_editable_by(request.user)
+            if not has_permission:
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
+            return super().patch(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        serializer = self.get_serializer(instance=item,
+                                         data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            page = item.page
+            # check permissions on page
+            has_permission = page.is_editable_by(request.user)
+            if not has_permission:
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
+            return super().put(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        page = item.page
+        # check permissions on page
+        has_permission = page.is_editable_by(request.user)
+        if not has_permission:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+        return super().delete(request, *args, **kwargs)

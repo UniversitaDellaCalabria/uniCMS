@@ -259,6 +259,11 @@ class EditorialBoardLockUser(models.Model):
     class Meta:
         verbose_name_plural = _("Editorial Board Locks Owners")
 
+    @classmethod
+    def get_users_locks(cls, content_type, object_id):
+        return cls.objects.filter(lock__content_type=content_type,
+                                  lock__object_id=object_id)
+
     def __str__(self): # pragma: no cover
         return f'{self.lock} {self.user}'
 

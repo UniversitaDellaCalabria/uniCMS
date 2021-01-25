@@ -11,6 +11,7 @@ class EditorWebsiteList(APIView, UniCmsApiPagination):
     """
     Editor user available active websites
     """
+    name = "Websites"
     description = "Get user editorial boards websites"
     permission_classes = [IsAdminUser]
 

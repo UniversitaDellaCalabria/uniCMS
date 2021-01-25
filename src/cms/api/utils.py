@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 
-from cms.contexts.models import EditorialBoardLockUser
+# from cms.contexts.models import EditorialBoardLockUser
+from cms.contexts.lock_proxy import EditorialBoardLockProxy
 
 
 def check_if_user_has_created(user, obj):
@@ -29,12 +30,12 @@ def check_user_permission_on_object(user, obj, permission):
 
     # check for locks on object
     content_type = ContentType.objects.get_for_model(obj.__class__)
-    eblo = EditorialBoardLockUser
-    locks = eblo.objects.filter(lock__content_type=content_type,
-                                lock__object_id=obj.pk)
+    locks = EditorialBoardLockProxy.obj_is_locked(user=user,
+                                                  content_type=content_type,
+                                                  object_id=obj.pk)
     # if there is not lock, no permission
     if not locks: return {'granted': False}
     # if user is in lock user list, has permissions
-    if locks.filter(user=user): return {'granted': True, 'locked': True}
+    if locks['locked_by_user']: return {'granted': True, 'locked': True}
     # else no permissions but obj is locked
     return {'granted': False, 'locked':True}

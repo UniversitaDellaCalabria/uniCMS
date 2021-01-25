@@ -167,10 +167,83 @@ class PublicationChangeStateView(generics.RetrieveAPIView):
         if not item: raise Http404
         permission = check_user_permission_on_object(request.user,
                                                      item,
-                                                     'cmspublications.delete_publication')
+                                                     'cmspublications.change_publication')
         if permission['granted']:
             item.is_active = not item.is_active
             item.save()
             return super().get(request, *args, **kwargs)
         raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                      resource=request.method)
+
+
+# Abstract API classes for every related object of Publication
+
+class PublicationRelatedObjectList(generics.ListCreateAPIView):
+
+    filter_backends = [filters.SearchFilter]
+    pagination_class = UniCmsApiPagination
+    permission_classes = [IsAdminUser]
+
+    class Meta:
+        abstract = True
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            # get publication
+            publication = serializer.validated_data.get('publication')
+            # check permissions on publication
+            has_permission = publication.is_editable_by(request.user)
+            if not has_permission:
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
+            return super().post(request, *args, **kwargs)
+
+
+class PublicationRelatedObject(generics.RetrieveUpdateDestroyAPIView):
+    """
+    """
+    permission_classes = [IsAdminUser]
+
+    class Meta:
+        abstract = True
+
+    def patch(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        serializer = self.get_serializer(instance=item,
+                                         data=request.data,
+                                         partial=True)
+        if serializer.is_valid(raise_exception=True):
+            publication = item.publication
+            # check permissions on publication
+            has_permission = publication.is_editable_by(request.user)
+            if not has_permission:
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
+            return super().patch(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        serializer = self.get_serializer(instance=item,
+                                         data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            publication = item.publication
+            # check permissions on publication
+            has_permission = publication.is_editable_by(request.user)
+            if not has_permission:
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
+            return super().put(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        publication = item.publication
+        # check permissions on publication
+        has_permission = publication.is_editable_by(request.user)
+        if not has_permission:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+        return super().delete(request, *args, **kwargs)

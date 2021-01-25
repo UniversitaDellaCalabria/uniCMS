@@ -53,9 +53,9 @@ class PublicationLocalizationView(generics.RetrieveUpdateDestroyAPIView):
         """
         pub_id = self.kwargs['publication_id']
         pk = self.kwargs['pk']
-        attachments = PublicationLocalization.objects.filter(pk=pk,
-                                                             publication__pk=pub_id)
-        return attachments
+        localizations = PublicationLocalization.objects.filter(pk=pk,
+                                                               publication__pk=pub_id)
+        return localizations
 
     def patch(self, request, *args, **kwargs):
         item = self.get_queryset().first()

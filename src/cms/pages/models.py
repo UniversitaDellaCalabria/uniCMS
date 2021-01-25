@@ -7,11 +7,17 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.models import *
+from cms.contexts.lock_proxy import EditorialBoardLockProxy
+from cms.contexts.utils import is_editor, is_publisher, is_translator
+
 from cms.carousels.models import Carousel
+
 from cms.medias import settings as cms_media_settings
 from cms.medias.models import Media
 from cms.medias.validators import *
+
 from cms.menus.models import NavigationBar
+
 from cms.templates.models import (TemplateBlock,
                                   ActivableModel,
                                   PageTemplate,
@@ -69,7 +75,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                       on_delete=models.CASCADE,
                                       limit_choices_to={'is_active': True},)
     description = models.TextField(null=True, blank=True,
-                                   help_text=_("Description"
+                                   help_text=_("Description "
                                                "used for SEO."))
     date_start = models.DateTimeField()
     date_end = models.DateTimeField(null=True, blank=True)
@@ -212,6 +218,75 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                                 is_active=True).first()
         if trans:
             self.title = trans.title
+
+    def is_localizable_by(self, user=None):
+        if not user: return False
+        # check if user has EditorialBoard translator permissions on object
+        webpath = self.webpath
+        eb_permission = EditorialBoardEditors.get_permission(webpath,
+                                                             user)
+        perms = is_translator(eb_permission)
+        # if user has not localization permissions
+        if not perms: return False
+        # check for locks on object
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        locks = EditorialBoardLockProxy.obj_is_locked(user=user,
+                                                      content_type=content_type,
+                                                      object_id=self.pk)
+        # if there is not lock, ok
+        if not locks: return True
+        # if user is in lock user list, has permissions
+        if locks['locked_by_user']: return True
+        # else no permissions but obj is locked
+        return False
+
+    def is_editable_by(self, user=None):
+        if not user: return False
+        # check if user has EditorialBoard editor permissions on object
+        webpath = self.webpath
+        eb_permission = EditorialBoardEditors.get_permission(webpath,
+                                                             user)
+        perms = is_editor(eb_permission)
+        # if user has not editor permissions
+        if not perms: return False
+        # if user can edit only created by him pages
+        if perms['only_created_by'] and self.created_by != user:
+            return False
+        # check for locks on object
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        locks = EditorialBoardLockProxy.obj_is_locked(user=user,
+                                                      content_type=content_type,
+                                                      object_id=self.pk)
+        # if there is not lock, ok
+        if not locks: return True
+        # if user is in lock user list, has permissions
+        if locks['locked_by_user']: return True
+        # else no permissions but obj is locked
+        return False
+
+    def is_publicable_by(self, user=None):
+        if not user: return False
+        # check if user has EditorialBoard publisher permissions on object
+        webpath = self.webpath
+        eb_permission = EditorialBoardEditors.get_permission(webpath,
+                                                             user)
+        perms = is_publisher(eb_permission)
+        # if user has not publisher permissions
+        if not perms: return False
+        # if user can edit only created by him pages
+        if perms['only_created_by'] and self.created_by != user:
+            return False
+        # check for locks on object
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        locks = EditorialBoardLockProxy.obj_is_locked(user=user,
+                                                      content_type=content_type,
+                                                      object_id=self.pk)
+        # if there is not lock, ok
+        if not locks: return True
+        # if user is in lock user list, has permissions
+        if locks['locked_by_user']: return True
+        # else no permissions but obj is locked
+        return False
 
     def __str__(self):
         return '{} [{}]'.format(self.name, self.state)
