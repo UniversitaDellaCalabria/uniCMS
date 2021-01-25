@@ -9,10 +9,12 @@ from django.conf import settings
 from django.utils import timezone, dateparse
 from django.utils.decorators import method_decorator
 
+
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from cms.api.filters import GenericApiFilter
 from cms.contexts.decorators import detect_language
 
 from . import MongoClientFactory
@@ -33,12 +35,55 @@ def _handle_date_string(date_string):
     return timezone.make_aware(dt)
 
 
+class ApiSearchEngineFilter(GenericApiFilter):
+    search_params = [ 
+        {'name': 'categories',
+         'description': 'comma separated values',
+         'required': False,
+         'schema': 
+             {'type': 'string'},
+        },
+        {'name': 'year',
+         'description': 'Year',
+         'required': False,
+         'schema': 
+             {'type': 'integer',
+              'format': 'int32'},
+        },
+        {'name': 'sites',
+         'description': 'comma separated values: www.unical.it,dimes.unical.it',
+         'required': False,
+         'schema': 
+             {'type': 'string'},
+        },
+        {'name': 'tags',
+         'description': 'comma separated values',
+         'required': False,
+         'schema': 
+             {'type': 'string'},
+        },
+        {'name': 'date_start',
+         'description': 'date start YYY-mm-dd',
+         'required': False,
+         'schema': 
+             {'type': 'string'},
+        },
+        {'name': 'date_end',
+         'description': 'date end YYY-mm-dd',
+         'required': False,
+         'schema': 
+             {'type': 'string'},
+        }
+    ]
+
+
 @method_decorator(detect_language, name='dispatch')
 class ApiSearchEngine(APIView):
     """
     """
     description = 'Search Engine'
-
+    filter_backends = [ApiSearchEngineFilter,]
+    
     def get(self, request):
         # get collection
         collection = MongoClientFactory().unicms.search

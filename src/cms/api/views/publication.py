@@ -9,8 +9,6 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-# from cms.api.serializers import PublicationSerializer
-
 from cms.contexts.decorators import detect_language
 from cms.contexts.models import WebPath
 
@@ -70,6 +68,11 @@ class ApiPublicationsByContext(APIView):
         paged = paginator.get_page(page_num)
         result = paged.serialize()
         return Response(result)
+
+
+@method_decorator(detect_language, name='dispatch')
+class ApiPublicationsByContextCategory(ApiPublicationsByContext):
+    pass
 
 
 @method_decorator(detect_language, name='dispatch')
