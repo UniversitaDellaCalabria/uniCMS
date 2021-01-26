@@ -2,6 +2,7 @@ import logging
 
 from django.core.exceptions import ValidationError
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 
 from rest_framework import generics
@@ -209,8 +210,12 @@ class PublicationChangeStateView(generics.RetrieveAPIView):
 
 class PublicationRelatedObjectList(UniCMSListCreateAPIView):
 
-    class Meta:
-        abstract = True
+    def get_data(self):
+        """
+        """
+        pk = self.kwargs['publication_id']
+        self.publication = get_object_or_404(Publication,
+                                             pk=pk)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -224,14 +229,19 @@ class PublicationRelatedObjectList(UniCMSListCreateAPIView):
                                              resource=request.method)
             return super().post(request, *args, **kwargs)
 
+    class Meta:
+        abstract = True
+
 
 class PublicationRelatedObject(generics.RetrieveUpdateDestroyAPIView):
     """
     """
     permission_classes = [IsAdminUser]
 
-    class Meta:
-        abstract = True
+    def get_data(self):
+        pub_id = self.kwargs['publication_id']
+        self.pk = self.kwargs['pk']
+        self.publication = get_object_or_404(Publication, pk=pub_id)
 
     def patch(self, request, *args, **kwargs):
         item = self.get_queryset().first()
@@ -272,3 +282,6 @@ class PublicationRelatedObject(generics.RetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         return super().delete(request, *args, **kwargs)
+
+    class Meta:
+        abstract = True

@@ -39,7 +39,7 @@ class MediaCollectionAPIUnitTest(TestCase):
         user.is_staff = True
         user.save()
         req.force_login(user)
-        res = req.get(url, {'is_active': True})
+        res = req.get(url)
         assert isinstance(res.json(), dict)
 
         # media data

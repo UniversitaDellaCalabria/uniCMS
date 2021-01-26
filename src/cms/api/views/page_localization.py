@@ -1,36 +1,24 @@
 from django.http import Http404
-from django.shortcuts import get_object_or_404
-
-from rest_framework import filters, generics
-from rest_framework.permissions import IsAdminUser
 
 from cms.pages.models import *
 from cms.pages.serializers import *
 
 from .. exceptions import LoggedPermissionDenied
-from .. pagination import UniCmsApiPagination
+from .. views.page import PageRelatedObject, PageRelatedObjectList
 
 
-class PageLocalizationList(generics.ListCreateAPIView):
+class PageLocalizationList(PageRelatedObjectList):
     """
     """
     description = ""
-    filter_backends = [filters.SearchFilter]
-    pagination_class = UniCmsApiPagination
-    permission_classes = [IsAdminUser]
-    search_fields = ['block__name']
+    search_fields = ['title', 'language']
     serializer_class = PageLocalizationSerializer
 
     def get_queryset(self):
         """
         """
-        site_id = self.kwargs['site_id']
-        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
-        if not site.is_managed_by(self.request.user):
-            raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                         resource=site)
-        page_id = self.kwargs['page_id']
-        items = PageRelated.objects.filter(page__pk=page_id)
+        super().get_data()
+        items = PageLocalization.objects.filter(page=self.page)
         return items
 
     def post(self, request, *args, **kwargs):
@@ -46,25 +34,17 @@ class PageLocalizationList(generics.ListCreateAPIView):
             return super().post(request, *args, **kwargs)
 
 
-class PageLocalizationView(generics.RetrieveUpdateDestroyAPIView):
+class PageLocalizationView(PageRelatedObject):
     """
     """
     description = ""
-    filter_backends = [filters.SearchFilter]
-    permission_classes = [IsAdminUser]
     serializer_class = PageLocalizationSerializer
 
     def get_queryset(self):
         """
         """
-        site_id = self.kwargs['site_id']
-        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
-        if not site.is_managed_by(self.request.user):
-            raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                         resource=site)
-        page_id = self.kwargs['page_id']
-        pk = self.kwargs['pk']
-        items = PageRelated.objects.filter(pk=pk, page__pk=page_id)
+        super().get_data()
+        items = PageLocalization.objects.filter(pk=self.pk, page=self.page)
         return items
 
     def patch(self, request, *args, **kwargs):

@@ -11,14 +11,14 @@ class PublicationLinkList(PublicationRelatedObjectList):
     """
     description = ""
     search_fields = ['name', 'url']
+    filterset_fields = ['created', 'modified']
     serializer_class = PublicationLinkSerializer
 
     def get_queryset(self):
         """
         """
-        pub_id = self.kwargs['publication_id']
-        items = PublicationLink.objects.filter(publication__pk=pub_id)
-        return items
+        super().get_data()
+        return PublicationLink.objects.filter(publication=self.publication)
 
 
 class PublicationLinkView(PublicationRelatedObject):
@@ -30,7 +30,6 @@ class PublicationLinkView(PublicationRelatedObject):
     def get_queryset(self):
         """
         """
-        pub_id = self.kwargs['publication_id']
-        pk = self.kwargs['pk']
-        links = PublicationLink.objects.filter(pk=pk, publication__pk=pub_id)
-        return links
+        super().get_data()
+        return PublicationLink.objects.filter(pk=self.pk,
+                                              publication=self.publication)

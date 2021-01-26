@@ -1,5 +1,3 @@
-
-
 from cms.publications.models import *
 from cms.publications.serializers import *
 
@@ -16,9 +14,8 @@ class PublicationBlockList(PublicationRelatedObjectList):
     def get_queryset(self):
         """
         """
-        pub_id = self.kwargs['publication_id']
-        items = PublicationBlock.objects.filter(publication__pk=pub_id)
-        return items
+        super().get_data()
+        return PublicationBlock.objects.filter(publication=self.publication)
 
 
 class PublicationBlockView(PublicationRelatedObject):
@@ -30,8 +27,6 @@ class PublicationBlockView(PublicationRelatedObject):
     def get_queryset(self):
         """
         """
-        pub_id = self.kwargs['publication_id']
-        pk = self.kwargs['pk']
-        blocks = PublicationBlock.objects.filter(pk=pk,
-                                                 publication__pk=pub_id)
-        return blocks
+        super().get_data()
+        return PublicationBlock.objects.filter(pk=self.pk,
+                                               publication=self.publication)

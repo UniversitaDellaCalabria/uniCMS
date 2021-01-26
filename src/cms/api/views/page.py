@@ -20,7 +20,7 @@ class EditorWebpathPageList(UniCMSListCreateAPIView):
     """
     name = "Pages"
     description = ""
-    search_fields = ['title', 'description']
+    search_fields = ['name', 'title', 'description']
     serializer_class = PageSerializer
 
     def get_queryset(self):
@@ -221,10 +221,7 @@ class PageChangePublicationStatusView(generics.RetrieveAPIView):
 
 class PageRelatedObjectList(UniCMSListCreateAPIView):
 
-    class Meta:
-        abstract = True
-
-    def get_queryset(self):
+    def get_data(self):
         """
         """
         site_id = self.kwargs['site_id']
@@ -233,10 +230,11 @@ class PageRelatedObjectList(UniCMSListCreateAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=site)
         webpath_id = self.kwargs['webpath_id']
-        self.kwargs['page_id']
-        self.page = Page.objects.filter(pk=pk,
-                                        webpath__pk=webpath_id,
-                                        webpath__site__pk=site_id).first()
+        pk = self.kwargs['page_id']
+        self.page = get_object_or_404(Page,
+                                      pk=pk,
+                                      webpath__pk=webpath_id,
+                                      webpath__site__pk=site_id)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -250,15 +248,15 @@ class PageRelatedObjectList(UniCMSListCreateAPIView):
                                              resource=request.method)
             return super().post(request, *args, **kwargs)
 
+    class Meta:
+        abstract = True
+
 
 class PageRelatedObject(generics.RetrieveUpdateDestroyAPIView):
 
     permission_classes = [IsAdminUser]
 
-    class Meta:
-        abstract = True
-
-    def get_queryset(self):
+    def get_data(self):
         site_id = self.kwargs['site_id']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
@@ -267,9 +265,10 @@ class PageRelatedObject(generics.RetrieveUpdateDestroyAPIView):
         webpath_id = self.kwargs['webpath_id']
         page_id = self.kwargs['page_id']
         self.pk = self.kwargs['pk']
-        self.page = Page.objects.filter(pk=page_id,
-                                        webpath__pk=webpath_id,
-                                        webpath__site__pk=site_id).first()
+        self.page = get_object_or_404(Page,
+                                      pk=page_id,
+                                      webpath__pk=webpath_id,
+                                      webpath__site__pk=site_id)
 
     def patch(self, request, *args, **kwargs):
         item = self.get_queryset().first()
@@ -310,3 +309,6 @@ class PageRelatedObject(generics.RetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         return super().delete(request, *args, **kwargs)
+
+    class Meta:
+        abstract = True

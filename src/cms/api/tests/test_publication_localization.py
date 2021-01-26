@@ -43,7 +43,7 @@ class PublicationLocalizationAPIUnitTest(TestCase):
         user.is_superuser = True
         user.save()
         req.force_login(user)
-        res = req.get(url, {'is_active': True})
+        res = req.get(url)
         assert isinstance(res.json(), dict)
 
         # POST

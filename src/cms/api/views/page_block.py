@@ -16,7 +16,7 @@ class PageBlockList(PageRelatedObjectList):
     def get_queryset(self):
         """
         """
-        super().get_queryset()
+        super().get_data()
         items = PageBlock.objects.filter(page=self.page)
         return items
 
@@ -30,6 +30,6 @@ class PageBlockView(PageRelatedObject):
     def get_queryset(self):
         """
         """
-        super().get_queryset()
+        super().get_data()
         items = PageBlock.objects.filter(pk=self.pk, page=self.page)
         return items

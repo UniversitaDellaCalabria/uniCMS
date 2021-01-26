@@ -53,7 +53,7 @@ class WebpathPubContextAPIUnitTest(TestCase):
                                                            permission=5,
                                                            is_active=True)
         # superuser can do (user is only an editor)
-        res = req.get(url, {'is_active': True})
+        res = req.get(url)
         assert isinstance(res.json(), dict)
 
         # POST

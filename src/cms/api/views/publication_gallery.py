@@ -15,9 +15,8 @@ class PublicationGalleryList(PublicationRelatedObjectList):
     def get_queryset(self):
         """
         """
-        pub_id = self.kwargs['publication_id']
-        items = PublicationGallery.objects.filter(publication__pk=pub_id)
-        return items
+        super().get_data()
+        return PublicationGallery.objects.filter(publication=self.publication)
 
 
 class PublicationGalleryView(PublicationRelatedObject):
@@ -29,8 +28,6 @@ class PublicationGalleryView(PublicationRelatedObject):
     def get_queryset(self):
         """
         """
-        pub_id = self.kwargs['publication_id']
-        pk = self.kwargs['pk']
-        galleries = PublicationGallery.objects.filter(pk=pk,
-                                                      publication__pk=pub_id)
-        return galleries
+        super().get_data()
+        return PublicationGallery.objects.filter(pk=self.pk,
+                                                 publication=self.publication)

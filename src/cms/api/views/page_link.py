@@ -1,5 +1,3 @@
-
-
 from cms.pages.models import *
 from cms.pages.serializers import *
 
@@ -10,13 +8,14 @@ class PageLinkList(PageRelatedObjectList):
     """
     """
     description = ""
-    search_fields = ['block__name']
+    search_fields = ['name', 'url']
+    filterset_fields = ['created', 'modified']
     serializer_class = PageLinkSerializer
 
     def get_queryset(self):
         """
         """
-        super().get_queryset()
+        super().get_data()
         items = PageLink.objects.filter(page=self.page)
         return items
 
@@ -30,6 +29,6 @@ class PageLinkView(PageRelatedObject):
     def get_queryset(self):
         """
         """
-        super().get_queryset()
+        super().get_data()
         items = PageLink.objects.filter(pk=self.pk, page=self.page)
         return items

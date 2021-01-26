@@ -1,32 +1,24 @@
 from django.http import Http404
 
-from rest_framework import filters, generics
-from rest_framework.permissions import IsAdminUser
-
-
 from cms.publications.models import *
 from cms.publications.serializers import *
 
 from .. exceptions import LoggedPermissionDenied
-from .. pagination import UniCmsApiPagination
+from .. views.publication import PublicationRelatedObject, PublicationRelatedObjectList
 
 
-class PublicationLocalizationList(generics.ListCreateAPIView):
+class PublicationLocalizationList(PublicationRelatedObjectList):
     """
     """
     description = ""
-    filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'language', 'subheading', 'content']
-    pagination_class = UniCmsApiPagination
-    permission_classes = [IsAdminUser]
     serializer_class = PublicationLocalizationSerializer
 
     def get_queryset(self):
         """
         """
-        pub_id = self.kwargs['publication_id']
-        items = PublicationLocalization.objects.filter(publication__pk=pub_id)
-        return items
+        super().get_data()
+        return PublicationLocalization.objects.filter(publication=self.publication)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -41,21 +33,18 @@ class PublicationLocalizationList(generics.ListCreateAPIView):
             return super().post(request, *args, **kwargs)
 
 
-class PublicationLocalizationView(generics.RetrieveUpdateDestroyAPIView):
+class PublicationLocalizationView(PublicationRelatedObject):
     """
     """
     description = ""
-    permission_classes = [IsAdminUser]
     serializer_class = PublicationLocalizationSerializer
 
     def get_queryset(self):
         """
         """
-        pub_id = self.kwargs['publication_id']
-        pk = self.kwargs['pk']
-        localizations = PublicationLocalization.objects.filter(pk=pk,
-                                                               publication__pk=pub_id)
-        return localizations
+        super().get_data()
+        return PublicationLocalization.objects.filter(pk=self.pk,
+                                                      publication=self.publication)
 
     def patch(self, request, *args, **kwargs):
         item = self.get_queryset().first()

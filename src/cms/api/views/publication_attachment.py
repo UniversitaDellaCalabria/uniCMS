@@ -1,8 +1,3 @@
-
-
-# from cms.api.serializers import PublicationSerializer
-
-
 from cms.publications.models import PublicationAttachment
 from cms.publications.serializers import PublicationAttachmentSerializer
 
@@ -13,15 +8,14 @@ class PublicationAttachmentList(PublicationRelatedObjectList):
     """
     """
     description = ""
-    search_fields = ['name', 'file', 'descripion']
+    search_fields = ['name', 'file', 'description']
     serializer_class = PublicationAttachmentSerializer
 
     def get_queryset(self):
         """
         """
-        pub_id = self.kwargs['publication_id']
-        items = PublicationAttachment.objects.filter(publication__pk=pub_id)
-        return items
+        super().get_data()
+        return PublicationAttachment.objects.filter(publication=self.publication)
 
 
 class PublicationAttachmentView(PublicationRelatedObject):
@@ -33,8 +27,6 @@ class PublicationAttachmentView(PublicationRelatedObject):
     def get_queryset(self):
         """
         """
-        pub_id = self.kwargs['publication_id']
-        pk = self.kwargs['pk']
-        attachments = PublicationAttachment.objects.filter(pk=pk,
-                                                           publication__pk=pub_id)
-        return attachments
+        super().get_data()
+        return PublicationAttachment.objects.filter(pk=self.pk,
+                                                    publication=self.publication)

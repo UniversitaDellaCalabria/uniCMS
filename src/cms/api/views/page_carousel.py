@@ -1,5 +1,3 @@
-
-
 from cms.pages.models import *
 from cms.pages.serializers import *
 
@@ -10,13 +8,13 @@ class PageCarouselList(PageRelatedObjectList):
     """
     """
     description = ""
-    search_fields = ['block__name']
+    search_fields = ['carousel__name', 'carousel__description']
     serializer_class = PageCarouselSerializer
 
     def get_queryset(self):
         """
         """
-        super().get_queryset()
+        super().get_data()
         items = PageCarousel.objects.filter(page=self.page)
         return items
 
@@ -30,6 +28,6 @@ class PageCarouselView(PageRelatedObject):
     def get_queryset(self):
         """
         """
-        super().get_queryset()
+        super().get_data()
         items = PageCarousel.objects.filter(pk=self.pk, page=self.page)
         return items

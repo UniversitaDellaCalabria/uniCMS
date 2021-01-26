@@ -1,5 +1,3 @@
-
-
 from cms.pages.models import *
 from cms.pages.serializers import *
 
@@ -10,13 +8,13 @@ class PageRelatedList(PageRelatedObjectList):
     """
     """
     description = ""
-    search_fields = ['block__name']
+    search_fields = ['related__name', 'related__title']
     serializer_class = PageRelatedSerializer
 
     def get_queryset(self):
         """
         """
-        super().get_queryset()
+        super().get_data()
         items = PageRelated.objects.filter(page=self.page)
         return items
 
@@ -30,6 +28,6 @@ class PageRelatedView(PageRelatedObject):
     def get_queryset(self):
         """
         """
-        super().get_queryset()
+        super().get_data()
         items = PageRelated.objects.filter(pk=self.pk, page=self.page)
         return items
