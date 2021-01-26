@@ -1,35 +1,25 @@
 from django.http import Http404
 
-
 from cms.medias.models import MediaCollection
 from cms.medias.serializers import MediaCollectionSerializer
 
-from rest_framework import filters, generics
+from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 
+from . generics import UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
-from .. pagination import UniCmsApiPagination
 from .. permissions import UserCanAddMediaCollectionOrAdminReadonly
 from .. utils import check_user_permission_on_object
 
 
-class MediaCollectionList(generics.ListCreateAPIView):
+class MediaCollectionList(UniCMSListCreateAPIView):
     """
     """
     description = ""
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['name', 'description', 'tags__name']
-    pagination_class = UniCmsApiPagination
     permission_classes = [UserCanAddMediaCollectionOrAdminReadonly]
     serializer_class = MediaCollectionSerializer
-    items = MediaCollection.objects.all()
-
-    # def get_queryset(self):
-        # items = MediaCollection.objects.all()
-        # is_active = self.request.GET.get('is_active')
-        # if is_active:
-            # items = items.filter(is_active=is_active)
-        # return items
+    queryset = MediaCollection.objects.all()
+    search_fields = ['name', 'description', 'tags__name']
 
 
 class MediaCollectionView(generics.RetrieveUpdateDestroyAPIView):

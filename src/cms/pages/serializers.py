@@ -20,6 +20,8 @@ class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
         request = self.context.get('request', None)
         if request:
+            if request.method in ['PATCH','PUT','DELETE']:
+                return WebPath.objects.all()
             site_id = self.context['request'].parser_context['kwargs']['site_id']
             webpath_id = self.context['request'].parser_context['kwargs']['webpath_id']
             return WebPath.objects.filter(pk=webpath_id,
@@ -27,20 +29,9 @@ class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
         return None # pragma: nocover
 
 
-class PageWebpathSerializer(TaggitSerializer, serializers.ModelSerializer):
-    webpath = WebPathForeignKey()
-    tags = TagListSerializerField()
-
-    class Meta:
-        model = Page
-        fields = '__all__'
-        read_only_fields = ['is_active', 'created_by',
-                            'modified_by', 'state']
-
-
 class PageSerializer(TaggitSerializer, serializers.ModelSerializer):
-    # webpath = WebPathForeignKey()
     tags = TagListSerializerField()
+    webpath = WebPathForeignKey()
 
     class Meta:
         model = Page

@@ -1,29 +1,27 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
-from rest_framework import filters, generics
+from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
+from rest_framework.schemas.openapi import AutoSchema
 
 from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
-from cms.contexts.utils import is_editor, is_publisher
+from cms.contexts.utils import is_editor
 
 from cms.pages.models import Page, PAGE_STATES
-from cms.pages.serializers import PageSerializer, PageWebpathSerializer
+from cms.pages.serializers import PageSerializer
 
+from . generics import UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
-from .. pagination import UniCmsApiPagination
 
 
-class EditorWebpathPageList(generics.ListCreateAPIView):
+class EditorWebpathPageList(UniCMSListCreateAPIView):
     """
     """
     name = "Pages"
     description = ""
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['in_evidence_start','publication__title']
-    pagination_class = UniCmsApiPagination
-    permission_classes = [IsAdminUser]
-    serializer_class = PageWebpathSerializer
+    search_fields = ['title', 'description']
+    serializer_class = PageSerializer
 
     def get_queryset(self):
         """
@@ -37,12 +35,9 @@ class EditorWebpathPageList(generics.ListCreateAPIView):
         webpath = get_object_or_404(WebPath,
                                     pk=webpath_id,
                                     site=site)
-        pages = Page.objects.filter(webpath=webpath)
+        items = Page.objects.filter(webpath=webpath)
         self.webpath = webpath
-        is_active = self.request.GET.get('is_active')
-        if is_active:
-            pages = pages.filter(is_active=is_active)
-        return pages
+        return items
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -140,12 +135,18 @@ class EditorWebpathPageView(generics.RetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
+class PageChangeStatusSchema(AutoSchema):
+    def get_operation_id(self, path, method):
+        return 'updatePageStatus'
+
+
 class PageChangeStateView(generics.RetrieveAPIView):
     """
     """
     description = ""
     permission_classes = [IsAdminUser]
     serializer_class = PageSerializer
+    schema = PageChangeStatusSchema()
 
     def get_queryset(self):
         """
@@ -174,12 +175,18 @@ class PageChangeStateView(generics.RetrieveAPIView):
                                      resource=request.method)
 
 
+class PageChangePublicationStatusSchema(AutoSchema):
+    def get_operation_id(self, path, method):
+        return 'updatePagePublicationStatus'
+
+
 class PageChangePublicationStatusView(generics.RetrieveAPIView):
     """
     """
     description = ""
     permission_classes = [IsAdminUser]
     serializer_class = PageSerializer
+    schema = PageChangePublicationStatusSchema()
 
     def get_queryset(self):
         """
@@ -212,11 +219,7 @@ class PageChangePublicationStatusView(generics.RetrieveAPIView):
 
 # Abstract API classes for every related object of Page
 
-class PageRelatedObjectList(generics.ListCreateAPIView):
-
-    filter_backends = [filters.SearchFilter]
-    pagination_class = UniCmsApiPagination
-    permission_classes = [IsAdminUser]
+class PageRelatedObjectList(UniCMSListCreateAPIView):
 
     class Meta:
         abstract = True
@@ -230,7 +233,7 @@ class PageRelatedObjectList(generics.ListCreateAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=site)
         webpath_id = self.kwargs['webpath_id']
-        page_id = self.kwargs['page_id']
+        self.kwargs['page_id']
         self.page = Page.objects.filter(pk=pk,
                                         webpath__pk=webpath_id,
                                         webpath__site__pk=site_id).first()
@@ -250,7 +253,6 @@ class PageRelatedObjectList(generics.ListCreateAPIView):
 
 class PageRelatedObject(generics.RetrieveUpdateDestroyAPIView):
 
-    filter_backends = [filters.SearchFilter]
     permission_classes = [IsAdminUser]
 
     class Meta:

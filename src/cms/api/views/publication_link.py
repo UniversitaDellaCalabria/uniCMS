@@ -1,14 +1,8 @@
-from django.http import Http404
-
-from rest_framework import filters, generics
-from rest_framework.permissions import IsAdminUser
 
 
 from cms.publications.models import *
 from cms.publications.serializers import *
 
-from .. exceptions import LoggedPermissionDenied
-from .. pagination import UniCmsApiPagination
 from .. views.publication import PublicationRelatedObject, PublicationRelatedObjectList
 
 

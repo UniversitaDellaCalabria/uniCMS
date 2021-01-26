@@ -106,4 +106,3 @@ class PageLocalizationView(generics.RetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         return super().delete(request, *args, **kwargs)
-

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'taggit', # page and publication tags
     'taggit-serializer', # taggit tags serializer
     'rest_framework' # api
+    'django_filters', # api filters
     'cms.templates',
     'cms.contexts',
     'cms.carousels',

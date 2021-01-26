@@ -1,25 +1,21 @@
 from django.http import Http404
 
 from rest_framework import generics
-from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 
 from cms.carousels.models import *
 from cms.carousels.serializers import *
 
-
+from . generics import UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
-from .. pagination import UniCmsApiPagination
 from .. utils import check_user_permission_on_object
 
 
-class CarouselItemLocalizationList(generics.ListCreateAPIView):
+class CarouselItemLocalizationList(UniCMSListCreateAPIView):
     """
     """
     description = ""
-    filter_backends = [filters.SearchFilter]
     search_fields = ['language', 'pre_heading', 'heading', 'description']
-    pagination_class = UniCmsApiPagination
     permission_classes = [IsAdminUser]
     serializer_class = CarouselItemLocalizationSerializer
 
@@ -30,9 +26,6 @@ class CarouselItemLocalizationList(generics.ListCreateAPIView):
         carousel_item_id = self.kwargs['carousel_item_id']
         items = CarouselItemLocalization.objects.filter(carousel_item__carousel__pk=carousel_id,
                                                         carousel_item__pk=carousel_item_id)
-        is_active = self.request.GET.get('is_active')
-        if is_active:
-            items = items.filter(is_active=is_active)
         return items
 
     def post(self, request, *args, **kwargs):

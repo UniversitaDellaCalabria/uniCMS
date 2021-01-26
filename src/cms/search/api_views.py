@@ -36,42 +36,42 @@ def _handle_date_string(date_string):
 
 
 class ApiSearchEngineFilter(GenericApiFilter):
-    search_params = [ 
+    search_params = [
         {'name': 'categories',
          'description': 'comma separated values',
          'required': False,
-         'schema': 
+         'schema':
              {'type': 'string'},
         },
         {'name': 'year',
          'description': 'Year',
          'required': False,
-         'schema': 
+         'schema':
              {'type': 'integer',
               'format': 'int32'},
         },
         {'name': 'sites',
          'description': 'comma separated values: www.unical.it,dimes.unical.it',
          'required': False,
-         'schema': 
+         'schema':
              {'type': 'string'},
         },
         {'name': 'tags',
          'description': 'comma separated values',
          'required': False,
-         'schema': 
+         'schema':
              {'type': 'string'},
         },
         {'name': 'date_start',
          'description': 'date start YYY-mm-dd',
          'required': False,
-         'schema': 
+         'schema':
              {'type': 'string'},
         },
         {'name': 'date_end',
          'description': 'date end YYY-mm-dd',
          'required': False,
-         'schema': 
+         'schema':
              {'type': 'string'},
         }
     ]
@@ -83,7 +83,7 @@ class ApiSearchEngine(APIView):
     """
     description = 'Search Engine'
     filter_backends = [ApiSearchEngineFilter,]
-    
+
     def get(self, request):
         # get collection
         collection = MongoClientFactory().unicms.search

@@ -1,7 +1,7 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
-from rest_framework import filters, generics
+from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 
 from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
@@ -10,18 +10,15 @@ from cms.contexts.utils import is_publisher
 from cms.publications.models import PublicationContext
 from cms.publications.serializers import PublicationContextSerializer
 
+from . generics import UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
-from .. pagination import UniCmsApiPagination
 
 
-class EditorWebpathPublicationContextList(generics.ListCreateAPIView):
+class EditorWebpathPublicationContextList(UniCMSListCreateAPIView):
     """
     """
     description = ""
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['in_evidence_start','publication__title']
-    pagination_class = UniCmsApiPagination
-    permission_classes = [IsAdminUser]
+    search_fields = ['publication__title']
     serializer_class = PublicationContextSerializer
 
     def get_queryset(self):
@@ -36,12 +33,9 @@ class EditorWebpathPublicationContextList(generics.ListCreateAPIView):
         webpath = get_object_or_404(WebPath,
                                     pk=webpath_id,
                                     site=site)
-        publications = PublicationContext.objects.filter(webpath=webpath)
+        items = PublicationContext.objects.filter(webpath=webpath)
         self.webpath = webpath
-        is_active = self.request.GET.get('is_active')
-        if is_active:
-            publications = publications.filter(is_active=is_active)
-        return publications
+        return items
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

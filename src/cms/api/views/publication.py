@@ -4,9 +4,10 @@ from django.core.exceptions import ValidationError
 from django.http import Http404
 from django.utils.decorators import method_decorator
 
-from rest_framework import filters, generics
+from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
 from cms.contexts.decorators import detect_language
@@ -17,8 +18,8 @@ from cms.publications.paginators import Paginator
 from cms.publications.serializers import PublicationSerializer
 from cms.publications.utils import publication_context_base_filter
 
+from . generics import UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
-from .. pagination import UniCmsApiPagination
 from .. permissions import UserCanAddPublicationOrAdminReadonly
 from .. utils import check_user_permission_on_object
 
@@ -88,16 +89,34 @@ class ApiContext(APIView): # pragma: no cover
         return Response(pubs)
 
 
-class PublicationList(generics.ListCreateAPIView):
+class EditorialBoardPublicationsSchema(AutoSchema):
+    def get_operation_id(self, path, method):
+        if method == 'POST':
+            return 'createEditorialBoardPublication'
+        return 'listEditorialBoardPublications'
+
+
+class PublicationList(UniCMSListCreateAPIView):
     """
     """
     description = ""
-    filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'subheading', 'content']
-    pagination_class = UniCmsApiPagination
     permission_classes = [UserCanAddPublicationOrAdminReadonly]
     serializer_class = PublicationSerializer
     queryset = Publication.objects.all()
+    schema = EditorialBoardPublicationsSchema()
+
+
+class EditorialBoardPublicationSchema(AutoSchema):
+    def get_operation_id(self, path, method):
+        if method == 'GET':
+            return 'retrieveEditorialBoardPublication'
+        if method == 'PATCH':
+            return 'partialUpdateEditorialBoardPublication'
+        if method == 'PUT':
+            return 'updateEditorialBoardPublication'
+        if method == 'DELETE':
+            return 'deleteEditorialBoardPublication'
 
 
 class PublicationView(generics.RetrieveUpdateDestroyAPIView):
@@ -106,6 +125,7 @@ class PublicationView(generics.RetrieveUpdateDestroyAPIView):
     description = ""
     permission_classes = [IsAdminUser]
     serializer_class = PublicationSerializer
+    schema = EditorialBoardPublicationSchema()
 
     def get_queryset(self):
         """
@@ -151,12 +171,18 @@ class PublicationView(generics.RetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
+class EditorialBoardPublicationChangeStatusSchema(AutoSchema):
+    def get_operation_id(self, path, method):
+        return 'updateEditorialBoardPublicationStatus'
+
+
 class PublicationChangeStateView(generics.RetrieveAPIView):
     """
     """
     description = ""
     permission_classes = [IsAdminUser]
     serializer_class = PublicationSerializer
+    schema = EditorialBoardPublicationChangeStatusSchema()
 
     def get_queryset(self):
         """
@@ -181,11 +207,7 @@ class PublicationChangeStateView(generics.RetrieveAPIView):
 
 # Abstract API classes for every related object of Publication
 
-class PublicationRelatedObjectList(generics.ListCreateAPIView):
-
-    filter_backends = [filters.SearchFilter]
-    pagination_class = UniCmsApiPagination
-    permission_classes = [IsAdminUser]
+class PublicationRelatedObjectList(UniCMSListCreateAPIView):
 
     class Meta:
         abstract = True

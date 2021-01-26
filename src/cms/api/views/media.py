@@ -3,29 +3,25 @@ import os
 from django.http import Http404
 
 from rest_framework import generics
-from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
-
 
 from cms.medias.models import Media
 from cms.medias.serializers import MediaSerializer
 
+from . generics import UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
-from .. pagination import UniCmsApiPagination
 from .. permissions import UserCanAddMediaOrAdminReadonly
 from .. utils import check_user_permission_on_object
 
 
-class MediaList(generics.ListCreateAPIView):
+class MediaList(UniCMSListCreateAPIView):
     """
     """
     description = ""
-    filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'file', 'description']
-    pagination_class = UniCmsApiPagination
     permission_classes = [UserCanAddMediaOrAdminReadonly]
     serializer_class = MediaSerializer
-    items = Media.objects.all()
+    queryset = Media.objects.all()
 
 
 class MediaView(generics.RetrieveUpdateDestroyAPIView):

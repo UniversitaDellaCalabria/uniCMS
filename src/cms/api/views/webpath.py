@@ -1,10 +1,10 @@
 from django.conf import settings
+from django.core.exceptions import FieldError
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from rest_framework import generics
-# from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
@@ -13,24 +13,19 @@ from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
 from cms.contexts.serializers import WebPathSerializer
 from cms.contexts.utils import is_publisher
 
+from . generics import UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
-from .. pagination import UniCmsApiPagination
 
 
 CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
                                   contexts_settings.CMS_CONTEXT_PERMISSIONS)
 
 
-class EditorWebsiteWebpathList(generics.ListCreateAPIView):
+class EditorWebsiteWebpathList(UniCMSListCreateAPIView):
     """
     """
     name = "Webpaths"
     description = "Get user editorial boards websites webpath list"
-    # ToDo - not work because get() returns a []
-    # filter_backends = [filters.SearchFilter]
-    # search_fields = ['name','path']
-    pagination_class = UniCmsApiPagination
-    permission_classes = [IsAdminUser]
     serializer_class = WebPathSerializer
 
     def get_queryset(self):
@@ -41,17 +36,19 @@ class EditorWebsiteWebpathList(generics.ListCreateAPIView):
         if not site.is_managed_by(self.request.user):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=site)
-        webpaths = WebPath.objects.filter(site=site)
-        is_active = self.request.GET.get('is_active')
-        if is_active:
-            webpaths = webpaths.filter(is_active=is_active)
-        return webpaths
+        return WebPath.objects.filter(site=site)
 
     def get(self, request, *args, **kwargs):
+        # this method returns a list, so default queryset filter
+        # don't work! filter by GET params must be done manually
+        query_params = {k:v for k,v in request.GET.items()}
+        try:
+            queryset = self.get_queryset().filter(**query_params)
+        except FieldError:
+            queryset = self.get_queryset()
         context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
         webpaths = []
-
-        for webpath in self.get_queryset():
+        for webpath in queryset:
             permission = EditorialBoardEditors.get_permission(user=request.user,
                                                               webpath=webpath)
             webpath_data = self.get_serializer(instance=webpath).data
@@ -106,8 +103,7 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
         if not site.is_managed_by(self.request.user):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=site)
-        webpaths = WebPath.objects.filter(pk=pk, site=site)
-        return webpaths
+        return WebPath.objects.filter(pk=pk, site=site)
 
     def get(self, request, *args, **kwargs):
         item = self.get_queryset().first()

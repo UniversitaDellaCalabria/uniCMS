@@ -1,37 +1,28 @@
 from django.http import Http404
 
 from rest_framework import generics
-from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 
 from cms.carousels.models import *
 from cms.carousels.serializers import *
 
-
+from . generics import UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
-from .. pagination import UniCmsApiPagination
 from .. utils import check_user_permission_on_object
 
 
-class CarouselItemList(generics.ListCreateAPIView):
+class CarouselItemList(UniCMSListCreateAPIView):
     """
     """
     description = ""
-    filter_backends = [filters.SearchFilter]
     search_fields = ['pre_heading', 'heading', 'description']
-    pagination_class = UniCmsApiPagination
-    permission_classes = [IsAdminUser]
     serializer_class = CarouselItemSerializer
 
     def get_queryset(self):
         """
         """
         carousel_id = self.kwargs['carousel_id']
-        items = CarouselItem.objects.filter(carousel__pk=carousel_id)
-        is_active = self.request.GET.get('is_active')
-        if is_active:
-            items = items.filter(is_active=is_active)
-        return items
+        return CarouselItem.objects.filter(carousel__pk=carousel_id)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

@@ -1,7 +1,5 @@
-from django.conf import settings
 from django.http import Http404
 
-from cms.contexts import settings as contexts_settings
 
 from cms.medias.models import MediaCollectionItem
 from cms.medias.serializers import MediaCollectionItemSerializer
@@ -9,28 +7,23 @@ from cms.medias.serializers import MediaCollectionItemSerializer
 from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 
+from . generics import UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
-from .. pagination import UniCmsApiPagination
 from .. utils import check_user_permission_on_object
 
 
-class MediaCollectionItemList(generics.ListCreateAPIView):
+class MediaCollectionItemList(UniCMSListCreateAPIView):
     """
     """
     description = ""
-    pagination_class = UniCmsApiPagination
-    permission_classes = [IsAdminUser]
     serializer_class = MediaCollectionItemSerializer
+    search_fields = ['name', 'collection__name']
 
     def get_queryset(self):
         """
         """
         collection_id = self.kwargs['collection_id']
-        items = MediaCollectionItem.objects.filter(collection__pk=collection_id)
-        is_active = self.request.GET.get('is_active')
-        if is_active:
-            items = items.filter(is_active=is_active)
-        return items
+        return MediaCollectionItem.objects.filter(collection__pk=collection_id)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
