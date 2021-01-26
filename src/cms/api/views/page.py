@@ -40,7 +40,7 @@ class EditorWebpathPageList(UniCMSListCreateAPIView):
         return items
 
     def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        self.get_queryset()
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -81,7 +81,7 @@ class EditorWebpathPageView(generics.RetrieveUpdateDestroyAPIView):
         return pages
 
     def get(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        self.get_queryset()
         return super().get(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
@@ -246,7 +246,7 @@ class PageRelatedObjectList(UniCMSListCreateAPIView):
 
     def get(self, request, *args, **kwargs):
         # class inheriting this must define get_queryset()
-        queryset = self.get_queryset()
+        self.get_queryset()
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

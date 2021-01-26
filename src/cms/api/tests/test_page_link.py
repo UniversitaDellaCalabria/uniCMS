@@ -9,7 +9,6 @@ from cms.contexts.tests import ContextUnitTest
 from cms.pages.models import PageLink
 from cms.pages.tests import PageUnitTest
 
-from cms.templates.tests import TemplateUnitTest
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

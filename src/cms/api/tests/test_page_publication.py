@@ -11,7 +11,6 @@ from cms.pages.tests import PageUnitTest
 
 from cms.publications.tests import PublicationUnitTest
 
-from cms.templates.tests import TemplateUnitTest
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

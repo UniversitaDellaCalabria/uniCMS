@@ -11,7 +11,6 @@ from cms.medias.tests import MediaUnitTest
 from cms.pages.models import PageMedia
 from cms.pages.tests import PageUnitTest
 
-from cms.templates.tests import TemplateUnitTest
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

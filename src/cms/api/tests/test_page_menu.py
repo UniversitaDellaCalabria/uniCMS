@@ -11,7 +11,6 @@ from cms.menus.tests import MenuUnitTest
 from cms.pages.models import PageMenu
 from cms.pages.tests import PageUnitTest
 
-from cms.templates.tests import TemplateUnitTest
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
