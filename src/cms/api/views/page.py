@@ -39,6 +39,10 @@ class EditorWebpathPageList(UniCMSListCreateAPIView):
         self.webpath = webpath
         return items
 
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        return super().get(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -75,6 +79,10 @@ class EditorWebpathPageView(generics.RetrieveUpdateDestroyAPIView):
                                     webpath__pk=webpath_id,
                                     webpath__site__pk=site_id)
         return pages
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        return super().get(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
         item = self.get_queryset().first()
@@ -136,7 +144,7 @@ class EditorWebpathPageView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class PageChangeStatusSchema(AutoSchema):
-    def get_operation_id(self, path, method):
+    def get_operation_id(self, path, method):# pragma: nocover
         return 'updatePageStatus'
 
 
@@ -176,7 +184,7 @@ class PageChangeStateView(generics.RetrieveAPIView):
 
 
 class PageChangePublicationStatusSchema(AutoSchema):
-    def get_operation_id(self, path, method):
+    def get_operation_id(self, path, method):# pragma: nocover
         return 'updatePagePublicationStatus'
 
 
@@ -210,7 +218,7 @@ class PageChangePublicationStatusView(generics.RetrieveAPIView):
         if has_permission:
             if item.state == PAGE_STATES[0][0]:
                 item.state = PAGE_STATES[1][0]
-            else: item.state = PAGE_STATES[0][0]
+            else: item.state = PAGE_STATES[0][0]# pragma: nocover
             item.save()
             return super().get(request, *args, **kwargs)
         raise LoggedPermissionDenied(classname=self.__class__.__name__,
@@ -235,6 +243,11 @@ class PageRelatedObjectList(UniCMSListCreateAPIView):
                                       pk=pk,
                                       webpath__pk=webpath_id,
                                       webpath__site__pk=site_id)
+
+    def get(self, request, *args, **kwargs):
+        # class inheriting this must define get_queryset()
+        queryset = self.get_queryset()
+        return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

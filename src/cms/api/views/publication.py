@@ -91,7 +91,7 @@ class ApiContext(APIView): # pragma: no cover
 
 
 class EditorialBoardPublicationsSchema(AutoSchema):
-    def get_operation_id(self, path, method):
+    def get_operation_id(self, path, method):# pragma: nocover
         if method == 'POST':
             return 'createEditorialBoardPublication'
         return 'listEditorialBoardPublications'
@@ -109,7 +109,7 @@ class PublicationList(UniCMSListCreateAPIView):
 
 
 class EditorialBoardPublicationSchema(AutoSchema):
-    def get_operation_id(self, path, method):
+    def get_operation_id(self, path, method):# pragma: nocover
         if method == 'GET':
             return 'retrieveEditorialBoardPublication'
         if method == 'PATCH':
@@ -173,7 +173,7 @@ class PublicationView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class EditorialBoardPublicationChangeStatusSchema(AutoSchema):
-    def get_operation_id(self, path, method):
+    def get_operation_id(self, path, method):# pragma: nocover
         return 'updateEditorialBoardPublicationStatus'
 
 

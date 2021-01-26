@@ -30,8 +30,8 @@ class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
 
 
 class PageSerializer(TaggitSerializer, serializers.ModelSerializer):
-    tags = TagListSerializerField()
     webpath = WebPathForeignKey()
+    tags = TagListSerializerField()
 
     class Meta:
         model = Page

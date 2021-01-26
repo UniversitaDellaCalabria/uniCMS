@@ -18,7 +18,7 @@ class GenericApiFilter(SearchFilter):
     ]
     """
 
-    def get_schema_operation_parameters(self, view):
+    def get_schema_operation_parameters(self, view): # pragma: nocover
         params = super().get_schema_operation_parameters(view)
         for search_param in self.search_params:
             params.append(

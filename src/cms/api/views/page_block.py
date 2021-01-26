@@ -11,6 +11,7 @@ class PageBlockList(PageRelatedObjectList):
     """
     description = ""
     search_fields = ['block__name']
+    filterset_fields = ['is_active']
     serializer_class = PageBlockSerializer
 
     def get_queryset(self):

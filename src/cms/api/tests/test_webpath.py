@@ -39,7 +39,9 @@ class WebpathAPIUnitTest(TestCase):
         # site is managed again
         ebu.is_active = True
         ebu.save()
-        res = req.get(url)
+        res = req.get(url, {'is_active': True})
+        assert isinstance(res.json(), dict)
+        res = req.get(url, {'not_existent_param': True})
         assert isinstance(res.json(), dict)
 
     def test_get(self):
