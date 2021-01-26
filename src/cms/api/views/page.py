@@ -39,10 +39,6 @@ class EditorWebpathPageList(UniCMSListCreateAPIView):
         self.webpath = webpath
         return items
 
-    def get(self, request, *args, **kwargs):
-        self.get_queryset()
-        return super().get(request, *args, **kwargs)
-
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -79,10 +75,6 @@ class EditorWebpathPageView(generics.RetrieveUpdateDestroyAPIView):
                                     webpath__pk=webpath_id,
                                     webpath__site__pk=site_id)
         return pages
-
-    def get(self, request, *args, **kwargs):
-        self.get_queryset()
-        return super().get(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
         item = self.get_queryset().first()
@@ -243,11 +235,6 @@ class PageRelatedObjectList(UniCMSListCreateAPIView):
                                       pk=pk,
                                       webpath__pk=webpath_id,
                                       webpath__site__pk=site_id)
-
-    def get(self, request, *args, **kwargs):
-        # class inheriting this must define get_queryset()
-        self.get_queryset()
-        return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
