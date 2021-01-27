@@ -1,6 +1,9 @@
+from cms.api.generic_serializers import UniCMSCreateUpdateSerializer
+
 from cms.contexts.models import WebPath
 
 from rest_framework import serializers
+
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
@@ -27,22 +30,22 @@ class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
         return None # pragma: nocover
 
 
-class PublicationSerializer(TaggitSerializer, serializers.ModelSerializer):
+class PublicationSerializer(TaggitSerializer, UniCMSCreateUpdateSerializer):
     tags = TagListSerializerField()
 
     class Meta:
         model = Publication
         fields = '__all__'
-        read_only_fields = ['is_active', 'created_by', 'modified_by']
+        read_only_fields = ('is_active', 'created_by', 'modified_by')
 
 
-class PublicationContextSerializer(serializers.ModelSerializer):
+class PublicationContextSerializer(UniCMSCreateUpdateSerializer):
     webpath = WebPathForeignKey()
 
     class Meta:
         model = PublicationContext
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']
+        read_only_fields = ('created_by', 'modified_by')
 
 
 class PublicationAttachmentSerializer(serializers.ModelSerializer):
@@ -51,8 +54,7 @@ class PublicationAttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = PublicationAttachment
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by',
-                            'file_size','file_type']
+        read_only_fields = ('file_size','file_type')
 
 
 class PublicationBlockSerializer(serializers.ModelSerializer):
@@ -61,7 +63,6 @@ class PublicationBlockSerializer(serializers.ModelSerializer):
     class Meta:
         model = PublicationBlock
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']
 
 
 class PublicationGallerySerializer(serializers.ModelSerializer):
@@ -70,7 +71,6 @@ class PublicationGallerySerializer(serializers.ModelSerializer):
     class Meta:
         model = PublicationGallery
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']
 
 
 class PublicationLinkSerializer(serializers.ModelSerializer):
@@ -79,16 +79,15 @@ class PublicationLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = PublicationLink
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']
 
 
-class PublicationLocalizationSerializer(serializers.ModelSerializer):
+class PublicationLocalizationSerializer(UniCMSCreateUpdateSerializer):
     publication = PublicationForeignKey()
 
     class Meta:
         model = PublicationLocalization
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']
+        read_only_fields = ('created_by', 'modified_by')
 
 
 class PublicationRelatedSerializer(serializers.ModelSerializer):

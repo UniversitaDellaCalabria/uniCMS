@@ -1,6 +1,9 @@
+from cms.api.generic_serializers import UniCMSCreateUpdateSerializer
+
 from cms.contexts.models import WebPath
 
 from rest_framework import serializers
+
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
@@ -29,15 +32,15 @@ class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
         return None # pragma: nocover
 
 
-class PageSerializer(TaggitSerializer, serializers.ModelSerializer):
+class PageSerializer(TaggitSerializer, UniCMSCreateUpdateSerializer):
     webpath = WebPathForeignKey()
     tags = TagListSerializerField()
 
     class Meta:
         model = Page
         fields = '__all__'
-        read_only_fields = ['is_active', 'created_by',
-                            'modified_by', 'state']
+        read_only_fields = ('is_active', 'created_by',
+                            'modified_by', 'state')
 
 
 class PageBlockSerializer(serializers.ModelSerializer):
@@ -46,7 +49,6 @@ class PageBlockSerializer(serializers.ModelSerializer):
     class Meta:
         model = PageBlock
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']
 
 
 class PageCarouselSerializer(serializers.ModelSerializer):
@@ -55,7 +57,6 @@ class PageCarouselSerializer(serializers.ModelSerializer):
     class Meta:
         model = PageCarousel
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']
 
 
 class PageLinkSerializer(serializers.ModelSerializer):
@@ -64,16 +65,15 @@ class PageLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = PageLink
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']
 
 
-class PageLocalizationSerializer(serializers.ModelSerializer):
+class PageLocalizationSerializer(UniCMSCreateUpdateSerializer):
     page = PageForeignKey()
 
     class Meta:
         model = PageLocalization
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']
+        read_only_fields = ('created_by', 'modified_by')
 
 
 class PageMenuSerializer(serializers.ModelSerializer):
@@ -82,7 +82,6 @@ class PageMenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = PageMenu
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']
 
 
 class PageMediaSerializer(serializers.ModelSerializer):
@@ -91,7 +90,6 @@ class PageMediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = PageMedia
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']
 
 
 class PagePublicationSerializer(serializers.ModelSerializer):
@@ -100,7 +98,6 @@ class PagePublicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = PagePublication
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']
 
 
 class PageRelatedSerializer(serializers.ModelSerializer):
@@ -109,4 +106,3 @@ class PageRelatedSerializer(serializers.ModelSerializer):
     class Meta:
         model = PageRelated
         fields = '__all__'
-        read_only_fields = ['created_by', 'modified_by']

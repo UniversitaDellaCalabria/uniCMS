@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from cms.api.generic_serializers import UniCMSCreateUpdateSerializer
+
 from . models import Carousel, CarouselItem, CarouselItemLink, CarouselItemLinkLocalization, CarouselItemLocalization
 
 
@@ -36,26 +38,30 @@ class CarouselItemLinkForeignKey(serializers.PrimaryKeyRelatedField):
         return None # pragma: no cover
 
 
-class CarouselSerializer(serializers.ModelSerializer):
+class CarouselSerializer(UniCMSCreateUpdateSerializer):
+
     class Meta:
         model = Carousel
         fields = '__all__'
+        read_only_fields = ('created_by', 'modified_by')
 
 
-class CarouselItemSerializer(serializers.ModelSerializer):
+class CarouselItemSerializer(UniCMSCreateUpdateSerializer):
     carousel = CarouselForeignKey()
 
     class Meta:
         model = CarouselItem
         fields = '__all__'
+        read_only_fields = ('created_by', 'modified_by')
 
 
-class CarouselItemLocalizationSerializer(serializers.ModelSerializer):
+class CarouselItemLocalizationSerializer(UniCMSCreateUpdateSerializer):
     carousel_item = CarouselItemForeignKey()
 
     class Meta:
         model = CarouselItemLocalization
         fields = '__all__'
+        read_only_fields = ('created_by', 'modified_by')
 
 
 class CarouselItemLinkSerializer(serializers.ModelSerializer):
@@ -66,9 +72,10 @@ class CarouselItemLinkSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CarouselItemLinkLocalizationSerializer(serializers.ModelSerializer):
+class CarouselItemLinkLocalizationSerializer(UniCMSCreateUpdateSerializer):
     carousel_item_link = CarouselItemLinkForeignKey()
 
     class Meta:
         model = CarouselItemLinkLocalization
         fields = '__all__'
+        read_only_fields = ('created_by', 'modified_by')

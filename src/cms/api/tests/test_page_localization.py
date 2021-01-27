@@ -4,7 +4,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from cms.contexts.models import EditorialBoardEditors
 from cms.contexts.tests import ContextUnitTest
 
 from cms.pages.models import PageLocalization
@@ -106,7 +105,6 @@ class PageLocalizationAPIUnitTest(TestCase):
         ebu3 = ContextUnitTest.create_editorialboard_user(user=user2,
                                                           webpath=webpath,
                                                           permission=0)
-        print(EditorialBoardEditors.objects.filter(user=user2))
         req.force_login(user2)
         res = req.patch(url, data,
                         content_type='application/json',

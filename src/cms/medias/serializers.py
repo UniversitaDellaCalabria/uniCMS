@@ -1,8 +1,11 @@
+from cms.api.generic_serializers import UniCMSCreateUpdateSerializer
+
 from rest_framework import serializers
-from . models import Media, MediaCollection, MediaCollectionItem
 
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
+
+from . models import Media, MediaCollection, MediaCollectionItem
 
 
 class MediaCollectionForeignKey(serializers.PrimaryKeyRelatedField):
@@ -14,23 +17,26 @@ class MediaCollectionForeignKey(serializers.PrimaryKeyRelatedField):
         return None # pragma: no cover
 
 
-class MediaSerializer(serializers.ModelSerializer):
+class MediaSerializer(UniCMSCreateUpdateSerializer):
     class Meta:
         model = Media
         fields = '__all__'
+        read_only_fields = ('created_by', 'modified_by')
 
 
-class MediaCollectionSerializer(TaggitSerializer, serializers.ModelSerializer):
+class MediaCollectionSerializer(TaggitSerializer, UniCMSCreateUpdateSerializer):
     tags = TagListSerializerField()
 
     class Meta:
         model = MediaCollection
         fields = '__all__'
+        read_only_fields = ('created_by', 'modified_by')
 
 
-class MediaCollectionItemSerializer(serializers.ModelSerializer):
+class MediaCollectionItemSerializer(UniCMSCreateUpdateSerializer):
     collection = MediaCollectionForeignKey()
 
     class Meta:
         model = MediaCollectionItem
         fields = '__all__'
+        read_only_fields = ('created_by', 'modified_by')
