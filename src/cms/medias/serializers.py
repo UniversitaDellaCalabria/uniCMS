@@ -1,4 +1,4 @@
-from cms.api.generic_serializers import UniCMSCreateUpdateSerializer
+from cms.api.serializers import UniCMSCreateUpdateSerializer
 
 from rest_framework import serializers
 

@@ -15,10 +15,19 @@ class PublicationContextSerializer(serializers.HyperlinkedModelSerializer):
         lookup_field = 'pk'
 
 
-# class PublicationSerializer(serializers.HyperlinkedModelSerializer):
-    # class Meta:
-        # model = Publication
-        # fields = ['title',
-        # 'subheading',
-        # 'content',
-        # ]
+class UniCMSCreateUpdateSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        request = self.context['request']
+        if request.user:
+            validated_data['created_by'] = request.user
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        request = self.context['request']
+        if request.user:
+            validated_data['modified_by'] = request.user
+        return super().update(instance, validated_data)
+
+    class Meta:
+        abstract = True
