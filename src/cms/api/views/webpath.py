@@ -1,12 +1,10 @@
 from django.conf import settings
-from django.core.exceptions import FieldError
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
-from rest_framework.response import Response
 
 from cms.contexts import settings as contexts_settings
 from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
@@ -37,27 +35,6 @@ class EditorWebsiteWebpathList(UniCMSListCreateAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=site)
         return WebPath.objects.filter(site=site)
-
-    def get(self, request, *args, **kwargs):
-        # this method returns a list, so default queryset filter
-        # don't work! filter by GET params must be done manually
-        query_params = {k:v for k,v in request.GET.items()}
-        try:
-            queryset = self.get_queryset().filter(**query_params)
-        except FieldError:
-            queryset = self.get_queryset()
-        context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
-        webpaths = []
-        for webpath in queryset:
-            permission = EditorialBoardEditors.get_permission(user=request.user,
-                                                              webpath=webpath)
-            webpath_data = self.get_serializer(instance=webpath).data
-            webpath_data["permission_id"] = permission
-            permission_label = context_permissions[permission]
-            webpath_data["permission_label"] = permission_label
-            webpaths.append(webpath_data)
-        results = self.paginate_queryset(webpaths)
-        return self.get_paginated_response(results)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -104,18 +81,6 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=site)
         return WebPath.objects.filter(pk=pk, site=site)
-
-    def get(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
-        self.name = item
-        context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
-        result = self.get_serializer(instance=item).data
-        permission = EditorialBoardEditors.get_permission(item, request.user)
-        result["permission_id"] = permission
-        webpath_permission = context_permissions[permission] if permission else None
-        result["permission_label"] = webpath_permission
-        return Response(result)
 
     def patch(self, request, *args, **kwargs):
         item = self.get_queryset().first()

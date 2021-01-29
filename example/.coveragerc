@@ -1,7 +1,7 @@
 # .coveragerc to control coverage.py
 [coverage:run]
 omit =
-    *manage.py 
+    *manage.py
     */distutils/*
     tests/*
     */apps/*
@@ -13,3 +13,4 @@ omit =
     */pages/admin.py
     */medias/admin.py
     */templates/admin.py
+    */unicms-editorial-board/*

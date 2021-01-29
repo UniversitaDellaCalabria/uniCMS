@@ -48,8 +48,11 @@ INSTALLED_APPS = [
 
     'unicms_template_unical',
     'unicms_template_italia',
+
     'rest_framework',
-    'django_filters'
+    'django_filters',
+
+    'unicms_editorial_board',
 ]
 
 # Database

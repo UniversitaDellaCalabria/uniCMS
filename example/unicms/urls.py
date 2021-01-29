@@ -61,18 +61,25 @@ except:
                            name='openapi-schema-json'),
 
 if 'cms.contexts' in settings.INSTALLED_APPS:
-    urlpatterns += path('', 
-                        include(('cms.contexts.urls', 'cms'), namespace="unicms"), 
+    urlpatterns += path('',
+                        include(('cms.contexts.urls', 'cms'), namespace="unicms"),
                         name="unicms"),
 
 if 'cms.api' in settings.INSTALLED_APPS:
-    urlpatterns += path('', 
-                        include(('cms.api.urls', 'cms'), namespace="unicms_api"), 
+    urlpatterns += path('',
+                        include(('cms.api.urls', 'cms'), namespace="unicms_api"),
                         name="unicms_api"),
 
 
 if 'cms.search' in settings.INSTALLED_APPS:
-    urlpatterns += path('', 
-                        include(('cms.search.urls', 'cms_search'), namespace="unicms_search"), 
+    urlpatterns += path('',
+                        include(('cms.search.urls', 'cms_search'), namespace="unicms_search"),
                         name="unicms_search"),
+
+
+if 'unicms_editorial_board' in settings.INSTALLED_APPS:
+    urlpatterns += path('',
+                        include(('unicms_editorial_board.urls', 'unicms_editorial_board'),
+                                 namespace="unicms_editorial_board"),
+                        name="unicms_editorial_board"),
 

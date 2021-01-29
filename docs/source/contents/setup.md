@@ -36,8 +36,7 @@ INSTALLED_APPS = [
     'nested_admin', # for admin CRUD
     'taggit', # page and publication tags
     'taggit-serializer', # taggit tags serializer
-    'rest_framework' # api
-    'django_filters', # api filters
+
     'cms.templates',
     'cms.contexts',
     'cms.carousels',
@@ -47,6 +46,14 @@ INSTALLED_APPS = [
     'cms.publications',
     'cms.api',
     'cms.search',
+
+    # django rest
+    'rest_framework' # api
+    'django_filters', # api filters
+
+    # editorial board app
+    'unicms_editorial_board', # for example
+
 ]
 ````
 

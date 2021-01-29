@@ -21,7 +21,8 @@ class MediaSerializer(UniCMSCreateUpdateSerializer):
     class Meta:
         model = Media
         fields = '__all__'
-        read_only_fields = ('created_by', 'modified_by')
+        read_only_fields = ('created_by', 'modified_by',
+                            'file_size', 'file_type')
 
 
 class MediaCollectionSerializer(TaggitSerializer, UniCMSCreateUpdateSerializer):
