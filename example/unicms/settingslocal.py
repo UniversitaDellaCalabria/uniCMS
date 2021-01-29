@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
 
-    'unicms_editorial_board',
+    # 'unicms_editorial_board',
 ]
 
 # Database
