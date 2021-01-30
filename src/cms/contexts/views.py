@@ -54,7 +54,8 @@ def cms_dispatch(request):
     # go further with webpath matching
     path = append_slash(path)
     webpath = WebPath.objects.filter(site=website,
-                                     fullpath=path).first()
+                                     fullpath=path,
+                                     is_active=True).first()
     if not webpath:
         raise Http404()
     if webpath.is_alias:
