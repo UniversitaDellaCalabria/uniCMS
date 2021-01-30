@@ -90,9 +90,17 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
                                          data=request.data,
                                          partial=True)
         if serializer.is_valid(raise_exception=True):
+
+            permission = EditorialBoardEditors.get_permission(webpath=item.parent,
+                                                              user=request.user)
+            publisher_perms = is_publisher(permission)
+            if not publisher_perms:
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
+
             # if parent in request data, check permission on parent
             new_parent = serializer.validated_data.get('parent')
-            if new_parent:
+            if new_parent and new_parent != item.parent:
                 # check permissions on parent
                 permission = EditorialBoardEditors.get_permission(webpath=new_parent,
                                                                   user=request.user)
@@ -109,14 +117,23 @@ class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance=item,
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
-            parent = serializer.validated_data.get('parent')
-            # check permissions on parent
-            permission = EditorialBoardEditors.get_permission(webpath=parent,
+
+            permission = EditorialBoardEditors.get_permission(webpath=item.parent,
                                                               user=request.user)
             publisher_perms = is_publisher(permission)
             if not publisher_perms:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
+
+            parent = serializer.validated_data.get('parent')
+            # check permissions on parent if different from actual
+            if parent != item.parent:
+                permission = EditorialBoardEditors.get_permission(webpath=parent,
+                                                                  user=request.user)
+                publisher_perms = is_publisher(permission)
+                if not publisher_perms:
+                    raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                                 resource=request.method)
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):

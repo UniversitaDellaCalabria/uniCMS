@@ -209,6 +209,8 @@ class WebpathAPIUnitTest(TestCase):
                                                                permission=3,
                                                                is_active=True)
         child = ebu_child.webpath
+        child.parent = ebu_parent.webpath
+        child.save()
         child_url = reverse('unicms_api:editorial-board-site-webpath',
                             kwargs={'site_id': site.pk,
                                     'pk': child.pk})
@@ -239,10 +241,6 @@ class WebpathAPIUnitTest(TestCase):
                       follow=1)
         assert res.status_code == 403
 
-        # correct data and permissions on parent
-        ebu_parent.permission = 7
-        ebu_parent.save()
-
         # wrong alias
         child_json = {'site': site.pk,
                       'parent': parent.pk,
@@ -255,6 +253,10 @@ class WebpathAPIUnitTest(TestCase):
                       content_type='application/json',
                       follow=1)
         assert res.status_code == 400
+
+        # correct data and permissions on parent
+        ebu_parent.permission = 7
+        ebu_parent.save()
 
         # correct alias
         child_json = {'site': site.pk,

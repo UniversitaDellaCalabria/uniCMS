@@ -91,7 +91,7 @@ class EditorWebpathPageView(generics.RetrieveUpdateDestroyAPIView):
 
             # if parent in request data, check permission on parent
             new_webpath = serializer.validated_data.get('webpath')
-            if new_webpath:
+            if new_webpath and new_webpath != item.webpath:
                 # check permissions on webpath
                 permission = EditorialBoardEditors.get_permission(webpath=new_webpath,
                                                                   user=request.user)
@@ -116,12 +116,13 @@ class EditorWebpathPageView(generics.RetrieveUpdateDestroyAPIView):
 
             webpath = serializer.validated_data.get('webpath')
             # check permissions on webpath
-            permission = EditorialBoardEditors.get_permission(webpath=webpath,
-                                                              user=request.user)
-            editor_perms = is_editor(permission)
-            if not editor_perms:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
+            if webpath != item.webpath:
+                permission = EditorialBoardEditors.get_permission(webpath=webpath,
+                                                                  user=request.user)
+                editor_perms = is_editor(permission)
+                if not editor_perms:
+                    raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                                 resource=request.method)
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):

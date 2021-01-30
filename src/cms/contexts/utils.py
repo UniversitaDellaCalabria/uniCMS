@@ -143,6 +143,6 @@ def is_publisher(permission):
     returns a dict{} with publiser permission info
     """
     if not permission > 5: return {}
-    allow_descendant = True if permission > 7 else False
+    allow_descendant = True if permission == 7 else False
     return {'only_created_by': False,
             'allow_descendant': allow_descendant}
