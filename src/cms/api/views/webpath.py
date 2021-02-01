@@ -25,6 +25,7 @@ class EditorWebsiteWebpathList(UniCMSListCreateAPIView):
     name = "Webpaths"
     description = "Get user editorial boards websites webpath list"
     serializer_class = WebPathSerializer
+    search_fields = ['name']
 
     def get_queryset(self):
         """
