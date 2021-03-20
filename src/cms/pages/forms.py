@@ -101,7 +101,7 @@ class PageMenuForm(ModelForm):
 
     class Meta:
         model = PageMenu
-        fields = ['page', 'menu', 'order', 'is_active']
+        fields = ['page', 'menu', 'section', 'order', 'is_active']
 
 
 class PagePublicationForm(ModelForm):
