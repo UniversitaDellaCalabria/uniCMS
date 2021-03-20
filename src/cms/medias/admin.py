@@ -7,7 +7,6 @@ from . models import Media, MediaCollection, MediaCollectionItem
 
 def preview_image(obj):
     width = "15"
-    # breakpoint()
     img_tag = f'<img src="{obj.file.url}" style="width: {width}vw;"/>'
     result = mark_safe(img_tag) # nosec
     return result

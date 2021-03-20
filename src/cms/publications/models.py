@@ -5,9 +5,13 @@ from django.utils.translation import gettext_lazy as _
 from cms.api.utils import check_user_permission_on_object
 
 from cms.contexts.models import *
-from cms.contexts.utils import is_editor, is_translator
+from cms.contexts.models_abstract import AbstractLockable
 
+from django.utils.safestring import mark_safe
+
+from cms.medias import settings as cms_media_settings
 from cms.medias.models import Media, MediaCollection, AbstractMedia
+from cms.medias.validators import *
 
 from cms.pages.models import AbstractPublicable
 
@@ -21,6 +25,41 @@ from markdownify import markdownify
 from taggit.managers import TaggableManager
 
 from . settings import *
+
+
+CMS_IMAGE_CATEGORY_SIZE = getattr(settings, 'CMS_IMAGE_CATEGORY_SIZE',
+                                  cms_media_settings.CMS_IMAGE_CATEGORY_SIZE)
+
+
+class Category(TimeStampedModel, CreatedModifiedBy):
+    name = models.CharField(max_length=160, blank=False,
+                            null=False, unique=False)
+    description = models.TextField(max_length=1024,
+                                   null=False, blank=False)
+    image = models.ImageField(upload_to="images/categories",
+                              null=True, blank=True,
+                              max_length=512,
+                              validators=[validate_file_extension,
+                                          validate_file_size])
+
+    class Meta:
+        ordering = ['name']
+        verbose_name_plural = _("Content Categories")
+
+    def __str__(self):
+        return self.name
+
+    def image_as_html(self):
+        res = ""
+        try:
+            res = f'<img width={CMS_IMAGE_CATEGORY_SIZE} src="{self.image.url}"/>'
+        except ValueError:  # pragma: no cover
+            # *** ValueError: The 'image' attribute has no file associated with it.
+            res = f"{settings.STATIC_URL}images/no-image.jpg"
+        return mark_safe(res) # nosec
+
+    image_as_html.short_description = _('Image of this Category')
+    image_as_html.allow_tags = True
 
 
 class AbstractPublication(TimeStampedModel, ActivableModel):
@@ -47,7 +86,7 @@ class AbstractPublication(TimeStampedModel, ActivableModel):
     # default='draft')
     # date_start = models.DateTimeField()
     # date_end = models.DateTimeField()
-    category = models.ManyToManyField('cmspages.Category')
+    category = models.ManyToManyField(Category)
 
     note = models.TextField(null=True,blank=True,
                             help_text=_('Editorial Board notes'))
@@ -60,7 +99,7 @@ class AbstractPublication(TimeStampedModel, ActivableModel):
 
 
 # class Publication(AbstractPublication, AbstractPublicable, CreatedModifiedBy):
-class Publication(AbstractPublication, CreatedModifiedBy):
+class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
     slug = models.SlugField(null=True, blank=True)
     tags = TaggableManager()
     relevance = models.IntegerField(default=0, blank=True)
@@ -119,8 +158,17 @@ class Publication(AbstractPublication, CreatedModifiedBy):
 
     @property
     def related_galleries(self):
-        return PublicationGallery.objects.filter(publication=self,
-                                                 is_active=True)
+        if getattr(self, '_related_galleries', None): # pragma: no cover
+            return self._related_galleries
+        pub_galleries = PublicationGallery.objects.filter(publication=self,
+                                                          is_active=True,
+                                                          collection__is_active=True)
+        # galleries = []
+        # for pub_gallery in pub_galleries:
+        # if pub_gallery.collection.get_items():
+        # galleries.append(pub_gallery)
+        self._related_galleries = pub_galleries
+        return self._related_galleries
 
     def translate_as(self, lang):
         """
@@ -206,8 +254,7 @@ class Publication(AbstractPublication, CreatedModifiedBy):
         if not user: return False
 
         # check if user has Django permissions to change object
-        permission = check_user_permission_on_object(user, self,
-                                                     'cmspublications.change_publication')
+        permission = check_user_permission_on_object(user, self)
         # if permission
         if permission['granted']: return True
 
@@ -217,10 +264,8 @@ class Publication(AbstractPublication, CreatedModifiedBy):
             pub_ctxs = self.get_publication_contexts()
             for pub_ctx in pub_ctxs:
                 webpath = pub_ctx.webpath
-                eb_permission = EditorialBoardEditors.get_permission(webpath,
-                                                                     user)
-                localization_perms = is_translator(eb_permission)
-                if localization_perms: return True
+                webpath_perms = webpath.is_localizable_by(user=user)
+                if webpath_perms: return True
         # if no permissions
         return False
 
@@ -228,8 +273,7 @@ class Publication(AbstractPublication, CreatedModifiedBy):
         if not user: return False
 
         # check if user has Django permissions to change object
-        permission = check_user_permission_on_object(user, self,
-                                                     'cmspublications.change_publication')
+        permission = check_user_permission_on_object(user, self)
         # if permission
         if permission['granted']: return True
 
@@ -239,16 +283,32 @@ class Publication(AbstractPublication, CreatedModifiedBy):
             pub_ctxs = self.get_publication_contexts()
             for pub_ctx in pub_ctxs:
                 webpath = pub_ctx.webpath
-                eb_permission = EditorialBoardEditors.get_permission(webpath,
-                                                                     user)
-                editor_perms = is_editor(eb_permission)
-                if editor_perms:
-                    if editor_perms['only_created_by'] == False:
-                        return True
-                    elif self.created_by == user:
-                        return True
+                webpath_perms = webpath.is_editable_by(user=user, obj=self)
+                if webpath_perms: return True
         # if no permissions
         return False
+
+    def is_publicable_by(self, user=None):
+        if not user: return False
+
+        # check if user has Django permissions to change object
+        permission = check_user_permission_on_object(user, self)
+        # if permission
+        if permission['granted']: return True
+
+        # if no permissions and no locks
+        if not permission.get('locked', False):
+            # check if user has EditorialBoard editor permissions on object
+            pub_ctxs = self.get_publication_contexts()
+            for pub_ctx in pub_ctxs:
+                webpath = pub_ctx.webpath
+                webpath_perms = webpath.is_publicable_by(user=user, obj=self)
+                if webpath_perms: return True
+        # if no permissions
+        return False
+
+    def is_lockable_by(self, user):
+        return True if self.is_editable_by(user) else False
 
     def __str__(self):
         # return '{} {}'.format(self.title, self.state)
@@ -282,11 +342,11 @@ class PublicationContext(TimeStampedModel, ActivableModel,
             url += f'/?category_name={category_name}'
         return sanitize_path(url)
 
-    @property
-    def related_publication_contexts(self):
-        related = PublicationContextRelated.objects.filter(publication_context=self,
-                                                           related__is_active=True)
-        return [i for i in related if i.related.is_publicable]
+    # @property
+    # def related_publication_contexts(self):
+        # related = PublicationContextRelated.objects.filter(publication_context=self,
+                                                           # related__is_active=True)
+        # return [i for i in related if i.related.is_publicable]
 
     @property
     def url(self):

@@ -2,15 +2,19 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
+from cms.pages.forms import PageLocalizationForm
 from cms.pages.models import *
 from cms.pages.serializers import *
 
 from rest_framework import generics
 from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .. exceptions import LoggedPermissionDenied
 from .. pagination import UniCmsApiPagination
+from .. serializers import UniCMSFormSerializer
 
 
 class PageLocalizationList(generics.ListCreateAPIView):
@@ -27,19 +31,21 @@ class PageLocalizationList(generics.ListCreateAPIView):
     def get_queryset(self):
         """
         """
-        site_id = self.kwargs['site_id']
-        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
-        if not site.is_managed_by(self.request.user):
-            raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                         resource=site)
-        webpath_id = self.kwargs['webpath_id']
-        pk = self.kwargs['page_id']
-        page = get_object_or_404(Page,
-                                 pk=pk,
-                                 webpath__pk=webpath_id,
-                                 webpath__site__pk=site_id)
-        items = PageLocalization.objects.filter(page=page)
-        return items
+        site_id = self.kwargs.get('site_id')
+        webpath_id = self.kwargs.get('webpath_id')
+        if site_id and webpath_id:
+            site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+            if not site.is_managed_by(self.request.user):
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=site)
+            pk = self.kwargs['page_id']
+            page = get_object_or_404(Page,
+                                     pk=pk,
+                                     webpath__pk=webpath_id,
+                                     webpath__site__pk=site_id)
+            return PageLocalization.objects.filter(page=page)
+        else:
+            return PageLocalization.objects.none() # pragma: no cover
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -118,3 +124,11 @@ class PageLocalizationView(generics.RetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         return super().delete(request, *args, **kwargs)
+
+
+class PageLocalizationFormView(APIView):
+
+    def get(self, *args, **kwargs):
+        form = PageLocalizationForm(page_id=kwargs.get('page_id'))
+        form_fields = UniCMSFormSerializer.serialize(form)
+        return Response(form_fields)

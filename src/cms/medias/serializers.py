@@ -1,4 +1,4 @@
-from cms.api.serializers import UniCMSCreateUpdateSerializer
+from cms.api.serializers import UniCMSCreateUpdateSerializer, UniCMSContentTypeClass
 
 from rest_framework import serializers
 
@@ -17,7 +17,8 @@ class MediaCollectionForeignKey(serializers.PrimaryKeyRelatedField):
         return None # pragma: no cover
 
 
-class MediaSerializer(UniCMSCreateUpdateSerializer):
+class MediaSerializer(UniCMSCreateUpdateSerializer,
+                      UniCMSContentTypeClass):
     class Meta:
         model = Media
         fields = '__all__'
@@ -25,7 +26,9 @@ class MediaSerializer(UniCMSCreateUpdateSerializer):
                             'file_size', 'file_type')
 
 
-class MediaCollectionSerializer(TaggitSerializer, UniCMSCreateUpdateSerializer):
+class MediaCollectionSerializer(TaggitSerializer,
+                                UniCMSCreateUpdateSerializer,
+                                UniCMSContentTypeClass):
     tags = TagListSerializerField()
 
     class Meta:
@@ -36,6 +39,12 @@ class MediaCollectionSerializer(TaggitSerializer, UniCMSCreateUpdateSerializer):
 
 class MediaCollectionItemSerializer(UniCMSCreateUpdateSerializer):
     collection = MediaCollectionForeignKey()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        media = MediaSerializer(instance.media)
+        data['media'] = media.data
+        return data
 
     class Meta:
         model = MediaCollectionItem

@@ -158,3 +158,13 @@ class CarouselItemAPIUnitTest(TestCase):
             carousel_item.refresh_from_db()
         except ObjectDoesNotExist:
             assert True
+
+        # carousel form
+        url = reverse('unicms_api:carousel-item-form',
+                      kwargs={'carousel_id': carousel.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)
+
+        url = reverse('unicms_api:carousel-item-form-generic')
+        res = req.get(url)
+        assert isinstance(res.json(), list)

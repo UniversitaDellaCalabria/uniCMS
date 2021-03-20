@@ -5486,7 +5486,7 @@
   }
 },
 {
-  "model": "cmspages.category",
+  "model": "cmspublications.category",
   "pk": 1,
   "fields": {
     "created": "2020-11-09T13:25:34.020Z",
@@ -5499,7 +5499,7 @@
   }
 },
 {
-  "model": "cmspages.category",
+  "model": "cmspublications.category",
   "pk": 2,
   "fields": {
     "created": "2020-11-09T13:26:39.646Z",
@@ -5512,7 +5512,7 @@
   }
 },
 {
-  "model": "cmspages.category",
+  "model": "cmspublications.category",
   "pk": 3,
   "fields": {
     "created": "2020-11-09T13:27:51.975Z",
@@ -5525,7 +5525,7 @@
   }
 },
 {
-  "model": "cmspages.category",
+  "model": "cmspublications.category",
   "pk": 4,
   "fields": {
     "created": "2020-11-14T15:11:08.755Z",
@@ -5538,7 +5538,7 @@
   }
 },
 {
-  "model": "cmspages.category",
+  "model": "cmspublications.category",
   "pk": 5,
   "fields": {
     "created": "2020-12-03T10:45:29.559Z",
@@ -5551,7 +5551,7 @@
   }
 },
 {
-  "model": "cmspages.category",
+  "model": "cmspublications.category",
   "pk": 6,
   "fields": {
     "created": "2020-12-03T15:04:27.918Z",
@@ -5564,7 +5564,7 @@
   }
 },
 {
-  "model": "cmspages.category",
+  "model": "cmspublications.category",
   "pk": 7,
   "fields": {
     "created": "2020-12-10T11:29:39.517Z",

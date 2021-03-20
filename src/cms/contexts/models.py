@@ -11,7 +11,9 @@ from cms.templates.models import ActivableModel, TimeStampedModel, CreatedModifi
 
 from . import settings as app_settings
 from . exceptions import ReservedWordException
-from . utils import append_slash, sanitize_path
+from . utils import (append_slash, is_editor,
+                     is_publisher, is_translator,
+                     sanitize_path)
 
 
 logger = logging.getLogger(__name__)
@@ -20,14 +22,13 @@ CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
 CMS_PATH_PREFIX = getattr(settings, 'CMS_PATH_PREFIX', '')
 
 
-class WebSite(models.Model):
+class WebSite(ActivableModel):
     name = models.CharField(max_length=254,
                             unique=True,
                             blank=False, null=False)
     domain = models.CharField(max_length=254,
                               blank=False, null=False,
                               unique=True)
-    is_active = models.BooleanField(default=False, blank=True)
 
     class Meta:
         verbose_name_plural = _("Sites")
@@ -51,7 +52,7 @@ class WebSite(models.Model):
         return self.domain
 
 
-class WebPath(TimeStampedModel, CreatedModifiedBy):
+class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
     """
     A Page can belong to one or more Context
     A editor/moderator can belong to one or more Context
@@ -79,7 +80,6 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
     fullpath = models.TextField(max_length=2048, null=True, blank=True,
                                 help_text=_("final path prefixed with the "
                                             "parent path"))
-    is_active = models.BooleanField()
 
     class Meta:
         verbose_name_plural = _("Site Contexts (WebPaths)")
@@ -147,11 +147,53 @@ class WebPath(TimeStampedModel, CreatedModifiedBy):
         for child_path in WebPath.objects.filter(parent=self):
             child_path.save()
 
-    # def get_parent_id(self):
-        # return self.parent.pk if self.parent else None
-
     def get_parent_fullpath(self):
         return self.parent.get_full_path() if self.parent else ''
+
+    def is_localizable_by(self, user=None, obj=None, parent=False):
+        if not user: return False
+        if user.is_superuser: return True
+        self if not obj else obj
+        parent = self.parent if parent else self
+        eb_permission = EditorialBoardEditors.get_permission(parent, user)
+        perms = is_translator(eb_permission)
+        # if user has not editor permissions
+        if not perms: return False
+        webpath_lock_ok = EditorialBoardLockUser.check_for_locks(self, user)
+        return webpath_lock_ok
+
+    def is_editable_by(self, user=None, obj=None, parent=False):
+        if not user: return False
+        if user.is_superuser: return True
+        item = self if not obj else obj
+        parent = self.parent if parent else self
+        eb_permission = EditorialBoardEditors.get_permission(parent, user)
+        perms = is_editor(eb_permission)
+        # if user has not editor permissions
+        if not perms: return False
+        # if user can edit only created by him pages
+        if perms['only_created_by'] and item.created_by != user:
+            return False
+        webpath_lock_ok = EditorialBoardLockUser.check_for_locks(self, user)
+        return webpath_lock_ok
+
+    def is_publicable_by(self, user=None, obj=None, parent=False):
+        if not user: return False
+        if user.is_superuser: return True
+        item = self if not obj else obj
+        parent = self.parent if parent else self
+        eb_permission = EditorialBoardEditors.get_permission(parent, user)
+        perms = is_publisher(eb_permission)
+        # if user has not editor permissions
+        if not perms: return False
+        # if user can edit only created by him pages
+        if perms['only_created_by'] and item.created_by != user:
+            return False
+        webpath_lock_ok = EditorialBoardLockUser.check_for_locks(self, user)
+        return webpath_lock_ok
+
+    def is_lockable_by(self, user):
+        return self.is_publicable_by(user, parent=True)
 
     def __str__(self):
         return '{} @ {}{}'.format(self.name, self.site, self.get_full_path())
@@ -260,9 +302,32 @@ class EditorialBoardLockUser(models.Model):
         verbose_name_plural = _("Editorial Board Locks Owners")
 
     @classmethod
-    def get_users_locks(cls, content_type, object_id):
+    def get_object_locks(cls, content_type, object_id):
         return cls.objects.filter(lock__content_type=content_type,
                                   lock__object_id=object_id)
+
+    @classmethod
+    def get_user_object_locks(cls, user, content_type, object_id):
+        return cls.get_object_locks(content_type=content_type,
+                                    object_id=object_id).filter(user=user)
+
+    @classmethod
+    def check_for_locks(cls, obj, user):
+        # @to-do redis-lock
+
+        # check for locks on object
+        content_type = ContentType.objects.get_for_model(obj)
+        # locks = EditorialBoardLockProxy.obj_is_locked(user=user,
+        # content_type=content_type,
+        # object_id=self.pk)
+        locks = cls.get_object_locks(content_type=content_type,
+                                     object_id=obj.pk)
+        # if there is not lock, ok
+        if not locks: return True
+        # if user is in lock user list, has permissions
+        if locks.filter(user=user): return True
+        # else no permissions but obj is locked
+        return False
 
     def __str__(self): # pragma: no cover
         return f'{self.lock} {self.user}'

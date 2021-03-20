@@ -3,16 +3,14 @@ import logging
 from django.db import models
 from django.utils import timezone
 from django.utils.module_loading import import_string
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.models import *
-from cms.contexts.lock_proxy import EditorialBoardLockProxy
-from cms.contexts.utils import is_editor, is_publisher, is_translator
+from cms.contexts.models_abstract import AbstractLockable
+# from cms.contexts.lock_proxy import EditorialBoardLockProxy
 
 from cms.carousels.models import Carousel
 
-from cms.medias import settings as cms_media_settings
 from cms.medias.models import Media
 from cms.medias.validators import *
 
@@ -33,12 +31,27 @@ logger = logging.getLogger(__name__)
 PAGE_STATES = (('draft', _('Draft')),
                ('published', _('Published')),)
 
-CMS_IMAGE_CATEGORY_SIZE = getattr(settings, 'CMS_IMAGE_CATEGORY_SIZE',
-                                  cms_media_settings.CMS_IMAGE_CATEGORY_SIZE)
-
 
 class AbstractDraftable(models.Model):
     draft_of = models.IntegerField(null=True, blank=True)
+
+    def publish(self):
+        if self.draft_of:
+            published = self.__class__.objects.filter(pk=self.draft_of).first()
+            # if not published:
+            # self.message_user(request,
+            # "Draft missed its parent page ... ",
+            # level = messages.ERROR)
+            if published and published.webpath == self.webpath:
+                published.is_active = False
+                published.save()
+            self.draft_of = None
+        if self.state == 'draft':
+            self.state = 'published'
+            self.is_active = True
+        else:
+            self.state = 'draft'
+        self.save()
 
     class Meta:
         abstract = True
@@ -63,7 +76,7 @@ class AbstractPublicable(models.Model):
 
 
 class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
-           AbstractPublicable, CreatedModifiedBy):
+           AbstractPublicable, CreatedModifiedBy, AbstractLockable):
     name = models.CharField(max_length=160,
                             blank=False, null=False)
     title = models.CharField(max_length=256,
@@ -221,72 +234,36 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
 
     def is_localizable_by(self, user=None):
         if not user: return False
-        # check if user has EditorialBoard translator permissions on object
+        # check if user has EditorialBoard editor permissions on object
+        # and check for locks on webpath
         webpath = self.webpath
-        eb_permission = EditorialBoardEditors.get_permission(webpath,
-                                                             user)
-        perms = is_translator(eb_permission)
-        # if user has not localization permissions
-        if not perms: return False
+        webpath_perms = webpath.is_localizable_by(user=user)
+        if not webpath_perms: return False
         # check for locks on object
-        content_type = ContentType.objects.get_for_model(self.__class__)
-        locks = EditorialBoardLockProxy.obj_is_locked(user=user,
-                                                      content_type=content_type,
-                                                      object_id=self.pk)
-        # if there is not lock, ok
-        if not locks: return True
-        # if user is in lock user list, has permissions
-        if locks['locked_by_user']: return True
-        # else no permissions but obj is locked
-        return False
+        return EditorialBoardLockUser.check_for_locks(self, user)
 
     def is_editable_by(self, user=None):
         if not user: return False
         # check if user has EditorialBoard editor permissions on object
+        # and check for locks on webpath
         webpath = self.webpath
-        eb_permission = EditorialBoardEditors.get_permission(webpath,
-                                                             user)
-        perms = is_editor(eb_permission)
-        # if user has not editor permissions
-        if not perms: return False
-        # if user can edit only created by him pages
-        if perms['only_created_by'] and self.created_by != user:
-            return False
+        webpath_perms = webpath.is_editable_by(user=user, obj=self)
+        if not webpath_perms: return False
         # check for locks on object
-        content_type = ContentType.objects.get_for_model(self.__class__)
-        locks = EditorialBoardLockProxy.obj_is_locked(user=user,
-                                                      content_type=content_type,
-                                                      object_id=self.pk)
-        # if there is not lock, ok
-        if not locks: return True
-        # if user is in lock user list, has permissions
-        if locks['locked_by_user']: return True
-        # else no permissions but obj is locked
-        return False
+        return EditorialBoardLockUser.check_for_locks(self, user)
 
     def is_publicable_by(self, user=None):
         if not user: return False
-        # check if user has EditorialBoard publisher permissions on object
+        # check if user has EditorialBoard editor permissions on object
+        # and check for locks on webpath
         webpath = self.webpath
-        eb_permission = EditorialBoardEditors.get_permission(webpath,
-                                                             user)
-        perms = is_publisher(eb_permission)
-        # if user has not publisher permissions
-        if not perms: return False
-        # if user can edit only created by him pages
-        if perms['only_created_by'] and self.created_by != user:
-            return False
+        webpath_perms = webpath.is_publicable_by(user=user, obj=self)
+        if not webpath_perms: return False
         # check for locks on object
-        content_type = ContentType.objects.get_for_model(self.__class__)
-        locks = EditorialBoardLockProxy.obj_is_locked(user=user,
-                                                      content_type=content_type,
-                                                      object_id=self.pk)
-        # if there is not lock, ok
-        if not locks: return True
-        # if user is in lock user list, has permissions
-        if locks['locked_by_user']: return True
-        # else no permissions but obj is locked
-        return False
+        return EditorialBoardLockUser.check_for_locks(self, user)
+
+    def is_lockable_by(self, user):
+        return True if self.is_editable_by(user) else False
 
     def __str__(self):
         return '{} [{}]'.format(self.name, self.state)
@@ -404,46 +381,15 @@ class PageLink(TimeStampedModel, SortableModel):
 
 class PagePublication(TimeStampedModel, SortableModel, ActivableModel):
     page = models.ForeignKey(Page, null=False, blank=False,
-                             related_name='container_page',
+                             # related_name='container_page',
                              on_delete=models.CASCADE)
     publication = models.ForeignKey('cmspublications.Publication',
                                     null=False, blank=False,
-                                    on_delete=models.CASCADE,
-                                    related_name="publication_content")
+                                    on_delete=models.CASCADE)
+    # related_name="publication_content")
 
     class Meta:
         verbose_name_plural = _("Publication Contents")
 
     def __str__(self):
         return '{} {}'.format(self.page, self.publication)
-
-
-class Category(TimeStampedModel, CreatedModifiedBy):
-    name = models.CharField(max_length=160, blank=False,
-                            null=False, unique=False)
-    description = models.TextField(max_length=1024,
-                                   null=False, blank=False)
-    image = models.ImageField(upload_to="images/categories",
-                              null=True, blank=True,
-                              max_length=512,
-                              validators=[validate_file_extension,
-                                          validate_file_size])
-
-    class Meta:
-        ordering = ['name']
-        verbose_name_plural = _("Content Categories")
-
-    def __str__(self):
-        return self.name
-
-    def image_as_html(self):
-        res = ""
-        try:
-            res = f'<img width={CMS_IMAGE_CATEGORY_SIZE} src="{self.image.url}"/>'
-        except ValueError:  # pragma: no cover
-            # *** ValueError: The 'image' attribute has no file associated with it.
-            res = f"{settings.STATIC_URL}images/no-image.jpg"
-        return mark_safe(res) # nosec
-
-    image_as_html.short_description = _('Image of this Category')
-    image_as_html.allow_tags = True

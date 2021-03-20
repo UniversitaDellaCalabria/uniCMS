@@ -151,3 +151,11 @@ class PageLocalizationAPIUnitTest(TestCase):
             page_loc.refresh_from_db()
         except ObjectDoesNotExist:
             assert True
+
+        # form
+        url = reverse('unicms_api:editorial-board-site-webpath-page-localization-form',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'page_id': page.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)

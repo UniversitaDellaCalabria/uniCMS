@@ -1,18 +1,14 @@
+from django.contrib.contenttypes.models import ContentType
+
+
 from rest_framework import serializers
 
-from cms.publications.models import *
 
-
-class PublicationContextSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = PublicationContext
-        # fields = ['webpath',
-        # 'publication__date_start',
-        # 'publication__title',
-        # 'publication__subheading',
-        # 'publication__content']
-        fields = '__all__'
-        lookup_field = 'pk'
+# class PublicationContextSerializer(serializers.HyperlinkedModelSerializer):
+# class Meta:
+# model = PublicationContext
+# fields = '__all__'
+# lookup_field = 'pk'
 
 
 class UniCMSCreateUpdateSerializer(serializers.ModelSerializer):
@@ -28,6 +24,66 @@ class UniCMSCreateUpdateSerializer(serializers.ModelSerializer):
         if request.user:
             validated_data['modified_by'] = request.user
         return super().update(instance, validated_data)
+
+    class Meta:
+        abstract = True
+
+
+class UniCMSFormSerializer():
+
+    @staticmethod
+    def serialize(form):
+
+        # WIDGETS_TYPES = (
+        # (,)
+        # )
+
+        def _get_choices(choices):
+            elements = []
+            for choice in choices:
+                if (type(choice[1]) == tuple):
+                    elements.extend(_get_choices(choice[1]))
+                else:
+                    elements.append({"text": choice[1],
+                                     "value": choice[0]})
+            return elements
+
+        form_fields = []
+
+        for field_name in form.fields:
+            field = form.fields[field_name]
+            field_type = getattr(field.widget.__class__,
+                                 'input_type',
+                                 'textarea')
+            field_dict = {}
+            field_dict['id'] = field_name
+            field_dict['label'] = field.label
+            field_dict['required'] = 1 if field.required else 0
+            field_dict['type'] = field_type
+            field_dict['help_text'] = field.help_text
+            field_dict['options'] = []
+            field_dict['multiple'] = 0
+
+            if field_type == "select":
+                if field.widget.__class__.__dict__.get('allow_multiple_selected'):
+                    field_dict['multiple'] = 1
+
+                if hasattr(field, '_queryset'):
+                    for item in field._queryset:
+                        field_dict['options'].append({"text": item.__str__(),
+                                                      "value": item.pk})
+                elif hasattr(field, '_choices'):
+                    field_dict['options'].extend(_get_choices(field._choices))
+            form_fields.append(field_dict)
+        return form_fields
+
+
+class UniCMSContentTypeClass(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        content_type = ContentType.objects.get_for_model(instance.__class__)
+        data['object_content_type'] = content_type.pk
+        return data
 
     class Meta:
         abstract = True

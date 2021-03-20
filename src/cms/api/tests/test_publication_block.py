@@ -125,6 +125,3 @@ class PublicationBlockAPIUnitTest(TestCase):
             pub_block.refresh_from_db()
         except ObjectDoesNotExist:
             assert True
-
-
-

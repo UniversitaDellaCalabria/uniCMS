@@ -162,3 +162,9 @@ class MediaCollectionItemAPIUnitTest(TestCase):
             item.refresh_from_db()
         except ObjectDoesNotExist:
             assert True
+
+        # form
+        url = reverse('unicms_api:media-collection-item-form',
+                      kwargs={'collection_id': collection.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)

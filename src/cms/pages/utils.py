@@ -19,7 +19,10 @@ def copy_page_as_draft(obj):
 
     # now replicate all its childs and menus
     for i in ('pageblock_set', 'pagecarousel_set',
-              'pagelink_set', 'pagemenu_set'):
+              'pagelink_set', 'pagemenu_set', 'pagepublication_set',
+              'pagemedia_set', 'pagelocalization_set',
+              # this is a related_name property on model
+              'parent_page'):
         childs = getattr(obj, i).all()
         for child in childs:
             child.pk = None

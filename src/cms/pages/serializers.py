@@ -1,6 +1,13 @@
-from cms.api.serializers import UniCMSCreateUpdateSerializer
+from django.urls import reverse
 
+from cms.api.serializers import UniCMSCreateUpdateSerializer, UniCMSContentTypeClass
+from cms.carousels.serializers import CarouselSerializer
 from cms.contexts.models import WebPath
+from cms.contexts.serializers import WebPathSerializer
+from cms.medias.serializers import MediaSerializer
+from cms.menus.serializers import MenuSerializer
+from cms.publications.serializers import PublicationSerializer
+from cms.templates.serializers import *
 
 from rest_framework import serializers
 
@@ -23,7 +30,7 @@ class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
         request = self.context.get('request', None)
         if request:
-            if request.method in ['PATCH','PUT','DELETE']:
+            if request.method in ['PATCH','PUT']:
                 return WebPath.objects.all()
             site_id = self.context['request'].parser_context['kwargs']['site_id']
             webpath_id = self.context['request'].parser_context['kwargs']['webpath_id']
@@ -32,9 +39,22 @@ class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
         return None # pragma: nocover
 
 
-class PageSerializer(TaggitSerializer, UniCMSCreateUpdateSerializer):
+class PageSerializer(TaggitSerializer,
+                     UniCMSCreateUpdateSerializer,
+                     UniCMSContentTypeClass):
     webpath = WebPathForeignKey()
     tags = TagListSerializerField()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        base_template = PageTemplateSerializer(instance.base_template)
+        webpath = WebPathSerializer(instance.webpath)
+        preview_url = reverse('unicms:page-preview',
+                              kwargs={'page_id': data['id']})
+        data['base_template'] = base_template.data
+        data['webpath'] = webpath.data
+        data['preview_url'] = preview_url
+        return data
 
     class Meta:
         model = Page
@@ -46,6 +66,12 @@ class PageSerializer(TaggitSerializer, UniCMSCreateUpdateSerializer):
 class PageBlockSerializer(serializers.ModelSerializer):
     page = PageForeignKey()
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        block = TemplateBlockSerializer(instance.block)
+        data['block'] = block.data
+        return data
+
     class Meta:
         model = PageBlock
         fields = '__all__'
@@ -53,6 +79,12 @@ class PageBlockSerializer(serializers.ModelSerializer):
 
 class PageCarouselSerializer(serializers.ModelSerializer):
     page = PageForeignKey()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        carousel = CarouselSerializer(instance.carousel)
+        data['carousel'] = carousel.data
+        return data
 
     class Meta:
         model = PageCarousel
@@ -79,6 +111,12 @@ class PageLocalizationSerializer(UniCMSCreateUpdateSerializer):
 class PageMenuSerializer(serializers.ModelSerializer):
     page = PageForeignKey()
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        menu = MenuSerializer(instance.menu)
+        data['menu'] = menu.data
+        return data
+
     class Meta:
         model = PageMenu
         fields = '__all__'
@@ -86,6 +124,12 @@ class PageMenuSerializer(serializers.ModelSerializer):
 
 class PageMediaSerializer(serializers.ModelSerializer):
     page = PageForeignKey()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        media = MediaSerializer(instance.media)
+        data['media'] = media.data
+        return data
 
     class Meta:
         model = PageMedia
@@ -95,6 +139,12 @@ class PageMediaSerializer(serializers.ModelSerializer):
 class PagePublicationSerializer(serializers.ModelSerializer):
     page = PageForeignKey()
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        publication = PublicationSerializer(instance.publication)
+        data['publication'] = publication.data
+        return data
+
     class Meta:
         model = PagePublication
         fields = '__all__'
@@ -102,6 +152,12 @@ class PagePublicationSerializer(serializers.ModelSerializer):
 
 class PageRelatedSerializer(serializers.ModelSerializer):
     page = PageForeignKey()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        related_page = PageSerializer(instance.related_page)
+        data['related_page'] = related_page.data
+        return data
 
     class Meta:
         model = PageRelated

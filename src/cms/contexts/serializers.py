@@ -1,15 +1,37 @@
 from django.conf import settings
 
+from cms.api.serializers import UniCMSCreateUpdateSerializer, UniCMSContentTypeClass
+
 from cms.contexts import settings as contexts_settings
 from cms.contexts.models import EditorialBoardEditors
 
 from rest_framework import serializers
 
-from . models import WebPath, WebSite
+from . models import *
 
 
 CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
                                   contexts_settings.CMS_CONTEXT_PERMISSIONS)
+
+
+class EditorialBoardLockSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EditorialBoardLock
+        fields = '__all__'
+
+
+class EditorialBoardLockUserSerializer(serializers.ModelSerializer):
+
+    lock = EditorialBoardLockSerializer()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['user'] = instance.user.__str__()
+        return data
+
+    class Meta:
+        model = EditorialBoardLockUser
+        fields = '__all__'
 
 
 class WebSiteForeignKey(serializers.PrimaryKeyRelatedField):
@@ -30,7 +52,7 @@ class ParentForeignKey(serializers.PrimaryKeyRelatedField):
         return None # pragma: no cover
 
 
-class WebPathSerializer(serializers.ModelSerializer):
+class WebPathSerializer(UniCMSCreateUpdateSerializer, UniCMSContentTypeClass):
 
     site = WebSiteForeignKey()
     parent = ParentForeignKey()

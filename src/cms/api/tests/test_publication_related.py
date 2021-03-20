@@ -125,5 +125,9 @@ class PublicationRelatedAPIUnitTest(TestCase):
         except ObjectDoesNotExist:
             assert True
 
-
+        # form
+        url = reverse('unicms_api:editorial-board-publication-related-form',
+                      kwargs={'publication_id': pub.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)
 

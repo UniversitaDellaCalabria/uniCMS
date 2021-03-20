@@ -109,16 +109,12 @@ class PageAPIUnitTest(TestCase):
                               'webpath_id': webpath.pk,
                               'pk': page.pk})
         req.force_login(user2)
-        res = req.get(url, data,
-                      content_type='application/json',
-                      follow=1)
+        res = req.get(url, data, follow=1)
         assert res.status_code == 403
         # user hasn't permission on website
         ebu2.permission = 0
         ebu2.save()
-        res = req.get(url, data,
-                      content_type='application/json',
-                      follow=1)
+        res = req.get(url, data, follow=1)
         assert res.status_code == 403
 
         # restore user2 permission
@@ -128,11 +124,43 @@ class PageAPIUnitTest(TestCase):
         # user has permission
         state = page.state
         req.force_login(user)
-        res = req.get(url, data,
-                      content_type='application/json',
-                      follow=1)
+        res = req.get(url, data, follow=1)
         page.refresh_from_db()
         assert page.state != state
+
+        # COPY AS DRAFT
+        # no permission
+        url = reverse('unicms_api:editorial-board-site-webpath-page-copy-as-draft',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': page.webpath.pk,
+                              'pk': page.pk})
+        req.force_login(user2)
+        res = req.get(url)
+        assert res.status_code == 403
+
+        # no site managed
+        user3 = ContextUnitTest.create_user(username="test_user",
+                                            email="test@test.com",
+                                            is_staff=True)
+        req.force_login(user3)
+        res = req.get(url)
+        assert res.status_code == 403
+
+        # right permission
+        req.force_login(user)
+        res = req.get(url)
+        draft_page = Page.objects.filter(draft_of=page.pk).first()
+        assert draft_page
+
+        # change publication status of draft
+        url = reverse('unicms_api:editorial-board-site-webpath-page-change-publication-status',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'pk': draft_page.pk})
+
+        res = req.get(url)
+        # restore status of draft (to test delete)
+        res = req.get(url)
 
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-site-webpath-page',
@@ -221,6 +249,7 @@ class PageAPIUnitTest(TestCase):
         # user hasn't permission
         req.force_login(user2)
         res = req.delete(url)
+
         assert res.status_code == 403
         # user has permission
         req.force_login(user)
@@ -229,3 +258,26 @@ class PageAPIUnitTest(TestCase):
             page.refresh_from_db()
         except ObjectDoesNotExist:
             assert True
+
+        # delete draft
+        url = reverse('unicms_api:editorial-board-site-webpath-page',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'pk': draft_page.pk})
+        res = req.delete(url)
+        try:
+            draft_page.refresh_from_db()
+        except ObjectDoesNotExist:
+            assert True
+
+        # form
+        url = reverse('unicms_api:editorial-board-site-webpath-page-form',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)
+
+        url = reverse('unicms_api:editorial-board-site-webpath-page-form-generic',
+                      kwargs={'site_id': site.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)

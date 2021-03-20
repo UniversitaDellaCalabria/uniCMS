@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.utils.safestring import SafeString
 
 from cms.contexts.utils import handle_faulty_templates
-from cms.pages.models import Category
+from cms.publications.models import Category
 from cms.templates.utils import import_string_block
 
 

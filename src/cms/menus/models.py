@@ -3,6 +3,7 @@ from copy import deepcopy
 from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.models import CreatedModifiedBy, WebPath, models, settings
+from cms.contexts.models_abstract import AbstractLockable
 from cms.templates.models import (ActivableModel,
                                   SortableModel,
                                   TimeStampedModel)
@@ -18,7 +19,7 @@ class AbstractImportableMenu(object):
         for item in items:
             if not item: continue
 
-            for i in 'link', 'parent_id', 'menu_id':
+            for i in 'link', 'parent_id', 'parent_name', 'menu_id', 'level':
                 item.pop(i, None)
             item['menu'] = self.get_menu()
             childs = item.pop('childs', None)
@@ -26,16 +27,17 @@ class AbstractImportableMenu(object):
             if item.get('webpath_id', None):
                 item['webpath'] = WebPath.objects.get(pk=item['webpath_id'])
 
-            if isinstance(self, NavigationBarItem):
-                item['parent'] = self
             obj = NavigationBarItem.objects.create(**item)
+            if isinstance(self, NavigationBarItem):
+                obj.parent = self
+                obj.save()
             if childs:
                 obj.import_childs(childs)
         return True
 
 
 class NavigationBar(TimeStampedModel, ActivableModel, CreatedModifiedBy,
-                    AbstractImportableMenu):
+                    AbstractImportableMenu, AbstractLockable):
     name = models.CharField(max_length=33, blank=False, null=False)
 
     class Meta:
@@ -49,12 +51,13 @@ class NavigationBar(TimeStampedModel, ActivableModel, CreatedModifiedBy,
             items.append(i.localized(lang=lang))
         return items
 
-    def serialize(self, lang=settings.LANGUAGE):
+    def serialize(self, lang=settings.LANGUAGE, only_active=True):
         data = []
-        for child in NavigationBarItem.objects.filter(is_active=True,
-                                                      menu = self,
-                                                      parent = None):
-            ser_child = child.serialize(deep=True, lang=lang)
+        childs = NavigationBarItem.objects.filter(menu=self, parent=None)
+        if only_active:
+            childs = childs.filter(is_active=True)
+        for child in childs:
+            ser_child = child.serialize(deep=True, lang=lang, only_active=only_active)
             data.append(ser_child)
         return dict(name=self.name, is_active=self.is_active, childs=data)
 
@@ -71,7 +74,6 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
     elements that builds up the navigation menu
     """
     menu = models.ForeignKey(NavigationBar,
-                             null=True, blank=True,
                              on_delete=models.CASCADE,
                              related_name="related_menu")
     name = models.CharField(max_length=60, blank=False, null=False)
@@ -101,6 +103,11 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
         verbose_name_plural = _("Context Navigation Menu Items")
         ordering = ('order',)
 
+    def save(self, *args, **kwargs):
+        if self.parent == self or self.item_in_childs(self.parent):
+            raise Exception(_("Can't choose a child as parent!"))
+        super(self.__class__, self).save(*args, **kwargs)
+
     @property
     def link(self):
         if self.url:
@@ -124,34 +131,53 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
             self.language = None
         return self
 
-    def serialize(self, lang=settings.LANGUAGE, deep=False):
+    def serialize(self, lang=settings.LANGUAGE, deep=False,
+                  level=0, only_active=True):
         data = dict(
+                    id = self.pk,
                     menu_id = self.menu.pk,
                     parent_id = getattr(self.parent, 'pk', None),
+                    parent_name = getattr(self.parent, 'name', None),
                     name = self.name,
                     url = self.url,
                     publication_id = self.publication.pk if self.publication else None,
                     webpath_id = self.webpath.pk if self.webpath else None,
                     link = self.link,
                     is_active = self.is_active,
-                    order = self.order
+                    order = self.order,
+                    level=level
         )
         if deep:
             data['childs'] = []
-            for child in self.get_childs(lang=lang):
-                ser_child = child.serialize(deep=deep)
+            for child in self.get_childs(lang=lang, only_active=only_active):
+                ser_child = child.serialize(deep=deep, level=level + 1,
+                                            only_active=only_active)
                 data['childs'].append(ser_child)
         return data
 
-    def get_childs(self, lang=settings.LANGUAGE):
-        items = NavigationBarItem.objects.filter(is_active=True,
-                                                 parent=self,
+    def get_childs(self, lang=settings.LANGUAGE, only_active=True):
+        items = NavigationBarItem.objects.filter(parent=self,
                                                  menu=self.menu).\
                                           order_by('order')
+        if only_active:
+            items = items.filter(is_active=True)
         if getattr(self, 'language', lang):
             for item in items:
                 item.localized(lang)
         return items
+
+    def item_in_childs(self, item):
+        """
+        tells us if a menu item is in self childs tree
+        """
+        if not item: return False
+        childs = self.get_childs(only_active=False)
+        if not childs: return False
+        if item in childs:
+            return True
+        for child in childs:
+            if child.item_in_childs(item): return True
+        return False # pragma: no cover
 
     def get_menu(self):
         return self.menu

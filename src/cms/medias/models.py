@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.models import CreatedModifiedBy
+from cms.contexts.models_abstract import AbstractLockable
 from cms.templates.models import (ActivableModel,
                                   SortableModel,
                                   TimeStampedModel)
@@ -45,7 +46,8 @@ class AbstractMedia(models.Model):
         abstract = True
 
 
-class MediaCollection(ActivableModel, TimeStampedModel, CreatedModifiedBy):
+class MediaCollection(ActivableModel, TimeStampedModel,
+                      AbstractLockable, CreatedModifiedBy):
     name = models.CharField(max_length=160, blank=False,
                             null=False, unique=False)
     description = models.TextField(max_length=1024,
@@ -56,11 +58,16 @@ class MediaCollection(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         ordering = ['name']
         verbose_name_plural = _("Media Collections")
 
+    def get_items(self): # pragma: no cover
+        return MediaCollectionItem.objects.filter(collection=self,
+                                                  is_active=True)
+
     def __str__(self): # pragma: no cover
         return self.name
 
 
-class Media(ActivableModel, TimeStampedModel, AbstractMedia, CreatedModifiedBy):
+class Media(ActivableModel, TimeStampedModel, AbstractMedia,
+            AbstractLockable, CreatedModifiedBy):
     title = models.CharField(max_length=60, blank=False, null=False,
                              help_text=_("Media file title"))
     file = models.FileField(upload_to=context_media_path,

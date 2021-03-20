@@ -160,3 +160,11 @@ class CarouselItemLinkLocalizationAPIUnitTest(TestCase):
             carousel_item_link_localization.refresh_from_db()
         except ObjectDoesNotExist:
             assert True
+
+        # form
+        url = reverse('unicms_api:carousel-item-link-localization-form',
+                      kwargs={'carousel_id': carousel.pk,
+                              'carousel_item_id': carousel_item.pk,
+                              'carousel_item_link_id': carousel_item_link.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)

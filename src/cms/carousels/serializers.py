@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from cms.api.serializers import UniCMSCreateUpdateSerializer
+from cms.api.serializers import UniCMSContentTypeClass, UniCMSCreateUpdateSerializer
+
+from cms.medias.serializers import MediaSerializer
 
 from . models import Carousel, CarouselItem, CarouselItemLink, CarouselItemLinkLocalization, CarouselItemLocalization
 
@@ -38,7 +40,8 @@ class CarouselItemLinkForeignKey(serializers.PrimaryKeyRelatedField):
         return None # pragma: no cover
 
 
-class CarouselSerializer(UniCMSCreateUpdateSerializer):
+class CarouselSerializer(UniCMSCreateUpdateSerializer,
+                         UniCMSContentTypeClass):
 
     class Meta:
         model = Carousel
@@ -48,6 +51,12 @@ class CarouselSerializer(UniCMSCreateUpdateSerializer):
 
 class CarouselItemSerializer(UniCMSCreateUpdateSerializer):
     carousel = CarouselForeignKey()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        image = MediaSerializer(instance.image)
+        data['image'] = image.data
+        return data
 
     class Meta:
         model = CarouselItem

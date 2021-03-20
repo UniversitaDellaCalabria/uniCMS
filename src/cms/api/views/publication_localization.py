@@ -2,14 +2,18 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
+from cms.publications.forms import PublicationLocalizationForm
 from cms.publications.models import *
 from cms.publications.serializers import *
 
 from rest_framework import filters, generics
 from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .. exceptions import LoggedPermissionDenied
 from .. pagination import UniCmsApiPagination
+from .. serializers import UniCMSFormSerializer
 
 
 class PublicationLocalizationList(generics.ListCreateAPIView):
@@ -26,9 +30,11 @@ class PublicationLocalizationList(generics.ListCreateAPIView):
     def get_queryset(self):
         """
         """
-        pk = self.kwargs['publication_id']
-        publication = get_object_or_404(Publication, pk=pk)
-        return PublicationLocalization.objects.filter(publication=publication)
+        pk = self.kwargs.get('publication_id')
+        if pk:
+            publication = get_object_or_404(Publication, pk=pk)
+            return PublicationLocalization.objects.filter(publication=publication)
+        return PublicationLocalization.objects.none() # pragma: no cover
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -56,8 +62,10 @@ class PublicationLocalizationView(generics.RetrieveUpdateDestroyAPIView):
         pub_id = self.kwargs['publication_id']
         pk = self.kwargs['pk']
         publication = get_object_or_404(Publication, pk=pub_id)
-        return PublicationLocalization.objects.filter(pk=pk,
-                                                      publication=publication)
+        return PublicationLocalization.objects\
+                                      .select_related('publication')\
+                                      .filter(pk=pk,
+                                              publication=publication)
 
     def patch(self, request, *args, **kwargs):
         item = self.get_queryset().first()
@@ -98,3 +106,11 @@ class PublicationLocalizationView(generics.RetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         return super().delete(request, *args, **kwargs)
+
+
+class PublicationLocalizationFormView(APIView):
+
+    def get(self, *args, **kwargs):
+        form = PublicationLocalizationForm(publication_id=kwargs.get('publication_id'))
+        form_fields = UniCMSFormSerializer.serialize(form)
+        return Response(form_fields)

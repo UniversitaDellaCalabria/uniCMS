@@ -1,14 +1,18 @@
 from django.http import Http404
 
+from cms.medias.forms import MediaCollectionForm
 from cms.medias.models import MediaCollection
 from cms.medias.serializers import MediaCollectionSerializer
 
 from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from . generics import UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import UserCanAddMediaCollectionOrAdminReadonly
+from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
 
 
@@ -44,8 +48,7 @@ class MediaCollectionView(generics.RetrieveUpdateDestroyAPIView):
                                          partial=True)
         if serializer.is_valid(raise_exception=True):
             permission = check_user_permission_on_object(request.user,
-                                                         item,
-                                                         'cmsmedias.change_mediacollection')
+                                                         item)
             if not permission['granted']:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
@@ -58,8 +61,7 @@ class MediaCollectionView(generics.RetrieveUpdateDestroyAPIView):
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
             permission = check_user_permission_on_object(request.user,
-                                                         item,
-                                                         'cmsmedias.change_mediacollection')
+                                                         item)
             if not permission['granted']:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
@@ -69,9 +71,16 @@ class MediaCollectionView(generics.RetrieveUpdateDestroyAPIView):
         item = self.get_queryset().first()
         if not item: raise Http404
         permission = check_user_permission_on_object(request.user,
-                                                     item,
-                                                     'cmsmedias.delete_mediacollection')
+                                                     item, 'delete')
         if not permission['granted']:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         return super().delete(request, *args, **kwargs)
+
+
+class MediaCollectionFormView(APIView):
+
+    def get(self, *args, **kwargs):
+        form = MediaCollectionForm()
+        form_fields = UniCMSFormSerializer.serialize(form)
+        return Response(form_fields)

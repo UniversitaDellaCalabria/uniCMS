@@ -15,7 +15,9 @@ class PublicationBlockList(PublicationRelatedObjectList):
         """
         """
         super().get_data()
-        return PublicationBlock.objects.filter(publication=self.publication)
+        if self.publication:
+            return PublicationBlock.objects.filter(publication=self.publication)
+        return PublicationBlock.objects.none() # pragma: no cover
 
 
 class PublicationBlockView(PublicationRelatedObject):

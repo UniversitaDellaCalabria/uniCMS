@@ -140,5 +140,9 @@ class PublicationLocalizationAPIUnitTest(TestCase):
         except ObjectDoesNotExist:
             assert True
 
-
+        # form
+        url = reverse('unicms_api:editorial-board-publication-localization-form',
+                      kwargs={'publication_id': pub.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)
 

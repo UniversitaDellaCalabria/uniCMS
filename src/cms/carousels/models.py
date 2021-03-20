@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.models import CreatedModifiedBy
+from cms.contexts.models_abstract import AbstractLockable
 from cms.medias.models import Media
 from cms.templates.models import (CMS_LINKS_LABELS,
                                   ActivableModel,
@@ -10,7 +11,8 @@ from cms.templates.models import (CMS_LINKS_LABELS,
                                   TimeStampedModel)
 
 
-class Carousel(ActivableModel, TimeStampedModel, CreatedModifiedBy):
+class Carousel(ActivableModel, TimeStampedModel, CreatedModifiedBy,
+               AbstractLockable):
     name = models.CharField(max_length=160, blank=False,
                             null=False, unique=False)
     description = models.TextField(max_length=2048,

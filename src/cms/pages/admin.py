@@ -24,22 +24,23 @@ class AbstractPreviewableAdmin(AbstractCreatedModifiedBy):
                     "and 'Draft view mode' is set on.").format(obj, obj.pk)
             draft = copy_page_as_draft(obj)
             self.message_user(request, _msg)
-            url = reverse('admin:cmspage_change',
+            url = reverse('admin:cmspages_page_change',
                           kwargs={'object_id': draft.pk})
             return HttpResponseRedirect(url)
 
-        elif request.POST.get('state') == 'published' and obj.draft_of:
-            published = obj.__class__.objects.filter(pk=obj.draft_of).first()
-            if not published:
-                self.message_user(request,
-                                  "Draft missed its parent page ... ",
-                                  level = messages.ERROR)
-            published.is_active = False
-            obj.is_active = True
-            obj.draft_of = None
-            published.save()
-            obj.save()
-
+        # elif request.POST.get('state') == 'published' and obj.draft_of:
+        elif request.POST.get('state') == 'published':
+            obj.publish()
+            # published = obj.__class__.objects.filter(pk=obj.draft_of).first()
+            # if not published:
+            # self.message_user(request,
+            # "Draft missed its parent page ... ",
+            # level = messages.ERROR)
+            # published.is_active = False
+            # obj.is_active = True
+            # obj.draft_of = None
+            # published.save()
+            # obj.save()
             self.message_user(request, "Draft being published succesfully")
 
         elif "_preview" in request.POST:
@@ -50,7 +51,7 @@ class AbstractPreviewableAdmin(AbstractCreatedModifiedBy):
             self.message_user(request, "Preview is available at ...")
             return HttpResponseRedirect(".")
 
-        return super().response_change(request, obj)
+        # return super().response_change(request, obj)
 
 
 def make_page_draft(modeladmin, request, queryset):
@@ -62,7 +63,7 @@ make_page_draft.short_description = _("Make page Draft")
 
 
 @admin.register(Page)
-class PageAdmin(AbstractCreatedModifiedBy, nested_admin.NestedModelAdmin):
+class PageAdmin(AbstractPreviewableAdmin, nested_admin.NestedModelAdmin):
     change_form_template = "admin/change_form_preview.html"
 
     search_fields = ('name',)
@@ -98,11 +99,3 @@ class PageAdmin(AbstractCreatedModifiedBy, nested_admin.NestedModelAdmin):
                 block_entry.save()
                 messages.add_message(request, messages.ERROR, f'{block_entry} failed validation on save')
                 logger.exception('ADMIN VALIDATION: Block {} failed rendering ({}): {}'.format(block_entry, obj, e))
-
-
-@admin.register(Category)
-class CategoryAdmin(AbstractCreatedModifiedBy):
-    list_display = ('name', 'image_as_html')
-
-    # def delete_model(modeladmin, request, queryset):
-    # obj.delete()

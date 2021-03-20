@@ -138,6 +138,12 @@ class PublicationAttachmentAPIUnitTest(TestCase):
         except ObjectDoesNotExist:
             assert True
 
+        # form
+        url = reverse('unicms_api:editorial-board-publication-attachment-form',
+                      kwargs={'publication_id': pub.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)
+
     def tearDown(self):
         match = f'{settings.MEDIA_ROOT}/publications_attachments/*/eventi_*.*'
         for i in glob(match):

@@ -12,13 +12,14 @@ from cms.medias.tests import MediaUnitTest
 from cms.menus.tests import MenuUnitTest
 from cms.menus.templatetags.unicms_menus import load_menu
 from cms.pages.templatetags.unicms_pages import load_link, load_page_title
+from cms.publications.models import Category
 from cms.templates.models import TemplateBlock
 from cms.templates.blocks import *
 from cms.templates.placeholders import *
 from cms.templates.tests import TemplateUnitTest
 from cms.templates.templatetags.unicms_templates import blocks_in_position
 
-from . models import (Category, Page, PageBlock, PageCarousel, PageLink,
+from . models import (Page, PageBlock, PageCarousel, PageLink,
                       PageLocalization, PageMedia, PageMenu, PageRelated)
 from . utils import copy_page_as_draft
 
@@ -246,12 +247,12 @@ class PageUnitTest(TestCase):
                       'content': 'Hello world'}
         block_section = '1-top-a'
         tb = TemplateUnitTest.create_block_template(**block_data)
-        
+
         # test page relateds cache cleanup
         for i in '_blocks_', '_pubs', '_carousels', '_medias', '_links':
             setattr(page, i, ['asdasd'])
         page.clean_related_caches()
-        
+
         PageBlock.objects.create(page=page, block=tb,
                                  is_active=1, section=block_section)
 
@@ -387,7 +388,7 @@ class PageUnitTest(TestCase):
         page_media = PageMedia.objects.create(page=page, is_active=1,
                                               media=media)
         page_media.__str__()
-        
+
         block = MediaPlaceholderBlock(
             request = req,
             webpath = webpath,
@@ -435,3 +436,17 @@ class PageUnitTest(TestCase):
                                               is_active=1)
         lm = block.render().replace('\n', '')
         assert lm
+
+
+    def test_page_preview(self):
+        req = Client()
+        page = self.create_page()
+        user = ContextUnitTest.create_user(is_staff=1)
+        url = reverse('unicms:page-preview',
+                      kwargs={'page_id': page.pk})
+        req.force_login(user)
+        res = req.get(url)
+
+        user.is_superuser = True
+        user.save()
+        res = req.get(url)

@@ -138,3 +138,11 @@ class PageLinkAPIUnitTest(TestCase):
             page_link.refresh_from_db()
         except ObjectDoesNotExist:
             assert True
+
+        # form
+        url = reverse('unicms_api:editorial-board-site-webpath-page-link-form',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'page_id': page.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)

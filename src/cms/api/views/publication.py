@@ -5,23 +5,25 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 
+from cms.contexts.decorators import detect_language
+from cms.contexts.models import WebPath
+
+from cms.publications.forms import PublicationForm
+from cms.publications.models import Publication, PublicationContext
+from cms.publications.paginators import Paginator
+from cms.publications.serializers import PublicationSerializer
+from cms.publications.utils import publication_context_base_filter
+
 from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
-from cms.contexts.decorators import detect_language
-from cms.contexts.models import WebPath
-
-from cms.publications.models import Publication, PublicationContext
-from cms.publications.paginators import Paginator
-from cms.publications.serializers import PublicationSerializer
-from cms.publications.utils import publication_context_base_filter
-
 from . generics import UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import UserCanAddPublicationOrAdminReadonly
+from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
 
 
@@ -164,8 +166,7 @@ class PublicationView(generics.RetrieveUpdateDestroyAPIView):
         item = self.get_queryset().first()
         if not item: raise Http404
         permission = check_user_permission_on_object(request.user,
-                                                     item,
-                                                     'cmspublications.delete_publication')
+                                                     item, 'delete')
         if not permission['granted']:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
@@ -177,7 +178,7 @@ class EditorialBoardPublicationChangeStatusSchema(AutoSchema):
         return 'updateEditorialBoardPublicationStatus'
 
 
-class PublicationChangeStateView(generics.RetrieveAPIView):
+class PublicationChangeStateView(APIView):
     """
     """
     description = ""
@@ -195,13 +196,12 @@ class PublicationChangeStateView(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         item = self.get_queryset().first()
         if not item: raise Http404
-        permission = check_user_permission_on_object(request.user,
-                                                     item,
-                                                     'cmspublications.change_publication')
-        if permission['granted']:
+        has_permission = item.is_publicable_by(request.user)
+        if has_permission:
             item.is_active = not item.is_active
             item.save()
-            return super().get(request, *args, **kwargs)
+            result = self.serializer_class(item)
+            return Response(result.data)
         raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                      resource=request.method)
 
@@ -213,9 +213,12 @@ class PublicationRelatedObjectList(UniCMSListCreateAPIView):
     def get_data(self):
         """
         """
-        pk = self.kwargs['publication_id']
-        self.publication = get_object_or_404(Publication,
-                                             pk=pk)
+        pk = self.kwargs.get('publication_id')
+        if pk:
+            self.publication = get_object_or_404(Publication,
+                                                 pk=pk)
+        else:
+            self.publication = None # pragma: no cover
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -285,3 +288,11 @@ class PublicationRelatedObject(generics.RetrieveUpdateDestroyAPIView):
 
     class Meta:
         abstract = True
+
+
+class PublicationFormView(APIView):
+
+    def get(self, *args, **kwargs):
+        form = PublicationForm()
+        form_fields = UniCMSFormSerializer.serialize(form)
+        return Response(form_fields)

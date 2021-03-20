@@ -71,6 +71,12 @@ class WebpathAPIUnitTest(TestCase):
         res = req.get(url)
         assert isinstance(res.json(), dict)
 
+        # form
+        url = reverse('unicms_api:editorial-board-site-webpath-form',
+                      kwargs={'site_id': webpath.site.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)
+
     def test_patch(self):
         req = Client()
         ebu_parent = ContextUnitTest.create_editorialboard_user()
@@ -116,9 +122,25 @@ class WebpathAPIUnitTest(TestCase):
                         follow=1)
         # ...no publisher permissions on parent
         assert res.status_code == 403
-        # if publisher permissions
+
+        # if publisher permissions on actual parent
+        # (user can edit webpath!)
         ebu_parent.permission = 7
         ebu_parent.save()
+
+        # change parent
+        new_parent = ContextUnitTest.create_webpath(site=ebu.webpath.site)
+        child_json = {'site': new_parent.site.pk,
+                      'parent': new_parent.pk,
+                      'name': 'child name',
+                      'path': 'test',
+                      'is_active': 1}
+        res = req.patch(url,
+                        data=child_json,
+                        content_type='application/json',
+                        follow=1)
+        assert res.status_code == 403
+
         res = req.patch(url,
                         data=data,
                         content_type='application/json',
@@ -214,6 +236,19 @@ class WebpathAPIUnitTest(TestCase):
         child_url = reverse('unicms_api:editorial-board-site-webpath',
                             kwargs={'site_id': site.pk,
                                     'pk': child.pk})
+
+        # change parent
+        new_parent = ContextUnitTest.create_webpath(site=site)
+        child_json = {'site': site.pk,
+                      'parent': new_parent.pk,
+                      'name': 'child name',
+                      'path': 'test',
+                      'is_active': 1}
+        res = req.put(child_url,
+                      data=child_json,
+                      content_type='application/json',
+                      follow=1)
+        assert res.status_code == 403
 
         # wrong parent
         child_json = {'site': site.pk,
@@ -397,7 +432,7 @@ class WebpathAPIUnitTest(TestCase):
         assert res.status_code == 403
 
         # update permissions on parent webpath
-        ebu_parent.permission = 7
+        ebu_parent.permission = 6
         ebu_parent.save()
 
         # invalid alias

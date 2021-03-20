@@ -314,7 +314,6 @@ class PublicationUnitTest(TestCase):
         url = reverse('unicms_api:api-menu', kwargs={'menu_id': 2})
         res = req.post(url, data=menu_json,
                       content_type='application/json', follow=1)
-
         # verify
         res = req.get(url, content_type='application/json')
         assert len(res.json()['childs']) == 2

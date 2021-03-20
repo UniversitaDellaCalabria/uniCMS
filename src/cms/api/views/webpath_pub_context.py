@@ -3,15 +3,18 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from cms.contexts.models import EditorialBoardEditors, WebPath, WebSite
-from cms.contexts.utils import is_publisher
+from cms.contexts.forms import EditorialBoardLockUserForm, PublicationContextForm
+from cms.contexts.models import WebPath, WebSite
 
 from cms.publications.models import PublicationContext
 from cms.publications.serializers import PublicationContextSerializer
 
 from . generics import UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
+from .. serializers import UniCMSFormSerializer
 
 
 class EditorWebpathPublicationContextList(UniCMSListCreateAPIView):
@@ -24,18 +27,18 @@ class EditorWebpathPublicationContextList(UniCMSListCreateAPIView):
     def get_queryset(self):
         """
         """
-        site_id = self.kwargs['site_id']
-        webpath_id = self.kwargs['webpath_id']
-        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
-        if not site.is_managed_by(self.request.user):
-            raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                         resource=site)
-        webpath = get_object_or_404(WebPath,
-                                    pk=webpath_id,
-                                    site=site)
-        items = PublicationContext.objects.filter(webpath=webpath)
-        self.webpath = webpath
-        return items
+        site_id = self.kwargs.get('site_id')
+        webpath_id = self.kwargs.get('webpath_id')
+        if site_id and webpath_id:
+            site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+            if not site.is_managed_by(self.request.user):
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=site)
+            webpath = get_object_or_404(WebPath,
+                                        pk=webpath_id,
+                                        site=site)
+            return PublicationContext.objects.filter(webpath=webpath)
+        return PublicationContext.objects.none() # pragma: no cover
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -43,10 +46,8 @@ class EditorWebpathPublicationContextList(UniCMSListCreateAPIView):
             # get webpath
             webpath = serializer.validated_data.get('webpath')
             # check permissions on webpath
-            permission = EditorialBoardEditors.get_permission(webpath=webpath,
-                                                              user=request.user)
-            publisher_perms = is_publisher(permission)
-            if not publisher_perms:
+            perms = webpath.is_publicable_by(user=request.user)
+            if not perms:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
             return super().post(request, *args, **kwargs)
@@ -69,9 +70,11 @@ class EditorWebpathPublicationContextView(generics.RetrieveUpdateDestroyAPIView)
                                          resource=site)
         webpath_id = self.kwargs['webpath_id']
         pk = self.kwargs['pk']
-        contexts = PublicationContext.objects.filter(pk=pk,
-                                                     webpath__pk=webpath_id,
-                                                     webpath__site__pk=site_id)
+        contexts = PublicationContext.objects\
+                                     .select_related('webpath')\
+                                     .filter(pk=pk,
+                                             webpath__pk=webpath_id,
+                                             webpath__site__pk=site_id)
         return contexts
 
     def patch(self, request, *args, **kwargs):
@@ -82,10 +85,8 @@ class EditorWebpathPublicationContextView(generics.RetrieveUpdateDestroyAPIView)
                                          partial=True)
         if serializer.is_valid(raise_exception=True):
             webpath = item.webpath
-            permission = EditorialBoardEditors.get_permission(webpath=webpath,
-                                                              user=request.user)
-            publisher_perms = is_publisher(permission)
-            if not publisher_perms:
+            perms = webpath.is_publicable_by(user=request.user)
+            if not perms:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
             return super().patch(request, *args, **kwargs)
@@ -97,10 +98,8 @@ class EditorWebpathPublicationContextView(generics.RetrieveUpdateDestroyAPIView)
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
             webpath = item.webpath
-            permission = EditorialBoardEditors.get_permission(webpath=webpath,
-                                                              user=request.user)
-            publisher_perms = is_publisher(permission)
-            if not publisher_perms:
+            perms = webpath.is_publicable_by(user=request.user)
+            if not perms:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
             return super().put(request, *args, **kwargs)
@@ -109,10 +108,33 @@ class EditorWebpathPublicationContextView(generics.RetrieveUpdateDestroyAPIView)
         item = self.get_queryset().first()
         if not item: raise Http404
         webpath = item.webpath
-        permission = EditorialBoardEditors.get_permission(webpath=webpath,
-                                                          user=request.user)
-        publisher_perms = is_publisher(permission)
-        if not publisher_perms:
+        perms = webpath.is_publicable_by(user=request.user)
+        if not perms:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         return super().delete(request, *args, **kwargs)
+
+
+class PublicationContextFormView(APIView):
+
+    def get(self, *args, **kwargs):
+        form = PublicationContextForm(site_id=kwargs.get('site_id'),
+                                      webpath_id=kwargs.get('webpath_id'))
+        form_fields = UniCMSFormSerializer.serialize(form)
+        return Response(form_fields)
+
+
+class PublicationContextGenericFormView(APIView):
+
+    def get(self, *args, **kwargs):
+        form = PublicationContextForm(site_id=kwargs.get('site_id'))
+        form_fields = UniCMSFormSerializer.serialize(form)
+        return Response(form_fields)
+
+
+class EditorialBoardLockUserFormView(APIView):
+
+    def get(self, *args, **kwargs):
+        form = EditorialBoardLockUserForm()
+        form_fields = UniCMSFormSerializer.serialize(form)
+        return Response(form_fields)

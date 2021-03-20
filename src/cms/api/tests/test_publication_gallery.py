@@ -125,3 +125,9 @@ class PublicationGalleryAPIUnitTest(TestCase):
             pub_gallery.refresh_from_db()
         except ObjectDoesNotExist:
             assert True
+
+        # form
+        url = reverse('unicms_api:editorial-board-publication-gallery-form',
+                      kwargs={'publication_id': pub.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)

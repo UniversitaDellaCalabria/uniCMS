@@ -47,3 +47,12 @@ class UserCanAddMediaCollectionOrAdminReadonly(AbstractUserCanAddObjectorAdminRe
     def has_permission(self, request, view):
         super().has_permission(request, view)
         return request.user.has_perm('cmsmedias.add_mediacollection')
+
+
+class UserCanAddMenuOrAdminReadonly(AbstractUserCanAddObjectorAdminReadonly):
+    """
+    """
+
+    def has_permission(self, request, view):
+        super().has_permission(request, view)
+        return request.user.has_perm('cmsmenus.add_navigationbar')

@@ -165,3 +165,19 @@ class WebpathPubContextAPIUnitTest(TestCase):
             pub_cxt.refresh_from_db()
         except ObjectDoesNotExist:
             assert True
+
+        # form
+        url = reverse('unicms_api:editorial-board-site-webpath-publication-context-form',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)
+
+        url = reverse('unicms_api:editorial-board-site-webpath-publication-context-form-generic',
+                      kwargs={'site_id': site.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)
+
+        url = reverse('unicms_api:users-form')
+        res = req.get(url)
+        assert isinstance(res.json(), list)

@@ -39,3 +39,11 @@ class PublicationLocalizationAdmin(AbstractCreatedModifiedBy):
     # list_filter = ('publication__state', 'is_active',
     # 'created', 'modified', 'language')
     list_filter = ('is_active', 'created', 'modified', 'language')
+
+
+@admin.register(Category)
+class CategoryAdmin(AbstractCreatedModifiedBy):
+    list_display = ('name', 'image_as_html')
+
+    # def delete_model(modeladmin, request, queryset):
+    # obj.delete()

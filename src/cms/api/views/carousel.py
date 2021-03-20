@@ -1,14 +1,20 @@
 from django.http import Http404
 
-from rest_framework import generics
-from rest_framework.permissions import IsAdminUser
-
+from cms.carousels.forms import CarouselForm
 from cms.carousels.models import *
 from cms.carousels.serializers import *
 
+from rest_framework import generics
+from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from . generics import UniCMSListCreateAPIView
+from . locks import ObjectUserLocksList, ObjectUserLocksView
+
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import UserCanAddCarouselOrAdminReadonly
+from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
 
 
@@ -44,8 +50,7 @@ class CarouselView(generics.RetrieveUpdateDestroyAPIView):
                                          partial=True)
         if serializer.is_valid(raise_exception=True):
             permission = check_user_permission_on_object(request.user,
-                                                         item,
-                                                         'cmscarousels.change_carousel')
+                                                         item)
             if not permission['granted']:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
@@ -58,8 +63,7 @@ class CarouselView(generics.RetrieveUpdateDestroyAPIView):
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
             permission = check_user_permission_on_object(request.user,
-                                                         item,
-                                                         'cmscarousels.change_carousel')
+                                                         item)
             if not permission['granted']:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
@@ -69,9 +73,16 @@ class CarouselView(generics.RetrieveUpdateDestroyAPIView):
         item = self.get_queryset().first()
         if not item: raise Http404
         permission = check_user_permission_on_object(request.user,
-                                                     item,
-                                                     'cmscarousels.delete_carousel')
+                                                     item, 'delete')
         if not permission['granted']:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         return super().delete(request, *args, **kwargs)
+
+
+class CarouselFormView(APIView):
+
+    def get(self, *args, **kwargs):
+        form = CarouselForm()
+        form_fields = UniCMSFormSerializer.serialize(form)
+        return Response(form_fields)

@@ -5,7 +5,7 @@ from django.utils.safestring import SafeString
 
 from cms.carousels.models import Carousel
 from cms.contexts.utils import handle_faulty_templates
-from cms.pages.models import PageCarousel
+# from cms.pages.models import PageCarousel
 
 logger = logging.getLogger(__name__)
 register = template.Library()
@@ -44,10 +44,14 @@ def load_carousel(context, section, template, carousel_id=None):
                                     func_name=_func_name)
     else:
         if not section: return SafeString('')
-        page_carousel = PageCarousel.objects.filter(section=section,
-                                                    is_active=True,
-                                                    page__webpath=context['webpath']).\
-            first()
+
+        page_carousel = page.get_carousels().first()
+
+        # page_carousel = PageCarousel.objects.filter(section=section,
+        # is_active=True,
+        # carousel__is_active=True,
+        # page__webpath=context['webpath']).\
+        # first()
         if not page_carousel: # pragma: no cover
             _msg = '{} cannot find carousel in page {} and section {}'\
                    .format(_func_name, page, section)
