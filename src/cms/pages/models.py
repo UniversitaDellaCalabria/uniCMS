@@ -130,13 +130,30 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             values_list('order', 'block__pk', 'section')
         excluded_blocks = PageBlock.objects.filter(page=self,
                                                    is_active=False).\
-            values_list('block__pk', flat=True)
+            values('order', 'block__pk', 'section')
+            # values_list('order', 'block__pk', 'section')
+            # values_list('block__pk', flat=True)
+
+        # template_blocks = self.base_template.\
+            # pagetemplateblock_set.\
+            # filter(**query_params).\
+            # exclude(block__pk__in=excluded_blocks).\
+            # order_by('section', 'order').\
+            # values_list('order', 'block__pk', 'section')
+
         template_blocks = self.base_template.\
             pagetemplateblock_set.\
             filter(**query_params).\
-            exclude(pk__in=excluded_blocks).\
             order_by('section', 'order').\
-            values_list('order', 'block__pk', 'section')
+            values('order', 'block__pk', 'section')
+
+        for exb in excluded_blocks:
+            template_blocks = template_blocks.exclude(order=exb['order'],
+                                                      block__pk=exb['block__pk'],
+                                                      section=exb['section'])
+        template_blocks = template_blocks.\
+                          values_list('order', 'block__pk', 'section')
+
         order_pk = set()
         for i in chain(blocks, template_blocks):
             order_pk.add(i)
