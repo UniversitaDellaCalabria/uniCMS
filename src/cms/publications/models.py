@@ -345,7 +345,7 @@ class PublicationContext(TimeStampedModel, ActivableModel,
     # @property
     # def related_publication_contexts(self):
         # related = PublicationContextRelated.objects.filter(publication_context=self,
-                                                           # related__is_active=True)
+        # related__is_active=True)
         # return [i for i in related if i.related.is_publicable]
 
     @property

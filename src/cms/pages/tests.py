@@ -445,8 +445,8 @@ class PageUnitTest(TestCase):
         url = reverse('unicms:page-preview',
                       kwargs={'page_id': page.pk})
         req.force_login(user)
-        res = req.get(url)
+        req.get(url)
 
         user.is_superuser = True
         user.save()
-        res = req.get(url)
+        req.get(url)

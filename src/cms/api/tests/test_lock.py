@@ -10,10 +10,8 @@ from cms.carousels.tests import CarouselUnitTest
 from cms.contexts.models import EditorialBoardLockUser
 from cms.contexts.tests import ContextUnitTest
 
-from cms.pages.models import Page
 from cms.pages.tests import PageUnitTest
 
-from cms.publications.models import Publication
 from cms.publications.tests import PublicationUnitTest
 
 
