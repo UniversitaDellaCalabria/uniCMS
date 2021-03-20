@@ -30,17 +30,7 @@ class AbstractPreviewableAdmin(AbstractCreatedModifiedBy):
 
         # elif request.POST.get('state') == 'published' and obj.draft_of:
         elif request.POST.get('state') == 'published':
-            obj.publish()
-            # published = obj.__class__.objects.filter(pk=obj.draft_of).first()
-            # if not published:
-            # self.message_user(request,
-            # "Draft missed its parent page ... ",
-            # level = messages.ERROR)
-            # published.is_active = False
-            # obj.is_active = True
-            # obj.draft_of = None
-            # published.save()
-            # obj.save()
+            obj.toggleState(force_actual_state='draft')
             self.message_user(request, "Draft being published succesfully")
 
         elif "_preview" in request.POST:
@@ -51,7 +41,7 @@ class AbstractPreviewableAdmin(AbstractCreatedModifiedBy):
             self.message_user(request, "Preview is available at ...")
             return HttpResponseRedirect(".")
 
-        # return super().response_change(request, obj)
+        return super().response_change(request, obj)
 
 
 def make_page_draft(modeladmin, request, queryset):

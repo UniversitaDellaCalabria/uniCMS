@@ -35,7 +35,8 @@ PAGE_STATES = (('draft', _('Draft')),
 class AbstractDraftable(models.Model):
     draft_of = models.IntegerField(null=True, blank=True)
 
-    def publish(self):
+    def toggleState(self, force_actual_state=''):
+        actual_state = force_actual_state or self.state
         if self.draft_of:
             published = self.__class__.objects.filter(pk=self.draft_of).first()
             # if not published:
@@ -46,7 +47,7 @@ class AbstractDraftable(models.Model):
                 published.is_active = False
                 published.save()
             self.draft_of = None
-        if self.state == 'draft':
+        if actual_state == 'draft':
             self.state = 'published'
             self.is_active = True
         else:

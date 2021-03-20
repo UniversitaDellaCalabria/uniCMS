@@ -214,7 +214,7 @@ class PageChangePublicationStatusView(APIView):
         if not item: raise Http404
         has_permission = item.is_publicable_by(request.user)
         if has_permission:
-            item.publish()
+            item.toggleState()
             result = self.serializer_class(item)
             return Response(result.data)
         raise LoggedPermissionDenied(classname=self.__class__.__name__,
