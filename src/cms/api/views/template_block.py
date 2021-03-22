@@ -7,6 +7,7 @@ from cms.templates.serializers import (TemplateBlockSerializer,
 from rest_framework import generics
 from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
+from rest_framework.schemas.openapi import AutoSchema
 
 from .. pagination import UniCmsApiPagination
 
@@ -33,6 +34,11 @@ class TemplatesBlockView(generics.RetrieveAPIView):
     queryset = TemplateBlock.objects.filter(is_active=True)
 
 
+class SingleTemplateBlockListSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: nocover
+        return 'listSingleTemplateBlocks'
+
+
 class TemplateBlockList(generics.ListAPIView):
     """
     """
@@ -41,6 +47,7 @@ class TemplateBlockList(generics.ListAPIView):
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     filterset_fields = ['is_active', 'created', 'modified']
     pagination_class = None
+    schema = SingleTemplateBlockListSchema()
     search_fields = ['name', 'description']
     serializer_class = TemplateBlockSerializer
 
@@ -54,12 +61,18 @@ class TemplateBlockList(generics.ListAPIView):
         return PageTemplateBlock.objects.none() # pragma: no cover
 
 
+class SingleTemplateBlockListDetail(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: nocover
+        return 'retrieveSingleTemplateBlock'
+
+
 class TemplateBlockView(generics.RetrieveAPIView):
     """
     """
     description = ""
     permission_classes = [IsAdminUser]
     serializer_class = TemplateBlockSerializer
+    schema = SingleTemplateBlockListDetail()
 
     def get_queryset(self):
         """
