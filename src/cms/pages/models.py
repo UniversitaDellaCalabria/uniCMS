@@ -121,49 +121,66 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             return getattr(self, f'_blocks_{section}')
         #
 
-        query_params = dict(is_active=True)
+        # query_params = dict(is_active=True)
+        query_params = {}
         if section:
             query_params['section'] = section
-        blocks = PageBlock.objects.filter(page=self,
-                                          **query_params,
-                                          block__is_active=True).\
+
+        # get all page blocks (if section, filter by section)
+        page_blocks = PageBlock.objects.filter(page=self,
+                                               **query_params).\
             order_by('section', 'order').\
-            values_list('order', 'block__pk', 'section')
-        excluded_blocks = PageBlock.objects.filter(page=self,
-                                                   is_active=False).\
-            values('order', 'block__pk', 'section')
-            # values_list('order', 'block__pk', 'section')
-            # values_list('block__pk', flat=True)
+            values_list('order', 'block__pk', 'section',
+                        'block__is_active', 'is_active')
 
-        # template_blocks = self.base_template.\
-            # pagetemplateblock_set.\
-            # filter(**query_params).\
-            # exclude(block__pk__in=excluded_blocks).\
-            # order_by('section', 'order').\
-            # values_list('order', 'block__pk', 'section')
+        blocks_list = []
+        excluded_blocks_list = []
 
+        # for every page block, check if it's active and if
+        # relative block is active and populate two lists
+        # blocks_list = []
+        # excluded_blocks_list = []
+        # enumerating block position in same section order level
+        # (multiple blocks with same order value in same section!)
+        for (count, block) in enumerate(page_blocks):
+            block = list(block)
+            page_block_is_active = block.pop()
+            block_is_active = block.pop()
+            block = tuple(block)
+            if block_is_active and page_block_is_active:
+                blocks_list.append((block, count))
+            elif not page_block_is_active:
+                excluded_blocks_list.append((block, count))
+
+        # get all active template blocks
         template_blocks = self.base_template.\
             pagetemplateblock_set.\
             filter(**query_params).\
+            filter(is_active=True).\
             order_by('section', 'order').\
-            values('order', 'block__pk', 'section')
+            values_list('order', 'block__pk', 'section')
 
-        for exb in excluded_blocks:
-            template_blocks = template_blocks.exclude(order=exb['order'],
-                                                      block__pk=exb['block__pk'],
-                                                      section=exb['section'])
-        template_blocks = template_blocks.\
-                          values_list('order', 'block__pk', 'section')
+        # populate a list with block params and enumerate value
+        # for every section order position
+        template_blocks_list = []
+        for (count, block) in enumerate(template_blocks):
+            template_blocks_list.append((block, count))
+        # exclude blocks in exclude_blocks_list[]
+        template_blocks_list = [x for x in template_blocks_list \
+                                if x not in excluded_blocks_list]
 
+        # populate a set excluding template blocks existing in page_blocks
+        # (same active blocks in same section and same order position!)
         order_pk = set()
-        for i in chain(blocks, template_blocks):
+        for i in chain(blocks_list, template_blocks_list):
             order_pk.add(i)
         ordered = list(order_pk)
-        ordered.sort(key=lambda x:x[0])
+        ordered.sort(key=lambda x:x[1])
 
         _blocks = []
         # add a on-the-fly section attribute on the blocks ...
-        for block in ordered:
+        for item in ordered:
+            block = item[0]
             _block = TemplateBlock.objects.get(pk=block[1])
             _block.section = block[2]
             _blocks.append(_block)
