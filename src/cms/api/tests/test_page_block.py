@@ -58,6 +58,17 @@ class PageBlockAPIUnitTest(TestCase):
         res = req.get(url)
         assert isinstance(res.json(), dict)
 
+        # page template blocks list
+        url = reverse('unicms_api:editorial-board-template-blocks',
+                      kwargs={'template_id': page.base_template.pk})
+        # accessible to staff users only
+        res = req.get(url)
+        assert isinstance(res.json(), list)
+
+        url = reverse('unicms_api:editorial-board-site-webpath-page-blocks',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'page_id': page.pk})
         # POST
         block = TemplateUnitTest.create_block_template()
         data = {'page': page.pk,

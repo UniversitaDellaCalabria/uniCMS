@@ -1,13 +1,36 @@
 from django_filters.rest_framework import DjangoFilterBackend
 
-from cms.templates.models import TemplateBlock
-from cms.templates.serializers import TemplateBlockSerializer
+from cms.templates.models import PageTemplateBlock, TemplateBlock
+from cms.templates.serializers import (TemplateBlockSerializer,
+                                       TemplatesBlockSerializer)
 
 from rest_framework import generics
 from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 
 from .. pagination import UniCmsApiPagination
+
+
+class TemplatesBlockList(generics.ListAPIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filterset_fields = ['is_active', 'created', 'modified']
+    pagination_class = UniCmsApiPagination
+    search_fields = ['name', 'description']
+    serializer_class = TemplatesBlockSerializer
+    queryset = TemplateBlock.objects.filter(is_active=True)
+
+
+class TemplatesBlockView(generics.RetrieveAPIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+    serializer_class = TemplatesBlockSerializer
+    queryset = TemplateBlock.objects.filter(is_active=True)
 
 
 class TemplateBlockList(generics.ListAPIView):
@@ -17,10 +40,18 @@ class TemplateBlockList(generics.ListAPIView):
     permission_classes = [IsAdminUser]
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     filterset_fields = ['is_active', 'created', 'modified']
-    pagination_class = UniCmsApiPagination
+    pagination_class = None
     search_fields = ['name', 'description']
     serializer_class = TemplateBlockSerializer
-    queryset = TemplateBlock.objects.filter(is_active=True)
+
+    def get_queryset(self):
+        """
+        """
+        template_id = self.kwargs.get('template_id')
+        if template_id:
+            return PageTemplateBlock.objects.filter(is_active=True,
+                                                    template__pk=template_id)
+        return PageTemplateBlock.objects.none() # pragma: no cover
 
 
 class TemplateBlockView(generics.RetrieveAPIView):
@@ -29,4 +60,14 @@ class TemplateBlockView(generics.RetrieveAPIView):
     description = ""
     permission_classes = [IsAdminUser]
     serializer_class = TemplateBlockSerializer
-    queryset = TemplateBlock.objects.filter(is_active=True)
+
+    def get_queryset(self):
+        """
+        """
+        template_id = self.kwargs['template_id']
+        item_id = self.kwargs['pk']
+        items = PageTemplateBlock.objects\
+                                 .filter(pk=item_id,
+                                         template__pk=template_id,
+                                         is_active=True)
+        return items

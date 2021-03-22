@@ -11,8 +11,17 @@ class PageTemplateSerializer(UniCMSCreateUpdateSerializer):
         fields = '__all__'
 
 
-class TemplateBlockSerializer(UniCMSCreateUpdateSerializer):
+class TemplatesBlockSerializer(UniCMSCreateUpdateSerializer):
 
     class Meta:
         model = TemplateBlock
+        fields = '__all__'
+
+
+class TemplateBlockSerializer(UniCMSCreateUpdateSerializer):
+
+    block = TemplatesBlockSerializer()
+
+    class Meta:
+        model = PageTemplateBlock
         fields = '__all__'

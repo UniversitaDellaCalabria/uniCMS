@@ -225,10 +225,15 @@ urlpatterns += path(f'{pur_prefix}/<int:pk>/', publication_related.PublicationRe
 urlpatterns += path(f'{pur_prefix}/form/', publication_related.PublicationRelatedFormView.as_view(),
                     name='editorial-board-publication-related-form'),
 
-# template blocks
-tb_prefix = f'{eb_prefix}/template-blocks'
-urlpatterns += path(f'{tb_prefix}/', template_block.TemplateBlockList.as_view(), name='editorial-board-template-blocks'),
-urlpatterns += path(f'{tb_prefix}/<int:pk>/', template_block.TemplateBlockView.as_view(), name='editorial-board-template-block'),
+# all template blocks
+tb_prefix = f'{eb_prefix}/templates'
+urlpatterns += path(f'{tb_prefix}/blocks/', template_block.TemplatesBlockList.as_view(), name='editorial-board-templates-blocks'),
+urlpatterns += path(f'{tb_prefix}/blocks/<int:pk>/', template_block.TemplatesBlockView.as_view(), name='editorial-board-templates-block'),
+
+# single template blocks
+tb_id_prefix = f'{eb_prefix}/templates/<int:template_id>'
+urlpatterns += path(f'{tb_id_prefix}/blocks/', template_block.TemplateBlockList.as_view(), name='editorial-board-template-blocks'),
+urlpatterns += path(f'{tb_id_prefix}/blocks/<int:pk>/', template_block.TemplateBlockView.as_view(), name='editorial-board-template-block'),
 
 # page templates
 pt_prefix = f'{eb_prefix}/page-templates'
