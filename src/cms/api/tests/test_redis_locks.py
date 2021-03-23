@@ -1,6 +1,6 @@
 import logging
 
-from django.test import Client, TestCase
+from django.test import TestCase
 
 from cms.carousels.tests import CarouselUnitTest
 
@@ -25,7 +25,6 @@ class RedisLockTest(TestCase):
         """
         Redis Lock
         """
-        Client()
         user1 = ContextUnitTest.create_user(username='user1',
                                             is_staff=True,
                                             is_superuser=True)
