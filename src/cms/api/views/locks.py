@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
@@ -10,8 +11,10 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
+from rest_framework.views import APIView
 
 from . generics import UniCMSListCreateAPIView
+from .. concurrency import get_lock_from_cache, LOCK_MESSAGE
 from .. exceptions import LoggedPermissionDenied
 
 
@@ -112,3 +115,21 @@ class ObjectUserLocksView(generics.RetrieveDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         return super().delete(request, *args, **kwargs)
+
+
+class RedisLockView(APIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+
+    def get(self, request, *args, **kwargs):
+        content_type_id = self.kwargs['content_type_id']
+        object_id = self.kwargs['object_id']
+        lock = get_lock_from_cache(content_type_id, object_id)
+        if lock[0]:
+            owner_user = get_user_model().objects.filter(pk=lock[0]).first()
+            return Response({'lock': lock,
+                             'message': LOCK_MESSAGE.format(user=owner_user,
+                                                            ttl=lock[1])})
+        return Response({})

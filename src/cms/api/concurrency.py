@@ -15,6 +15,7 @@ LOCKS_CACHE_KEY_PREFIX = getattr(settings, 'LOCKS_CACHE_KEY_PREFIX',
                                  app_settings.LOCKS_CACHE_KEY_PREFIX)
 LOCKS_CACHE_ENABLED = getattr(settings, 'LOCKS_CACHE_ENABLED',
                               app_settings.LOCKS_CACHE_ENABLED)
+LOCK_MESSAGE = getattr(settings, 'LOCK_MESSAGE', app_settings.LOCK_MESSAGE)
 
 
 def is_lock_cache_available():

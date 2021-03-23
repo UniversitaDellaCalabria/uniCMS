@@ -36,5 +36,5 @@ class RedisLockTest(TestCase):
         check_locks(user=user1, item=carousel, force=True)
         try:
             check_locks(user=user2, item=carousel, force=True)
-        except:
+        except: # pragma: no cover
             logger.info('Exception raised! right!')
