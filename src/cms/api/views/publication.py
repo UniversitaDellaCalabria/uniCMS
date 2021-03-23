@@ -20,7 +20,7 @@ from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
-from . generics import *
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, check_locks
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import UserCanAddPublicationOrAdminReadonly
 from .. serializers import UniCMSFormSerializer

@@ -2,7 +2,6 @@ from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
-from rest_framework import generics
 from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -13,7 +12,7 @@ from cms.menus.forms import MenuForm
 from cms.menus.models import NavigationBar
 from cms.menus.serializers import MenuSerializer
 
-from . generics import *
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import UserCanAddMenuOrAdminReadonly
 from .. serializers import UniCMSFormSerializer

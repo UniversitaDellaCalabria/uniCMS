@@ -6,12 +6,11 @@ from cms.medias.forms import MediaForm
 from cms.medias.models import Media
 from cms.medias.serializers import MediaSerializer
 
-from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from . generics import *
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import UserCanAddMediaOrAdminReadonly
 from .. serializers import UniCMSFormSerializer

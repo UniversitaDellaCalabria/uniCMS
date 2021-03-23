@@ -13,9 +13,7 @@ from rest_framework.permissions import IsAdminUser
 from .. concurrency import (is_lock_cache_available,
                             get_lock_from_cache,
                             set_lock_to_cache)
-from .. exceptions import LoggedPermissionDenied
 from .. pagination import UniCmsApiPagination
-from .. settings import LOCKS_CACHE_TTL
 
 
 logger = logging.getLogger(__name__)
@@ -46,7 +44,7 @@ def check_locks(item, user, force=False):
             raise PermissionDenied(
                 _('Object is actually used by user {}. '
                   'Try again in {} seconds').format(owner_user, ttl,
-                403))
+                                                    403))
         set_lock_to_cache(user_id, content_type_id, object_id)
 
 

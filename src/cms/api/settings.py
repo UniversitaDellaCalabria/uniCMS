@@ -1,4 +1,4 @@
-from cms.contexts.settings import  CMS_CACHE_KEY_PREFIX
+from cms.contexts.settings import CMS_CACHE_KEY_PREFIX
 
 
 LOCKS_CACHE_ENABLED = True

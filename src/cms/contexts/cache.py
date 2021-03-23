@@ -75,5 +75,3 @@ def is_response_cacheable(response):
 
 def is_cache_available():
     return CMS_CACHE_ENABLED
-
-

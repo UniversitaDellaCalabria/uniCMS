@@ -1,7 +1,6 @@
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
-from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,7 +11,7 @@ from cms.contexts.models import WebPath, WebSite
 from cms.publications.models import PublicationContext
 from cms.publications.serializers import PublicationContextSerializer
 
-from . generics import *
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 

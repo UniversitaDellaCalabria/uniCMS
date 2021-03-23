@@ -165,7 +165,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         for (count, block) in enumerate(template_blocks):
             template_blocks_list.append((block, count))
         # exclude blocks in exclude_blocks_list[]
-        template_blocks_list = [x for x in template_blocks_list \
+        template_blocks_list = [x for x in template_blocks_list
                                 if x not in excluded_blocks_list]
 
         # populate a set excluding template blocks existing in page_blocks

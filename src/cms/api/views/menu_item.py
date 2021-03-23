@@ -5,7 +5,6 @@ from cms.menus.forms import MenuItemForm
 from cms.menus.models import *
 from cms.menus.serializers import *
 
-from rest_framework import generics
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response

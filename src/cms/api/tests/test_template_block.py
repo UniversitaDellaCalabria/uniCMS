@@ -1,12 +1,8 @@
 import logging
 
-from django.contrib.auth.models import Permission
-from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from cms.templates.models import TemplateBlock
 from cms.templates.tests import TemplateUnitTest
 
 from cms.contexts.tests import ContextUnitTest

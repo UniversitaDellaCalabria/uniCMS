@@ -4,7 +4,6 @@ from cms.carousels.forms import CarouselForm
 from cms.carousels.models import *
 from cms.carousels.serializers import *
 
-from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView

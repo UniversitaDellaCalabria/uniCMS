@@ -4,12 +4,11 @@ from cms.medias.forms import MediaCollectionForm
 from cms.medias.models import MediaCollection
 from cms.medias.serializers import MediaCollectionSerializer
 
-from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from . generics import *
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import UserCanAddMediaCollectionOrAdminReadonly
 from .. serializers import UniCMSFormSerializer

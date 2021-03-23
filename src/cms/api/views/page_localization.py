@@ -1,4 +1,3 @@
-from django_filters.rest_framework import DjangoFilterBackend
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
@@ -6,8 +5,6 @@ from cms.pages.forms import PageLocalizationForm
 from cms.pages.models import *
 from cms.pages.serializers import *
 
-from rest_framework import generics
-from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,7 +12,6 @@ from rest_framework.views import APIView
 from . generics import *
 
 from .. exceptions import LoggedPermissionDenied
-from .. pagination import UniCmsApiPagination
 from .. serializers import UniCMSFormSerializer
 
 
