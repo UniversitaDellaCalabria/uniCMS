@@ -313,8 +313,6 @@ class EditorialBoardLockUser(models.Model):
 
     @classmethod
     def check_for_locks(cls, obj, user):
-        # @to-do redis-lock
-
         # check for locks on object
         content_type = ContentType.objects.get_for_model(obj)
         locks = cls.get_object_locks(content_type=content_type,

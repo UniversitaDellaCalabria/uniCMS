@@ -7,9 +7,6 @@ def check_user_permission_on_object(user, obj, permission='change'):
     """
     check if user has a permission and has created an object
     """
-
-    # @to-do redis-lock
-
     # superuser have all permissions
     if user.is_superuser: return {'granted': True}
     # if not staff, no permission
