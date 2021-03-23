@@ -317,9 +317,6 @@ class EditorialBoardLockUser(models.Model):
 
         # check for locks on object
         content_type = ContentType.objects.get_for_model(obj)
-        # locks = EditorialBoardLockProxy.obj_is_locked(user=user,
-        # content_type=content_type,
-        # object_id=self.pk)
         locks = cls.get_object_locks(content_type=content_type,
                                      object_id=obj.pk)
         # if there is not lock, ok

@@ -12,7 +12,7 @@ from cms.contexts.models import WebPath, WebSite
 from cms.publications.models import PublicationContext
 from cms.publications.serializers import PublicationContextSerializer
 
-from . generics import UniCMSListCreateAPIView
+from . generics import *
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 
@@ -53,7 +53,7 @@ class EditorWebpathPublicationContextList(UniCMSListCreateAPIView):
             return super().post(request, *args, **kwargs)
 
 
-class EditorWebpathPublicationContextView(generics.RetrieveUpdateDestroyAPIView):
+class EditorWebpathPublicationContextView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     """
     """
     description = ""

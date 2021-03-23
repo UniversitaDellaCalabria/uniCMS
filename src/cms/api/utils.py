@@ -1,7 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 
 from cms.contexts.models import EditorialBoardLockUser
-# from cms.contexts.lock_proxy import EditorialBoardLockProxy
 
 
 def check_user_permission_on_object(user, obj, permission='change'):
@@ -29,9 +28,7 @@ def check_user_permission_on_object(user, obj, permission='change'):
     # obj owner has permissions
     if obj.created_by == user: return {'granted': True}
 
-    # locks = EditorialBoardLockProxy.obj_is_locked(user=user,
-    # content_type=content_type,
-    # object_id=obj.pk)
+    # check for Editorial Board locks
     locks = EditorialBoardLockUser.get_object_locks(content_type=content_type,
                                                     object_id=obj.pk)
     # if there is not lock, no permission

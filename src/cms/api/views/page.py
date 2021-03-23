@@ -14,7 +14,7 @@ from cms.pages.models import Page
 from cms.pages.serializers import PageSerializer
 from cms.pages.utils import copy_page_as_draft
 
-from . generics import UniCMSListCreateAPIView
+from . generics import *
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 
@@ -55,7 +55,7 @@ class EditorWebpathPageList(UniCMSListCreateAPIView):
             return super().post(request, *args, **kwargs)
 
 
-class EditorWebpathPageView(generics.RetrieveUpdateDestroyAPIView):
+class EditorWebpathPageView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     """
     """
     description = ""
@@ -173,6 +173,7 @@ class PageChangeStateView(APIView):
         if not item: raise Http404
         has_permission = item.is_publicable_by(request.user)
         if has_permission:
+            check_locks(item, request.user)
             item.is_active = not item.is_active
             item.save()
             result = self.serializer_class(item)
@@ -214,6 +215,7 @@ class PageChangePublicationStatusView(APIView):
         if not item: raise Http404
         has_permission = item.is_publicable_by(request.user)
         if has_permission:
+            check_locks(item, request.user)
             item.toggleState()
             result = self.serializer_class(item)
             return Response(result.data)
@@ -259,7 +261,7 @@ class PageRelatedObjectList(UniCMSListCreateAPIView):
         abstract = True
 
 
-class PageRelatedObject(generics.RetrieveUpdateDestroyAPIView):
+class PageRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
 
     permission_classes = [IsAdminUser]
 

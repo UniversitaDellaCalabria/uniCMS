@@ -11,21 +11,20 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from . generics import *
+
 from .. exceptions import LoggedPermissionDenied
 from .. pagination import UniCmsApiPagination
 from .. serializers import UniCMSFormSerializer
 
 
-class PublicationLocalizationList(generics.ListCreateAPIView):
+class PublicationLocalizationList(UniCMSListCreateAPIView):
     """
     """
     description = ""
     serializer_class = PublicationLocalizationSerializer
-    permission_classes = [IsAdminUser]
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     filterset_fields = ['is_active', 'created', 'modified']
     search_fields = ['title', 'language', 'subheading', 'content']
-    pagination_class = UniCmsApiPagination
 
     def get_queryset(self):
         """
@@ -49,7 +48,7 @@ class PublicationLocalizationList(generics.ListCreateAPIView):
             return super().post(request, *args, **kwargs)
 
 
-class PublicationLocalizationView(generics.RetrieveUpdateDestroyAPIView):
+class PublicationLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     """
     """
     description = ""

@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from . generics import UniCMSListCreateAPIView
+from . generics import *
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import UserCanAddMediaCollectionOrAdminReadonly
 from .. serializers import UniCMSFormSerializer
@@ -26,7 +26,7 @@ class MediaCollectionList(UniCMSListCreateAPIView):
     search_fields = ['name', 'description', 'tags__name']
 
 
-class MediaCollectionView(generics.RetrieveUpdateDestroyAPIView):
+class MediaCollectionView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     """
     """
     description = ""

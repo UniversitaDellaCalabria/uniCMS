@@ -12,6 +12,8 @@ from . import settings as app_settings
 
 logger = logging.getLogger(__name__)
 
+
+# unicms cache
 CMS_CACHE_TTL = getattr(settings, 'CMS_CACHE_TTL',
                         app_settings.CMS_CACHE_TTL)
 CMS_CACHE_EXCLUDED_MATCHES = getattr(settings,
@@ -73,3 +75,5 @@ def is_response_cacheable(response):
 
 def is_cache_available():
     return CMS_CACHE_ENABLED
+
+

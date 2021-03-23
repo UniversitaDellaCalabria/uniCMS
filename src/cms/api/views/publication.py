@@ -20,7 +20,7 @@ from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
-from . generics import UniCMSListCreateAPIView
+from . generics import *
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import UserCanAddPublicationOrAdminReadonly
 from .. serializers import UniCMSFormSerializer
@@ -122,7 +122,7 @@ class EditorialBoardPublicationSchema(AutoSchema):
             return 'deleteEditorialBoardPublication'
 
 
-class PublicationView(generics.RetrieveUpdateDestroyAPIView):
+class PublicationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     """
     """
     description = ""
@@ -198,6 +198,7 @@ class PublicationChangeStateView(APIView):
         if not item: raise Http404
         has_permission = item.is_publicable_by(request.user)
         if has_permission:
+            check_locks(item, request.user)
             item.is_active = not item.is_active
             item.save()
             result = self.serializer_class(item)
@@ -236,7 +237,7 @@ class PublicationRelatedObjectList(UniCMSListCreateAPIView):
         abstract = True
 
 
-class PublicationRelatedObject(generics.RetrieveUpdateDestroyAPIView):
+class PublicationRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
     """
     """
     permission_classes = [IsAdminUser]

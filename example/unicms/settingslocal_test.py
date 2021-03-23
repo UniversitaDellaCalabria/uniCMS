@@ -7,6 +7,8 @@ DATABASES = {
     }
 }
 
+LOCKS_CACHE_ENABLED = False
+LOCKS_CACHE_TTL = 1
 
 # CACHES = {
 # 'default': {

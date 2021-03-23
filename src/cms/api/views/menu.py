@@ -13,7 +13,7 @@ from cms.menus.forms import MenuForm
 from cms.menus.models import NavigationBar
 from cms.menus.serializers import MenuSerializer
 
-from . generics import UniCMSListCreateAPIView
+from . generics import *
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import UserCanAddMenuOrAdminReadonly
 from .. serializers import UniCMSFormSerializer
@@ -86,7 +86,7 @@ class MenuList(UniCMSListCreateAPIView):
     queryset = NavigationBar.objects.all()
 
 
-class MenuView(generics.RetrieveUpdateDestroyAPIView):
+class MenuView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     """
     """
     description = ""

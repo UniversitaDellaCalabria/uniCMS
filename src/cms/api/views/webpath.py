@@ -15,7 +15,7 @@ from cms.contexts.utils import is_publisher
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from . generics import UniCMSListCreateAPIView
+from . generics import *
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 
@@ -71,8 +71,7 @@ class EditorWebsiteWebpathList(UniCMSListCreateAPIView):
             return HttpResponseRedirect(url)
 
 
-# @method_decorator(staff_member_required, name='dispatch')
-class EditorWebsiteWebpathView(generics.RetrieveUpdateDestroyAPIView):
+class EditorWebsiteWebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     """
     Editor user get website webpath permissions
     """

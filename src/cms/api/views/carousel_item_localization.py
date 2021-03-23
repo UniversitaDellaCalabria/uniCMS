@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from . generics import UniCMSListCreateAPIView
+from . generics import *
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
@@ -47,7 +47,7 @@ class CarouselItemLocalizationList(UniCMSListCreateAPIView):
             return super().post(request, *args, **kwargs)
 
 
-class CarouselItemLocalizationView(generics.RetrieveUpdateDestroyAPIView):
+class CarouselItemLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     """
     """
     description = ""

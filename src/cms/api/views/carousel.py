@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from . generics import UniCMSListCreateAPIView
+from . generics import *
 from . locks import ObjectUserLocksList, ObjectUserLocksView
 
 from .. exceptions import LoggedPermissionDenied
@@ -28,7 +28,7 @@ class CarouselList(UniCMSListCreateAPIView):
     queryset = Carousel.objects.all()
 
 
-class CarouselView(generics.RetrieveUpdateDestroyAPIView):
+class CarouselView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     """
     """
     description = ""

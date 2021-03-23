@@ -7,7 +7,6 @@ from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.models import *
 from cms.contexts.models_abstract import AbstractLockable
-# from cms.contexts.lock_proxy import EditorialBoardLockProxy
 
 from cms.carousels.models import Carousel
 

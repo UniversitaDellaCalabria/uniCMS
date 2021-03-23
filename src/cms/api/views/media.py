@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from . generics import UniCMSListCreateAPIView
+from . generics import *
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import UserCanAddMediaOrAdminReadonly
 from .. serializers import UniCMSFormSerializer
@@ -28,7 +28,7 @@ class MediaList(UniCMSListCreateAPIView):
     queryset = Media.objects.all()
 
 
-class MediaView(generics.RetrieveUpdateDestroyAPIView):
+class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     """
     """
     description = ""
