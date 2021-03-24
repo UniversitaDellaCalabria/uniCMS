@@ -127,7 +127,7 @@ class RedisLockView(APIView):
         content_type_id = self.kwargs['content_type_id']
         object_id = self.kwargs['object_id']
         lock = get_lock_from_cache(content_type_id, object_id)
-        if lock[0]:
+        if lock[0] and not lock[0] == request.user.pk:
             owner_user = get_user_model().objects.filter(pk=lock[0]).first()
             return Response({'lock': lock,
                              'message': LOCK_MESSAGE.format(user=owner_user,
