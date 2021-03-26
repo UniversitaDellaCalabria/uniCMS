@@ -41,3 +41,9 @@ class WebsiteAPIUnitTest(TestCase):
         req.force_login(user)
         res = req.get(url)
         assert isinstance(res.json(), dict)
+
+        url = reverse('unicms_api:editorial-board-site',
+                      kwargs={'pk': webpath.site.pk})
+        # accessible to staff users only
+        res = req.get(url)
+        assert isinstance(res.json(), dict)

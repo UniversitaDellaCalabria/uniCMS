@@ -92,6 +92,7 @@ urlpatterns += path(f'{cilil_prefix}/form/', carousel_item_link_localization.Car
 
 # websites
 urlpatterns += path(f'{eb_prefix}/sites/', website.EditorWebsiteList.as_view(), name='editorial-board-sites'),
+urlpatterns += path(f'{eb_prefix}/sites/<int:pk>/', website.EditorWebsiteView.as_view(), name='editorial-board-site'),
 
 # webpaths
 w_prefix = f'{eb_prefix}/sites/<int:site_id>/webpaths'

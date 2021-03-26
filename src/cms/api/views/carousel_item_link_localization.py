@@ -28,9 +28,9 @@ class CarouselItemLinkLocalizationList(UniCMSListCreateAPIView):
         carousel_item_id = self.kwargs.get('carousel_item_id')
         carousel_item_link_id = self.kwargs.get('carousel_item_link_id')
         if carousel_id and carousel_item_id and carousel_item_link_id:
-            return CarouselItemLinkLocalization.objects.filter(carousel_item_link__pk=carousel_id,
+            return CarouselItemLinkLocalization.objects.filter(carousel_item_link__pk=carousel_item_link_id,
                                                                carousel_item_link__carousel_item__pk=carousel_item_id,
-                                                               carousel_item_link__carousel_item__carousel__pk=carousel_item_link_id)
+                                                               carousel_item_link__carousel_item__carousel__pk=carousel_id)
         return CarouselItemLinkLocalization.objects.none() # pragma: no cover
 
     def post(self, request, *args, **kwargs):
