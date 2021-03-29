@@ -12,6 +12,6 @@ pyyaml
 pydantic
 django-htmlmin>=0.11.0
 django-redis>=4.12.1
-unicms-template-italia
+unicms-template-italia>=0.4.6
 markdown
 markdownify
