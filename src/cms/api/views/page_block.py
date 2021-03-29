@@ -16,6 +16,7 @@ class PageBlockList(PageRelatedObjectList):
     search_fields = ['block__name', 'section']
     filterset_fields = ['is_active']
     serializer_class = PageBlockSerializer
+    ordering_fields = ['id', 'block__name']
 
     def get_queryset(self):
         """

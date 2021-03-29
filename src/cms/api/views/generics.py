@@ -24,9 +24,12 @@ logger = logging.getLogger(__name__)
 class UniCMSListCreateAPIView(generics.ListCreateAPIView):
 
     permission_classes = [IsAdminUser]
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter,
+                       DjangoFilterBackend,
+                       filters.OrderingFilter]
     filterset_fields = ['is_active', 'created', 'modified']
     pagination_class = UniCmsApiPagination
+    ordering = ['id']
 
     class Meta:
         abstract = True
