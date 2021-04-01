@@ -1,4 +1,6 @@
-from cms.api.serializers import UniCMSCreateUpdateSerializer, UniCMSContentTypeClass
+from cms.api.serializers import (UniCMSCreateUpdateSerializer,
+                                 UniCMSContentTypeClass,
+                                 UniCMSTagsValidator)
 
 from rest_framework import serializers
 
@@ -28,7 +30,8 @@ class MediaSerializer(UniCMSCreateUpdateSerializer,
 
 class MediaCollectionSerializer(TaggitSerializer,
                                 UniCMSCreateUpdateSerializer,
-                                UniCMSContentTypeClass):
+                                UniCMSContentTypeClass,
+                                UniCMSTagsValidator):
     tags = TagListSerializerField()
 
     class Meta:

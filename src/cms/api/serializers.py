@@ -1,14 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
-
+from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
-
-
-# class PublicationContextSerializer(serializers.HyperlinkedModelSerializer):
-# class Meta:
-# model = PublicationContext
-# fields = '__all__'
-# lookup_field = 'pk'
 
 
 class UniCMSCreateUpdateSerializer(serializers.ModelSerializer):
@@ -33,10 +26,6 @@ class UniCMSFormSerializer():
 
     @staticmethod
     def serialize(form):
-
-        # WIDGETS_TYPES = (
-        # (,)
-        # )
 
         def _get_choices(choices):
             elements = []
@@ -84,6 +73,21 @@ class UniCMSContentTypeClass(serializers.ModelSerializer):
         content_type = ContentType.objects.get_for_model(instance.__class__)
         data['object_content_type'] = content_type.pk
         return data
+
+    class Meta:
+        abstract = True
+
+
+class UniCMSTagsValidator():
+
+    def validate_tags(self, value):
+        """
+        Check that the blog post is about Django.
+        """
+        required = self.fields['tags'].__dict__['required']
+        if not value and required:
+            raise serializers.ValidationError(_("Field required"))
+        return value
 
     class Meta:
         abstract = True

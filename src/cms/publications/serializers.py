@@ -1,4 +1,6 @@
-from cms.api.serializers import UniCMSContentTypeClass, UniCMSCreateUpdateSerializer
+from cms.api.serializers import (UniCMSContentTypeClass,
+                                 UniCMSCreateUpdateSerializer,
+                                 UniCMSTagsValidator)
 from cms.contexts.models import WebPath
 from cms.medias.serializers import MediaSerializer, MediaCollectionSerializer
 
@@ -40,7 +42,8 @@ class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
 
 class PublicationSerializer(TaggitSerializer,
                             UniCMSCreateUpdateSerializer,
-                            UniCMSContentTypeClass):
+                            UniCMSContentTypeClass,
+                            UniCMSTagsValidator):
     tags = TagListSerializerField()
 
     def to_representation(self, instance):

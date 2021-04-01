@@ -1,6 +1,8 @@
 from django.urls import reverse
 
-from cms.api.serializers import UniCMSContentTypeClass, UniCMSCreateUpdateSerializer
+from cms.api.serializers import (UniCMSContentTypeClass,
+                                 UniCMSCreateUpdateSerializer,
+                                 UniCMSTagsValidator)
 from cms.carousels.serializers import CarouselSerializer
 from cms.contexts.models import WebPath
 from cms.contexts.serializers import WebPathSerializer
@@ -41,7 +43,8 @@ class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
 
 class PageSerializer(TaggitSerializer,
                      UniCMSCreateUpdateSerializer,
-                     UniCMSContentTypeClass):
+                     UniCMSContentTypeClass,
+                     UniCMSTagsValidator):
     webpath = WebPathForeignKey()
     tags = TagListSerializerField()
 
