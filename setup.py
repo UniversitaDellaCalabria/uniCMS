@@ -15,21 +15,21 @@ def get_requirements(fname='requirements.txt'):
 
 setup(
     name="unicms",
-    version='0.8.0',
+    version='0.8.2',
     description="uniCMS is a Django Web Content Management System",
     author='Giuseppe De Marco, Francesco Filicetti',
     author_email='giuseppe.demarco@unical.it, francesco.filicetti@unical.it',
     license="Apache 2.0",
     url='https://github.com/UniversitaDellaCalabria/uniCMS',
-    
+
     packages=[f"{_pkg_name}"],
     package_dir={f"{_pkg_name}": f"{_src_folder}/{_pkg_name}"},
-    
-    package_data={f"{_pkg_name}": [i.replace(f'{_src_folder}/{_pkg_name}/', '') 
-                                   for i in glob(f'{_src_folder}/{_pkg_name}/**', 
+
+    package_data={f"{_pkg_name}": [i.replace(f'{_src_folder}/{_pkg_name}/', '')
+                                   for i in glob(f'{_src_folder}/{_pkg_name}/**',
                                                  recursive=True)]
     },
-    
+
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: Apache Software License",
