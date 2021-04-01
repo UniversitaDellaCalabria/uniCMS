@@ -369,7 +369,8 @@ class PublicationContext(TimeStampedModel, ActivableModel,
         return '{} {}'.format(self.publication, self.webpath)
 
 
-class PublicationRelated(TimeStampedModel, SortableModel, ActivableModel):
+class PublicationRelated(TimeStampedModel, SortableModel, ActivableModel,
+                         CreatedModifiedBy):
     publication = models.ForeignKey(Publication, null=False, blank=False,
                                     related_name='parent_publication',
                                     on_delete=models.CASCADE)
@@ -385,7 +386,7 @@ class PublicationRelated(TimeStampedModel, SortableModel, ActivableModel):
         return '{} {}'.format(self.publication, self.related)
 
 
-class PublicationLink(TimeStampedModel):
+class PublicationLink(TimeStampedModel, CreatedModifiedBy):
     publication = models.ForeignKey(Publication, null=False, blank=False,
                                     on_delete=models.CASCADE)
     name = models.CharField(max_length=256, null=False, blank=False)
@@ -399,7 +400,7 @@ class PublicationLink(TimeStampedModel):
 
 
 class PublicationBlock(SectionAbstractModel,TimeStampedModel,
-                       ActivableModel, SortableModel):
+                       ActivableModel, SortableModel, CreatedModifiedBy):
     publication = models.ForeignKey(Publication, null=False, blank=False,
                                     on_delete=models.CASCADE)
     block = models.ForeignKey(TemplateBlock, null=False, blank=False,
@@ -415,7 +416,8 @@ class PublicationBlock(SectionAbstractModel,TimeStampedModel,
                                     self.section or '#')
 
 
-class PublicationGallery(TimeStampedModel, ActivableModel, SortableModel):
+class PublicationGallery(TimeStampedModel, ActivableModel, SortableModel,
+                         CreatedModifiedBy):
     publication = models.ForeignKey(Publication,
                                     on_delete=models.CASCADE)
     collection = models.ForeignKey(MediaCollection,
@@ -435,7 +437,7 @@ def publication_attachment_path(instance, filename): # pragma: no cover
 
 
 class PublicationAttachment(TimeStampedModel, SortableModel, ActivableModel,
-                            AbstractMedia):
+                            AbstractMedia, CreatedModifiedBy):
 
     publication = models.ForeignKey(Publication, null=False, blank=False,
                                     related_name='page_attachment',

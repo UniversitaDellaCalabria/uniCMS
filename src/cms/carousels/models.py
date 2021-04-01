@@ -88,7 +88,8 @@ class CarouselItemLocalization(ActivableModel,
         return '{} {}'.format(self.carousel_item, self.language)
 
 
-class CarouselItemLink(ActivableModel, TimeStampedModel, SortableModel):
+class CarouselItemLink(ActivableModel, TimeStampedModel, SortableModel,
+                       CreatedModifiedBy):
     carousel_item = models.ForeignKey(CarouselItem,
                                       on_delete=models.CASCADE)
     title_preset = models.CharField(choices=CMS_LINKS_LABELS,

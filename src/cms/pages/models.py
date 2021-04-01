@@ -304,7 +304,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
 
 
 class PageCarousel(SectionAbstractModel, ActivableModel, SortableModel,
-                   TimeStampedModel):
+                   TimeStampedModel, CreatedModifiedBy):
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     carousel = models.ForeignKey(Carousel, null=False, blank=False,
@@ -318,8 +318,7 @@ class PageCarousel(SectionAbstractModel, ActivableModel, SortableModel,
                                   self.section or '#')
 
 
-class PageLocalization(TimeStampedModel, ActivableModel,
-                       CreatedModifiedBy):
+class PageLocalization(TimeStampedModel, ActivableModel, CreatedModifiedBy):
     title = models.CharField(max_length=256,
                              null=False, blank=False)
     page = models.ForeignKey(Page,
@@ -337,7 +336,7 @@ class PageLocalization(TimeStampedModel, ActivableModel,
 
 
 class PageMedia(SectionAbstractModel, ActivableModel, SortableModel,
-                TimeStampedModel):
+                TimeStampedModel, CreatedModifiedBy):
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     media = models.ForeignKey(Media, null=False, blank=False,
@@ -354,7 +353,7 @@ class PageMedia(SectionAbstractModel, ActivableModel, SortableModel,
 
 
 class PageMenu(SectionAbstractModel, ActivableModel, SortableModel,
-               TimeStampedModel):
+               TimeStampedModel, CreatedModifiedBy):
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     menu = models.ForeignKey(NavigationBar, null=False, blank=False,
@@ -368,7 +367,8 @@ class PageMenu(SectionAbstractModel, ActivableModel, SortableModel,
                                   self.section or '#')
 
 
-class PageBlock(ActivableModel, SectionAbstractModel, SortableModel):
+class PageBlock(ActivableModel, SectionAbstractModel, SortableModel,
+                TimeStampedModel, CreatedModifiedBy):
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     block = models.ForeignKey(TemplateBlock, null=False, blank=False,
@@ -384,7 +384,8 @@ class PageBlock(ActivableModel, SectionAbstractModel, SortableModel):
                                     self.section or '#')
 
 
-class PageRelated(TimeStampedModel, SortableModel, ActivableModel):
+class PageRelated(TimeStampedModel, SortableModel, ActivableModel,
+                  CreatedModifiedBy):
     page = models.ForeignKey(Page, null=False, blank=False,
                              related_name='parent_page',
                              on_delete=models.CASCADE)
@@ -400,7 +401,7 @@ class PageRelated(TimeStampedModel, SortableModel, ActivableModel):
         return '{} {}'.format(self.page, self.related_page)
 
 
-class PageLink(TimeStampedModel, SortableModel):
+class PageLink(TimeStampedModel, SortableModel, CreatedModifiedBy):
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     name = models.CharField(max_length=256, null=False, blank=False)
@@ -413,7 +414,8 @@ class PageLink(TimeStampedModel, SortableModel):
         return '{} {}'.format(self.page, self.name)
 
 
-class PagePublication(TimeStampedModel, SortableModel, ActivableModel):
+class PagePublication(TimeStampedModel, SortableModel, ActivableModel,
+                      CreatedModifiedBy):
     page = models.ForeignKey(Page, null=False, blank=False,
                              # related_name='container_page',
                              on_delete=models.CASCADE)

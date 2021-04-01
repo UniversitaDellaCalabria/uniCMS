@@ -63,8 +63,7 @@ class PageSerializer(TaggitSerializer,
                             'modified_by', 'state')
 
 
-class PageBlockSerializer(UniCMSCreateUpdateSerializer,
-                          UniCMSContentTypeClass):
+class PageBlockSerializer(UniCMSContentTypeClass):
     page = PageForeignKey()
 
     def to_representation(self, instance):
@@ -78,8 +77,7 @@ class PageBlockSerializer(UniCMSCreateUpdateSerializer,
         fields = '__all__'
 
 
-class PageCarouselSerializer(UniCMSCreateUpdateSerializer,
-                             UniCMSContentTypeClass):
+class PageCarouselSerializer(UniCMSContentTypeClass):
     page = PageForeignKey()
 
     def to_representation(self, instance):
@@ -93,8 +91,7 @@ class PageCarouselSerializer(UniCMSCreateUpdateSerializer,
         fields = '__all__'
 
 
-class PageLinkSerializer(UniCMSCreateUpdateSerializer,
-                         UniCMSContentTypeClass):
+class PageLinkSerializer(UniCMSContentTypeClass):
     page = PageForeignKey()
 
     class Meta:
