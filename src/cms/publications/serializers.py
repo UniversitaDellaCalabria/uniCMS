@@ -1,4 +1,4 @@
-from cms.api.serializers import UniCMSCreateUpdateSerializer, UniCMSContentTypeClass
+from cms.api.serializers import UniCMSContentTypeClass, UniCMSCreateUpdateSerializer
 from cms.contexts.models import WebPath
 from cms.medias.serializers import MediaSerializer, MediaCollectionSerializer
 
@@ -59,7 +59,8 @@ class PublicationSerializer(TaggitSerializer,
         read_only_fields = ('is_active', 'created_by', 'modified_by', 'content_type')
 
 
-class PublicationContextSerializer(UniCMSCreateUpdateSerializer):
+class PublicationContextSerializer(UniCMSCreateUpdateSerializer,
+                                   UniCMSContentTypeClass):
     webpath = WebPathForeignKey()
 
     def to_representation(self, instance):
@@ -74,7 +75,8 @@ class PublicationContextSerializer(UniCMSCreateUpdateSerializer):
         read_only_fields = ('created_by', 'modified_by')
 
 
-class PublicationAttachmentSerializer(serializers.ModelSerializer):
+class PublicationAttachmentSerializer(UniCMSCreateUpdateSerializer,
+                                      UniCMSContentTypeClass):
     publication = PublicationForeignKey()
 
     class Meta:
@@ -83,7 +85,8 @@ class PublicationAttachmentSerializer(serializers.ModelSerializer):
         read_only_fields = ('file_size','file_type')
 
 
-class PublicationBlockSerializer(serializers.ModelSerializer):
+class PublicationBlockSerializer(UniCMSCreateUpdateSerializer,
+                                 UniCMSContentTypeClass):
     publication = PublicationForeignKey()
 
     class Meta:
@@ -91,7 +94,8 @@ class PublicationBlockSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PublicationGallerySerializer(serializers.ModelSerializer):
+class PublicationGallerySerializer(UniCMSCreateUpdateSerializer,
+                                   UniCMSContentTypeClass):
     publication = PublicationForeignKey()
 
     def to_representation(self, instance):
@@ -105,7 +109,8 @@ class PublicationGallerySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PublicationLinkSerializer(serializers.ModelSerializer):
+class PublicationLinkSerializer(UniCMSCreateUpdateSerializer,
+                                UniCMSContentTypeClass):
     publication = PublicationForeignKey()
 
     class Meta:
@@ -113,7 +118,8 @@ class PublicationLinkSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PublicationLocalizationSerializer(UniCMSCreateUpdateSerializer):
+class PublicationLocalizationSerializer(UniCMSCreateUpdateSerializer,
+                                        UniCMSContentTypeClass):
     publication = PublicationForeignKey()
 
     class Meta:
@@ -122,7 +128,8 @@ class PublicationLocalizationSerializer(UniCMSCreateUpdateSerializer):
         read_only_fields = ('created_by', 'modified_by')
 
 
-class PublicationRelatedSerializer(serializers.ModelSerializer):
+class PublicationRelatedSerializer(UniCMSCreateUpdateSerializer,
+                                   UniCMSContentTypeClass):
     publication = PublicationForeignKey()
 
     def to_representation(self, instance):

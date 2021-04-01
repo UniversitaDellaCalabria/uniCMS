@@ -1,6 +1,6 @@
 from django.urls import reverse
 
-from cms.api.serializers import UniCMSCreateUpdateSerializer, UniCMSContentTypeClass
+from cms.api.serializers import UniCMSContentTypeClass, UniCMSCreateUpdateSerializer
 from cms.carousels.serializers import CarouselSerializer
 from cms.contexts.models import WebPath
 from cms.contexts.serializers import WebPathSerializer
@@ -63,7 +63,8 @@ class PageSerializer(TaggitSerializer,
                             'modified_by', 'state')
 
 
-class PageBlockSerializer(serializers.ModelSerializer):
+class PageBlockSerializer(UniCMSCreateUpdateSerializer,
+                          UniCMSContentTypeClass):
     page = PageForeignKey()
 
     def to_representation(self, instance):
@@ -77,7 +78,8 @@ class PageBlockSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PageCarouselSerializer(serializers.ModelSerializer):
+class PageCarouselSerializer(UniCMSCreateUpdateSerializer,
+                             UniCMSContentTypeClass):
     page = PageForeignKey()
 
     def to_representation(self, instance):
@@ -91,7 +93,8 @@ class PageCarouselSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PageLinkSerializer(serializers.ModelSerializer):
+class PageLinkSerializer(UniCMSCreateUpdateSerializer,
+                         UniCMSContentTypeClass):
     page = PageForeignKey()
 
     class Meta:
@@ -99,7 +102,8 @@ class PageLinkSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PageLocalizationSerializer(UniCMSCreateUpdateSerializer):
+class PageLocalizationSerializer(UniCMSCreateUpdateSerializer,
+                                 UniCMSContentTypeClass):
     page = PageForeignKey()
 
     class Meta:
@@ -108,7 +112,8 @@ class PageLocalizationSerializer(UniCMSCreateUpdateSerializer):
         read_only_fields = ('created_by', 'modified_by')
 
 
-class PageMenuSerializer(serializers.ModelSerializer):
+class PageMenuSerializer(UniCMSCreateUpdateSerializer,
+                         UniCMSContentTypeClass):
     page = PageForeignKey()
 
     def to_representation(self, instance):
@@ -122,7 +127,8 @@ class PageMenuSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PageMediaSerializer(serializers.ModelSerializer):
+class PageMediaSerializer(UniCMSCreateUpdateSerializer,
+                          UniCMSContentTypeClass):
     page = PageForeignKey()
 
     def to_representation(self, instance):
@@ -136,7 +142,8 @@ class PageMediaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PagePublicationSerializer(serializers.ModelSerializer):
+class PagePublicationSerializer(UniCMSCreateUpdateSerializer,
+                                UniCMSContentTypeClass):
     page = PageForeignKey()
 
     def to_representation(self, instance):
@@ -150,7 +157,8 @@ class PagePublicationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PageRelatedSerializer(serializers.ModelSerializer):
+class PageRelatedSerializer(UniCMSCreateUpdateSerializer,
+                            UniCMSContentTypeClass):
     page = PageForeignKey()
 
     def to_representation(self, instance):

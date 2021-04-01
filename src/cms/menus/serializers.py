@@ -1,11 +1,12 @@
 from rest_framework import serializers
 
-from cms.api.serializers import UniCMSContentTypeClass
+from cms.api.serializers import UniCMSContentTypeClass, UniCMSCreateUpdateSerializer
 
 from . models import *
 
 
-class MenuSerializer(UniCMSContentTypeClass):
+class MenuSerializer(UniCMSCreateUpdateSerializer,
+                     UniCMSContentTypeClass):
 
     class Meta:
         model = NavigationBar
@@ -31,7 +32,8 @@ class MenuItemForeignKey(serializers.PrimaryKeyRelatedField):
         return None # pragma: no cover
 
 
-class MenuItemSerializer(serializers.ModelSerializer):
+class MenuItemSerializer(UniCMSCreateUpdateSerializer,
+                         UniCMSContentTypeClass):
     menu = MenuForeignKey()
     parent = MenuItemForeignKey(required=False, allow_null=True)
 

@@ -37,7 +37,8 @@ class MediaCollectionSerializer(TaggitSerializer,
         read_only_fields = ('created_by', 'modified_by')
 
 
-class MediaCollectionItemSerializer(UniCMSCreateUpdateSerializer):
+class MediaCollectionItemSerializer(UniCMSCreateUpdateSerializer,
+                                    UniCMSContentTypeClass):
     collection = MediaCollectionForeignKey()
 
     def to_representation(self, instance):

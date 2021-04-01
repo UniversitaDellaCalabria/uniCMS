@@ -49,7 +49,8 @@ class CarouselSerializer(UniCMSCreateUpdateSerializer,
         read_only_fields = ('created_by', 'modified_by')
 
 
-class CarouselItemSerializer(UniCMSCreateUpdateSerializer):
+class CarouselItemSerializer(UniCMSCreateUpdateSerializer,
+                             UniCMSContentTypeClass):
     carousel = CarouselForeignKey()
 
     def to_representation(self, instance):
@@ -64,7 +65,8 @@ class CarouselItemSerializer(UniCMSCreateUpdateSerializer):
         read_only_fields = ('created_by', 'modified_by')
 
 
-class CarouselItemLocalizationSerializer(UniCMSCreateUpdateSerializer):
+class CarouselItemLocalizationSerializer(UniCMSCreateUpdateSerializer,
+                                         UniCMSContentTypeClass):
     carousel_item = CarouselItemForeignKey()
 
     class Meta:
@@ -73,7 +75,8 @@ class CarouselItemLocalizationSerializer(UniCMSCreateUpdateSerializer):
         read_only_fields = ('created_by', 'modified_by')
 
 
-class CarouselItemLinkSerializer(serializers.ModelSerializer):
+class CarouselItemLinkSerializer(UniCMSCreateUpdateSerializer,
+                                 UniCMSContentTypeClass):
     carousel_item = CarouselItemForeignKey()
 
     class Meta:
@@ -81,7 +84,8 @@ class CarouselItemLinkSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CarouselItemLinkLocalizationSerializer(UniCMSCreateUpdateSerializer):
+class CarouselItemLinkLocalizationSerializer(UniCMSCreateUpdateSerializer,
+                                             UniCMSContentTypeClass):
     carousel_item_link = CarouselItemLinkForeignKey()
 
     class Meta:
