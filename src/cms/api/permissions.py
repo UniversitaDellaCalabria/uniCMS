@@ -22,6 +22,7 @@ class AbstractUserGetCreatePermissions(BasePermission):
 class CarouselGetCreatePermissions(AbstractUserGetCreatePermissions):
     """
     """
+
     def has_permission(self, request, view):
         return super().has_permission(request, view, 'cmscarousels', 'carousel')
 
@@ -29,6 +30,7 @@ class CarouselGetCreatePermissions(AbstractUserGetCreatePermissions):
 class PublicationGetCreatePermissions(AbstractUserGetCreatePermissions):
     """
     """
+
     def has_permission(self, request, view):
         return super().has_permission(request, view, 'cmspublications', 'publication')
 
@@ -36,6 +38,7 @@ class PublicationGetCreatePermissions(AbstractUserGetCreatePermissions):
 class MediaGetCreatePermissions(AbstractUserGetCreatePermissions):
     """
     """
+
     def has_permission(self, request, view):
         return super().has_permission(request, view, 'cmsmedias', 'media')
 
@@ -43,6 +46,7 @@ class MediaGetCreatePermissions(AbstractUserGetCreatePermissions):
 class MediaCollectionGetCreatePermissions(AbstractUserGetCreatePermissions):
     """
     """
+
     def has_permission(self, request, view):
         return super().has_permission(request, view, 'cmsmedias', 'mediacollection')
 
@@ -50,5 +54,6 @@ class MediaCollectionGetCreatePermissions(AbstractUserGetCreatePermissions):
 class MenuGetCreatePermissions(AbstractUserGetCreatePermissions):
     """
     """
+
     def has_permission(self, request, view):
         return super().has_permission(request, view, 'cmsmenus', 'navigationbar')

@@ -1,10 +1,8 @@
 import logging
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django_filters.rest_framework import DjangoFilterBackend
-from django.utils.translation import gettext_lazy as _
 
 from rest_framework import generics
 from rest_framework import filters
@@ -42,7 +40,6 @@ def check_locks(item, user, force=False):
     if is_lock_cache_available() or force:
         lock = get_lock_from_cache(content_type_id, object_id)
         user_lock = lock[0]
-        ttl = lock[1]
         owner_user = get_user_model().objects.filter(pk=user_lock).first()
         if user_lock and not user_lock == user_id:
             logger.debug(f'{user} tried to access to {owner_user} actually used by {item}')
