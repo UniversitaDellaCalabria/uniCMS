@@ -22,7 +22,7 @@ from rest_framework.views import APIView
 
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, check_locks
 from .. exceptions import LoggedPermissionDenied
-from .. permissions import UserCanAddPublicationOrAdminReadonly
+from .. permissions import PublicationGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
 
@@ -104,7 +104,7 @@ class PublicationList(UniCMSListCreateAPIView):
     """
     description = ""
     search_fields = ['title', 'subheading', 'content']
-    permission_classes = [UserCanAddPublicationOrAdminReadonly]
+    permission_classes = [PublicationGetCreatePermissions]
     serializer_class = PublicationSerializer
     queryset = Publication.objects.all()
     schema = EditorialBoardPublicationsSchema()

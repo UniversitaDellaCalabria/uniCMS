@@ -14,7 +14,7 @@ from cms.menus.serializers import MenuSerializer
 
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
-from .. permissions import UserCanAddMenuOrAdminReadonly
+from .. permissions import MenuGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
 
@@ -80,7 +80,7 @@ class MenuList(UniCMSListCreateAPIView):
     """
     description = ""
     search_fields = ['name']
-    permission_classes = [UserCanAddMenuOrAdminReadonly]
+    permission_classes = [MenuGetCreatePermissions]
     serializer_class = MenuSerializer
     queryset = NavigationBar.objects.all()
 

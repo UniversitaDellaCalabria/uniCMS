@@ -12,7 +12,7 @@ from . generics import *
 from . locks import ObjectUserLocksList, ObjectUserLocksView
 
 from .. exceptions import LoggedPermissionDenied
-from .. permissions import UserCanAddCarouselOrAdminReadonly
+from .. permissions import CarouselGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
 
@@ -22,7 +22,7 @@ class CarouselList(UniCMSListCreateAPIView):
     """
     description = ""
     search_fields = ['name', 'description']
-    permission_classes = [UserCanAddCarouselOrAdminReadonly]
+    permission_classes = [CarouselGetCreatePermissions]
     serializer_class = CarouselSerializer
     queryset = Carousel.objects.all()
 

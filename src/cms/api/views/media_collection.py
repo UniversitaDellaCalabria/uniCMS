@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
 from .. exceptions import LoggedPermissionDenied
-from .. permissions import UserCanAddMediaCollectionOrAdminReadonly
+from .. permissions import MediaCollectionGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
 
@@ -19,7 +19,7 @@ class MediaCollectionList(UniCMSListCreateAPIView):
     """
     """
     description = ""
-    permission_classes = [UserCanAddMediaCollectionOrAdminReadonly]
+    permission_classes = [MediaCollectionGetCreatePermissions]
     serializer_class = MediaCollectionSerializer
     queryset = MediaCollection.objects.all()
     search_fields = ['name', 'description', 'tags__name']

@@ -1,58 +1,54 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
-class AbstractUserCanAddObjectorAdminReadonly(BasePermission):
+class AbstractUserGetCreatePermissions(BasePermission):
+    """
+    """
 
-    def has_permission(self, request, view):
+    def has_permission(self, request, view, class_name, item_name):
         user = request.user
-        if user.is_superuser and user.is_staff: return True
         if not user.is_staff: return False
-        if request.method in SAFE_METHODS: return True
+        if user.is_superuser: return True
+
+        method = request.method
+        if method in SAFE_METHODS:
+            return True
+        return user.has_perm(f'{class_name}.add_{item_name}')
 
     class Meta:
         abstract = True
 
 
-class UserCanAddCarouselOrAdminReadonly(AbstractUserCanAddObjectorAdminReadonly):
+class CarouselGetCreatePermissions(AbstractUserGetCreatePermissions):
     """
     """
-
     def has_permission(self, request, view):
-        super().has_permission(request, view)
-        return request.user.has_perm('cmscarousels.add_carousel')
+        return super().has_permission(request, view, 'cmscarousels', 'carousel')
 
 
-class UserCanAddPublicationOrAdminReadonly(AbstractUserCanAddObjectorAdminReadonly):
+class PublicationGetCreatePermissions(AbstractUserGetCreatePermissions):
     """
     """
-
     def has_permission(self, request, view):
-        super().has_permission(request, view)
-        return request.user.has_perm('cmspublications.add_publication')
+        return super().has_permission(request, view, 'cmspublications', 'publication')
 
 
-class UserCanAddMediaOrAdminReadonly(AbstractUserCanAddObjectorAdminReadonly):
+class MediaGetCreatePermissions(AbstractUserGetCreatePermissions):
     """
     """
-
     def has_permission(self, request, view):
-        super().has_permission(request, view)
-        return request.user.has_perm('cmsmedias.add_media')
+        return super().has_permission(request, view, 'cmsmedias', 'media')
 
 
-class UserCanAddMediaCollectionOrAdminReadonly(AbstractUserCanAddObjectorAdminReadonly):
+class MediaCollectionGetCreatePermissions(AbstractUserGetCreatePermissions):
     """
     """
-
     def has_permission(self, request, view):
-        super().has_permission(request, view)
-        return request.user.has_perm('cmsmedias.add_mediacollection')
+        return super().has_permission(request, view, 'cmsmedias', 'mediacollection')
 
 
-class UserCanAddMenuOrAdminReadonly(AbstractUserCanAddObjectorAdminReadonly):
+class MenuGetCreatePermissions(AbstractUserGetCreatePermissions):
     """
     """
-
     def has_permission(self, request, view):
-        super().has_permission(request, view)
-        return request.user.has_perm('cmsmenus.add_navigationbar')
+        return super().has_permission(request, view, 'cmsmenus', 'navigationbar')
