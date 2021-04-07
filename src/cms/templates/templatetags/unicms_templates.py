@@ -1,5 +1,4 @@
 import logging
-import random
 
 from django import template
 from django.conf import settings
@@ -12,11 +11,6 @@ register = template.Library()
 
 CMS_TEMPLATE_BLOCK_SECTIONS = getattr(settings, "CMS_TEMPLATE_BLOCK_SECTIONS",
                                       app_settings.CMS_TEMPLATE_BLOCK_SECTIONS)
-
-
-@register.simple_tag
-def random_id(): # pragma: no cover
-    return random.randint(1000, 9999)
 
 
 @register.simple_tag
