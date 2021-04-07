@@ -60,3 +60,16 @@ def load_link(context, template, url):
     # url is quite arbitrary
     data = {'link': url}
     return handle_faulty_templates(template, data, name=_func_name)
+
+
+@register.simple_tag(takes_context=True)
+def load_page_publications(context, template):
+    _func_name = 'load_publications'
+    request = context['request']
+    page = context['page']
+    language = getattr(request, 'LANGUAGE_CODE', '')
+    page_publications = page.get_publications()
+    for page_pub in page_publications:
+        page_pub.publication.translate_as(lang=language)
+    data = {'page_publications': page_publications}
+    return handle_faulty_templates(template, data, name=_func_name)
