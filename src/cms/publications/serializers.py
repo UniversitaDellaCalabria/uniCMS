@@ -66,6 +66,13 @@ class PublicationContextSerializer(UniCMSCreateUpdateSerializer,
                                    UniCMSContentTypeClass):
     webpath = WebPathForeignKey()
 
+    def to_internal_value(self, data):
+        if data.get('in_evidence_start') == '':
+            data['in_evidence_start'] = None
+        if data.get('in_evidence_end') == '':
+            data['in_evidence_end'] = None
+        return super().to_internal_value(data)
+
     def to_representation(self, instance):
         data = super().to_representation(instance)
         publication = PublicationSerializer(instance.publication)
