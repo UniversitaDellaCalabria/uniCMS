@@ -79,29 +79,44 @@ class EditorWebpathPublicationContextView(UniCMSCachedRetrieveUpdateDestroyAPIVi
     def patch(self, request, *args, **kwargs):
         item = self.get_queryset().first()
         if not item: raise Http404
+        webpath = item.webpath
+        perms = webpath.is_publicable_by(user=request.user)
+        if not perms:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
         serializer = self.get_serializer(instance=item,
                                          data=request.data,
                                          partial=True)
         if serializer.is_valid(raise_exception=True):
-            webpath = item.webpath
-            perms = webpath.is_publicable_by(obj=item, user=request.user)
-            if not perms:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
-            return super().patch(request, *args, **kwargs)
+            new_webpath = serializer.validated_data.get('webpath')
+            if new_webpath and new_webpath != item.webpath:
+                # check permissions and locks on webpath
+                webpath_perms = new_webpath.is_publicable_by(user=request.user)
+                if not webpath_perms:
+                    raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                                 resource=request.method)
+        return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
         item = self.get_queryset().first()
         if not item: raise Http404
+        webpath = item.webpath
+        perms = webpath.is_publicable_by(user=request.user)
+        if not perms:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
         serializer = self.get_serializer(instance=item,
-                                         data=request.data)
+                                         data=request.data,
+                                         partial=True)
         if serializer.is_valid(raise_exception=True):
-            webpath = item.webpath
-            perms = webpath.is_publicable_by(obj=item, user=request.user)
-            if not perms:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
-            return super().put(request, *args, **kwargs)
+            new_webpath = serializer.validated_data.get('webpath')
+            if new_webpath and new_webpath != item.webpath:
+                # check permissions and locks on webpath
+                webpath_perms = new_webpath.is_publicable_by(user=request.user)
+                if not webpath_perms:
+                    raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                                 resource=request.method)
+        return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         item = self.get_queryset().first()
