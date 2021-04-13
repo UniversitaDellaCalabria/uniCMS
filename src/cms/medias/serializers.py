@@ -8,6 +8,7 @@ from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
 from . models import Media, MediaCollection, MediaCollectionItem
+from . utils import get_image_width_height
 
 
 class MediaCollectionForeignKey(serializers.PrimaryKeyRelatedField):
@@ -21,6 +22,13 @@ class MediaCollectionForeignKey(serializers.PrimaryKeyRelatedField):
 
 class MediaSerializer(UniCMSCreateUpdateSerializer,
                       UniCMSContentTypeClass):
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        w,y = get_image_width_height(instance.file)
+        data['file_dimensions'] = f'{w}px*{y}px'
+        return data
+
     class Meta:
         model = Media
         fields = '__all__'

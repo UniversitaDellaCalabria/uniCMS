@@ -74,34 +74,27 @@ class CarouselItemLinkLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView)
         item = self.get_queryset().first()
         if not item: raise Http404
         carousel_item_link = item.carousel_item_link
-        serializer = self.get_serializer(instance=item,
-                                         data=request.data,
-                                         partial=True)
-        if serializer.is_valid(raise_exception=True):
-            # check permissions on carousel
-            carousel = carousel_item_link.carousel_item.carousel
-            permission = check_user_permission_on_object(request.user,
-                                                         carousel)
-            if not permission['granted']:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
-            return super().patch(request, *args, **kwargs)
+        # check permissions on carousel
+        carousel = carousel_item_link.carousel_item.carousel
+        permission = check_user_permission_on_object(request.user,
+                                                     carousel)
+        if not permission['granted']:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+        return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
         item = self.get_queryset().first()
         if not item: raise Http404
         carousel_item_link = item.carousel_item_link
-        serializer = self.get_serializer(instance=item,
-                                         data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            # check permissions on carousel
-            carousel = carousel_item_link.carousel_item.carousel
-            permission = check_user_permission_on_object(request.user,
-                                                         carousel)
-            if not permission['granted']:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
-            return super().put(request, *args, **kwargs)
+        # check permissions on carousel
+        carousel = carousel_item_link.carousel_item.carousel
+        permission = check_user_permission_on_object(request.user,
+                                                     carousel)
+        if not permission['granted']:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+        return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         item = self.get_queryset().first()

@@ -42,29 +42,22 @@ class MediaCollectionView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     def patch(self, request, *args, **kwargs):
         item = self.get_queryset().first()
         if not item: raise Http404
-        serializer = self.get_serializer(instance=item,
-                                         data=request.data,
-                                         partial=True)
-        if serializer.is_valid(raise_exception=True):
-            permission = check_user_permission_on_object(request.user,
-                                                         item)
-            if not permission['granted']:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
-            return super().patch(request, *args, **kwargs)
+        permission = check_user_permission_on_object(request.user,
+                                                     item)
+        if not permission['granted']:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+        return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
         item = self.get_queryset().first()
         if not item: raise Http404
-        serializer = self.get_serializer(instance=item,
-                                         data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            permission = check_user_permission_on_object(request.user,
-                                                         item)
-            if not permission['granted']:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
-            return super().put(request, *args, **kwargs)
+        permission = check_user_permission_on_object(request.user,
+                                                     item)
+        if not permission['granted']:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+        return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         item = self.get_queryset().first()

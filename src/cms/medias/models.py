@@ -71,7 +71,7 @@ class Media(ActivableModel, TimeStampedModel, AbstractMedia,
     title = models.CharField(max_length=60, blank=False, null=False,
                              help_text=_("Media file title"))
     file = models.FileField(upload_to=context_media_path,
-                            validators=[validate_file_extension,
+                            validators=[validate_image_file_extension,
                                         validate_file_size,
                                         validate_image_size_ratio])
     description = models.TextField()

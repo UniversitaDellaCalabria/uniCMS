@@ -84,7 +84,7 @@ class EditorWebpathPublicationContextView(UniCMSCachedRetrieveUpdateDestroyAPIVi
                                          partial=True)
         if serializer.is_valid(raise_exception=True):
             webpath = item.webpath
-            perms = webpath.is_publicable_by(user=request.user)
+            perms = webpath.is_publicable_by(obj=item, user=request.user)
             if not perms:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
@@ -97,7 +97,7 @@ class EditorWebpathPublicationContextView(UniCMSCachedRetrieveUpdateDestroyAPIVi
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
             webpath = item.webpath
-            perms = webpath.is_publicable_by(user=request.user)
+            perms = webpath.is_publicable_by(obj=item, user=request.user)
             if not perms:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)

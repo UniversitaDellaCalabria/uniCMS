@@ -281,31 +281,24 @@ class PageRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
     def patch(self, request, *args, **kwargs):
         item = self.get_queryset().first()
         if not item: raise Http404
-        serializer = self.get_serializer(instance=item,
-                                         data=request.data,
-                                         partial=True)
-        if serializer.is_valid(raise_exception=True):
-            page = item.page
-            # check permissions on page
-            has_permission = page.is_editable_by(request.user)
-            if not has_permission:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
-            return super().patch(request, *args, **kwargs)
+        page = item.page
+        # check permissions on page
+        has_permission = page.is_editable_by(request.user)
+        if not has_permission:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+        return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
         item = self.get_queryset().first()
         if not item: raise Http404
-        serializer = self.get_serializer(instance=item,
-                                         data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            page = item.page
-            # check permissions on page
-            has_permission = page.is_editable_by(request.user)
-            if not has_permission:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
-            return super().put(request, *args, **kwargs)
+        page = item.page
+        # check permissions on page
+        has_permission = page.is_editable_by(request.user)
+        if not has_permission:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+        return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         item = self.get_queryset().first()

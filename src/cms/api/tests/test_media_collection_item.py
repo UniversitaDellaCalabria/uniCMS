@@ -131,12 +131,6 @@ class MediaCollectionItemAPIUnitTest(TestCase):
         media2 = MediaUnitTest.create_media()
         data = {'media': media2.pk,
                 'is_active': 1}
-        # wrong collection
-        data['collection'] = 12312312
-        res = req.put(url, data=data,
-                      content_type='application/json',
-                      follow=1)
-        assert res.status_code == 400
         # correct collection but...
         data['collection'] = collection.pk
         # user hasn't permission
