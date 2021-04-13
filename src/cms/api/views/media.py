@@ -1,3 +1,4 @@
+import logging
 import os
 
 from django.http import Http404
@@ -15,6 +16,9 @@ from .. exceptions import LoggedPermissionDenied
 from .. permissions import MediaGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
+
+
+logger = logging.getLogger(__name__)
 
 
 class MediaList(UniCMSListCreateAPIView):
@@ -70,7 +74,10 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         media = self.get_queryset().first()
-        os.remove(media.file.path)
+        try:
+            os.remove(media.file.path)
+        except:
+            logger.warning(f'File {media.file.path} not found')
         return super().delete(request, *args, **kwargs)
 
 

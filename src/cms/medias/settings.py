@@ -16,9 +16,11 @@ FILETYPE_TEXT = ('text/plain',
                 )
 FILETYPE_IMAGE = ('image/webp', 'image/jpeg', 'image/png',
                   'image/gif', 'image/x-ms-bmp')
+FILETYPE_VIDEO = ('video/mp4',)
 FILETYPE_P7M = ('application/pkcs7-mime',)
 FILETYPE_SIGNED = FILETYPE_PDF + FILETYPE_P7M
-FILETYPE_ALLOWED = FILETYPE_TEXT + FILETYPE_DATA + FILETYPE_IMAGE + FILETYPE_SIGNED
+FILETYPE_MEDIA = FILETYPE_IMAGE + FILETYPE_VIDEO
+FILETYPE_ALLOWED = FILETYPE_TEXT + FILETYPE_DATA + FILETYPE_MEDIA + FILETYPE_SIGNED
 
 # maximum permitted filename lengh in attachments, uploads
 FILE_NAME_MAX_LEN = 128

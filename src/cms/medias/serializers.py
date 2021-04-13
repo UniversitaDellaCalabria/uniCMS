@@ -25,8 +25,12 @@ class MediaSerializer(UniCMSCreateUpdateSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        w,y = get_image_width_height(instance.file)
-        data['file_dimensions'] = f'{w}px*{y}px'
+        data['file_size'] = instance.file_size_kb
+        try:
+            w,y = get_image_width_height(instance.file)
+            data['file_dimensions'] = f'{w}px*{y}px'
+        except FileNotFoundError:
+            data['file_dimensions'] = ''
         return data
 
     class Meta:

@@ -9,6 +9,8 @@ from . utils import get_image_width_height
 
 FILETYPE_IMAGE = getattr(settings, 'FILETYPE_IMAGE',
                          app_settings.FILETYPE_IMAGE)
+FILETYPE_MEDIA = getattr(settings, 'FILETYPE_MEDIA',
+                         app_settings.FILETYPE_MEDIA)
 FILETYPE_ALLOWED = getattr(settings, 'FILETYPE_ALLOWED',
                            app_settings.FILETYPE_ALLOWED)
 FILE_MAX_SIZE = getattr(settings, 'FILE_MAX_SIZE',
@@ -50,6 +52,10 @@ def validate_file_extension(value):
 
 def validate_image_file_extension(value):
     _validate_generic_file_extension(value, FILETYPE_IMAGE)
+
+
+def validate_media_file_extension(value):
+    _validate_generic_file_extension(value, FILETYPE_MEDIA)
 
 
 def validate_image_size_ratio(value):
