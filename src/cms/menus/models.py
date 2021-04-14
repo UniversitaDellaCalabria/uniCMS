@@ -156,15 +156,17 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
         return data
 
     def get_childs(self, lang=settings.LANGUAGE, only_active=True):
-        items = NavigationBarItem.objects.filter(parent=self,
-                                                 menu=self.menu).\
-                                          order_by('order')
-        if only_active:
-            items = items.filter(is_active=True)
-        if getattr(self, 'language', lang):
-            for item in items:
-                item.localized(lang)
-        return items
+        if self.pk:
+            items = NavigationBarItem.objects.filter(parent=self,
+                                                     menu=self.menu).\
+                                              order_by('order')
+            if only_active:
+                items = items.filter(is_active=True)
+            if getattr(self, 'language', lang):
+                for item in items:
+                    item.localized(lang)
+            return items
+        return None
 
     def item_in_childs(self, item):
         """
