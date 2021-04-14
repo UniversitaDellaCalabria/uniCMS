@@ -62,6 +62,8 @@ class PageSerializer(TaggitSerializer,
         data['base_template'] = base_template.data
         data['webpath'] = webpath.data
         data['preview_url'] = preview_url
+        data['date_start'] = instance.date_start.strftime("%Y-%m-%d %H:%M:%S")
+        data['date_end'] = instance.date_end.strftime("%Y-%m-%d %H:%M:%S") if instance.date_end else None
         return data
 
     class Meta:

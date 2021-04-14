@@ -77,6 +77,10 @@ class PublicationContextSerializer(UniCMSCreateUpdateSerializer,
         data = super().to_representation(instance)
         publication = PublicationSerializer(instance.publication)
         data['publication'] = publication.data
+        data['date_start'] = instance.date_start.strftime("%Y-%m-%d %H:%M:%S")
+        data['date_end'] = instance.date_end.strftime("%Y-%m-%d %H:%M:%S")
+        data['in_evidence_start'] = instance.in_evidence_start.strftime("%Y-%m-%d %H:%M:%S") if instance.in_evidence_start else None
+        data['in_evidence_end'] = instance.in_evidence_end.strftime("%Y-%m-%d %H:%M:%S") if instance.in_evidence_end else None
         return data
 
     class Meta:
