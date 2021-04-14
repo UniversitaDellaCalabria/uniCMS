@@ -82,6 +82,11 @@ class MenuItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         item = self.get_queryset().first()
         if not item: raise Http404
         menu = item.menu
+        permission = check_user_permission_on_object(request.user,
+                                                     menu)
+        if not permission['granted']:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
         serializer = self.get_serializer(instance=item,
                                          data=request.data,
                                          partial=True)
@@ -89,12 +94,11 @@ class MenuItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             new_menu = serializer.validated_data.get('menu')
             # check permissions on menu
             if new_menu:
-                menu = new_menu
-            permission = check_user_permission_on_object(request.user,
-                                                         menu)
-            if not permission['granted']:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
+                permission = check_user_permission_on_object(request.user,
+                                                             new_menu)
+                if not permission['granted']:
+                    raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                                 resource=request.method)
             try:
                 return super().patch(request, *args, **kwargs)
             except Exception as e:
@@ -103,14 +107,20 @@ class MenuItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     def put(self, request, *args, **kwargs):
         item = self.get_queryset().first()
         if not item: raise Http404
+        menu = item.menu
+        permission = check_user_permission_on_object(request.user,
+                                                     menu)
+        if not permission['granted']:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
         serializer = self.get_serializer(instance=item,
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
             # get menu
-            menu = serializer.validated_data.get('menu')
+            new_menu = serializer.validated_data.get('menu')
             # check permissions on menu
             permission = check_user_permission_on_object(request.user,
-                                                         menu)
+                                                         new_menu)
             if not permission['granted']:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)

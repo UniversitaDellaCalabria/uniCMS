@@ -115,7 +115,8 @@ class LinkPlaceHolder(AbstractPlaceholder):
         self.links = self.page.get_links()
 
     def build_data_dict(self):
-        return {'link': self.entry.url}
+        return {'name': self.entry.name,
+                'url': self.entry.url}
 
 
 class MediaPlaceHolder(AbstractPlaceholder):

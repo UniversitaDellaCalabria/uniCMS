@@ -1,3 +1,4 @@
+import logging
 import os
 
 from django.http import Http404
@@ -15,6 +16,9 @@ from .. exceptions import LoggedPermissionDenied
 from .. permissions import MediaGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
+
+
+logger = logging.getLogger(__name__)
 
 
 class MediaList(UniCMSListCreateAPIView):
@@ -44,29 +48,22 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     def patch(self, request, *args, **kwargs):
         item = self.get_queryset().first()
         if not item: raise Http404
-        serializer = self.get_serializer(instance=item,
-                                         data=request.data,
-                                         partial=True)
-        if serializer.is_valid(raise_exception=True):
-            permission = check_user_permission_on_object(request.user,
-                                                         item)
-            if not permission['granted']:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
-            return super().patch(request, *args, **kwargs)
+        permission = check_user_permission_on_object(request.user,
+                                                     item)
+        if not permission['granted']:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+        return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
         item = self.get_queryset().first()
         if not item: raise Http404
-        serializer = self.get_serializer(instance=item,
-                                         data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            permission = check_user_permission_on_object(request.user,
-                                                         item)
-            if not permission['granted']:
-                raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                             resource=request.method)
-            return super().put(request, *args, **kwargs)
+        permission = check_user_permission_on_object(request.user,
+                                                     item)
+        if not permission['granted']:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+        return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         item = self.get_queryset().first()
@@ -77,7 +74,10 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         media = self.get_queryset().first()
-        os.remove(media.file.path)
+        try:
+            os.remove(media.file.path)
+        except:
+            logger.warning(f'File {media.file.path} not found')
         return super().delete(request, *args, **kwargs)
 
 

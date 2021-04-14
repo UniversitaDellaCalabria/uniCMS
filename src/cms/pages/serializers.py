@@ -48,6 +48,11 @@ class PageSerializer(TaggitSerializer,
     webpath = WebPathForeignKey()
     tags = TagListSerializerField()
 
+    def to_internal_value(self, data):
+        if data.get('date_end') == '':
+            data['date_end'] = None
+        return super().to_internal_value(data)
+
     def to_representation(self, instance):
         data = super().to_representation(instance)
         base_template = PageTemplateSerializer(instance.base_template)

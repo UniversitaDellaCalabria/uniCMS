@@ -130,13 +130,6 @@ class CarouselItemLinkLocalizationAPIUnitTest(TestCase):
                 'language': 'en',
                 'title': 'putted title',
                 'is_active': 0}
-        # wrong carousel item id
-        data['carousel_item_link'] = 1221321312
-        res = req.put(url, data,
-                      content_type='application/json',
-                      follow=1)
-        assert res.status_code == 400
-        data['carousel_item_link'] = carousel_item_link.pk
         # user hasn't permission
         req.force_login(user2)
         res = req.put(url, data, content_type='application/json')

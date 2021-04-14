@@ -82,7 +82,6 @@ class UniCMSTagsValidator():
 
     def validate_tags(self, value):
         """
-        Check that the blog post is about Django.
         """
         required = self.fields['tags'].__dict__['required']
         if not value and required:

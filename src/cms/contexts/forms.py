@@ -30,6 +30,7 @@ class WebPathForm(ModelForm):
 class PublicationContextForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
+        print(kwargs)
         site_id = kwargs.pop('site_id', None)
         webpath_id = kwargs.pop('webpath_id', None)
         super().__init__(*args, **kwargs)

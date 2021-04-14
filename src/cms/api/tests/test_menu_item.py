@@ -145,12 +145,6 @@ class MenuItemAPIUnitTest(TestCase):
                 'name': 'putted',
                 'parent': '',
                 'is_active': 0}
-        data['menu'] = 1221321312
-        res = req.put(url, data,
-                      content_type='application/json',
-                      follow=1)
-        assert res.status_code == 400
-        data['menu'] = menu.pk
         # user hasn't permission
         req.force_login(user2)
         res = req.put(url, data,
