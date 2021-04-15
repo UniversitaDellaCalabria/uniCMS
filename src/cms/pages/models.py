@@ -372,6 +372,7 @@ class PageBlock(ActivableModel, SectionAbstractModel, SortableModel,
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     block = models.ForeignKey(TemplateBlock, null=False, blank=False,
+                              limit_choices_to={'is_active': True},
                               on_delete=models.CASCADE)
 
     class Meta:
