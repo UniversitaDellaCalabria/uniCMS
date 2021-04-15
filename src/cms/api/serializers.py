@@ -44,7 +44,6 @@ class UniCMSFormSerializer():
             field_type = getattr(field.widget.__class__,
                                  'input_type',
                                  'textarea')
-            print(field.widget.__class__)
 
             field_dict = {}
             field_dict['id'] = field_name
@@ -54,11 +53,13 @@ class UniCMSFormSerializer():
             field_dict['options'] = []
             field_dict['multiple'] = 0
 
-            if field.widget.__class__.__name__ == 'DateInput':
+            class_name = field.widget.__class__.__name__
+
+            if  class_name == 'DateInput':
                 field_dict['type'] = 'date'
-            elif field.widget.__class__.__name__ == 'DateTimeInput':
+            elif class_name == 'DateTimeInput':
                 field_dict['type'] = 'datetime'
-            elif field.widget.__class__.__name__ == 'Select':
+            elif class_name in ('Select', 'SelectMultiple'):
                 field_dict['type'] = 'select'
                 if field.widget.__class__.__dict__.get('allow_multiple_selected'):
                     field_dict['multiple'] = 1
