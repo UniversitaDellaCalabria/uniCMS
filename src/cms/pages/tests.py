@@ -193,7 +193,7 @@ class PageUnitTest(TestCase):
                                 page=obj)
 
         data = dict(section='banner',
-                    template='italia_hero_slider.html',
+                    template='italia_carousel_hero_slider.html',
                     context=template_context)
 
         lm = load_carousel(**data)

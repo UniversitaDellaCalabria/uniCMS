@@ -44,10 +44,9 @@ class JSONBlock(AbstractBlock):
 class PlaceHolderBlock(JSONBlock):
     """
     """
-
-    def get_template(self):
-        template = self.content.get('template', '')
-        return template
+    def sanitize_template(self):
+        if not self.content.get('template'):
+            self.content['template'] = SafeString('')
 
 
 class CarouselPlaceholderBlock(PlaceHolderBlock):
@@ -56,11 +55,10 @@ class CarouselPlaceholderBlock(PlaceHolderBlock):
     """
 
     def render(self):
-        template = self.get_template()
-        if not template: return SafeString('')
+        self.sanitize_template()
         context = self.get_context()
         return load_carousel_placeholder(context=context,
-                                         template=template)
+                                         content=self.content)
 
 
 class LinkPlaceholderBlock(PlaceHolderBlock):
@@ -69,11 +67,10 @@ class LinkPlaceholderBlock(PlaceHolderBlock):
     """
 
     def render(self):
-        template = self.get_template()
-        if not template: return SafeString('')
+        self.sanitize_template()
         context = self.get_context()
         return load_link_placeholder(context=context,
-                                     template=template)
+                                     content=self.content)
 
 
 class MediaPlaceholderBlock(PlaceHolderBlock):
@@ -82,11 +79,10 @@ class MediaPlaceholderBlock(PlaceHolderBlock):
     """
 
     def render(self):
-        template = self.get_template()
-        if not template: return SafeString('')
+        self.sanitize_template()
         context = self.get_context()
         return load_media_placeholder(context=context,
-                                      template=template)
+                                      content=self.content)
 
 
 class MenuPlaceholderBlock(PlaceHolderBlock):
@@ -95,11 +91,10 @@ class MenuPlaceholderBlock(PlaceHolderBlock):
     """
 
     def render(self):
-        template = self.get_template()
-        if not template: return SafeString('')
+        self.sanitize_template()
         context = self.get_context()
         return load_menu_placeholder(context=context,
-                                     template=template)
+                                     content=self.content)
 
 
 class PublicationContentPlaceholderBlock(PlaceHolderBlock):
@@ -108,8 +103,7 @@ class PublicationContentPlaceholderBlock(PlaceHolderBlock):
     """
 
     def render(self):
-        template = self.get_template()
-        if not template: return SafeString('')
+        self.sanitize_template()
         context = self.get_context()
         return load_publication_content_placeholder(context=context,
-                                                    template=template)
+                                                    content=self.content)

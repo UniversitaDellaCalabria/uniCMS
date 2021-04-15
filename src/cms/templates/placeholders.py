@@ -13,12 +13,13 @@ logger = logging.getLogger(__name__)
 class AbstractPlaceholder(object):
     collection_name = 'entries'
 
-    def __init__(self, context:dict, template:str):
+    def __init__(self, context:dict, content:dict):
         self.request = context['request']
         self.block = context.get('block', None)
         self.page = context['page']
         self.webpath = context['webpath']
-        self.template = template
+        self.template = content['template']
+        self.content = content
 
         # i18n
         self.language = getattr(self.request, 'LANGUAGE_CODE', '')
@@ -86,8 +87,8 @@ class CarouselPlaceHolder(AbstractPlaceholder):
     ph_name = 'cms.templates.blocks.CarouselPlaceholderBlock'
 
     def __init__(self,
-                 context:dict, template:str = 'italia_hero_slider.html'):
-        super().__init__(context, template)
+                 context:dict, content:dict):
+        super().__init__(context, content)
         self.carousels = self.page.get_carousels()
 
     def build_identifier(self):
@@ -101,22 +102,23 @@ class CarouselPlaceHolder(AbstractPlaceholder):
         self.build_identifier()
 
     def build_data_dict(self):
-        return {'carousel_items': self.entry.carousel.get_items(self.language),
-                'carousel_identifier': self.identifier}
+        data =  {'carousel_items': self.entry.carousel.get_items(self.language),
+                 'carousel_identifier': self.identifier}
+        return {**self.content,**data}
 
 
 class LinkPlaceHolder(AbstractPlaceholder):
     collection_name = 'links'
     ph_name = 'cms.templates.blocks.LinkPlaceholderBlock'
 
-    def __init__(self,
-                 context:dict, template:str = 'italia_iframe_16by9.html'):
-        super().__init__(context, template)
+    def __init__(self, context:dict, content:dict):
+        super().__init__(context, content)
         self.links = self.page.get_links()
 
     def build_data_dict(self):
-        return {'name': self.entry.name,
+        data = {'name': self.entry.name,
                 'url': self.entry.url}
+        return {**self.content,**data}
 
 
 class MediaPlaceHolder(AbstractPlaceholder):
@@ -124,12 +126,13 @@ class MediaPlaceHolder(AbstractPlaceholder):
     ph_name = 'cms.templates.blocks.MediaPlaceholderBlock'
 
     def __init__(self,
-                 context:dict, template:str = 'italia_image.html'):
-        super().__init__(context, template)
+                 context:dict, content:dict):
+        super().__init__(context, content)
         self.medias = self.page.get_medias()
 
     def build_data_dict(self):
-        return {'media': self.entry.media, 'url': self.entry.url}
+        data = {'media': self.entry.media, 'url': self.entry.url}
+        return {**self.content,**data}
 
 
 class MenuPlaceHolder(AbstractPlaceholder):
@@ -137,22 +140,22 @@ class MenuPlaceHolder(AbstractPlaceholder):
     ph_name = 'cms.templates.blocks.MenuPlaceholderBlock'
 
     def __init__(self,
-                 context:dict, template:str = 'italia_main_menu.html'):
-        super().__init__(context, template)
+                 context:dict, content:dict):
+        super().__init__(context, content)
         self.menus = self.page.get_menus()
 
     def build_data_dict(self):
-        return {'items': self.entry.menu.get_items(lang=self.language,
+        data = {'items': self.entry.menu.get_items(lang=self.language,
                                                    parent__isnull=True)}
+        return {**self.content,**data}
 
 
 class PublicationPlaceHolder(AbstractPlaceholder):
     collection_name = 'publications'
     ph_name = 'cms.templates.blocks.PublicationContentPlaceholderBlock'
 
-    def __init__(self,
-                 context:dict, template:str = 'ph_publication_style_1.html'):
-        super().__init__(context, template)
+    def __init__(self, context:dict, content:dict):
+        super().__init__(context, content)
         self.publications = self.page.get_publications()
 
     def get_entry(self, entry):
@@ -160,7 +163,8 @@ class PublicationPlaceHolder(AbstractPlaceholder):
 
     def build_data_dict(self):
         self.entry.translate_as(lang=self.language)
-        return {'publication': self.entry, 'webpath': self.webpath}
+        data = {'publication': self.entry, 'webpath': self.webpath}
+        return {**self.content,**data}
 
 
 def load_media_placeholder(*args, **kwargs):
