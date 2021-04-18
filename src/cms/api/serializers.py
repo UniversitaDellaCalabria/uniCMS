@@ -3,6 +3,8 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
+from . settings import FORM_SOURCE_LABEL
+
 
 class UniCMSCreateUpdateSerializer(serializers.ModelSerializer):
 
@@ -50,6 +52,7 @@ class UniCMSFormSerializer():
             field_dict['label'] = field.label
             field_dict['required'] = 1 if field.required else 0
             field_dict['help_text'] = field.help_text
+            field_dict['api_source'] = getattr(field, FORM_SOURCE_LABEL, '')
             field_dict['options'] = []
             field_dict['multiple'] = 0
 
@@ -64,7 +67,7 @@ class UniCMSFormSerializer():
                 if field.widget.__class__.__dict__.get('allow_multiple_selected'):
                     field_dict['multiple'] = 1
 
-                if hasattr(field, '_queryset'):
+                if hasattr(field, '_queryset') and not getattr(field, FORM_SOURCE_LABEL, ''):
                     for item in field._queryset:
                         field_dict['options'].append({"text": item.__str__(),
                                                       "value": item.pk})

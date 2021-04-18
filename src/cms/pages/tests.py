@@ -11,7 +11,9 @@ from cms.contexts.tests import ContextUnitTest
 from cms.medias.tests import MediaUnitTest
 from cms.menus.tests import MenuUnitTest
 from cms.menus.templatetags.unicms_menus import load_menu
-from cms.pages.templatetags.unicms_pages import load_link, load_page_title
+from cms.pages.templatetags.unicms_pages import (load_link,
+                                                 load_page_publications,
+                                                 load_page_title)
 from cms.publications.models import Category
 from cms.templates.models import TemplateBlock
 from cms.templates.blocks import *
@@ -450,3 +452,16 @@ class PageUnitTest(TestCase):
         user.is_superuser = True
         user.save()
         req.get(url)
+
+
+    # templatetag
+    @classmethod
+    def test_load_page_publications(cls):
+        req = RequestFactory().get('/')
+        page = cls.create_page()
+        template_context = dict(request=req,
+                                page=page, webpath=page.webpath)
+        data = dict(context=template_context,
+                    template='that.html')
+        lpp = load_page_publications(**data)
+        assert lpp

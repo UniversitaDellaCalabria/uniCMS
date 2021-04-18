@@ -25,7 +25,7 @@ class PageForeignKey(serializers.PrimaryKeyRelatedField):
         if request:
             page_id = self.context['request'].parser_context['kwargs']['page_id']
             return Page.objects.filter(pk=page_id)
-        return None # pragma: nocover
+        return None # pragma: no cover
 
 
 class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
@@ -38,7 +38,7 @@ class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
             webpath_id = self.context['request'].parser_context['kwargs']['webpath_id']
             return WebPath.objects.filter(pk=webpath_id,
                                           site__id=site_id)
-        return None # pragma: nocover
+        return None # pragma: no cover
 
 
 class PageSerializer(TaggitSerializer,

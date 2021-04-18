@@ -104,7 +104,7 @@ def fill_created_modified_by(request, obj):
         return False
 
     for field_name in ('created_by', 'modified_by'):
-        if not hasattr(obj, field_name):
+        if not hasattr(obj, field_name):# pragma: no cover
             continue
 
         if (field_name == 'modified_by' or not getattr(obj, field_name, None)):

@@ -11,17 +11,18 @@ from cms.contexts.models import WebPath
 from cms.publications.forms import PublicationForm
 from cms.publications.models import Publication, PublicationContext
 from cms.publications.paginators import Paginator
-from cms.publications.serializers import PublicationSerializer
+from cms.publications.serializers import PublicationSerializer, PublicationSelectOptionsSerializer
 from cms.publications.utils import publication_context_base_filter
 
-from rest_framework import generics
+from rest_framework import filters, generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, check_locks
+from . generics import *
 from .. exceptions import LoggedPermissionDenied
+from .. pagination import UniCmsApiPagination
 from .. permissions import PublicationGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
@@ -93,7 +94,7 @@ class ApiContext(APIView): # pragma: no cover
 
 
 class EditorialBoardPublicationsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: nocover
+    def get_operation_id(self, path, method):# pragma: no cover
         if method == 'POST':
             return 'createEditorialBoardPublication'
         return 'listEditorialBoardPublications'
@@ -111,7 +112,7 @@ class PublicationList(UniCMSListCreateAPIView):
 
 
 class EditorialBoardPublicationSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: nocover
+    def get_operation_id(self, path, method):# pragma: no cover
         if method == 'GET':
             return 'retrieveEditorialBoardPublication'
         if method == 'PATCH':
@@ -167,7 +168,7 @@ class PublicationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
 
 
 class EditorialBoardPublicationChangeStatusSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: nocover
+    def get_operation_id(self, path, method):# pragma: no cover
         return 'updateEditorialBoardPublicationStatus'
 
 
@@ -287,3 +288,33 @@ class PublicationFormView(APIView):
         form = PublicationForm()
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
+
+
+class EditorialBoardPublicationOptionListSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listPublicationSelectOptions'
+
+
+class PublicationOptionList(UniCMSListSelectOptionsAPIView):
+    """
+    """
+    description = ""
+    search_fields = ['title']
+    serializer_class = PublicationSelectOptionsSerializer
+    queryset = Publication.objects.all()
+    schema = EditorialBoardPublicationOptionListSchema()
+
+
+class PublicationOptionView(generics.RetrieveAPIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+    serializer_class = PublicationSelectOptionsSerializer
+
+    def get_queryset(self):
+        """
+        """
+        pub_id = self.kwargs['pk']
+        publications = Publication.objects.filter(pk=pub_id)
+        return publications

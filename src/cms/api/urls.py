@@ -41,6 +41,8 @@ m_prefix = f'{eb_prefix}/medias'
 urlpatterns += path(f'{m_prefix}/', media.MediaList.as_view(), name='medias'),
 urlpatterns += path(f'{m_prefix}/<int:pk>/', media.MediaView.as_view(), name='media'),
 urlpatterns += path(f'{m_prefix}/form/', media.MediaFormView.as_view(), name='media-form'),
+urlpatterns += path(f'{m_prefix}/options/', media.MediaOptionList.as_view(), name='media-options'),
+urlpatterns += path(f'{m_prefix}/options/<int:pk>/', media.MediaOptionView.as_view(), name='media-option'),
 
 # media collections
 mc_prefix = f'{eb_prefix}/media-collections'
@@ -99,6 +101,9 @@ w_prefix = f'{eb_prefix}/sites/<int:site_id>/webpaths'
 urlpatterns += path(f'{w_prefix}/', webpath.EditorWebsiteWebpathList.as_view(), name='editorial-board-site-webpaths'),
 urlpatterns += path(f'{w_prefix}/<int:pk>/', webpath.EditorWebsiteWebpathView.as_view(), name='editorial-board-site-webpath'),
 urlpatterns += path(f'{w_prefix}/form/', webpath.WebpathFormView.as_view(), name='editorial-board-site-webpath-form'),
+urlpatterns += path(f'{eb_prefix}/sites/webpaths/options/', webpath.WebpathOptionList.as_view(), name='webpath-options'),
+urlpatterns += path(f'{w_prefix}/options/', webpath.WebpathOptionList.as_view(), name='webpath-options'),
+urlpatterns += path(f'{w_prefix}/options/<int:pk>/', webpath.WebpathOptionView.as_view(), name='webpath-option'),
 
 # pages
 pa_prefix = f'{w_prefix}/<int:webpath_id>/pages'
@@ -183,6 +188,8 @@ urlpatterns += path(f'{pu_prefix}/<int:pk>/', publication.PublicationView.as_vie
 urlpatterns += path(f'{pu_prefix}/<int:pk>/change-status/', publication.PublicationChangeStateView.as_view(),
                     name='editorial-board-publication-change-status'),
 urlpatterns += path(f'{pu_prefix}/form/', publication.PublicationFormView.as_view(), name='editorial-board-publication-form'),
+urlpatterns += path(f'{pu_prefix}/options/', publication.PublicationOptionList.as_view(), name='editorial-board-publications-options'),
+urlpatterns += path(f'{pu_prefix}/options/<int:pk>/', publication.PublicationOptionView.as_view(), name='editorial-board-publications-option'),
 
 # publication attachments
 pua_prefix = f'{pu_prefix}/<int:publication_id>/attachments'

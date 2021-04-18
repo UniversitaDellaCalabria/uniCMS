@@ -1,4 +1,7 @@
 from django.forms import ModelForm
+from django.urls import reverse
+
+from cms.api.settings import FORM_SOURCE_LABEL
 
 from . models import Media, MediaCollection, MediaCollectionItem
 
@@ -24,6 +27,9 @@ class MediaCollectionItemForm(ModelForm):
         super().__init__(*args, **kwargs)
         if collection_id:
             self.fields['collection'].queryset = MediaCollection.objects.filter(pk=collection_id)
+        setattr(self.fields['media'],
+                FORM_SOURCE_LABEL,
+                reverse('unicms_api:media-options'))
 
     class Meta:
         model = MediaCollectionItem

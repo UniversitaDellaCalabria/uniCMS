@@ -5,13 +5,14 @@ from django.http import Http404
 
 from cms.medias.forms import MediaForm
 from cms.medias.models import Media
-from cms.medias.serializers import MediaSerializer
+from cms.medias.serializers import MediaSerializer, MediaSelectOptionsSerializer
 
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
+from . generics import *
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import MediaGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
@@ -76,7 +77,7 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         media = self.get_queryset().first()
         try:
             os.remove(media.file.path)
-        except:
+        except: # pragma: no cover
             logger.warning(f'File {media.file.path} not found')
         return super().delete(request, *args, **kwargs)
 
@@ -87,3 +88,33 @@ class MediaFormView(APIView):
         form = MediaForm()
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
+
+
+class EditorialBoardMediaOptionListSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listMediaSelectOptions'
+
+
+class MediaOptionList(UniCMSListSelectOptionsAPIView):
+    """
+    """
+    description = ""
+    search_fields = ['title']
+    serializer_class = MediaSelectOptionsSerializer
+    queryset = Media.objects.all()
+    schema = EditorialBoardMediaOptionListSchema()
+
+
+class MediaOptionView(generics.RetrieveAPIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+    serializer_class = MediaSelectOptionsSerializer
+
+    def get_queryset(self):
+        """
+        """
+        media_id = self.kwargs['pk']
+        media = Media.objects.filter(pk=media_id)
+        return media

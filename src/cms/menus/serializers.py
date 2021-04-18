@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from cms.api.serializers import UniCMSContentTypeClass, UniCMSCreateUpdateSerializer
+from cms.contexts.serializers import WebPathSerializer
 
 from . models import *
 
@@ -36,6 +37,12 @@ class MenuItemSerializer(UniCMSCreateUpdateSerializer,
                          UniCMSContentTypeClass):
     menu = MenuForeignKey()
     parent = MenuItemForeignKey(required=False, allow_null=True)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        webpath = WebPathSerializer(instance.webpath)
+        data['webpath'] = webpath.data
+        return data
 
     class Meta:
         model = NavigationBarItem

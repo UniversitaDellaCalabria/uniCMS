@@ -1,4 +1,7 @@
 from django.forms import ModelForm
+from django.urls import reverse
+
+from cms.api.settings import FORM_SOURCE_LABEL
 
 from . models import NavigationBar, NavigationBarItem
 
@@ -18,8 +21,12 @@ class MenuItemForm(ModelForm):
         if menu_id:
             self.fields['menu'].queryset = NavigationBar.objects.filter(pk=menu_id)
             self.fields['parent'].queryset = NavigationBarItem.objects.filter(menu__pk=menu_id)
+        setattr(self.fields['webpath'],
+                FORM_SOURCE_LABEL,
+                reverse('unicms_api:webpath-options'))
 
     class Meta:
         model = NavigationBarItem
         fields = ['menu', 'name', 'webpath', 'parent', 'url',
-                  'publication', 'inherited_content', 'order', 'is_active']
+                  #'publication', 'inherited_content',
+                  'order', 'is_active']

@@ -29,7 +29,7 @@ class MediaSerializer(UniCMSCreateUpdateSerializer,
         try:
             w,y = get_image_width_height(instance.file)
             data['file_dimensions'] = f'{w}px*{y}px'
-        except FileNotFoundError:
+        except FileNotFoundError: # pragma: no cover
             data['file_dimensions'] = ''
         return data
 
@@ -66,3 +66,16 @@ class MediaCollectionItemSerializer(UniCMSCreateUpdateSerializer,
         model = MediaCollectionItem
         fields = '__all__'
         read_only_fields = ('created_by', 'modified_by')
+
+
+class MediaSelectOptionsSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['value'] = instance.pk
+        data['text'] = instance.title
+        return data
+
+    class Meta:
+        model = Media
+        fields = ()

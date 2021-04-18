@@ -1,4 +1,7 @@
 from django.forms import ModelForm
+from django.urls import reverse
+
+from cms.api.settings import FORM_SOURCE_LABEL
 
 from . models import Carousel, CarouselItem, CarouselItemLink, CarouselItemLinkLocalization, CarouselItemLocalization
 
@@ -17,6 +20,9 @@ class CarouselItemForm(ModelForm):
         super().__init__(*args, **kwargs)
         if carousel_id:
             self.fields['carousel'].queryset = Carousel.objects.filter(pk=carousel_id)
+        setattr(self.fields['image'],
+                FORM_SOURCE_LABEL,
+                reverse('unicms_api:media-options'))
 
     class Meta:
         model = CarouselItem

@@ -2,6 +2,7 @@ from cms.api.serializers import (UniCMSContentTypeClass,
                                  UniCMSCreateUpdateSerializer,
                                  UniCMSTagsValidator)
 from cms.contexts.models import WebPath
+from cms.contexts.serializers import WebPathSerializer
 from cms.medias.serializers import MediaSerializer, MediaCollectionSerializer
 
 from rest_framework import serializers
@@ -24,7 +25,7 @@ class PublicationForeignKey(serializers.PrimaryKeyRelatedField):
         if request:
             publication_id = self.context['request'].parser_context['kwargs']['publication_id']
             return Publication.objects.filter(pk=publication_id)
-        return None # pragma: nocover
+        return None # pragma: no cover
 
 
 class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
@@ -37,7 +38,7 @@ class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
             webpath_id = self.context['request'].parser_context['kwargs']['webpath_id']
             return WebPath.objects.filter(pk=webpath_id,
                                           site__id=site_id)
-        return None # pragma: nocover
+        return None # pragma: no cover
 
 
 class PublicationSerializer(TaggitSerializer,
@@ -62,6 +63,19 @@ class PublicationSerializer(TaggitSerializer,
         read_only_fields = ('is_active', 'created_by', 'modified_by', 'content_type')
 
 
+class PublicationSelectOptionsSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['value'] = instance.pk
+        data['text'] = instance.title
+        return data
+
+    class Meta:
+        model = Publication
+        fields = ()
+
+
 class PublicationContextSerializer(UniCMSCreateUpdateSerializer,
                                    UniCMSContentTypeClass):
     webpath = WebPathForeignKey()
@@ -77,6 +91,8 @@ class PublicationContextSerializer(UniCMSCreateUpdateSerializer,
         data = super().to_representation(instance)
         publication = PublicationSerializer(instance.publication)
         data['publication'] = publication.data
+        webpath = WebPathSerializer(instance.webpath)
+        data['webpath'] = webpath.data
         return data
 
     class Meta:

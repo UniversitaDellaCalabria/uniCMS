@@ -140,7 +140,7 @@ class EditorWebpathPageView(UniCMSCachedRetrieveUpdateDestroyAPIView):
 
 
 class PageChangeStateSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: nocover
+    def get_operation_id(self, path, method):# pragma: no cover
         return 'updatePageStatus'
 
 
@@ -182,7 +182,7 @@ class PageChangeStateView(APIView):
 
 
 class PageChangePublicationStatusSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: nocover
+    def get_operation_id(self, path, method):# pragma: no cover
         return 'updatePagePublicationStatus'
 
 
@@ -333,7 +333,7 @@ class PageGenericFormView(APIView):
 
 
 class PageCopyAsDraftSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: nocover
+    def get_operation_id(self, path, method):# pragma: no cover
         return 'copyPageAsDraftSchema'
 
 

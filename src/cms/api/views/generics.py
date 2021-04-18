@@ -13,7 +13,7 @@ from .. concurrency import (is_lock_cache_available,
                             get_lock_from_cache,
                             set_lock_to_cache,
                             LOCK_MESSAGE)
-from .. pagination import UniCmsApiPagination
+from .. pagination import UniCmsApiPagination, UniCmsSelectOptionsApiPagination
 
 
 logger = logging.getLogger(__name__)
@@ -65,6 +65,19 @@ class UniCMSCachedRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPI
         item = self.get_queryset().first()
         check_locks(item, request.user)
         return super().delete(request, *args, **kwargs)
+
+    class Meta:
+        abstract = True
+
+
+class UniCMSListSelectOptionsAPIView(generics.ListAPIView):
+
+    permission_classes = [IsAdminUser]
+    filter_backends = [filters.SearchFilter,
+                       DjangoFilterBackend,
+                       filters.OrderingFilter]
+    pagination_class = UniCmsSelectOptionsApiPagination
+    ordering = ['id']
 
     class Meta:
         abstract = True

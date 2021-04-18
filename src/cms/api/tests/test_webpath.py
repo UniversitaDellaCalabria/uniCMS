@@ -446,3 +446,56 @@ class WebpathAPIUnitTest(TestCase):
         res = req.post(url, data=data,
                        content_type='application/json', follow=1)
         assert WebPath.objects.filter(name='test webpath').first()
+
+    def test_get_options(self):
+        req = Client()
+        ebu = ContextUnitTest.create_editorialboard_user()
+        webpath = ebu.webpath
+        url = reverse('unicms_api:webpath-options',
+                      kwargs={'site_id': webpath.site.pk})
+
+        # accessible to staff users only
+        res = req.get(url)
+        assert res.status_code == 403
+        user = ebu.user
+        user.is_staff = True
+        user.save()
+        req.force_login(user)
+        # site is not managed
+        # (user is not superuser and not EditorialPermissions)
+        ebu.is_active = False
+        ebu.save()
+        res = req.get(url)
+        assert res.status_code == 403
+        # site is managed again
+        ebu.is_active = True
+        ebu.save()
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
+    def test_get_option(self):
+        req = Client()
+        ebu = ContextUnitTest.create_editorialboard_user()
+        webpath = ebu.webpath
+        url = reverse('unicms_api:webpath-option',
+                      kwargs={'site_id': webpath.site.pk,
+                              'pk': webpath.pk})
+
+        # accessible to staff users only
+        res = req.get(url)
+        assert res.status_code == 403
+        user = ebu.user
+        user.is_staff = True
+        user.save()
+        req.force_login(user)
+        # site is not managed
+        # (user is not superuser and not EditorialPermissions)
+        ebu.is_active = False
+        ebu.save()
+        res = req.get(url)
+        assert res.status_code == 403
+        # site is managed again
+        ebu.is_active = True
+        ebu.save()
+        res = req.get(url)
+        assert isinstance(res.json(), dict)

@@ -10,3 +10,4 @@ LOCKS_CACHE_TTL = 20
 LOCK_MESSAGE = _("{user} is currently editing this "
                  "item. Unable to make changes "
                  "for at least {ttl} seconds")
+FORM_SOURCE_LABEL = 'api_source'

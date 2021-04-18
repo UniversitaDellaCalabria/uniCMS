@@ -1,5 +1,7 @@
 from django.forms import ModelForm
+from django.urls import reverse
 
+from cms.api.settings import FORM_SOURCE_LABEL
 from cms.pages.models import Page, PageBlock, PageCarousel, PageLink, PageLocalization, PageMedia, PageMenu, PagePublication, PageRelated
 
 from . models import WebPath, WebSite
@@ -17,6 +19,10 @@ class PageForm(ModelForm):
                                                                          site__pk=site_id)
             else:
                 self.fields['webpath'].queryset = WebPath.objects.filter(site__pk=site_id)
+            setattr(self.fields['webpath'],
+                    FORM_SOURCE_LABEL,
+                    reverse('unicms_api:webpath-options',
+                            kwargs={'site_id': site_id}))
 
     class Meta:
         model = Page
@@ -59,6 +65,9 @@ class PageMediaForm(ModelForm):
         super().__init__(*args, **kwargs)
         if page_id:
             self.fields['page'].queryset = Page.objects.filter(pk=page_id)
+        setattr(self.fields['media'],
+                FORM_SOURCE_LABEL,
+                reverse('unicms_api:media-options'))
 
     class Meta:
         model = PageMedia
@@ -101,7 +110,8 @@ class PageMenuForm(ModelForm):
 
     class Meta:
         model = PageMenu
-        fields = ['page', 'menu', 'section', 'order', 'is_active']
+        fields = ['page', 'menu', #'section',
+                  'order', 'is_active']
 
 
 class PagePublicationForm(ModelForm):
@@ -111,6 +121,9 @@ class PagePublicationForm(ModelForm):
         super().__init__(*args, **kwargs)
         if page_id:
             self.fields['page'].queryset = Page.objects.filter(pk=page_id)
+        setattr(self.fields['publication'],
+                FORM_SOURCE_LABEL,
+                reverse('unicms_api:editorial-board-publications-options'))
 
     class Meta:
         model = PagePublication

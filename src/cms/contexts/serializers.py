@@ -79,3 +79,16 @@ class WebPathSerializer(UniCMSCreateUpdateSerializer, UniCMSContentTypeClass):
             data['permission_id'] = permission
             data['permission_label'] = context_permissions[permission]
         return data
+
+
+class WebPathSelectOptionsSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['value'] = instance.pk
+        data['text'] = instance.__str__()
+        return data
+
+    class Meta:
+        model = WebPath
+        fields = ()

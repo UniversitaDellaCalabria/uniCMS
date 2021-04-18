@@ -125,7 +125,18 @@ class MediaAPIUnitTest(TestCase):
         assert media.title == 'media1 api-test'
         assert not media.is_active
 
+        # GET SelectField Options
+        url = reverse('unicms_api:media-options')
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
+        url = reverse('unicms_api:media-option',
+                      kwargs={'pk': media.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
         # DELETE
+        url = reverse('unicms_api:media', kwargs={'pk': media.pk})
         # user hasn't permission
         req.force_login(user2)
         res = req.delete(url)

@@ -76,7 +76,7 @@ class ObjectUserLocksList(UniCMSListCreateAPIView):
 
 
 class ObjectUserLocksItemSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: nocover
+    def get_operation_id(self, path, method):# pragma: no cover
         if method == 'GET':
             return 'retrieveEditorialBoardLockUserItem'
         if method == 'DELETE':

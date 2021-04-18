@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.forms import ModelForm
+from django.urls import reverse
 
+from cms.api.settings import FORM_SOURCE_LABEL
 from cms.publications.models import PublicationContext
 
 from . models import EditorialBoardLockUser, WebPath, WebSite
@@ -20,6 +22,14 @@ class WebPathForm(ModelForm):
         if site_id:
             self.fields['site'].queryset = WebSite.objects.filter(pk=site_id)
             self.fields['parent'].queryset = WebPath.objects.filter(site__pk=site_id)
+            setattr(self.fields['parent'],
+                    FORM_SOURCE_LABEL,
+                    reverse('unicms_api:webpath-options',
+                            kwargs={'site_id': site_id}))
+            setattr(self.fields['alias'],
+                    FORM_SOURCE_LABEL,
+                    reverse('unicms_api:webpath-options',
+                            kwargs={'site_id': site_id}))
 
     class Meta:
         model = WebPath
@@ -39,6 +49,13 @@ class PublicationContextForm(ModelForm):
                                                                          site__pk=site_id)
             else:
                 self.fields['webpath'].queryset = WebPath.objects.filter(site__pk=site_id)
+            setattr(self.fields['webpath'],
+                    FORM_SOURCE_LABEL,
+                    reverse('unicms_api:webpath-options',
+                            kwargs={'site_id': site_id}))
+        setattr(self.fields['publication'],
+                FORM_SOURCE_LABEL,
+                reverse('unicms_api:editorial-board-publications-options'))
 
     class Meta:
         model = PublicationContext

@@ -4,17 +4,18 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
 from rest_framework.permissions import IsAdminUser
+from rest_framework.schemas.openapi import AutoSchema
 
 from cms.contexts import settings as contexts_settings
 from cms.contexts.forms import WebPathForm
 from cms.contexts.models import EditorialBoardEditors, EditorialBoardLockUser, WebPath, WebSite
-from cms.contexts.serializers import WebPathSerializer
+from cms.contexts.serializers import WebPathSerializer, WebPathSelectOptionsSerializer
 from cms.contexts.utils import is_publisher
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
+from . generics import *
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 
@@ -154,3 +155,48 @@ class WebpathFormView(APIView):
         form = WebPathForm(site_id=kwargs.get('site_id'))
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
+
+
+class EditorialBoardWebpathOptionListSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listWebPathSelectOptions'
+
+
+class WebpathOptionList(UniCMSListSelectOptionsAPIView):
+    """
+    """
+    description = ""
+    search_fields = ['name','path']
+    serializer_class = WebPathSelectOptionsSerializer
+    queryset = WebPath.objects.all()
+    schema = EditorialBoardWebpathOptionListSchema()
+
+    def get_queryset(self):
+        """
+        """
+        site_id = self.kwargs.get('site_id')
+        if site_id:
+            site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+            if not site.is_managed_by(self.request.user):
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=site)
+            return WebPath.objects.filter(site=site)
+        return WebPath.objects.all()# pragma: no cover
+
+class WebpathOptionView(generics.RetrieveAPIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+    serializer_class = WebPathSelectOptionsSerializer
+
+    def get_queryset(self):
+        """
+        """
+        site_id = self.kwargs['site_id']
+        pk = self.kwargs['pk']
+        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        if not site.is_managed_by(self.request.user):
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
+        return WebPath.objects.filter(pk=pk, site=site)
