@@ -102,8 +102,8 @@ class CarouselPlaceHolder(AbstractPlaceholder):
         self.build_identifier()
 
     def build_data_dict(self):
-        data =  {'carousel_items': self.entry.carousel.get_items(self.language),
-                 'carousel_identifier': self.identifier}
+        data = {'carousel_items': self.entry.carousel.get_items(self.language),
+                'carousel_identifier': self.identifier}
         return {**self.content,**data}
 
 

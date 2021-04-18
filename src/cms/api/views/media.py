@@ -7,12 +7,13 @@ from cms.medias.forms import MediaForm
 from cms.medias.models import Media
 from cms.medias.serializers import MediaSerializer, MediaSelectOptionsSerializer
 
+from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
-from . generics import *
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import MediaGetCreatePermissions
 from .. serializers import UniCMSFormSerializer

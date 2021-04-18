@@ -58,7 +58,7 @@ class UniCMSFormSerializer():
 
             class_name = field.widget.__class__.__name__
 
-            if  class_name == 'DateInput':
+            if class_name == 'DateInput':
                 field_dict['type'] = 'date'
             elif class_name == 'DateTimeInput':
                 field_dict['type'] = 'datetime'
@@ -74,7 +74,7 @@ class UniCMSFormSerializer():
                 elif hasattr(field, '_choices'):
                     field_dict['options'].extend(_get_choices(field._choices))
             else:
-                 field_dict['type'] = field_type
+                field_dict['type'] = field_type
             form_fields.append(field_dict)
         return form_fields
 

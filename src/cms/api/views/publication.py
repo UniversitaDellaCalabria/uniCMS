@@ -14,15 +14,14 @@ from cms.publications.paginators import Paginator
 from cms.publications.serializers import PublicationSerializer, PublicationSelectOptionsSerializer
 from cms.publications.utils import publication_context_base_filter
 
-from rest_framework import filters, generics
+from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
-from . generics import *
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView, check_locks
 from .. exceptions import LoggedPermissionDenied
-from .. pagination import UniCmsApiPagination
 from .. permissions import PublicationGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object

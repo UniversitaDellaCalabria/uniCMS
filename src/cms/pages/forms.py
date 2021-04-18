@@ -110,7 +110,7 @@ class PageMenuForm(ModelForm):
 
     class Meta:
         model = PageMenu
-        fields = ['page', 'menu', #'section',
+        fields = ['page', 'menu',  # 'section',
                   'order', 'is_active']
 
 

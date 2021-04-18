@@ -44,6 +44,7 @@ class JSONBlock(AbstractBlock):
 class PlaceHolderBlock(JSONBlock):
     """
     """
+
     def sanitize_template(self):
         if not self.content.get('template'):
             self.content['template'] = SafeString('')

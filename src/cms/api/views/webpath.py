@@ -3,6 +3,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
+from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.schemas.openapi import AutoSchema
 
@@ -15,7 +16,7 @@ from cms.contexts.utils import is_publisher
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from . generics import *
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 
