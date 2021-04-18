@@ -23,7 +23,7 @@ class MenuItemForm(ModelForm):
             self.fields['parent'].queryset = NavigationBarItem.objects.filter(menu__pk=menu_id)
         setattr(self.fields['webpath'],
                 FORM_SOURCE_LABEL,
-                reverse('unicms_api:webpath-options'))
+                reverse('unicms_api:webpath-all-options'))
 
     class Meta:
         model = NavigationBarItem

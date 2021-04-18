@@ -150,7 +150,6 @@ class EditorWebsiteWebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
 
 
 class WebpathFormView(APIView):
-
     def get(self, *args, **kwargs):
         form = WebPathForm(site_id=kwargs.get('site_id'))
         form_fields = UniCMSFormSerializer.serialize(form)
@@ -181,7 +180,23 @@ class WebpathOptionList(UniCMSListSelectOptionsAPIView):
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=site)
             return WebPath.objects.filter(site=site)
-        return WebPath.objects.all()# pragma: no cover
+        return WebPath.objects.none()# pragma: no cover
+
+
+class EditorialBoardWebpathAllOptionListSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listWebPathAllSelectOptions'
+
+
+class WebpathAllOptionList(UniCMSListSelectOptionsAPIView):
+    """
+    """
+    description = ""
+    search_fields = ['name','path']
+    serializer_class = WebPathSelectOptionsSerializer
+    queryset = WebPath.objects.all()
+    schema = EditorialBoardWebpathAllOptionListSchema()
+
 
 class WebpathOptionView(generics.RetrieveAPIView):
     """

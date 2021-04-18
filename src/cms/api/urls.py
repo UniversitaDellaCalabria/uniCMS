@@ -101,7 +101,7 @@ w_prefix = f'{eb_prefix}/sites/<int:site_id>/webpaths'
 urlpatterns += path(f'{w_prefix}/', webpath.EditorWebsiteWebpathList.as_view(), name='editorial-board-site-webpaths'),
 urlpatterns += path(f'{w_prefix}/<int:pk>/', webpath.EditorWebsiteWebpathView.as_view(), name='editorial-board-site-webpath'),
 urlpatterns += path(f'{w_prefix}/form/', webpath.WebpathFormView.as_view(), name='editorial-board-site-webpath-form'),
-urlpatterns += path(f'{eb_prefix}/sites/webpaths/options/', webpath.WebpathOptionList.as_view(), name='webpath-options'),
+urlpatterns += path(f'{eb_prefix}/sites/webpaths/options/', webpath.WebpathAllOptionList.as_view(), name='webpath-all-options'),
 urlpatterns += path(f'{w_prefix}/options/', webpath.WebpathOptionList.as_view(), name='webpath-options'),
 urlpatterns += path(f'{w_prefix}/options/<int:pk>/', webpath.WebpathOptionView.as_view(), name='webpath-option'),
 

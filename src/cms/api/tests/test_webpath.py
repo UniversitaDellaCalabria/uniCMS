@@ -473,6 +473,10 @@ class WebpathAPIUnitTest(TestCase):
         res = req.get(url)
         assert isinstance(res.json(), dict)
 
+        url = reverse('unicms_api:webpath-all-options')
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
     def test_get_option(self):
         req = Client()
         ebu = ContextUnitTest.create_editorialboard_user()
