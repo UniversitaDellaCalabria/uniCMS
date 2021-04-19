@@ -14,6 +14,8 @@ class PageMediaCollectionList(PageRelatedObjectList):
     """
     description = ""
     search_fields = ['collection__name', 'collection__description']
+    ordering_fields = ['id', 'collection__name',
+                       'collection__description', 'order', 'is_active']
     serializer_class = PageMediaCollectionSerializer
 
     def get_queryset(self):

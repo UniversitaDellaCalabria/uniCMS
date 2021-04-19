@@ -14,6 +14,7 @@ class PageMenuList(PageRelatedObjectList):
     """
     description = ""
     search_fields = ['menu__name']
+    ordering_fields = ['id', 'menu__name', 'order', 'is_active']
     serializer_class = PageMenuSerializer
 
     def get_queryset(self):

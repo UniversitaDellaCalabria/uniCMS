@@ -27,7 +27,6 @@ class UniCMSListCreateAPIView(generics.ListCreateAPIView):
                        filters.OrderingFilter]
     filterset_fields = ['is_active', 'created', 'modified']
     pagination_class = UniCmsApiPagination
-    ordering = ['id']
 
     class Meta:
         abstract = True

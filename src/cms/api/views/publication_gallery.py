@@ -13,6 +13,9 @@ class PublicationGalleryList(PublicationRelatedObjectList):
     """
     """
     description = ""
+    search_fields = ['collection__name', 'collection__description']
+    ordering_fields = ['id', 'collection__name',
+                       'collection__description', 'order', 'is_active']
     serializer_class = PublicationGallerySerializer
 
     def get_queryset(self):

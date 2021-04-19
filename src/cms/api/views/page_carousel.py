@@ -14,6 +14,8 @@ class PageCarouselList(PageRelatedObjectList):
     """
     description = ""
     search_fields = ['carousel__name', 'carousel__description']
+    ordering_fields = ['id', 'carousel__name',
+                       'is_active', 'order']
     serializer_class = PageCarouselSerializer
 
     def get_queryset(self):
