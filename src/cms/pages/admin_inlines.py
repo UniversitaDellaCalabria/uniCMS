@@ -2,7 +2,16 @@ import nested_admin
 
 from django.contrib import admin
 
-from . models import Page, PageBlock, PageCarousel, PageLink, PageLocalization, PageMedia, PageMenu, PagePublication, PageRelated
+from . models import (Page,
+                      PageBlock,
+                      PageCarousel,
+                      PageLink,
+                      PageLocalization,
+                      PageMedia,
+                      PageMediaCollection,
+                      PageMenu,
+                      PagePublication,
+                      PageRelated)
 
 
 class PageInline(admin.TabularInline):
@@ -60,6 +69,14 @@ class PageMediaInline(nested_admin.NestedTabularInline):
     extra = 0
     classes = ['collapse']
     raw_id_fields = ("media",)
+    sortable_field_name = "order"
+
+
+class PageMediaCollectionInline(nested_admin.NestedTabularInline):
+    model = PageMediaCollection
+    extra = 0
+    classes = ['collapse']
+    raw_id_fields = ("collection",)
     sortable_field_name = "order"
 
 

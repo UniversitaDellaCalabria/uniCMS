@@ -135,6 +135,20 @@ class MediaPlaceHolder(AbstractPlaceholder):
         return {**self.content,**data}
 
 
+class MediaCollectionPlaceHolder(AbstractPlaceholder):
+    collection_name = 'media_collections'
+    ph_name = 'cms.templates.blocks.MediaCollectionPlaceholderBlock'
+
+    def __init__(self,
+                 context:dict, content:dict):
+        super().__init__(context, content)
+        self.media_collections = self.page.get_media_collections()
+
+    def build_data_dict(self):
+        data = {'collection': self.entry.collection}
+        return {**self.content,**data}
+
+
 class MenuPlaceHolder(AbstractPlaceholder):
     collection_name = 'menus'
     ph_name = 'cms.templates.blocks.MenuPlaceholderBlock'
@@ -169,6 +183,10 @@ class PublicationPlaceHolder(AbstractPlaceholder):
 
 def load_media_placeholder(*args, **kwargs):
     return MediaPlaceHolder(*args, **kwargs)()
+
+
+def load_media_collection_placeholder(*args, **kwargs):
+    return MediaCollectionPlaceHolder(*args, **kwargs)()
 
 
 def load_menu_placeholder(*args, **kwargs):

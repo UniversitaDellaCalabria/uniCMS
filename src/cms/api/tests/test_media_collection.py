@@ -118,7 +118,19 @@ class MediaCollectionAPIUnitTest(TestCase):
         assert collection.description == 'put'
         assert not collection.is_active
 
+        # GET SelectField Options
+        url = reverse('unicms_api:media-collection-options')
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
+        url = reverse('unicms_api:media-collection-option',
+                      kwargs={'pk': collection.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
         # DELETE
+        url = reverse('unicms_api:media-collection',
+                      kwargs={'pk': collection.pk})
         # user hasn't permission
         req.force_login(user2)
         res = req.delete(url)

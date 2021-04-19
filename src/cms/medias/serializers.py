@@ -79,3 +79,16 @@ class MediaSelectOptionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Media
         fields = ()
+
+
+class MediaCollectionSelectOptionsSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['value'] = instance.pk
+        data['text'] = instance.name
+        return data
+
+    class Meta:
+        model = MediaCollection
+        fields = ()

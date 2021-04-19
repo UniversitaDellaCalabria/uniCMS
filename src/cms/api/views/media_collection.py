@@ -2,13 +2,15 @@ from django.http import Http404
 
 from cms.medias.forms import MediaCollectionForm
 from cms.medias.models import MediaCollection
-from cms.medias.serializers import MediaCollectionSerializer
+from cms.medias.serializers import MediaCollectionSerializer, MediaCollectionSelectOptionsSerializer
 
+from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import MediaCollectionGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
@@ -76,3 +78,33 @@ class MediaCollectionFormView(APIView):
         form = MediaCollectionForm()
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
+
+
+class EditorialBoardMediaCollectionOptionListSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listMediaCollectionSelectOptions'
+
+
+class MediaCollectionOptionList(UniCMSListSelectOptionsAPIView):
+    """
+    """
+    description = ""
+    search_fields = ['title']
+    serializer_class = MediaCollectionSelectOptionsSerializer
+    queryset = MediaCollection.objects.all()
+    schema = EditorialBoardMediaCollectionOptionListSchema()
+
+
+class MediaCollectionOptionView(generics.RetrieveAPIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+    serializer_class = MediaCollectionSelectOptionsSerializer
+
+    def get_queryset(self):
+        """
+        """
+        collection_id = self.kwargs['pk']
+        collection = MediaCollection.objects.filter(pk=collection_id)
+        return collection

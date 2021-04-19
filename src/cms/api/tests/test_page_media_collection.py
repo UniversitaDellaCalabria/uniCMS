@@ -8,7 +8,7 @@ from cms.contexts.tests import ContextUnitTest
 
 from cms.medias.tests import MediaUnitTest
 
-from cms.pages.models import PageMedia
+from cms.pages.models import PageMediaCollection
 from cms.pages.tests import PageUnitTest
 
 
@@ -16,12 +16,12 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-class PageMediaAPIUnitTest(TestCase):
+class PageMediaCollectionAPIUnitTest(TestCase):
 
     def setUp(self):
         pass
 
-    def test_page_media(self):
+    def test_page_media_collection(self):
         """
         Page Media API
         """
@@ -38,8 +38,8 @@ class PageMediaAPIUnitTest(TestCase):
         page.webpath = webpath
         page.save()
 
-        # page media list
-        url = reverse('unicms_api:editorial-board-site-webpath-page-medias',
+        # page media collections list
+        url = reverse('unicms_api:editorial-board-site-webpath-page-media-collections',
                       kwargs={'site_id': site.pk,
                               'webpath_id': webpath.pk,
                               'page_id': page.pk})
@@ -60,10 +60,9 @@ class PageMediaAPIUnitTest(TestCase):
         assert isinstance(res.json(), dict)
 
         # POST
-        media = MediaUnitTest.create_media()
+        collection = MediaUnitTest.create_media_collection()
         data = {'page': page.pk,
-                'media': media.pk,
-                'url': 'https://unical.it'
+                'collection': collection.pk
                 }
         # user hasn't permission
         req.force_login(user2)
@@ -74,22 +73,23 @@ class PageMediaAPIUnitTest(TestCase):
         req.force_login(user)
         res = req.post(url, data=data, follow=1,
                        content_type='application/json')
-        page_media = PageMedia.objects.filter(page=page).last()
-        assert page_media
+        page_collection = PageMediaCollection.objects.filter(page=page).last()
+        assert page_collection
 
         # GET, patch, put, delete
-        url = reverse('unicms_api:editorial-board-site-webpath-page-media',
+        url = reverse('unicms_api:editorial-board-site-webpath-page-media-collection',
                       kwargs={'site_id': site.pk,
                               'webpath_id': webpath.pk,
                               'page_id': page.pk,
-                              'pk': page_media.pk})
+                              'pk': page_collection.pk})
 
         # GET
         res = req.get(url, content_type='application/json',)
         assert isinstance(res.json(), dict)
 
         # PATCH
-        data = {'url': 'https://test.test'}
+        collection2 = MediaUnitTest.create_media_collection(name="collection-2")
+        data = {'collection': collection2.pk}
         # user hasn't permission
         req.force_login(user2)
         res = req.patch(url, data,
@@ -107,15 +107,14 @@ class PageMediaAPIUnitTest(TestCase):
         res = req.patch(url, data,
                         content_type='application/json',
                         follow=1)
-        page_media.refresh_from_db()
-        assert page_media.url == 'https://test.test'
+        page_collection.refresh_from_db()
+        assert page_collection.collection.name == "collection-2"
 
         # PUT
         page.created_by = None
         page.save()
         data = {'page': page.pk,
-                'media': media.pk,
-                'url': 'https://unical.it'
+                'collection': collection.pk
         }
         # user hasn't permission
         req.force_login(user2)
@@ -126,8 +125,8 @@ class PageMediaAPIUnitTest(TestCase):
         req.force_login(user)
         res = req.put(url, data, follow=1,
                       content_type='application/json')
-        page_media.refresh_from_db()
-        assert page_media.url == 'https://unical.it'
+        page_collection.refresh_from_db()
+        assert page_collection.collection.pk == collection.pk
 
         # DELETE
         # user hasn't permission
@@ -138,12 +137,12 @@ class PageMediaAPIUnitTest(TestCase):
         req.force_login(user)
         res = req.delete(url)
         try:
-            page_media.refresh_from_db()
+            page_collection.refresh_from_db()
         except ObjectDoesNotExist:
             assert True
 
         # form
-        url = reverse('unicms_api:editorial-board-site-webpath-page-media-form',
+        url = reverse('unicms_api:editorial-board-site-webpath-page-media-collection-form',
                       kwargs={'site_id': site.pk,
                               'webpath_id': webpath.pk,
                               'page_id': page.pk})

@@ -6,7 +6,7 @@ from cms.api.serializers import (UniCMSContentTypeClass,
 from cms.carousels.serializers import CarouselSerializer
 from cms.contexts.models import WebPath
 from cms.contexts.serializers import WebPathSerializer
-from cms.medias.serializers import MediaSerializer
+from cms.medias.serializers import MediaSerializer, MediaCollectionSerializer
 from cms.menus.serializers import MenuSerializer
 from cms.publications.serializers import PublicationSerializer
 from cms.templates.serializers import *
@@ -129,6 +129,21 @@ class PageMenuSerializer(UniCMSCreateUpdateSerializer,
 
     class Meta:
         model = PageMenu
+        fields = '__all__'
+
+
+class PageMediaCollectionSerializer(UniCMSCreateUpdateSerializer,
+                                    UniCMSContentTypeClass):
+    page = PageForeignKey()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        collection = MediaCollectionSerializer(instance.collection)
+        data['collection'] = collection.data
+        return data
+
+    class Meta:
+        model = PageMediaCollection
         fields = '__all__'
 
 

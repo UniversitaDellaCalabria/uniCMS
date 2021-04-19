@@ -2,7 +2,16 @@ from django.forms import ModelForm
 from django.urls import reverse
 
 from cms.api.settings import FORM_SOURCE_LABEL
-from cms.pages.models import Page, PageBlock, PageCarousel, PageLink, PageLocalization, PageMedia, PageMenu, PagePublication, PageRelated
+from cms.pages.models import (Page,
+                              PageBlock,
+                              PageCarousel,
+                              PageLink,
+                              PageLocalization,
+                              PageMedia,
+                              PageMediaCollection,
+                              PageMenu,
+                              PagePublication,
+                              PageRelated)
 
 from . models import WebPath, WebSite
 
@@ -72,6 +81,19 @@ class PageMediaForm(ModelForm):
     class Meta:
         model = PageMedia
         fields = ['page', 'media', 'url', 'order', 'is_active']
+
+
+class PageMediaCollectionForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        page_id = kwargs.pop('page_id', None)
+        super().__init__(*args, **kwargs)
+        if page_id:
+            self.fields['page'].queryset = Page.objects.filter(pk=page_id)
+
+    class Meta:
+        model = PageMediaCollection
+        fields = ['page', 'collection', 'order', 'is_active']
 
 
 class PageLinkForm(ModelForm):

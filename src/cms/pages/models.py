@@ -10,7 +10,7 @@ from cms.contexts.models_abstract import AbstractLockable
 
 from cms.carousels.models import Carousel
 
-from cms.medias.models import Media
+from cms.medias.models import Media, MediaCollection
 from cms.medias.validators import *
 
 from cms.menus.models import NavigationBar
@@ -225,6 +225,15 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             order_by('order')
         return self._medias
 
+    def get_media_collections(self):
+        if getattr(self, '_media_collections', None): # pragma: no cover
+            return self._media_collections
+        self._media_collections = PageMediaCollection.objects.filter(page=self,
+                                                                     is_active=True,
+                                                                     collection__is_active=True).\
+            order_by('order')
+        return self._media_collections
+
     def get_menus(self):
         if getattr(self, '_menus', None):
             return self._menus
@@ -430,3 +439,16 @@ class PagePublication(TimeStampedModel, SortableModel, ActivableModel,
 
     def __str__(self):
         return '{} {}'.format(self.page, self.publication)
+
+
+class PageMediaCollection(SectionAbstractModel, ActivableModel, SortableModel,
+                          TimeStampedModel, CreatedModifiedBy):
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
+    collection = models.ForeignKey(MediaCollection,
+                                   on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = _("Page Media Collection")
+
+    def __str__(self):
+        return '{} {}'.format(self.page, self.collection)

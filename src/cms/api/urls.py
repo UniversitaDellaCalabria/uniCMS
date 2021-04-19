@@ -10,7 +10,8 @@ from . views import (carousel, carousel_item, carousel_item_link,
                      publication_related,
                      website, webpath, webpath_pub_context,
                      page, page_block, page_carousel, page_link,
-                     page_media, page_menu, page_publication,
+                     page_media, page_media_collection,
+                     page_menu, page_publication,
                      page_related, page_localization, page_template,
                      template_block, menu, menu_item, locks)
 
@@ -49,6 +50,8 @@ mc_prefix = f'{eb_prefix}/media-collections'
 urlpatterns += path(f'{mc_prefix}/', media_collection.MediaCollectionList.as_view(), name='media-collections'),
 urlpatterns += path(f'{mc_prefix}/<int:pk>/', media_collection.MediaCollectionView.as_view(), name='media-collection'),
 urlpatterns += path(f'{mc_prefix}/form/', media_collection.MediaCollectionFormView.as_view(), name='media-collection-form'),
+urlpatterns += path(f'{mc_prefix}/options/', media_collection.MediaCollectionOptionList.as_view(), name='media-collection-options'),
+urlpatterns += path(f'{mc_prefix}/options/<int:pk>/', media_collection.MediaCollectionOptionView.as_view(), name='media-collection-option'),
 
 # media collection items
 mci_prefix = f'{mc_prefix}/<int:collection_id>/items'
@@ -149,6 +152,12 @@ pamed_prefix = f'{pa_prefix}/<int:page_id>/medias'
 urlpatterns += path(f'{pamed_prefix}/', page_media.PageMediaList.as_view(), name='editorial-board-site-webpath-page-medias'),
 urlpatterns += path(f'{pamed_prefix}/<int:pk>/', page_media.PageMediaView.as_view(), name='editorial-board-site-webpath-page-media'),
 urlpatterns += path(f'{pamed_prefix}/form/', page_media.PageMediaFormView.as_view(), name='editorial-board-site-webpath-page-media-form'),
+
+# page media collections
+pamecol_prefix = f'{pa_prefix}/<int:page_id>/media-collections'
+urlpatterns += path(f'{pamecol_prefix}/', page_media_collection.PageMediaCollectionList.as_view(), name='editorial-board-site-webpath-page-media-collections'),
+urlpatterns += path(f'{pamecol_prefix}/<int:pk>/', page_media_collection.PageMediaCollectionView.as_view(), name='editorial-board-site-webpath-page-media-collection'),
+urlpatterns += path(f'{pamecol_prefix}/form/', page_media_collection.PageMediaCollectionFormView.as_view(), name='editorial-board-site-webpath-page-media-collection-form'),
 
 # page menus
 pamen_prefix = f'{pa_prefix}/<int:page_id>/menus'
@@ -265,4 +274,4 @@ urlpatterns += path(f'{eb_prefix}/locks/<int:content_type_id>/<int:object_id>/',
 urlpatterns += path(f'{eb_prefix}/locks/<int:content_type_id>/<int:object_id>/<int:pk>/',
                     locks.ObjectUserLocksView.as_view(), name='editorial-board-lock-delete'),
 urlpatterns += path(f'{eb_prefix}/users/form/', webpath_pub_context.EditorialBoardLockUserFormView.as_view(), name='users-form'),
-urlpatterns += path(f'{eb_prefix}/redis-lock/<int:content_type_id>/<int:object_id>/', locks.RedisLockView.as_view(), name='editorial-board-r'),
+urlpatterns += path(f'{eb_prefix}/redis-lock/<int:content_type_id>/<int:object_id>/', locks.RedisLockView.as_view(), name='editorial-board-redis-lock'),

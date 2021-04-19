@@ -4,7 +4,9 @@ from django.template import Context, Template
 from django.utils.safestring import mark_safe
 
 from cms.templates.placeholders import (SafeString, load_carousel_placeholder,
-                                        load_link_placeholder, load_media_placeholder,
+                                        load_link_placeholder,
+                                        load_media_placeholder,
+                                        load_media_collection_placeholder,
                                         load_menu_placeholder,
                                         load_publication_content_placeholder)
 
@@ -84,6 +86,18 @@ class MediaPlaceholderBlock(PlaceHolderBlock):
         context = self.get_context()
         return load_media_placeholder(context=context,
                                       content=self.content)
+
+
+class MediaCollectionPlaceholderBlock(PlaceHolderBlock):
+    """
+    Media Collection PlaceHolder
+    """
+
+    def render(self):
+        self.sanitize_template()
+        context = self.get_context()
+        return load_media_collection_placeholder(context=context,
+                                                 content=self.content)
 
 
 class MenuPlaceholderBlock(PlaceHolderBlock):
