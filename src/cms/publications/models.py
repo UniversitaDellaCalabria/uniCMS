@@ -79,7 +79,7 @@ class AbstractPublication(TimeStampedModel, ActivableModel):
     content_type = models.CharField(choices=CONTENT_TYPES,
                                     null=False, blank=False,
                                     max_length=33,
-                                    default='markdown')
+                                    default='html')
     presentation_image = models.ForeignKey(Media, null=True, blank=True,
                                            on_delete=models.CASCADE)
     # state = models.CharField(choices=PAGE_STATES,

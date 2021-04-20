@@ -72,6 +72,9 @@ class WebPathSerializer(UniCMSCreateUpdateSerializer, UniCMSContentTypeClass):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
+        parent = WebPathSerializer(instance.parent)
+        data['parent'] = parent.data
+        data['full_name'] = instance.__str__()
         request = self.context.get('request', None)
         if request and request.user:
             context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
