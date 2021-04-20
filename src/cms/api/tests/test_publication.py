@@ -49,6 +49,7 @@ class PublicationAPIUnitTest(TestCase):
 
         # POST
         data = {'category': [category.pk],
+                'name':'test api pub',
                 'title':'test api pub',
                 'subheading':'test',
                 'content':'<p>test</p>',
@@ -119,6 +120,7 @@ class PublicationAPIUnitTest(TestCase):
         pub.created_by = None
         pub.save()
         data = {'category': [category.pk],
+                'name':'putted',
                 'title':'putted',
                 'subheading':'test',
                 'content':'<p>putted</p>',

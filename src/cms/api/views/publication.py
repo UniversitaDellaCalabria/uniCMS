@@ -103,7 +103,7 @@ class PublicationList(UniCMSListCreateAPIView):
     """
     """
     description = ""
-    search_fields = ['title', 'subheading', 'content']
+    search_fields = ['name', 'title', 'subheading', 'content']
     permission_classes = [PublicationGetCreatePermissions]
     serializer_class = PublicationSerializer
     queryset = Publication.objects.all()
@@ -298,7 +298,7 @@ class PublicationOptionList(UniCMSListSelectOptionsAPIView):
     """
     """
     description = ""
-    search_fields = ['title']
+    search_fields = ['name', 'title']
     serializer_class = PublicationSelectOptionsSerializer
     queryset = Publication.objects.all()
     schema = EditorialBoardPublicationOptionListSchema()

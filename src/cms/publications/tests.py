@@ -38,6 +38,7 @@ class PublicationUnitTest(TestCase):
     def create_pub(cls, count = 4, **kwargs):
         media = MediaUnitTest.create_media()
         data = {'is_active': 1,
+                'name':'my publication',
                 'title':'Papiri, Codex, Libri. La attraverso labora lorem ipsum',
                 'subheading':'Itaque earum rerum hic tenetur a sapiente delectus',
                 'content':'<p>Sed ut <b>perspiciatis</b> unde omnis iste natus error </p>',

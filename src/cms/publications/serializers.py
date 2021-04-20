@@ -55,6 +55,7 @@ class PublicationSerializer(TaggitSerializer,
         for category in instance.category.all():
             categories.append(CategorySerializer(category).data)
         data['category'] = categories
+        data['full_name'] = instance.__str__()
         return data
 
     class Meta:
@@ -68,7 +69,7 @@ class PublicationSelectOptionsSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         data['value'] = instance.pk
-        data['text'] = instance.title
+        data['text'] = instance.__str__()
         return data
 
     class Meta:

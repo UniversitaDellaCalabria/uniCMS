@@ -20,7 +20,7 @@ class EditorWebpathPublicationContextList(UniCMSListCreateAPIView):
     """
     """
     description = ""
-    search_fields = ['publication__title']
+    search_fields = ['publication__name', 'publication__title']
     serializer_class = PublicationContextSerializer
 
     def get_queryset(self):

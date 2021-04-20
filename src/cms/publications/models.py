@@ -66,10 +66,11 @@ class AbstractPublication(TimeStampedModel, ActivableModel):
     CONTENT_TYPES = (('markdown', 'markdown'),
                      ('html', 'html'))
 
+    name = models.CharField(max_length=256,
+                            null=False, blank=False)
     title = models.CharField(max_length=256,
                              null=False, blank=False,
                              help_text=_("Heading, Headline"))
-
     subheading = models.TextField(max_length=1024,
                                   null=True,blank=True,
                                   help_text=_("Strap line (press)"))
@@ -110,6 +111,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
     def serialize(self):
         return {'slug': self.slug,
                 'image': self.image_url(),
+                'name': self.name,
                 'title': self.title,
                 # 'published': self.date_start,
                 'subheading': self.subheading,
@@ -311,8 +313,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         return True if self.is_editable_by(user) else False
 
     def __str__(self):
-        # return '{} {}'.format(self.title, self.state)
-        return self.title
+        return f'{self.name} ({self.title})'
 
 
 class PublicationContext(TimeStampedModel, ActivableModel,

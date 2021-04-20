@@ -14,7 +14,7 @@ class PublicationRelatedList(PublicationRelatedObjectList):
     """
     description = ""
     serializer_class = PublicationRelatedSerializer
-    search_fields = ['related__title']
+    search_fields = ['related__name', 'related__title']
 
     def get_queryset(self):
         """

@@ -16,7 +16,7 @@ class PublicationForm(ModelForm):
 
     class Meta:
         model = Publication
-        fields = ['title', 'subheading', 'content',
+        fields = ['name', 'title', 'subheading', 'content',
                   'presentation_image', 'category',
                   'note', 'tags', 'relevance']
 

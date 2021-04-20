@@ -13,9 +13,9 @@ class PagePublicationList(PageRelatedObjectList):
     """
     """
     description = ""
-    search_fields = ['publication__title', 'publication__subheading'
-                     'publication__content']
-    ordering_fields = ['id', 'publication__title',
+    search_fields = ['publication__name','publication__title',
+                     'publication__subheading', 'publication__content']
+    ordering_fields = ['id', 'publication__name', 'publication__title',
                        'publication__subheading', 'order', 'is_active']
     serializer_class = PagePublicationSerializer
 
