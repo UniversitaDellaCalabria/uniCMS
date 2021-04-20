@@ -5,6 +5,8 @@ from django.contrib import admin
 from . models import (Page,
                       PageBlock,
                       PageCarousel,
+                      PageHeading,
+                      PageHeadingLocalization,
                       PageLink,
                       PageLocalization,
                       PageMedia,
@@ -86,3 +88,18 @@ class PageMenuInline(nested_admin.NestedTabularInline):
     classes = ['collapse']
     raw_id_fields = ("menu",)
     sortable_field_name = "order"
+
+
+class PageHeadingLocalizationInline(nested_admin.NestedTabularInline):
+    model = PageHeadingLocalization
+    extra = 0
+    classes = ['collapse']
+    sortable_field_name = "order"
+
+
+class PageHeadingInline(nested_admin.NestedTabularInline):
+    model = PageHeading
+    extra = 0
+    classes = ['collapse']
+    sortable_field_name = "order"
+    inlines = (PageHeadingLocalizationInline,)

@@ -50,7 +50,7 @@ class PageSerializer(TaggitSerializer,
 
     def to_internal_value(self, data):
         if data.get('date_end') == '':
-            data['date_end'] = None
+            data['date_end'] = None # pragma: no cover
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
@@ -189,4 +189,31 @@ class PageRelatedSerializer(UniCMSCreateUpdateSerializer,
 
     class Meta:
         model = PageRelated
+        fields = '__all__'
+
+
+class PageHeadingSerializer(UniCMSContentTypeClass):
+    page = PageForeignKey()
+
+    class Meta:
+        model = PageHeading
+        fields = '__all__'
+
+
+class HeadingForeignKey(serializers.PrimaryKeyRelatedField):
+    def get_queryset(self):
+        request = self.context.get('request', None)
+        if request:
+            page_id = self.context['request'].parser_context['kwargs']['page_id']
+            heading_id = self.context['request'].parser_context['kwargs']['heading_id']
+            return PageHeading.objects.filter(pk=heading_id,
+                                              page__pk=page_id)
+        return None # pragma: no cover
+
+
+class PageHeadingLocalizationSerializer(UniCMSContentTypeClass):
+    heading = HeadingForeignKey()
+
+    class Meta:
+        model = PageHeadingLocalization
         fields = '__all__'

@@ -21,8 +21,10 @@ from cms.templates.placeholders import *
 from cms.templates.tests import TemplateUnitTest
 from cms.templates.templatetags.unicms_templates import blocks_in_position
 
-from . models import (Page, PageBlock, PageCarousel, PageLink,
-                      PageLocalization, PageMedia, PageMenu, PageRelated)
+from . models import (Page, PageBlock, PageCarousel,
+                      PageHeading, PageHeadingLocalization, PageLink,
+                      PageLocalization, PageMedia, PageMediaCollection,
+                      PageMenu, PageRelated)
 from . utils import copy_page_as_draft
 
 
@@ -92,6 +94,26 @@ class PageUnitTest(TestCase):
                                          section='banner',
                                          is_active=1)
         pc.__str__()
+
+        # page heading
+        phead = PageHeading.objects.create(page = obj,
+                                        title= 'page heading',
+                                        description='description',
+                                        is_active=1)
+        pheadloc = PageHeadingLocalization.objects.create(heading = phead,
+                                                          language='en',
+                                                          title= 'page heading en',
+                                                          description='description en',
+                                                          is_active=1)
+        phead.translate_as(lang='en')
+        phead.__str__()
+
+        # page media collection
+        media_collection = MediaUnitTest.create_media_collection()
+        phead = PageMediaCollection.objects.create(page = obj,
+                                                   collection=media_collection,
+                                                   is_active=1)
+        phead.__str__()
 
         # page link
         pl = PageLink.objects.create(page = obj,
@@ -364,7 +386,7 @@ class PageUnitTest(TestCase):
             request = req,
             webpath = webpath,
             page = page,
-            content = '{"template": "italia_iframe_16by9.html"}'
+            content = '{"template": "italia_link.html"}'
         )
 
         template_block = TemplateBlock.objects.create(
@@ -465,3 +487,54 @@ class PageUnitTest(TestCase):
                     template='that.html')
         lpp = load_page_publications(**data)
         assert lpp
+
+    # placeholders
+    @classmethod
+    def test_load_heading_placeholder(cls):
+        page = cls.create_page()
+        webpath = page.webpath
+        req = RequestFactory().get('/')
+
+        block = HeadingPlaceholderBlock(
+            request = req,
+            webpath = webpath,
+            page = page,
+            content = '{"template": "italia_heading.html"}'
+        )
+
+        template_block = TemplateBlock.objects.create(
+            name = 'heading test',
+            type = 'cms.templates.blocks.HeadingPlaceholderBlock',
+            is_active = True
+        )
+        page_block = PageBlock.objects.create(page=page,
+                                              block = template_block,
+                                              is_active=1)
+        lm = block.render()
+        assert lm
+
+
+    # placeholders
+    @classmethod
+    def test_load_mediacollection_placeholder(cls):
+        page = cls.create_page()
+        webpath = page.webpath
+        req = RequestFactory().get('/')
+
+        block = MediaCollectionPlaceholderBlock(
+            request = req,
+            webpath = webpath,
+            page = page,
+            content = '{"template": "template.html"}'
+        )
+
+        template_block = TemplateBlock.objects.create(
+            name = 'heading test',
+            type = 'cms.templates.blocks.MediaCollectionPlaceholderBlock',
+            is_active = True
+        )
+        page_block = PageBlock.objects.create(page=page,
+                                              block = template_block,
+                                              is_active=1)
+        lm = block.render()
+        assert lm

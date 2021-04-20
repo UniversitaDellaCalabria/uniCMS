@@ -250,6 +250,14 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             order_by('order')
         return self._links
 
+    def get_headings(self):
+        if getattr(self, '_headings', None): # pragma: no cover
+            return self._headings
+        self._headings = PageHeading.objects.filter(page=self,
+                                                    is_active=True).\
+            order_by('order')
+        return self._headings
+
     def delete(self, *args, **kwargs):
         PageRelated.objects.filter(related_page=self).delete()
         super(self.__class__, self).delete(*args, **kwargs)
@@ -452,3 +460,45 @@ class PageMediaCollection(SectionAbstractModel, ActivableModel, SortableModel,
 
     def __str__(self):
         return '{} {}'.format(self.page, self.collection)
+
+
+class PageHeading(SectionAbstractModel, ActivableModel, SortableModel,
+                  TimeStampedModel, CreatedModifiedBy):
+    page = models.ForeignKey(Page, null=False, blank=False,
+                             on_delete=models.CASCADE)
+    title = models.CharField(max_length=256, null=False, blank=False)
+    description = models.TextField(null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = _("Page Headings")
+
+    def translate_as(self, lang):
+        """
+        returns translation if available
+        """
+        trans = PageHeadingLocalization.objects.filter(heading=self,
+                                                       language=lang,
+                                                       is_active=True).first()
+        if trans:
+            self.title = trans.title
+            self.description = trans.description
+
+    def __str__(self):
+        return '{} {}'.format(self.page, self.title)
+
+
+class PageHeadingLocalization(ActivableModel,
+                              TimeStampedModel, SortableModel,
+                              CreatedModifiedBy):
+    heading = models.ForeignKey(PageHeading, on_delete=models.CASCADE)
+    language = models.CharField(choices=settings.LANGUAGES,
+                                max_length=12, null=False,blank=False,
+                                default='en')
+    title = models.CharField(max_length=256, null=False, blank=False)
+    description = models.TextField(null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = _("Page Heading Localizations")
+
+    def __str__(self):
+        return '{} {}'.format(self.heading, self.language)

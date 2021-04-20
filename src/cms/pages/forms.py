@@ -5,6 +5,8 @@ from cms.api.settings import FORM_SOURCE_LABEL
 from cms.pages.models import (Page,
                               PageBlock,
                               PageCarousel,
+                              PageHeading,
+                              PageHeadingLocalization,
                               PageLink,
                               PageLocalization,
                               PageMedia,
@@ -106,7 +108,7 @@ class PageLinkForm(ModelForm):
 
     class Meta:
         model = PageLink
-        fields = ['page', 'name', 'url']
+        fields = ['page', 'name', 'url', 'order']
 
 
 class PageLocalizationForm(ModelForm):
@@ -163,3 +165,32 @@ class PageRelatedForm(ModelForm):
     class Meta:
         model = PageRelated
         fields = ['page', 'related_page', 'order', 'is_active']
+
+
+class PageHeadingForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        page_id = kwargs.pop('page_id', None)
+        super().__init__(*args, **kwargs)
+        if page_id:
+            self.fields['page'].queryset = Page.objects.filter(pk=page_id)
+
+    class Meta:
+        model = PageHeading
+        fields = ['page', 'title', 'description', 'order', 'is_active']
+
+
+class PageHeadingLocalizationForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        page_id = kwargs.pop('page_id', None)
+        heading_id = kwargs.pop('heading_id', None)
+        super().__init__(*args, **kwargs)
+        if page_id and heading_id:
+            self.fields['heading'].queryset = PageHeading.objects.filter(pk=heading_id,
+                                                                         page__pk=page_id)
+
+    class Meta:
+        model = PageHeadingLocalization
+        fields = ['heading', 'title', 'description', 'language',
+                  'order', 'is_active']

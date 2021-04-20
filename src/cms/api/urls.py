@@ -12,6 +12,7 @@ from . views import (carousel, carousel_item, carousel_item_link,
                      page, page_block, page_carousel, page_link,
                      page_media, page_media_collection,
                      page_menu, page_publication,
+                     page_heading, page_heading_localization,
                      page_related, page_localization, page_template,
                      template_block, menu, menu_item, locks)
 
@@ -126,6 +127,18 @@ pab_prefix = f'{pa_prefix}/<int:page_id>/blocks'
 urlpatterns += path(f'{pab_prefix}/', page_block.PageBlockList.as_view(), name='editorial-board-site-webpath-page-blocks'),
 urlpatterns += path(f'{pab_prefix}/<int:pk>/', page_block.PageBlockView.as_view(), name='editorial-board-site-webpath-page-block'),
 urlpatterns += path(f'{pab_prefix}/form/', page_block.PageBlockFormView.as_view(), name='editorial-board-site-webpath-page-block-form'),
+
+# page headings
+pah_prefix = f'{pa_prefix}/<int:page_id>/headings'
+urlpatterns += path(f'{pah_prefix}/', page_heading.PageHeadingList.as_view(), name='editorial-board-site-webpath-page-headings'),
+urlpatterns += path(f'{pah_prefix}/<int:pk>/', page_heading.PageHeadingView.as_view(), name='editorial-board-site-webpath-page-heading'),
+urlpatterns += path(f'{pah_prefix}/form/', page_heading.PageHeadingFormView.as_view(), name='editorial-board-site-webpath-page-heading-form'),
+
+# page heading localizations
+pahl_prefix = f'{pa_prefix}/<int:page_id>/headings/<int:heading_id>/localizations'
+urlpatterns += path(f'{pahl_prefix}/', page_heading_localization.PageHeadingLocalizationList.as_view(), name='editorial-board-site-webpath-page-heading-localizations'),
+urlpatterns += path(f'{pahl_prefix}/<int:pk>/', page_heading_localization.PageHeadingLocalizationView.as_view(), name='editorial-board-site-webpath-page-heading-localization'),
+urlpatterns += path(f'{pahl_prefix}/form/', page_heading_localization.PageHeadingLocalizationFormView.as_view(), name='editorial-board-site-webpath-page-heading-localization-form'),
 
 # page links
 pali_prefix = f'{pa_prefix}/<int:page_id>/links'

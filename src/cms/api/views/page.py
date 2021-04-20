@@ -31,6 +31,7 @@ class EditorWebpathPageList(UniCMSListCreateAPIView):
         """
         site_id = self.kwargs.get('site_id')
         webpath_id = self.kwargs.get('webpath_id')
+
         if site_id and webpath_id:
             site = get_object_or_404(WebSite, pk=site_id, is_active=True)
             if not site.is_managed_by(self.request.user):
@@ -64,13 +65,14 @@ class EditorWebpathPageView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         """
         """
-        site_id = self.kwargs['site_id']
+        site_id = self.kwargs.get('site_id')
+        webpath_id = self.kwargs.get('webpath_id')
+        pk = self.kwargs.get('pk')
+
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=site)
-        webpath_id = self.kwargs['webpath_id']
-        pk = self.kwargs['pk']
         pages = Page.objects\
                     .select_related('webpath')\
                     .filter(pk=pk,

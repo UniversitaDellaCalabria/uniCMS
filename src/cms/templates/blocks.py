@@ -4,6 +4,7 @@ from django.template import Context, Template
 from django.utils.safestring import mark_safe
 
 from cms.templates.placeholders import (SafeString, load_carousel_placeholder,
+                                        load_heading_placeholder,
                                         load_link_placeholder,
                                         load_media_placeholder,
                                         load_media_collection_placeholder,
@@ -122,3 +123,15 @@ class PublicationContentPlaceholderBlock(PlaceHolderBlock):
         context = self.get_context()
         return load_publication_content_placeholder(context=context,
                                                     content=self.content)
+
+
+class HeadingPlaceholderBlock(PlaceHolderBlock):
+    """
+    Heading PlaceHolder
+    """
+
+    def render(self):
+        self.sanitize_template()
+        context = self.get_context()
+        return load_heading_placeholder(context=context,
+                                        content=self.content)

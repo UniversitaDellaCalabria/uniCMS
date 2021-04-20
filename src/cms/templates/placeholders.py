@@ -181,6 +181,23 @@ class PublicationPlaceHolder(AbstractPlaceholder):
         return {**self.content,**data}
 
 
+class HeadingPlaceholder(AbstractPlaceholder):
+    collection_name = 'headings'
+    ph_name = 'cms.templates.blocks.HeadingPlaceholderBlock'
+
+    def __init__(self, context:dict, content:dict):
+        super().__init__(context, content)
+        self.headings = self.page.get_headings()
+
+    def get_entry(self, entry):
+        return entry[1]
+
+    def build_data_dict(self):
+        self.entry.translate_as(lang=self.language)
+        data = {'heading': self.entry, 'webpath': self.webpath}
+        return {**self.content,**data}
+
+
 def load_media_placeholder(*args, **kwargs):
     return MediaPlaceHolder(*args, **kwargs)()
 
@@ -203,3 +220,7 @@ def load_link_placeholder(*args, **kwargs):
 
 def load_publication_content_placeholder(*args, **kwargs):
     return PublicationPlaceHolder(*args, **kwargs)()
+
+
+def load_heading_placeholder(*args, **kwargs):
+    return HeadingPlaceholder(*args, **kwargs)()

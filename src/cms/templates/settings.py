@@ -131,6 +131,7 @@ CMS_BLOCK_TYPES = (
                    ('cms.templates.blocks.HtmlBlock', 'HTML Block'),
                    ('cms.templates.blocks.JSONBlock', 'JSON Block'),
                    ('cms.templates.blocks.CarouselPlaceholderBlock', 'Carousel Placeholder Block'),
+                   ('cms.templates.blocks.HeadingPlaceholderBlock', 'Headings Placeholder Block'),
                    ('cms.templates.blocks.LinkPlaceholderBlock', 'Link Placeholder Block'),
                    ('cms.templates.blocks.MediaPlaceholderBlock', 'Media Placeholder Block'),
                    ('cms.templates.blocks.MediaCollectionPlaceholderBlock', 'Media Collection Placeholder Block'),
