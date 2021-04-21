@@ -20,12 +20,11 @@ def _get_pub_qparams(context, webpath, section = None, in_evidence=False,
                         publication__is_active=True,
                         date_start__lte=now,
                         date_end__gt=now)
-    # publication__state="published")
     if section:
         query_params['section'] = section
     if in_evidence:
         query_params['in_evidence_start__lte'] = now
-        query_params['in_evidence_start__gt'] = now
+        query_params['in_evidence_end__gt'] = now
     if categories_csv:
         cats = [i.strip() for i in categories_csv.split(',')]
         query_params['publication__category__name__in'] = cats
@@ -77,7 +76,6 @@ def load_publications_preview(context, template,
     pub_in_context = PublicationContext.objects.\
         filter(**query_params).\
         order_by('order')[0:number]
-
     if not pub_in_context: return SafeString('')
 
     # i18n
