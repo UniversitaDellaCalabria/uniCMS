@@ -174,8 +174,8 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         for i in chain(blocks_list, template_blocks_list):
             order_pk.add(i)
         ordered = list(order_pk)
-        ordered.sort(key=lambda x:x[1])
-
+        print(ordered)
+        ordered.sort(key=lambda x:x[0][0])
         _blocks = []
         # add a on-the-fly section attribute on the blocks ...
         for item in ordered:
