@@ -12,23 +12,14 @@ logger = logging.getLogger(__name__)
 register = template.Library()
 
 
-def _build_breadcrumbs(webpath: str):
-    nodes = webpath.split('/')
-    if nodes[-1] == '':
-        del nodes[-1]
-
+def _build_breadcrumbs(webpath: WebPath):
     crumbs = []
-    root = '/'
     root_prefixed = f'/{settings.CMS_PATH_PREFIX}'
-
-    for i in nodes:
-        url = sanitize_path(f'{root}/{i}')
-        node_webpath = WebPath.objects.filter(fullpath=f'{url}/').first()
-        node_name = node_webpath.name if node_webpath else i
-        node_path = sanitize_path(f'{root_prefixed}{url}/')
-        crumbs.append((node_path, node_name))
-        root = url
-    crumbs[0] = [root_prefixed, _('Home')]
+    if webpath.parent:
+        crumbs = _build_breadcrumbs(webpath.parent)
+        crumbs.append((webpath.get_full_path, webpath.name))
+    else:
+        crumbs.append((root_prefixed, _('Home')))
     return crumbs
 
 
@@ -46,7 +37,8 @@ def language_menu(context, template=None):
 @register.simple_tag
 def breadcrumbs(webpath, template=None, leaf=None):
     template = template or 'breadcrumbs.html'
-    crumbs = _build_breadcrumbs(webpath.fullpath)
+    # crumbs = _build_breadcrumbs(webpath.fullpath)
+    crumbs = _build_breadcrumbs(webpath)
     if leaf: # pragma: no cover
         for i in leaf.breadcrumbs:
             crumbs.append(i)
