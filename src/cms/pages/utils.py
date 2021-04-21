@@ -21,6 +21,7 @@ def copy_page_as_draft(obj):
     for i in ('pageblock_set', 'pagecarousel_set',
               'pagelink_set', 'pagemenu_set', 'pagepublication_set',
               'pagemedia_set', 'pagelocalization_set',
+              'pageheading_set', 'pagemediacollection_set',
               # this is a related_name property on model
               'parent_page'):
         childs = getattr(obj, i).all()
