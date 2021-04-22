@@ -145,7 +145,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             block_is_active = block.pop()
             block = tuple(block)
             if block_is_active and page_block_is_active:
-                blocks_list.append(block)
+                blocks_list.append((block, count))
             elif not page_block_is_active:
                 excluded_blocks_list.append(block)
         # get all active template blocks
@@ -160,23 +160,25 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         # for every section order position
         template_blocks_list = []
         for (count, block) in enumerate(template_blocks):
-            template_blocks_list.append(block)
+            template_blocks_list.append((block, count))
 
-        blocks_to_show = []
-        blocks_to_show = [x for x in template_blocks_list
-                          if x not in excluded_blocks_list]
+        for exc_block in excluded_blocks_list:
+            for tpl_block in template_blocks_list:
+                if tpl_block[0] == exc_block:
+                    template_blocks_list.remove(tpl_block)
+                    break
 
         # populate a set excluding template blocks existing in page_blocks
         # (same active blocks in same section and same order position!)
         order_pk = set()
-        for i in chain(blocks_list, blocks_to_show):
+        for i in chain(blocks_list, template_blocks_list):
             order_pk.add(i)
         ordered = list(order_pk)
-        ordered.sort(key=lambda x:x[0])
+        ordered.sort(key=lambda x:x[0][0])
         _blocks = []
         # add a on-the-fly section attribute on the blocks ...
         for item in ordered:
-            block = item
+            block = item[0]
             _block = TemplateBlock.objects.get(pk=block[1])
             _block.section = block[2]
             _blocks.append(_block)
