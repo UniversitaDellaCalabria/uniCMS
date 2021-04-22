@@ -17,10 +17,14 @@ class TemplatesBlockList(generics.ListAPIView):
     """
     description = ""
     permission_classes = [IsAdminUser]
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter,
+                       DjangoFilterBackend,
+                       filters.OrderingFilter]
     filterset_fields = ['is_active', 'created', 'modified']
     pagination_class = UniCmsApiPagination
-    search_fields = ['name', 'description']
+    search_fields = ['name', 'description', 'type']
+    ordering_fields = ['name', 'type', 'description']
+    ordering = ['name','type']
     serializer_class = TemplatesBlockSerializer
     queryset = TemplateBlock.objects.filter(is_active=True)
 
@@ -44,7 +48,9 @@ class TemplateBlockList(generics.ListAPIView):
     """
     description = ""
     permission_classes = [IsAdminUser]
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter,
+                       DjangoFilterBackend,
+                       filters.OrderingFilter]
     filterset_fields = ['is_active', 'created', 'modified']
     pagination_class = None
     schema = SingleTemplateBlockListSchema()
