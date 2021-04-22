@@ -1,3 +1,4 @@
+import datetime
 import logging
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -227,7 +228,7 @@ class WebpathAPIUnitTest(TestCase):
 
         # edit child parent
         ebu_child = ContextUnitTest.create_editorialboard_user(user=user,
-                                                               webpath=ContextUnitTest.create_webpath(),
+                                                               webpath=ContextUnitTest.create_webpath(path=datetime.datetime.now().strftime("%f")),
                                                                permission=3,
                                                                is_active=True)
         child = ebu_child.webpath
@@ -238,7 +239,8 @@ class WebpathAPIUnitTest(TestCase):
                                     'pk': child.pk})
 
         # change parent
-        new_parent = ContextUnitTest.create_webpath(site=site)
+        new_parent = ContextUnitTest.create_webpath(site=site,
+                                                    path=datetime.datetime.now().strftime("%f"))
         child_json = {'site': site.pk,
                       'parent': new_parent.pk,
                       'name': 'child name',

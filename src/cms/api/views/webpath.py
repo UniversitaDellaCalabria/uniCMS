@@ -17,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView
-from .. exceptions import LoggedPermissionDenied
+from .. exceptions import LoggedPermissionDenied, LoggedValidationException
 from .. serializers import UniCMSFormSerializer
 
 
@@ -59,7 +59,12 @@ class EditorWebsiteWebpathList(UniCMSListCreateAPIView):
             if not publisher_perms or not parent_locks_ok:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
-            webpath = serializer.save()
+            try:
+                webpath = serializer.save()
+            except Exception as e:
+                raise LoggedValidationException(classname=self.__class__.__name__,
+                                                resource=request.method,
+                                                detail=e)
             # add permission to webpath
             if not publisher_perms['allow_descendant']:
                 EditorialBoardEditors.objects.create(user=request.user,
@@ -114,7 +119,13 @@ class EditorWebsiteWebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
                 if not has_permission:
                     raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                                  resource=request.method)
-            return super().patch(request, *args, **kwargs)
+            try:
+                return super().patch(request, *args, **kwargs)
+            except Exception as e:
+                raise LoggedValidationException(classname=self.__class__.__name__,
+                                                resource=request.method,
+                                                detail=e)
+
 
     def put(self, request, *args, **kwargs):
         item = self.get_queryset().first()
@@ -137,7 +148,12 @@ class EditorWebsiteWebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
                 if not has_permission:
                     raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                                  resource=request.method)
-            return super().put(request, *args, **kwargs)
+            try:
+                return super().put(request, *args, **kwargs)
+            except Exception as e:
+                raise LoggedValidationException(classname=self.__class__.__name__,
+                                                resource=request.method,
+                                                detail=e)
 
     def delete(self, request, *args, **kwargs):
         item = self.get_queryset().first()

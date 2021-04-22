@@ -1,3 +1,4 @@
+import datetime
 import logging
 
 from django.conf import settings
@@ -47,10 +48,12 @@ class PublicationUnitTest(TestCase):
                 'note':'',
                 'relevance':'0',
         }
+        if kwargs.get('webpath_path'):
+            webpath = ContextUnitTest.create_webpath(path=kwargs.pop('webpath_path'))
+        else:
+            webpath = ContextUnitTest.create_webpath(path=datetime.datetime.now().strftime("%f"))
         for k,v in kwargs.items():
             data[k] = v
-
-        webpath = ContextUnitTest.create_webpath()
         category = PageUnitTest.create_category()
         for i in range(count):
             obj = Publication.objects.create(**data)
@@ -230,7 +233,7 @@ class PublicationUnitTest(TestCase):
 
 
     def test_publication_handler_view(self):
-        pub = self.enrich_pub()
+        pub = self.enrich_pub(webpath_path='/')
         webpath=pub.related_contexts[0].webpath
         page = PageUnitTest.create_page(webpath=webpath)
 
@@ -246,13 +249,12 @@ class PublicationUnitTest(TestCase):
 
 
     def test_publication_handler_list(self):
-        pub = self.enrich_pub()
+        pub = self.enrich_pub(webpath_path='/')
         webpath=pub.related_contexts[0].webpath
         page = PageUnitTest.create_page(webpath=webpath)
         req = Client(HTTP_HOST='example.org')
         user = ContextUnitTest.create_user(is_staff=1)
         req.force_login(user)
-
         url = reverse('unicms:cms_dispatch')
         lurl = f'{url}{settings.CMS_PUBLICATION_LIST_PREFIX_PATH}'
         res = req.get(lurl)

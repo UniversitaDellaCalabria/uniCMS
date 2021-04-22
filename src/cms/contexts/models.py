@@ -142,6 +142,13 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         if fullpath != self.fullpath:
             self.fullpath = fullpath
 
+        existent = WebPath.objects.filter(site=self.site,
+                                          fullpath=self.fullpath)\
+                                  .exclude(pk=self.pk)\
+                                  .first()
+        if existent:
+            raise Exception(f'Existent path "{self.get_full_path()}". Change it')
+
         super(WebPath, self).save(*args, **kwargs)
         # update also its childs
         for child_path in WebPath.objects.filter(parent=self):

@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.utils.text import slugify
 
 from cms.api.serializers import UniCMSCreateUpdateSerializer, UniCMSContentTypeClass
 
@@ -82,6 +83,24 @@ class WebPathSerializer(UniCMSCreateUpdateSerializer, UniCMSContentTypeClass):
             data['permission_id'] = permission
             data['permission_label'] = context_permissions[permission]
         return data
+
+    def validate_path(self, value):
+        """
+        slugify path
+        """
+        return slugify(value)
+
+    def create(self, validated_data):
+        try:
+            return WebPath.objects.create(**validated_data)
+        except Exception as e:
+            raise e
+
+    def update(self, instance, validated_data):
+        try:
+            return super().update(instance, validated_data)
+        except Exception as e:
+            raise e
 
 
 class WebPathSelectOptionsSerializer(serializers.ModelSerializer):

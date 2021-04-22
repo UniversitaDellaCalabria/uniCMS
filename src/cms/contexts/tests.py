@@ -1,3 +1,4 @@
+import datetime
 import logging
 
 from django.contrib.auth import get_user_model
@@ -61,9 +62,10 @@ class ContextUnitTest(TestCase):
     def create_editorialboard_user(cls, **kwargs):
         data = {'user': cls.create_user() if not kwargs.get('user') else kwargs['user'],
                 'permission': 1,
-                'webpath': cls.create_webpath(),
+                'webpath': kwargs.get('webpath') or cls.create_webpath(path=datetime.datetime.now().strftime("%f")),
                 'is_active': True}
         for k,v in kwargs.items():
+            if k == 'webpath': continue
             data[k] = v
         obj = EditorialBoardEditors.objects.create(**data)
         obj.serialize()
@@ -154,8 +156,8 @@ class ContextUnitTest(TestCase):
         assert perm
 
         # test parent permissions
-        parent = self.create_webpath()
-        webpath = self.create_webpath(parent=parent)
+        parent = self.create_webpath(path="path-1")
+        webpath = self.create_webpath(path="path-2", parent=parent)
         user = ebe.user
         ebe.delete()
         parent_ebe = self.create_editorialboard_user(user=user,
@@ -164,7 +166,7 @@ class ContextUnitTest(TestCase):
         EditorialBoardEditors.get_permission(user=user, webpath=webpath)
 
         # test no permission webpath
-        webpath = self.create_webpath()
+        webpath = self.create_webpath(path="path-3")
         EditorialBoardEditors.get_permission(user=user, webpath=webpath, check_all=False)
 
 

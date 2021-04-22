@@ -1,4 +1,5 @@
 import logging
+import datetime
 
 from django.conf import settings
 from django.test import Client, RequestFactory, TestCase
@@ -56,11 +57,18 @@ class PageUnitTest(TestCase):
         page_template_block = TemplateUnitTest.create_page_block_template()
         page_template = page_template_block.template
 
+        if kwargs.get('webpath'):
+            webpath = kwargs.get('webpath')
+        elif kwargs.get('webpath_path'):
+            webpath = ContextUnitTest.create_webpath(path=kwargs.pop('webpath_path'))
+        else:
+            webpath = ContextUnitTest.create_webpath(path=datetime.datetime.now().strftime("%f"))
+
         data =  {'is_active': 1,
                  'draft_of': None,
                  'name': "Portale dell'Università della Calabria",
                  'title': 'titolo pagina',
-                 'webpath': kwargs.get('webpath', None) or ContextUnitTest.create_webpath(),
+                 'webpath': kwargs.get('webpath', None) or webpath,
                  'base_template': page_template,
                  'description': '',
                  'date_start': timezone.localtime(),
@@ -323,7 +331,8 @@ class PageUnitTest(TestCase):
 
 
     def test_home_page(self):
-        obj = self.create_page(date_end=timezone.localtime())
+        obj = self.create_page(date_end=timezone.localtime(),
+                               webpath_path='/')
         url = reverse('unicms:cms_dispatch')
         res = self.client.get(url)
         assert res.status_code == 200
@@ -333,7 +342,7 @@ class PageUnitTest(TestCase):
 
 
     def test_show_template_blocks_sections(self):
-        self.create_page()
+        self.create_page(webpath_path='/')
         user = ContextUnitTest.create_user(is_staff=1)
         self.client.force_login(user)
         url = reverse('unicms:cms_dispatch')
