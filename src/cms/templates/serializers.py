@@ -1,7 +1,13 @@
+from django.conf import settings
+
 from cms.api.serializers import UniCMSCreateUpdateSerializer
 
-
 from . models import *
+from . import settings as app_settings
+
+
+CMS_BLOCK_TYPES = getattr(settings, 'CMS_BLOCK_TYPES',
+                          app_settings.CMS_BLOCK_TYPES)
 
 
 class PageTemplateSerializer(UniCMSCreateUpdateSerializer):
@@ -12,6 +18,14 @@ class PageTemplateSerializer(UniCMSCreateUpdateSerializer):
 
 
 class TemplatesBlockSerializer(UniCMSCreateUpdateSerializer):
+    CMS_BLOCK_TYPES
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        for t in CMS_BLOCK_TYPES:
+            if t[0] == instance.type:
+                data['type_friendly'] = t[1]
+                break
+        return data
 
     class Meta:
         model = TemplateBlock
