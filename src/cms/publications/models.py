@@ -101,7 +101,7 @@ class AbstractPublication(TimeStampedModel, ActivableModel):
 
 # class Publication(AbstractPublication, AbstractPublicable, CreatedModifiedBy):
 class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
-    slug = models.SlugField(null=True, blank=True)
+    slug = models.SlugField(null=True, blank=True, max_length=256)
     tags = TaggableManager()
     relevance = models.IntegerField(default=0, blank=True)
 
