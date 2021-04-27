@@ -13,6 +13,9 @@ from django.template.loader import get_template, render_to_string
 from django.template.exceptions import (TemplateDoesNotExist,
                                         TemplateSyntaxError)
 
+from copy import deepcopy
+
+
 logger = logging.getLogger(__name__)
 CMS_PATH_PREFIX = getattr(settings, 'CMS_PATH_PREFIX', '')
 
@@ -150,13 +153,26 @@ def is_publisher(permission):
             'allow_descendant': allow_descendant}
 
 
-def log_obj_event(user, obj, data={}):
+def log_obj_event(user, obj, data={}, action_flag=CHANGE):
     """
     new LogEntry to log change action on object
     """
+    msg = _("changed") if action_flag == CHANGE else _("added")
+
+    data = deepcopy(data)
+    data = dict(data)
+
+    # pop readonly fields from logged dict
+    data.pop('id', None)
+    data.pop('created', None)
+    data.pop('modified', None)
+    data.pop('created_by', None)
+    data.pop('modified_by', None)
+    data.pop('object_content_type', None)
+
     LogEntry.objects.log_action(user_id = user.pk,
                                 content_type_id = ContentType.objects.get_for_model(obj).pk,
                                 object_id = obj.pk,
                                 object_repr = obj.__str__(),
-                                action_flag = CHANGE,
-                                change_message = f'{_("changed")}: {data}' or _("changed"))
+                                action_flag = action_flag,
+                                change_message = f'{msg}: {data}' or msg)

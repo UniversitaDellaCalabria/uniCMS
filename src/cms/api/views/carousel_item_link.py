@@ -30,8 +30,10 @@ class CarouselItemLinkList(UniCMSListCreateAPIView):
         carousel_id = self.kwargs.get('carousel_id')
         carousel_item_id = self.kwargs.get('carousel_item_id')
         if carousel_id and carousel_item_id:
-            return CarouselItemLink.objects.filter(carousel_item__carousel__pk=carousel_id,
-                                                   carousel_item__pk=carousel_item_id)
+            return CarouselItemLink.objects\
+                                   .select_related('carousel_item')\
+                                   .filter(carousel_item__carousel__pk=carousel_id,
+                                           carousel_item__pk=carousel_item_id)
         return CarouselItemLink.objects.none() # pragma: no cover
 
     def post(self, request, *args, **kwargs):
