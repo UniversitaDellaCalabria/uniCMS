@@ -1,5 +1,7 @@
+import json
 import logging
 
+from django.contrib.admin.models import ADDITION
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django_filters.rest_framework import DjangoFilterBackend
@@ -29,6 +31,16 @@ class UniCMSListCreateAPIView(generics.ListCreateAPIView):
                        filters.OrderingFilter]
     filterset_fields = ['is_active', 'created', 'modified']
     pagination_class = UniCmsApiPagination
+
+    def post(self, request, *args, **kwargs):
+        post_request = super().post(request, *args, **kwargs)
+        model_class = self.serializer_class.Meta.model
+        item = model_class.objects.filter(pk=post_request.data['id']).first()
+        log_obj_event(user=request.user,
+                      obj=item,
+                      data=request.data,
+                      action_flag=ADDITION)
+        return post_request
 
     class Meta:
         abstract = True
