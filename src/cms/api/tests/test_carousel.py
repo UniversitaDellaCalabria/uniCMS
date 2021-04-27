@@ -57,6 +57,11 @@ class CarouselAPIUnitTest(TestCase):
         res = req.post(url, data=data, follow=1)
         assert Carousel.objects.filter(name='posted name').first()
 
+        # GET LOGS
+        url = reverse('unicms_api:carousel-logs', kwargs={'pk': carousel.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:carousel', kwargs={'pk': carousel.pk})
 

@@ -77,6 +77,15 @@ class PageCarouselAPIUnitTest(TestCase):
         page_carousel = PageCarousel.objects.filter(carousel=carousel).last()
         assert page_carousel
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-site-webpath-page-carousel-logs',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'page_id': page.pk,
+                              'pk': page_carousel.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-site-webpath-page-carousel',
                       kwargs={'site_id': site.pk,

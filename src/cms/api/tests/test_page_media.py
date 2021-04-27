@@ -77,6 +77,15 @@ class PageMediaAPIUnitTest(TestCase):
         page_media = PageMedia.objects.filter(page=page).last()
         assert page_media
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-site-webpath-page-media-logs',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'page_id': page.pk,
+                              'pk': page_media.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-site-webpath-page-media',
                       kwargs={'site_id': site.pk,

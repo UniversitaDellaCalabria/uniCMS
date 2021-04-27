@@ -1,4 +1,6 @@
+from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 from cms.carousels.forms import CarouselItemLinkLocalizationForm
 from cms.carousels.models import *
@@ -9,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from . generics import *
+from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
@@ -118,3 +121,21 @@ class CarouselItemLinkLocalizationFormView(APIView):
                                                 carousel_id=kwargs.get('carousel_id'))
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
+
+
+class CarouselItemLinkLocalizationLogsView(ObjectLogEntriesList):
+
+    def get_queryset(self, **kwargs):
+        """
+        """
+        carousel_id = self.kwargs['carousel_id']
+        carousel_item_id = self.kwargs['carousel_item_id']
+        carousel_item_link_id = self.kwargs['carousel_item_link_id']
+        object_id = self.kwargs['pk']
+        item = get_object_or_404(CarouselItemLinkLocalization.objects.select_related('carousel_item_link'),
+                                 pk=object_id,
+                                 carousel_item_link__pk=carousel_item_link_id,
+                                 carousel_item_link__carousel_item__pk=carousel_item_id,
+                                 carousel_item_link__carousel_item__carousel__pk=carousel_id)
+        content_type_id = ContentType.objects.get_for_model(item).pk
+        return super().get_queryset(object_id, content_type_id)

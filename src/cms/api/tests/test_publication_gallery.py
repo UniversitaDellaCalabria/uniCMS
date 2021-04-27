@@ -65,6 +65,13 @@ class PublicationGalleryAPIUnitTest(TestCase):
                                                         collection=collection).first()
         assert(pub_gallery)
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-publication-gallery-logs',
+                      kwargs={'publication_id': pub.pk,
+                              'pk': pub_gallery.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-publication-gallery',
                       kwargs={'publication_id': pub.pk,

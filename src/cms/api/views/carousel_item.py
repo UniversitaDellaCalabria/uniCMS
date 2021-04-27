@@ -1,4 +1,6 @@
+from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 from cms.carousels.forms import CarouselItemForm
 from cms.carousels.models import *
@@ -9,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from . generics import *
+from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
@@ -124,3 +127,17 @@ class CarouselItemGenericFormView(APIView):
         form = CarouselItemForm()
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
+
+
+class CarouselItemLogsView(ObjectLogEntriesList):
+
+    def get_queryset(self, **kwargs):
+        """
+        """
+        carousel_id = self.kwargs['carousel_id']
+        object_id = self.kwargs['pk']
+        item = get_object_or_404(CarouselItem.objects.select_related('carousel'),
+                                 pk=object_id,
+                                 carousel__pk=carousel_id)
+        content_type_id = ContentType.objects.get_for_model(item).pk
+        return super().get_queryset(object_id, content_type_id)

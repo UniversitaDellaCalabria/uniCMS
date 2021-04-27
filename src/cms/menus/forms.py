@@ -28,5 +28,5 @@ class MenuItemForm(ModelForm):
     class Meta:
         model = NavigationBarItem
         fields = ['menu', 'name', 'webpath', 'parent', 'url',
-                  #'publication', 'inherited_content',
+                  # 'publication', 'inherited_content',
                   'order', 'is_active']

@@ -77,6 +77,15 @@ class PageMenuAPIUnitTest(TestCase):
         page_menu = PageMenu.objects.filter(page=page).last()
         assert page_menu
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-site-webpath-page-menu-logs',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'page_id': page.pk,
+                              'pk': page_menu.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-site-webpath-page-menu',
                       kwargs={'site_id': site.pk,

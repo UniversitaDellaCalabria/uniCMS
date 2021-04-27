@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
@@ -10,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from . generics import *
-
+from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 
@@ -127,3 +128,26 @@ class PageLocalizationFormView(APIView):
         form = PageLocalizationForm(page_id=kwargs.get('page_id'))
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
+
+
+class PageLocalizationLogsView(ObjectLogEntriesList):
+
+    def get_queryset(self):
+        """
+        """
+        site_id = self.kwargs['site_id']
+        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        if not site.is_managed_by(self.request.user):
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
+        webpath_id = self.kwargs['webpath_id']
+        page_id = self.kwargs['page_id']
+        object_id = self.kwargs['pk']
+        page = get_object_or_404(Page.objects.select_related('webpath'),
+                                 pk=page_id,
+                                 webpath__pk=webpath_id,
+                                 webpath__site__pk=site_id)
+        item = get_object_or_404(PageLocalization.objects.select_related('page'),
+                                 pk=object_id, page=page)
+        content_type_id = ContentType.objects.get_for_model(item).pk
+        return super().get_queryset(object_id, content_type_id)

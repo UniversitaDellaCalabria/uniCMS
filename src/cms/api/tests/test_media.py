@@ -75,6 +75,11 @@ class MediaAPIUnitTest(TestCase):
         media = Media.objects.filter(title='media1 api-test').first()
         assert media.file
 
+        # GET LOGS
+        url = reverse('unicms_api:media-logs', kwargs={'pk': media.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:media', kwargs={'pk': media.pk})
 

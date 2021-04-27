@@ -86,6 +86,13 @@ class MediaCollectionItemAPIUnitTest(TestCase):
         item = MediaCollectionItem.objects.filter(media=media, collection=collection).first()
         assert item
 
+        # GET LOGS
+        url = reverse('unicms_api:media-collection-item-logs',
+                      kwargs={'collection_id': collection.pk,
+                              'pk': item.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:media-collection-item',
                       kwargs={'collection_id': collection.pk,

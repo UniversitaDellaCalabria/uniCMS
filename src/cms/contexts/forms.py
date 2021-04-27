@@ -6,7 +6,7 @@ from django.urls import reverse
 from cms.api.settings import FORM_SOURCE_LABEL
 from cms.publications.models import PublicationContext
 
-from . models import EditorialBoardLockUser, WebPath, WebSite
+from . models import WebPath, WebSite
 
 
 class EditorialBoardLockUserForm(forms.Form):

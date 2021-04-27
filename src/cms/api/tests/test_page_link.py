@@ -74,6 +74,15 @@ class PageLinkAPIUnitTest(TestCase):
         page_link = PageLink.objects.filter(page=page).last()
         assert page_link
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-site-webpath-page-link-logs',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'page_id': page.pk,
+                              'pk': page_link.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-site-webpath-page-link',
                       kwargs={'site_id': site.pk,

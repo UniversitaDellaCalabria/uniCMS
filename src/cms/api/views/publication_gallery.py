@@ -1,3 +1,6 @@
+from django.contrib.contenttypes.models import ContentType
+from django.shortcuts import get_object_or_404
+
 from cms.publications.forms import PublicationGalleryForm
 from cms.publications.models import *
 from cms.publications.serializers import *
@@ -6,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .. serializers import UniCMSFormSerializer
-from .. views.publication import PublicationRelatedObject, PublicationRelatedObjectList
+from .. views.publication import PublicationRelatedObject, PublicationRelatedObjectList, PublicationRelatedObjectLogsView
 
 
 class PublicationGalleryList(PublicationRelatedObjectList):
@@ -47,3 +50,16 @@ class PublicationGalleryFormView(APIView):
         form = PublicationGalleryForm(publication_id=kwargs.get('publication_id'))
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
+
+
+class PublicationGalleryLogsView(PublicationRelatedObjectLogsView):
+
+    def get_queryset(self):
+        """
+        """
+        super().get_data()
+        item = get_object_or_404(PublicationGallery.objects.select_related('publication'),
+                                 pk=self.pk,
+                                 publication=self.publication)
+        content_type_id = ContentType.objects.get_for_model(item).pk
+        return super().get_queryset(self.pk, content_type_id)

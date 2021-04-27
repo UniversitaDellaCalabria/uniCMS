@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
@@ -10,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from . generics import *
-
+from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 
@@ -110,3 +111,18 @@ class PublicationLocalizationFormView(APIView):
         form = PublicationLocalizationForm(publication_id=kwargs.get('publication_id'))
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
+
+
+class PublicationLocalizationLogsView(ObjectLogEntriesList):
+
+    def get_queryset(self):
+        """
+        """
+        pub_id = self.kwargs['publication_id']
+        object_id = self.kwargs['pk']
+        publication = get_object_or_404(Publication, pk=pub_id)
+        item = get_object_or_404(PublicationLocalization.objects.select_related('publication'),
+                                 pk=object_id,
+                                 publication=publication)
+        content_type_id = ContentType.objects.get_for_model(item).pk
+        return super().get_queryset(object_id, content_type_id)

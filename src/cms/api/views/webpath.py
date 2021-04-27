@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -17,6 +18,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView
+from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied, LoggedValidationException
 from .. serializers import UniCMSFormSerializer
 
@@ -25,7 +27,7 @@ CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
                                   contexts_settings.CMS_CONTEXT_PERMISSIONS)
 
 
-class EditorWebsiteWebpathList(UniCMSListCreateAPIView):
+class WebpathList(UniCMSListCreateAPIView):
     """
     """
     name = "Webpaths"
@@ -77,7 +79,7 @@ class EditorWebsiteWebpathList(UniCMSListCreateAPIView):
             return HttpResponseRedirect(url)
 
 
-class EditorWebsiteWebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
+class WebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     """
     Editor user get website webpath permissions
     """
@@ -125,7 +127,6 @@ class EditorWebsiteWebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
                 raise LoggedValidationException(classname=self.__class__.__name__,
                                                 resource=request.method,
                                                 detail=e)
-
 
     def put(self, request, *args, **kwargs):
         item = self.get_queryset().first()
@@ -232,3 +233,21 @@ class WebpathOptionView(generics.RetrieveAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=site)
         return WebPath.objects.filter(pk=pk, site=site)
+
+
+class WebpathLogsView(ObjectLogEntriesList):
+
+    def get_queryset(self, **kwargs):
+        """
+        """
+        site_id = self.kwargs['site_id']
+        object_id = self.kwargs['pk']
+        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        if not site.is_managed_by(self.request.user):
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
+        item = get_object_or_404(WebPath.objects.select_related('site'),
+                                 pk=object_id,
+                                 site=site)
+        content_type_id = ContentType.objects.get_for_model(item).pk
+        return super().get_queryset(object_id, content_type_id)

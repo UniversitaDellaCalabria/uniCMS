@@ -78,6 +78,15 @@ class PageLocalizationAPIUnitTest(TestCase):
         page_loc = PageLocalization.objects.filter(page=page).last()
         assert page_loc
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-site-webpath-page-localization-logs',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'page_id': page.pk,
+                              'pk': page_loc.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-site-webpath-page-localization',
                       kwargs={'site_id': site.pk,

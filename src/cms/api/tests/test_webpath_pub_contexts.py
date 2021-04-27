@@ -77,6 +77,14 @@ class WebpathPubContextAPIUnitTest(TestCase):
                                                     webpath=webpath).first()
         assert pub_cxt
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-site-webpath-publication-context-logs',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'pk': pub_cxt.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-site-webpath-publication-context',
                       kwargs={'site_id': site.pk,
@@ -123,6 +131,8 @@ class WebpathPubContextAPIUnitTest(TestCase):
                 'webpath': webpath.pk,
                 'date_start': timezone.localtime(),
                 'date_end': timezone.localtime() + timezone.timedelta(hours=1),
+                'in_evidence_start': '',
+                'in_evidence_end': '',
                 'is_active': 0,
         }
         # user hasn't permission

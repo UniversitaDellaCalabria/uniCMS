@@ -87,6 +87,15 @@ class PageBlockAPIUnitTest(TestCase):
         page_block = PageBlock.objects.filter(block=block).last()
         assert page_block
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-site-webpath-page-block-logs',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'page_id': page.pk,
+                              'pk': page_block.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-site-webpath-page-block',
                       kwargs={'site_id': site.pk,

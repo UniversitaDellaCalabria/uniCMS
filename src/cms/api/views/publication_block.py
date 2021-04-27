@@ -1,7 +1,10 @@
+from django.contrib.contenttypes.models import ContentType
+from django.shortcuts import get_object_or_404
+
 from cms.publications.models import *
 from cms.publications.serializers import *
 
-from .. views.publication import PublicationRelatedObject, PublicationRelatedObjectList
+from .. views.publication import PublicationRelatedObject, PublicationRelatedObjectList, PublicationRelatedObjectLogsView
 
 
 class PublicationBlockList(PublicationRelatedObjectList):
@@ -32,3 +35,16 @@ class PublicationBlockView(PublicationRelatedObject):
         super().get_data()
         return PublicationBlock.objects.filter(pk=self.pk,
                                                publication=self.publication)
+
+
+class PublicationBlockLogsView(PublicationRelatedObjectLogsView):
+
+    def get_queryset(self):
+        """
+        """
+        super().get_data()
+        item = get_object_or_404(PublicationBlock.objects.select_related('publication'),
+                                 pk=self.pk,
+                                 publication=self.publication)
+        content_type_id = ContentType.objects.get_for_model(item).pk
+        return super().get_queryset(self.pk, content_type_id)

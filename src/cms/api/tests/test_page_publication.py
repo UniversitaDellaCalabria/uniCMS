@@ -77,6 +77,15 @@ class PagePublicationAPIUnitTest(TestCase):
         page_pub = PagePublication.objects.filter(page=page).last()
         assert page_pub
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-site-webpath-page-publication-logs',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'page_id': page.pk,
+                              'pk': page_pub.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-site-webpath-page-publication',
                       kwargs={'site_id': site.pk,

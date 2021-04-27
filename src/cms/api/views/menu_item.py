@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
@@ -11,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from . generics import *
+from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
@@ -149,3 +151,17 @@ class MenuItemFormView(APIView):
         form = MenuItemForm(menu_id=kwargs.get('menu_id'))
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
+
+
+class MenuItemLogsView(ObjectLogEntriesList):
+
+    def get_queryset(self, **kwargs):
+        """
+        """
+        menu_id = self.kwargs['menu_id']
+        object_id = self.kwargs['pk']
+        item = get_object_or_404(NavigationBarItem.objects.select_related('menu'),
+                                 pk=object_id,
+                                 menu__pk=menu_id)
+        content_type_id = ContentType.objects.get_for_model(item).pk
+        return super().get_queryset(object_id, content_type_id)

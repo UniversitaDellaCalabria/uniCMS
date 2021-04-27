@@ -56,6 +56,11 @@ class MenuAPIUnitTest(TestCase):
         res = req.post(url, data=data, follow=1)
         assert NavigationBar.objects.filter(name='posted name').first()
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-menu-logs', kwargs={'pk': menu.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-menu', kwargs={'pk': menu.pk})
 

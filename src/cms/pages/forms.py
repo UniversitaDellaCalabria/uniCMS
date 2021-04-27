@@ -15,7 +15,7 @@ from cms.pages.models import (Page,
                               PagePublication,
                               PageRelated)
 
-from . models import WebPath, WebSite
+from . models import WebPath
 
 
 class PageForm(ModelForm):

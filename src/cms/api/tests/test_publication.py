@@ -86,6 +86,12 @@ class PublicationAPIUnitTest(TestCase):
         pub.refresh_from_db()
         assert pub.is_active != state
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-publication-logs',
+                      kwargs={'pk': pub.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-publication',
                       kwargs={'pk': pub.pk})
@@ -152,6 +158,16 @@ class PublicationAPIUnitTest(TestCase):
             pub.refresh_from_db()
         except ObjectDoesNotExist:
             assert True
+
+        # GET SelectField Options
+        url = reverse('unicms_api:editorial-board-publications-options')
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
+        url = reverse('unicms_api:editorial-board-publications-option',
+                      kwargs={'pk': pub.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
 
         # form
         url = reverse('unicms_api:editorial-board-publication-form')

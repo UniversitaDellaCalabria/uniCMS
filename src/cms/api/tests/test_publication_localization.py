@@ -64,6 +64,13 @@ class PublicationLocalizationAPIUnitTest(TestCase):
         localization = PublicationLocalization.objects.filter(title='test en').first()
         assert(localization)
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-publication-localization-logs',
+                      kwargs={'publication_id': pub.pk,
+                              'pk': localization.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-publication-localization',
                       kwargs={'publication_id': pub.pk,

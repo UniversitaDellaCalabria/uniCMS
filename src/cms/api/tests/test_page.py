@@ -162,6 +162,14 @@ class PageAPIUnitTest(TestCase):
         # restore status of draft (to test delete)
         res = req.get(url)
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-site-webpath-page-logs',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'pk': page.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-site-webpath-page',
                       kwargs={'site_id': site.pk,

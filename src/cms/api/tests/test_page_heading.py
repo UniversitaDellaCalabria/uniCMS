@@ -75,6 +75,15 @@ class PageHeadingAPIUnitTest(TestCase):
         page_heading = PageHeading.objects.filter(page=page).last()
         assert page_heading
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-site-webpath-page-heading-logs',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'page_id': page.pk,
+                              'pk': page_heading.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-site-webpath-page-heading',
                       kwargs={'site_id': site.pk,
@@ -216,6 +225,16 @@ class PageHeadingAPIUnitTest(TestCase):
                        content_type='application/json')
         localization = PageHeadingLocalization.objects.filter(heading=page_heading).last()
         assert localization
+
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-site-webpath-page-heading-localization-logs',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'page_id': page.pk,
+                              'heading_id': page_heading.pk,
+                              'pk': localization.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
 
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-site-webpath-page-heading-localization',

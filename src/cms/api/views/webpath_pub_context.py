@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
@@ -12,11 +13,12 @@ from cms.publications.models import PublicationContext
 from cms.publications.serializers import PublicationContextSerializer
 
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
+from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 
 
-class EditorWebpathPublicationContextList(UniCMSListCreateAPIView):
+class PublicationContextList(UniCMSListCreateAPIView):
     """
     """
     description = ""
@@ -52,7 +54,7 @@ class EditorWebpathPublicationContextList(UniCMSListCreateAPIView):
             return super().post(request, *args, **kwargs)
 
 
-class EditorWebpathPublicationContextView(UniCMSCachedRetrieveUpdateDestroyAPIView):
+class PublicationContextView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     """
     """
     description = ""
@@ -152,3 +154,23 @@ class EditorialBoardLockUserFormView(APIView):
         form = EditorialBoardLockUserForm()
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
+
+
+class PublicationContextLogsView(ObjectLogEntriesList):
+
+    def get_queryset(self, **kwargs):
+        """
+        """
+        site_id = self.kwargs['site_id']
+        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        if not site.is_managed_by(self.request.user):
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
+        webpath_id = self.kwargs['webpath_id']
+        object_id = self.kwargs['pk']
+        item = get_object_or_404(PublicationContext.objects.select_related('webpath'),
+                                 pk=object_id,
+                                 webpath__pk=webpath_id,
+                                 webpath__site__pk=site_id)
+        content_type_id = ContentType.objects.get_for_model(item).pk
+        return super().get_queryset(object_id, content_type_id)

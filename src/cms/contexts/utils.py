@@ -3,6 +3,8 @@ import re
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.admin.models import LogEntry, CHANGE
+from django.contrib.contenttypes.models import ContentType
 from django.utils import translation
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext as _
@@ -146,3 +148,15 @@ def is_publisher(permission):
     allow_descendant = True if permission == 7 else False
     return {'only_created_by': False,
             'allow_descendant': allow_descendant}
+
+
+def log_obj_event(user, obj, data={}):
+    """
+    new LogEntry to log change action on object
+    """
+    LogEntry.objects.log_action(user_id = user.pk,
+                                content_type_id = ContentType.objects.get_for_model(obj).pk,
+                                object_id = obj.pk,
+                                object_repr = obj.__str__(),
+                                action_flag = CHANGE,
+                                change_message = f'{_("changed")}: {data}' or _("changed"))

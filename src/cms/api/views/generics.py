@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django_filters.rest_framework import DjangoFilterBackend
 
+from cms.contexts.utils import log_obj_event
+
 from rest_framework import generics
 from rest_framework import filters
 from rest_framework.exceptions import PermissionDenied
@@ -52,13 +54,21 @@ class UniCMSCachedRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPI
 
     def patch(self, request, *args, **kwargs):
         item = self.get_queryset().first()
+        # check for locks
         check_locks(item, request.user)
-        return super().patch(request, *args, **kwargs)
+        ok_response = super().patch(request, *args, **kwargs)
+        # log action in item history
+        log_obj_event(user=request.user, obj=item, data=request.data)
+        return ok_response
 
     def put(self, request, *args, **kwargs):
         item = self.get_queryset().first()
+        # check for locks
         check_locks(item, request.user)
-        return super().put(request, *args, **kwargs)
+        ok_response = super().put(request, *args, **kwargs)
+        # log action in item history
+        log_obj_event(user=request.user, obj=item, data=request.data)
+        return ok_response
 
     def delete(self, request, *args, **kwargs):
         item = self.get_queryset().first()

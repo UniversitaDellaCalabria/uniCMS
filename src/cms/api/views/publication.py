@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.http import Http404
 from django.shortcuts import get_object_or_404
@@ -21,6 +22,7 @@ from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView, check_locks
+from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import PublicationGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
@@ -317,3 +319,25 @@ class PublicationOptionView(generics.RetrieveAPIView):
         pub_id = self.kwargs['pk']
         publications = Publication.objects.filter(pk=pub_id)
         return publications
+
+
+class PublicationLogsView(ObjectLogEntriesList):
+
+    def get_queryset(self, **kwargs):
+        """
+        """
+        object_id = self.kwargs['pk']
+        item = Publication.objects.filter(pk=object_id).first()
+        content_type_id = ContentType.objects.get_for_model(item).pk
+        return super().get_queryset(object_id, content_type_id)
+
+
+class PublicationRelatedObjectLogsView(ObjectLogEntriesList):
+
+    def get_data(self):
+        pub_id = self.kwargs['publication_id']
+        self.pk = self.kwargs['pk']
+        self.publication = get_object_or_404(Publication, pk=pub_id)
+
+    def get_queryset(self, object_id, content_type_id):
+        return super().get_queryset(object_id, content_type_id)

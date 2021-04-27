@@ -64,6 +64,13 @@ class PublicationRelatedAPIUnitTest(TestCase):
                                                         related=pub2).first()
         assert(pub_related)
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-publication-related-logs',
+                      kwargs={'publication_id': pub.pk,
+                              'pk': pub_related.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-publication-related',
                       kwargs={'publication_id': pub.pk,

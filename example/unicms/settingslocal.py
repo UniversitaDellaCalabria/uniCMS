@@ -324,6 +324,18 @@ CMS_HOOKS = {
         'PREDELETE': [],
         'POSTDELETE': ['cms.medias.hooks.remove_file']
     },
+    'MediaCollection': {
+        'PRESAVE': [],
+        'POSTSAVE': ['cms.contexts.hooks.used_by'],
+        'PREDELETE': [],
+        'POSTDELETE': []
+    },
+    'NavigationBar': {
+        'PRESAVE': [],
+        'POSTSAVE': ['cms.contexts.hooks.used_by'],
+        'PREDELETE': [],
+        'POSTDELETE': []
+    },
     'Category': {
         'PRESAVE': ['cms.medias.hooks.webp_image_optimizer'],
         'POSTSAVE': [],

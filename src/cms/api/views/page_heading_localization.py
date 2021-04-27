@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
 
 from cms.pages.forms import PageHeadingLocalizationForm
@@ -9,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
+from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 
@@ -82,7 +84,6 @@ class PageHeadingLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         items = PageHeadingLocalization.objects.filter(pk=pk, heading=heading)
         return items
 
-
     def patch(self, request, *args, **kwargs):
         item = self.get_queryset().first()
         if not item: raise Http404
@@ -124,3 +125,30 @@ class PageHeadingLocalizationFormView(APIView):
                                            heading_id=kwargs.get('heading_id'))
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
+
+
+class PageHeadingLocalizationLogsView(ObjectLogEntriesList):
+
+    def get_queryset(self):
+        """
+        """
+        site_id = self.kwargs.get('site_id')
+        webpath_id = self.kwargs.get('webpath_id')
+        page_id = self.kwargs.get('page_id')
+        heading_id = self.kwargs.get('heading_id')
+        object_id = self.kwargs.get('pk')
+
+        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        if not site.is_managed_by(self.request.user):
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=site)
+        page = get_object_or_404(Page.objects.select_related('webpath'),
+                                 pk=page_id,
+                                 webpath__pk=webpath_id,
+                                 webpath__site__pk=site_id)
+        heading = get_object_or_404(PageHeading.objects.select_related('page'),
+                                    page=page, pk=heading_id)
+        item = get_object_or_404(PageHeadingLocalization.objects.select_related('heading'),
+                                 pk=object_id, heading=heading)
+        content_type_id = ContentType.objects.get_for_model(item).pk
+        return super().get_queryset(object_id, content_type_id)

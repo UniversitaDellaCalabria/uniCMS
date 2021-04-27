@@ -49,6 +49,7 @@ class WebpathAPIUnitTest(TestCase):
         req = Client()
         ebu = ContextUnitTest.create_editorialboard_user()
         webpath = ebu.webpath
+
         url = reverse('unicms_api:editorial-board-site-webpath',
                       kwargs={'site_id': webpath.site.pk,
                               'pk': webpath.pk})
@@ -77,6 +78,13 @@ class WebpathAPIUnitTest(TestCase):
                       kwargs={'site_id': webpath.site.pk})
         res = req.get(url)
         assert isinstance(res.json(), list)
+
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-site-webpath-logs',
+                      kwargs={'site_id': webpath.site.pk,
+                              'pk': webpath.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
 
     def test_patch(self):
         req = Client()

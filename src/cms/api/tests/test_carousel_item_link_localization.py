@@ -83,6 +83,15 @@ class CarouselItemLinkLocalizationAPIUnitTest(TestCase):
         res = req.post(url, data=data, follow=1)
         assert CarouselItemLinkLocalization.objects.filter(title='posted title').first()
 
+        # GET LOGS
+        url = reverse('unicms_api:carousel-item-link-localization-logs',
+                      kwargs={'carousel_id': carousel.pk,
+                              'carousel_item_id': carousel_item.pk,
+                              'carousel_item_link_id': carousel_item_link.pk,
+                              'pk': carousel_item_link_localization.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:carousel-item-link-localization',
                       kwargs={'carousel_id': carousel.pk,

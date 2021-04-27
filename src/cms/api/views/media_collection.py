@@ -1,4 +1,6 @@
+from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 from cms.medias.forms import MediaCollectionForm
 from cms.medias.models import MediaCollection
@@ -11,6 +13,7 @@ from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView
+from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import MediaCollectionGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
@@ -108,3 +111,14 @@ class MediaCollectionOptionView(generics.RetrieveAPIView):
         collection_id = self.kwargs['pk']
         collection = MediaCollection.objects.filter(pk=collection_id)
         return collection
+
+
+class MediaCollectionLogsView(ObjectLogEntriesList):
+
+    def get_queryset(self, **kwargs):
+        """
+        """
+        object_id = self.kwargs['pk']
+        item = get_object_or_404(MediaCollection, pk=object_id)
+        content_type_id = ContentType.objects.get_for_model(item).pk
+        return super().get_queryset(object_id, content_type_id)

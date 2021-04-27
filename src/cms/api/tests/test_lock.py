@@ -36,8 +36,8 @@ class EditorialBoardLockAPIUnitTest(TestCase):
         webpath = ContextUnitTest.create_webpath()
         webpath_ct = ContentType.objects.get_for_model(webpath)
 
-        # webpath locks list
-        url = reverse('unicms_api:editorial-board-locks',
+        # webpath redis redislocks list
+        url = reverse('unicms_api:editorial-board-redis-lock',
                       kwargs={'content_type_id': webpath_ct.pk,
                               'object_id': webpath.pk})
 
@@ -48,6 +48,14 @@ class EditorialBoardLockAPIUnitTest(TestCase):
         user.is_superuser = True
         user.save()
         req.force_login(user)
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
+        # webpath locks list
+        url = reverse('unicms_api:editorial-board-locks',
+                      kwargs={'content_type_id': webpath_ct.pk,
+                              'object_id': webpath.pk})
+
         res = req.get(url)
         assert res.data['count'] == 0
 

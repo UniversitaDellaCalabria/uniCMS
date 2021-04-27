@@ -65,6 +65,13 @@ class PublicationBlockAPIUnitTest(TestCase):
                                                     block=block).first()
         assert(pub_block)
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-publication-block-logs',
+                      kwargs={'publication_id': pub.pk,
+                              'pk': pub_block.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-publication-block',
                       kwargs={'publication_id': pub.pk,

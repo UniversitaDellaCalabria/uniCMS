@@ -1,7 +1,9 @@
 import logging
 import os
 
+from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 from cms.medias.forms import MediaForm
 from cms.medias.models import Media
@@ -14,6 +16,7 @@ from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView
+from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import MediaGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
@@ -78,7 +81,7 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         media = self.get_queryset().first()
         try:
             os.remove(media.file.path)
-        except: # pragma: no cover
+        except Exception: # pragma: no cover
             logger.warning(f'File {media.file.path} not found')
         return super().delete(request, *args, **kwargs)
 
@@ -119,3 +122,14 @@ class MediaOptionView(generics.RetrieveAPIView):
         media_id = self.kwargs['pk']
         media = Media.objects.filter(pk=media_id)
         return media
+
+
+class MediaLogsView(ObjectLogEntriesList):
+
+    def get_queryset(self, **kwargs):
+        """
+        """
+        object_id = self.kwargs['pk']
+        item = get_object_or_404(Media, pk=object_id)
+        content_type_id = ContentType.objects.get_for_model(item).pk
+        return super().get_queryset(object_id, content_type_id)

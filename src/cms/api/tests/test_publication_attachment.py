@@ -73,6 +73,13 @@ class PublicationAttachmentAPIUnitTest(TestCase):
                                                           name='test attachment').first()
         assert(attachment)
 
+        # GET LOGS
+        url = reverse('unicms_api:editorial-board-publication-attachment-logs',
+                      kwargs={'publication_id': pub.pk,
+                              'pk': attachment.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-publication-attachment',
                       kwargs={'publication_id': pub.pk,

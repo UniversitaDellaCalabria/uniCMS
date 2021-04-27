@@ -15,7 +15,7 @@ def get_requirements(fname='requirements.txt'):
 
 setup(
     name="unicms",
-    version='0.11.13',
+    version='0.12.0',
     description="uniCMS is a Django Web Content Management System",
     author='Giuseppe De Marco, Francesco Filicetti',
     author_email='giuseppe.demarco@unical.it, francesco.filicetti@unical.it',

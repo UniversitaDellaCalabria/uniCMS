@@ -1,4 +1,6 @@
+from django.contrib.contenttypes.models import ContentType
 from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
@@ -13,6 +15,7 @@ from cms.menus.models import NavigationBar
 from cms.menus.serializers import MenuSerializer
 
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
+from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import MenuGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
@@ -148,3 +151,14 @@ class MenuFormView(APIView):
         form = MenuForm()
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
+
+
+class MenuLogsView(ObjectLogEntriesList):
+
+    def get_queryset(self, **kwargs):
+        """
+        """
+        object_id = self.kwargs['pk']
+        item = get_object_or_404(NavigationBar, pk=object_id)
+        content_type_id = ContentType.objects.get_for_model(item).pk
+        return super().get_queryset(object_id, content_type_id)
