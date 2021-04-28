@@ -8,6 +8,7 @@ from cms.carousels.serializers import *
 
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
 from . generics import *
@@ -123,7 +124,14 @@ class CarouselItemLinkLocalizationFormView(APIView):
         return Response(form_fields)
 
 
+class CarouselItemLinkLocalizationLogsSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listCarouselItemLinkLocalizationLogs'
+
+
 class CarouselItemLinkLocalizationLogsView(ObjectLogEntriesList):
+
+    schema = CarouselItemLinkLocalizationLogsSchema()
 
     def get_queryset(self, **kwargs):
         """

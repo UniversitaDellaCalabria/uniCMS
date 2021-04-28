@@ -8,6 +8,7 @@ from cms.pages.serializers import *
 
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
 from . generics import *
@@ -130,7 +131,14 @@ class PageLocalizationFormView(APIView):
         return Response(form_fields)
 
 
+class PageLocalizationLogsSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listPageLocalizationLogs'
+
+
 class PageLocalizationLogsView(ObjectLogEntriesList):
+
+    schema = PageLocalizationLogsSchema()
 
     def get_queryset(self):
         """

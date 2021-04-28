@@ -9,6 +9,7 @@ from cms.menus.serializers import *
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
 from . generics import *
@@ -153,7 +154,14 @@ class MenuItemFormView(APIView):
         return Response(form_fields)
 
 
+class MenuItemLogsSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listMenuItemLogs'
+
+
 class MenuItemLogsView(ObjectLogEntriesList):
+
+    schema = MenuItemLogsSchema()
 
     def get_queryset(self, **kwargs):
         """

@@ -321,7 +321,14 @@ class PublicationOptionView(generics.RetrieveAPIView):
         return publications
 
 
+class PublicationLogsSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listPublicationLogs'
+
+
 class PublicationLogsView(ObjectLogEntriesList):
+
+    schema = PublicationLogsSchema()
 
     def get_queryset(self, **kwargs):
         """
