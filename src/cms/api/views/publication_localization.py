@@ -8,6 +8,7 @@ from cms.publications.serializers import *
 
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
 from . generics import *
@@ -113,7 +114,14 @@ class PublicationLocalizationFormView(APIView):
         return Response(form_fields)
 
 
+class PublicationLocalizationLogsSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listPublicationLocalizationLogs'
+
+
 class PublicationLocalizationLogsView(ObjectLogEntriesList):
+
+    schema = PublicationLocalizationLogsSchema()
 
     def get_queryset(self):
         """

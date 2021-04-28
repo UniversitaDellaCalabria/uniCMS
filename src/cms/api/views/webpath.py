@@ -235,7 +235,14 @@ class WebpathOptionView(generics.RetrieveAPIView):
         return WebPath.objects.filter(pk=pk, site=site)
 
 
+class WebpathLogsSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listWebPathLogs'
+
+
 class WebpathLogsView(ObjectLogEntriesList):
+
+    schema = WebpathLogsSchema()
 
     def get_queryset(self, **kwargs):
         """

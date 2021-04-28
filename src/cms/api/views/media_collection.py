@@ -113,7 +113,14 @@ class MediaCollectionOptionView(generics.RetrieveAPIView):
         return collection
 
 
+class MediaCollectionLogsSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listMediaCollectionLogs'
+
+
 class MediaCollectionLogsView(ObjectLogEntriesList):
+
+    schema = MediaCollectionLogsSchema()
 
     def get_queryset(self, **kwargs):
         """

@@ -4,6 +4,8 @@ from django.shortcuts import get_object_or_404
 from cms.publications.models import *
 from cms.publications.serializers import *
 
+from rest_framework.schemas.openapi import AutoSchema
+
 from .. views.publication import PublicationRelatedObject, PublicationRelatedObjectList, PublicationRelatedObjectLogsView
 
 
@@ -37,7 +39,14 @@ class PublicationBlockView(PublicationRelatedObject):
                                                publication=self.publication)
 
 
+class PublicationBlockLogsSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listPublicationBlockLogs'
+
+
 class PublicationBlockLogsView(PublicationRelatedObjectLogsView):
+
+    schema = PublicationBlockLogsSchema()
 
     def get_queryset(self):
         """

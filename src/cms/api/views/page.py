@@ -376,7 +376,14 @@ class PageCopyAsDraftView(APIView):
                                      resource=request.method)
 
 
+class PageLogsSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listPageLogs'
+
+
 class PageLogsView(ObjectLogEntriesList):
+
+    schema = PageLogsSchema()
 
     def get_queryset(self, **kwargs):
         """

@@ -125,14 +125,11 @@ pa_prefix = f'{w_prefix}/<int:webpath_id>/pages'
 urlpatterns += path(f'{pa_prefix}/', page.PageList.as_view(), name='editorial-board-site-webpath-pages'),
 urlpatterns += path(f'{pa_prefix}/<int:pk>/', page.PageView.as_view(), name='editorial-board-site-webpath-page'),
 urlpatterns += path(f'{pa_prefix}/<int:pk>/logs/', page.PageLogsView.as_view(), name='editorial-board-site-webpath-page-logs'),
-urlpatterns += path(f'{pa_prefix}/<int:pk>/change-status/', page.PageChangeStateView.as_view(),
-                    name='editorial-board-site-webpath-page-change-status'),
-urlpatterns += path(f'{pa_prefix}/<int:pk>/change-publication-status/', page.PageChangePublicationStatusView.as_view(),
-                    name='editorial-board-site-webpath-page-change-publication-status'),
+urlpatterns += path(f'{pa_prefix}/<int:pk>/change-status/', page.PageChangeStateView.as_view(), name='editorial-board-site-webpath-page-change-status'),
+urlpatterns += path(f'{pa_prefix}/<int:pk>/change-publication-status/', page.PageChangePublicationStatusView.as_view(), name='editorial-board-site-webpath-page-change-publication-status'),
 urlpatterns += path(f'{pa_prefix}/form/', page.PageFormView.as_view(), name='editorial-board-site-webpath-page-form'),
 urlpatterns += path(f'{w_prefix}/pages/form/', page.PageGenericFormView.as_view(), name='editorial-board-site-webpath-page-form-generic'),
-urlpatterns += path(f'{pa_prefix}/<int:pk>/copy-as-draft/', page.PageCopyAsDraftView.as_view(),
-                    name='editorial-board-site-webpath-page-copy-as-draft'),
+urlpatterns += path(f'{pa_prefix}/<int:pk>/copy-as-draft/', page.PageCopyAsDraftView.as_view(), name='editorial-board-site-webpath-page-copy-as-draft'),
 
 # page blocks
 pab_prefix = f'{pa_prefix}/<int:page_id>/blocks'
@@ -145,20 +142,15 @@ urlpatterns += path(f'{pab_prefix}/form/', page_block.PageBlockFormView.as_view(
 pah_prefix = f'{pa_prefix}/<int:page_id>/headings'
 urlpatterns += path(f'{pah_prefix}/', page_heading.PageHeadingList.as_view(), name='editorial-board-site-webpath-page-headings'),
 urlpatterns += path(f'{pah_prefix}/<int:pk>/', page_heading.PageHeadingView.as_view(), name='editorial-board-site-webpath-page-heading'),
-urlpatterns += path(f'{pah_prefix}/<int:pk>/logs/', page_heading.PageHeadingLogsView.as_view(),
-                    name='editorial-board-site-webpath-page-heading-logs'),
+urlpatterns += path(f'{pah_prefix}/<int:pk>/logs/', page_heading.PageHeadingLogsView.as_view(), name='editorial-board-site-webpath-page-heading-logs'),
 urlpatterns += path(f'{pah_prefix}/form/', page_heading.PageHeadingFormView.as_view(), name='editorial-board-site-webpath-page-heading-form'),
 
 # page heading localizations
 pahl_prefix = f'{pa_prefix}/<int:page_id>/headings/<int:heading_id>/localizations'
-urlpatterns += path(f'{pahl_prefix}/', page_heading_localization.PageHeadingLocalizationList.as_view(),
-                    name='editorial-board-site-webpath-page-heading-localizations'),
-urlpatterns += path(f'{pahl_prefix}/<int:pk>/', page_heading_localization.PageHeadingLocalizationView.as_view(),
-                    name='editorial-board-site-webpath-page-heading-localization'),
-urlpatterns += path(f'{pahl_prefix}/<int:pk>/logs/', page_heading_localization.PageHeadingLocalizationLogsView.as_view(),
-                    name='editorial-board-site-webpath-page-heading-localization-logs'),
-urlpatterns += path(f'{pahl_prefix}/form/', page_heading_localization.PageHeadingLocalizationFormView.as_view(),
-                    name='editorial-board-site-webpath-page-heading-localization-form'),
+urlpatterns += path(f'{pahl_prefix}/', page_heading_localization.PageHeadingLocalizationList.as_view(), name='editorial-board-site-webpath-page-heading-localizations'),
+urlpatterns += path(f'{pahl_prefix}/<int:pk>/', page_heading_localization.PageHeadingLocalizationView.as_view(), name='editorial-board-site-webpath-page-heading-localization'),
+urlpatterns += path(f'{pahl_prefix}/<int:pk>/logs/', page_heading_localization.PageHeadingLocalizationLogsView.as_view(), name='editorial-board-site-webpath-page-heading-localization-logs'),
+urlpatterns += path(f'{pahl_prefix}/form/', page_heading_localization.PageHeadingLocalizationFormView.as_view(), name='editorial-board-site-webpath-page-heading-localization-form'),
 
 # page links
 pali_prefix = f'{pa_prefix}/<int:page_id>/links'
@@ -178,12 +170,9 @@ urlpatterns += path(f'{pac_prefix}/form/', page_carousel.PageCarouselFormView.as
 # page localizations
 palo_prefix = f'{pa_prefix}/<int:page_id>/localizations'
 urlpatterns += path(f'{palo_prefix}/', page_localization.PageLocalizationList.as_view(), name='editorial-board-site-webpath-page-localizations'),
-urlpatterns += path(f'{palo_prefix}/<int:pk>/', page_localization.PageLocalizationView.as_view(),
-                    name='editorial-board-site-webpath-page-localization'),
-urlpatterns += path(f'{palo_prefix}/<int:pk>/logs/', page_localization.PageLocalizationLogsView.as_view(),
-                    name='editorial-board-site-webpath-page-localization-logs'),
-urlpatterns += path(f'{palo_prefix}/form/', page_localization.PageLocalizationFormView.as_view(),
-                    name='editorial-board-site-webpath-page-localization-form'),
+urlpatterns += path(f'{palo_prefix}/<int:pk>/', page_localization.PageLocalizationView.as_view(), name='editorial-board-site-webpath-page-localization'),
+urlpatterns += path(f'{palo_prefix}/<int:pk>/logs/', page_localization.PageLocalizationLogsView.as_view(), name='editorial-board-site-webpath-page-localization-logs'),
+urlpatterns += path(f'{palo_prefix}/form/', page_localization.PageLocalizationFormView.as_view(), name='editorial-board-site-webpath-page-localization-form'),
 
 # page medias
 pamed_prefix = f'{pa_prefix}/<int:page_id>/medias'
@@ -194,14 +183,10 @@ urlpatterns += path(f'{pamed_prefix}/form/', page_media.PageMediaFormView.as_vie
 
 # page media collections
 pamecol_prefix = f'{pa_prefix}/<int:page_id>/media-collections'
-urlpatterns += path(f'{pamecol_prefix}/', page_media_collection.PageMediaCollectionList.as_view(),
-                    name='editorial-board-site-webpath-page-media-collections'),
-urlpatterns += path(f'{pamecol_prefix}/<int:pk>/', page_media_collection.PageMediaCollectionView.as_view(),
-                    name='editorial-board-site-webpath-page-media-collection'),
-urlpatterns += path(f'{pamecol_prefix}/<int:pk>/logs/', page_media_collection.PageMediaCollectionLogsView.as_view(),
-                    name='editorial-board-site-webpath-page-media-collection-logs'),
-urlpatterns += path(f'{pamecol_prefix}/form/', page_media_collection.PageMediaCollectionFormView.as_view(),
-                    name='editorial-board-site-webpath-page-media-collection-form'),
+urlpatterns += path(f'{pamecol_prefix}/', page_media_collection.PageMediaCollectionList.as_view(), name='editorial-board-site-webpath-page-media-collections'),
+urlpatterns += path(f'{pamecol_prefix}/<int:pk>/', page_media_collection.PageMediaCollectionView.as_view(), name='editorial-board-site-webpath-page-media-collection'),
+urlpatterns += path(f'{pamecol_prefix}/<int:pk>/logs/', page_media_collection.PageMediaCollectionLogsView.as_view(), name='editorial-board-site-webpath-page-media-collection-logs'),
+urlpatterns += path(f'{pamecol_prefix}/form/', page_media_collection.PageMediaCollectionFormView.as_view(), name='editorial-board-site-webpath-page-media-collection-form'),
 
 # page menus
 pamen_prefix = f'{pa_prefix}/<int:page_id>/menus'
@@ -213,33 +198,24 @@ urlpatterns += path(f'{pamen_prefix}/form/', page_menu.PageMenuFormView.as_view(
 # page publications
 pap_prefix = f'{pa_prefix}/<int:page_id>/publications'
 urlpatterns += path(f'{pap_prefix}/', page_publication.PagePublicationList.as_view(), name='editorial-board-site-webpath-page-publications'),
-urlpatterns += path(f'{pap_prefix}/<int:pk>/', page_publication.PagePublicationView.as_view(),
-                    name='editorial-board-site-webpath-page-publication'),
-urlpatterns += path(f'{pap_prefix}/<int:pk>/logs/', page_publication.PagePublicationLogsView.as_view(),
-                    name='editorial-board-site-webpath-page-publication-logs'),
-urlpatterns += path(f'{pap_prefix}/form/', page_publication.PagePublicationFormView.as_view(),
-                    name='editorial-board-site-webpath-page-publication-form'),
+urlpatterns += path(f'{pap_prefix}/<int:pk>/', page_publication.PagePublicationView.as_view(), name='editorial-board-site-webpath-page-publication'),
+urlpatterns += path(f'{pap_prefix}/<int:pk>/logs/', page_publication.PagePublicationLogsView.as_view(), name='editorial-board-site-webpath-page-publication-logs'),
+urlpatterns += path(f'{pap_prefix}/form/', page_publication.PagePublicationFormView.as_view(), name='editorial-board-site-webpath-page-publication-form'),
 
 # page related
 par_prefix = f'{pa_prefix}/<int:page_id>/related'
 urlpatterns += path(f'{par_prefix}/', page_related.PageRelatedList.as_view(), name='editorial-board-site-webpath-page-related-list'),
 urlpatterns += path(f'{par_prefix}/<int:pk>/', page_related.PageRelatedView.as_view(), name='editorial-board-site-webpath-page-related'),
-urlpatterns += path(f'{par_prefix}/<int:pk>/logs/', page_related.PageRelatedLogsView.as_view(),
-                    name='editorial-board-site-webpath-page-related-logs'),
+urlpatterns += path(f'{par_prefix}/<int:pk>/logs/', page_related.PageRelatedLogsView.as_view(), name='editorial-board-site-webpath-page-related-logs'),
 urlpatterns += path(f'{par_prefix}/form/', page_related.PageRelatedFormView.as_view(), name='editorial-board-site-webpath-page-related-form'),
 
 # publication-contexts
 pc_prefix = f'{w_prefix}/<int:webpath_id>/publication-contexts'
-urlpatterns += path(f'{pc_prefix}/', webpath_pub_context.PublicationContextList.as_view(),
-                    name='editorial-board-site-webpath-publication-contexts'),
-urlpatterns += path(f'{pc_prefix}/<int:pk>/', webpath_pub_context.PublicationContextView.as_view(),
-                    name='editorial-board-site-webpath-publication-context'),
-urlpatterns += path(f'{pc_prefix}/<int:pk>/logs/', webpath_pub_context.PublicationContextLogsView.as_view(),
-                    name='editorial-board-site-webpath-publication-context-logs'),
-urlpatterns += path(f'{pc_prefix}/form/', webpath_pub_context.PublicationContextFormView.as_view(),
-                    name='editorial-board-site-webpath-publication-context-form'),
-urlpatterns += path(f'{w_prefix}/publication-contexts/form/', webpath_pub_context.PublicationContextGenericFormView.as_view(),
-                    name='editorial-board-site-webpath-publication-context-form-generic'),
+urlpatterns += path(f'{pc_prefix}/', webpath_pub_context.PublicationContextList.as_view(), name='editorial-board-site-webpath-publication-contexts'),
+urlpatterns += path(f'{pc_prefix}/<int:pk>/', webpath_pub_context.PublicationContextView.as_view(), name='editorial-board-site-webpath-publication-context'),
+urlpatterns += path(f'{pc_prefix}/<int:pk>/logs/', webpath_pub_context.PublicationContextLogsView.as_view(), name='editorial-board-site-webpath-publication-context-logs'),
+urlpatterns += path(f'{pc_prefix}/form/', webpath_pub_context.PublicationContextFormView.as_view(), name='editorial-board-site-webpath-publication-context-form'),
+urlpatterns += path(f'{w_prefix}/publication-contexts/form/', webpath_pub_context.PublicationContextGenericFormView.as_view(), name='editorial-board-site-webpath-publication-context-form-generic'),
 
 # publications
 pu_prefix = f'{eb_prefix}/publications'

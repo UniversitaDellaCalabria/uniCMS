@@ -15,11 +15,9 @@ class ObjectLogEntriesList(generics.ListAPIView):
     description = ""
     permission_classes = [IsAdminUser]
     filter_backends = [filters.SearchFilter,
-                       DjangoFilterBackend,
                        filters.OrderingFilter]
     search_fields = ['user__first_name','user__last_name',
                      'change_message']
-    filterset_fields = []
     pagination_class = UniCmsApiPagination
     serializer_class = LogEntrySerializer
 

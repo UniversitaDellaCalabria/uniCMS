@@ -8,6 +8,7 @@ from cms.medias.serializers import MediaCollectionItemSerializer
 
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
+from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
@@ -110,7 +111,14 @@ class MediaCollectionItemFormView(APIView):
         return Response(form_fields)
 
 
+class MediaCollectionItemLogsSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listMediaCollectionItemLogs'
+
+
 class MediaCollectionItemLogsView(ObjectLogEntriesList):
+
+    schema = MediaCollectionItemLogsSchema()
 
     def get_queryset(self, **kwargs):
         """

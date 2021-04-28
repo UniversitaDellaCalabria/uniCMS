@@ -124,7 +124,14 @@ class MediaOptionView(generics.RetrieveAPIView):
         return media
 
 
+class MediaLogsSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listMediaLogs'
+
+
 class MediaLogsView(ObjectLogEntriesList):
+
+    schema = MediaLogsSchema()
 
     def get_queryset(self, **kwargs):
         """

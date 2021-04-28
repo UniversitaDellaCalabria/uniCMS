@@ -6,6 +6,7 @@ from cms.pages.models import *
 from cms.pages.serializers import *
 
 from rest_framework.response import Response
+from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
 from .. serializers import UniCMSFormSerializer
@@ -51,7 +52,14 @@ class PageLinkFormView(APIView):
         return Response(form_fields)
 
 
+class PageLinkLogsSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listPageLinkLogs'
+
+
 class PageLinkLogsView(PageRelatedObjectLogsView):
+
+    schema = PageLinkLogsSchema()
 
     def get_queryset(self):
         """
