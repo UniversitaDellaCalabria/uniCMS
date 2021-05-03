@@ -246,8 +246,8 @@ class PublicationRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
         item = self.get_queryset().first()
         if not item: raise Http404
         # serializer = self.get_serializer(instance=item,
-                                         # data=request.data,
-                                         # partial=True)
+        # data=request.data,
+        # partial=True)
         # if serializer.is_valid(raise_exception=True):
         publication = item.publication
         # check permissions on publication

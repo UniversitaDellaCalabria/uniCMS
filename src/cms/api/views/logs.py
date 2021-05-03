@@ -1,5 +1,4 @@
 from django.contrib.admin.models import LogEntry
-from django_filters.rest_framework import DjangoFilterBackend
 
 from cms.contexts.serializers import LogEntrySerializer
 

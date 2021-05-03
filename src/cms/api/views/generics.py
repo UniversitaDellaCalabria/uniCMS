@@ -1,4 +1,3 @@
-import json
 import logging
 
 from django.contrib.admin.models import ADDITION
@@ -29,7 +28,7 @@ class UniCMSListCreateAPIView(generics.ListCreateAPIView):
     filter_backends = [filters.SearchFilter,
                        DjangoFilterBackend,
                        filters.OrderingFilter]
-    filterset_fields = ['is_active', 'created', 'modified']
+    filterset_fields = ['is_active', 'created', 'modified', 'created_by']
     pagination_class = UniCmsApiPagination
 
     def post(self, request, *args, **kwargs):
