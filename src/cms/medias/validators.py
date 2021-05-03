@@ -71,4 +71,6 @@ def validate_image_size_ratio(value):
         if ratio < FILETYPE_IMAGE_YX_RATIO_MIN or \
            ratio > FILETYPE_IMAGE_YX_RATIO_MAX:
             rratio = f'{ratio:.2f}'
-            raise ValidationError(f'Image have invalid y / w ratio {rratio}')
+            raise ValidationError(f'Image have invalid y / w ratio {rratio}. \
+                                    Min {FILETYPE_IMAGE_YX_RATIO_MIN} - \
+                                    Max {FILETYPE_IMAGE_YX_RATIO_MAX}')
