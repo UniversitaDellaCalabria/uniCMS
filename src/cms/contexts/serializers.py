@@ -91,17 +91,17 @@ class WebPathSerializer(UniCMSCreateUpdateSerializer, UniCMSContentTypeClass):
         """
         return slugify(value)
 
-    def create(self, validated_data):
-        try:
-            return WebPath.objects.create(**validated_data)
-        except Exception as e:
-            raise e
+    # def create(self, validated_data):
+        # try:
+            # return WebPath.objects.create(**validated_data)
+        # except Exception as e:
+            # raise e
 
-    def update(self, instance, validated_data):
-        try:
-            return super().update(instance, validated_data)
-        except Exception as e:
-            raise e
+    # def update(self, instance, validated_data):
+        # try:
+            # return super().update(instance, validated_data)
+        # except Exception as e:
+            # raise e
 
 
 class WebPathSelectOptionsSerializer(serializers.ModelSerializer):
