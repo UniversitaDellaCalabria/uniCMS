@@ -1,9 +1,10 @@
 import logging
 
 from django import template
+from django.conf import settings
 from django.utils.safestring import SafeString
 
-from cms.contexts.utils import handle_faulty_templates
+from cms.contexts.utils import handle_faulty_templates, append_slash
 from cms.menus.models import NavigationBar
 
 
@@ -53,3 +54,40 @@ def load_menu(context, template, section=None, menu_id=None):
                                          parent__isnull=True)
         data = {'items': items}
         return handle_faulty_templates(template, data, name=_func_name)
+
+
+@register.simple_tag(takes_context=True)
+def load_item_childs(context, item):
+    _func_name = 'load_item_childs'
+    _log_msg = f'Template Tag {_func_name}'
+
+    request = context['request']
+    language = getattr(request, 'LANGUAGE_CODE', '')
+
+    return item.get_childs(lang=language)
+
+
+@register.simple_tag(takes_context=True)
+def load_item_inherited_content(context, item):
+    _func_name = 'load_item_inherited_content'
+    _log_msg = f'Template Tag {_func_name}'
+
+    request = context['request']
+    language = getattr(request, 'LANGUAGE_CODE', '')
+
+    item.inherited_content.translate_as(lang=language)
+    return item.inherited_content
+
+
+@register.simple_tag(takes_context=True)
+def load_current_item_from_menu(context):
+    _func_name = 'load_current_item_from_menu'
+    _log_msg = f'Template Tag {_func_name}'
+
+    request = context['request']
+    language = getattr(request, 'LANGUAGE_CODE', '')
+
+    for item in context['items']:
+        if item.webpath:
+            if append_slash(request.path) == f'/{settings.CMS_PATH_PREFIX}{item.webpath.path}':
+                return item.get_childs(lang=language)

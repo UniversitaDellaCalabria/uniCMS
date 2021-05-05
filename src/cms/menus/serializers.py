@@ -24,7 +24,7 @@ class MenuForeignKey(serializers.PrimaryKeyRelatedField):
         return None # pragma: no cover
 
 
-class MenuItemForeignKey(serializers.PrimaryKeyRelatedField):
+class MenuItemsForeignKey(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
         request = self.context.get('request', None)
         if request:
@@ -36,7 +36,7 @@ class MenuItemForeignKey(serializers.PrimaryKeyRelatedField):
 class MenuItemSerializer(UniCMSCreateUpdateSerializer,
                          UniCMSContentTypeClass):
     menu = MenuForeignKey()
-    parent = MenuItemForeignKey(required=False, allow_null=True)
+    parent = MenuItemsForeignKey(required=False, allow_null=True)
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -46,5 +46,26 @@ class MenuItemSerializer(UniCMSCreateUpdateSerializer,
 
     class Meta:
         model = NavigationBarItem
+        fields = '__all__'
+        read_only_fields = ('created_by', 'modified_by')
+
+
+class MenuItemForeignKey(serializers.PrimaryKeyRelatedField):
+    def get_queryset(self):
+        request = self.context.get('request', None)
+        if request:
+            menu_id = self.context['request'].parser_context['kwargs']['menu_id']
+            menu_item_id = self.context['request'].parser_context['kwargs']['menu_item_id']
+            return NavigationBarItem.objects.filter(menu__pk=menu_id,
+                                                    pk=menu_item_id)
+        return None # pragma: no cover
+
+
+class MenuItemLocalizationSerializer(UniCMSCreateUpdateSerializer,
+                                     UniCMSContentTypeClass):
+    item = MenuItemForeignKey()
+
+    class Meta:
+        model = NavigationBarItemLocalization
         fields = '__all__'
         read_only_fields = ('created_by', 'modified_by')

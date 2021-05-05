@@ -86,8 +86,7 @@ class CarouselPlaceHolder(AbstractPlaceholder):
     collection_name = 'carousels'
     ph_name = 'cms.templates.blocks.CarouselPlaceholderBlock'
 
-    def __init__(self,
-                 context:dict, content:dict):
+    def __init__(self, context:dict, content:dict):
         super().__init__(context, content)
         self.carousels = self.page.get_carousels()
 
@@ -125,8 +124,7 @@ class MediaPlaceHolder(AbstractPlaceholder):
     collection_name = 'medias'
     ph_name = 'cms.templates.blocks.MediaPlaceholderBlock'
 
-    def __init__(self,
-                 context:dict, content:dict):
+    def __init__(self, context:dict, content:dict):
         super().__init__(context, content)
         self.medias = self.page.get_medias()
 
@@ -139,8 +137,7 @@ class MediaCollectionPlaceHolder(AbstractPlaceholder):
     collection_name = 'media_collections'
     ph_name = 'cms.templates.blocks.MediaCollectionPlaceholderBlock'
 
-    def __init__(self,
-                 context:dict, content:dict):
+    def __init__(self, context:dict, content:dict):
         super().__init__(context, content)
         self.media_collections = self.page.get_media_collections()
 
@@ -153,14 +150,14 @@ class MenuPlaceHolder(AbstractPlaceholder):
     collection_name = 'menus'
     ph_name = 'cms.templates.blocks.MenuPlaceholderBlock'
 
-    def __init__(self,
-                 context:dict, content:dict):
+    def __init__(self, context:dict, content:dict):
         super().__init__(context, content)
         self.menus = self.page.get_menus()
 
     def build_data_dict(self):
         data = {'items': self.entry.menu.get_items(lang=self.language,
-                                                   parent__isnull=True)}
+                                                   parent__isnull=True),
+                'request': self.request}
         return {**self.content,**data}
 
 

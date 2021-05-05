@@ -14,7 +14,8 @@ from . views import (carousel, carousel_item, carousel_item_link,
                      page_menu, page_publication,
                      page_heading, page_heading_localization,
                      page_related, page_localization, page_template,
-                     template_block, menu, menu_item, locks, users)
+                     template_block, menu, menu_item,
+                     menu_item_localization, locks, users)
 
 
 urlpatterns = []
@@ -334,6 +335,16 @@ urlpatterns += path(f'{mei_prefix}/', menu_item.MenuItemList.as_view(), name='ed
 urlpatterns += path(f'{mei_prefix}/<int:pk>/', menu_item.MenuItemView.as_view(), name='editorial-board-menu-item'),
 urlpatterns += path(f'{mei_prefix}/<int:pk>/logs/', menu_item.MenuItemLogsView.as_view(), name='editorial-board-menu-item-logs'),
 urlpatterns += path(f'{mei_prefix}/form/', menu_item.MenuItemFormView.as_view(), name='editorial-board-menu-item-form'),
+
+# menu item localizations
+meil_prefix = f'{mei_prefix}/<int:menu_item_id>/localizations'
+urlpatterns += path(f'{meil_prefix}/', menu_item_localization.MenuItemLocalizationList.as_view(), name='menu-item-localizations'),
+urlpatterns += path(f'{meil_prefix}/<int:pk>/', menu_item_localization.MenuItemLocalizationView.as_view(),
+                    name='menu-item-localization'),
+urlpatterns += path(f'{meil_prefix}/<int:pk>/logs/', menu_item_localization.MenuItemLocalizationLogsView.as_view(),
+                    name='menu-item-localization-logs'),
+urlpatterns += path(f'{meil_prefix}/form/', menu_item_localization.MenuItemLocalizationFormView.as_view(),
+                    name='menu-item-localization-form'),
 
 # locks
 urlpatterns += path(f'{eb_prefix}/locks/<int:content_type_id>/<int:object_id>/', locks.ObjectUserLocksList.as_view(), name='editorial-board-locks'),

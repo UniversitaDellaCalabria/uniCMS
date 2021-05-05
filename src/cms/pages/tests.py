@@ -11,7 +11,7 @@ from cms.carousels.tests import CarouselUnitTest
 from cms.contexts.tests import ContextUnitTest
 from cms.medias.tests import MediaUnitTest
 from cms.menus.tests import MenuUnitTest
-from cms.menus.templatetags.unicms_menus import load_menu
+from cms.menus.templatetags.unicms_menus import *
 from cms.pages.templatetags.unicms_pages import (load_link,
                                                  load_page_publications,
                                                  load_page_title)
@@ -547,3 +547,29 @@ class PageUnitTest(TestCase):
                                               is_active=1)
         lm = block.render()
         assert lm
+
+
+    # templatetag
+    @classmethod
+    def test_load_item_childs(cls):
+        req = RequestFactory().get('/')
+        page = cls.create_page()
+        template_context = dict(request=req,
+                                page=page, webpath=page.webpath)
+
+        parent = MenuUnitTest.create_menu_item()
+
+        data = dict(item=parent,
+                    context=template_context)
+
+        childs = load_item_childs(**data)
+        assert not childs
+
+        child = MenuUnitTest.create_menu_item(menu_id=parent.menu.pk,
+                                              parent_id=parent.pk)
+
+        data = dict(item=parent,
+                    context=template_context)
+
+        childs = load_item_childs(**data)
+        assert childs

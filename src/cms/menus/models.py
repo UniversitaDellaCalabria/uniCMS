@@ -162,9 +162,9 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
                                               order_by('order')
             if only_active:
                 items = items.filter(is_active=True)
-            if getattr(self, 'language', lang):
-                for item in items:
-                    item.localized(lang)
+            # if getattr(self, 'language', lang):
+            for item in items:
+                item.localized(lang)
             return items
         return None
 
@@ -205,7 +205,8 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
                                     getattr(self.parent, 'name', ''))
 
 
-class NavigationBarItemLocalization(CreatedModifiedBy):
+class NavigationBarItemLocalization(ActivableModel, TimeStampedModel,
+                                    CreatedModifiedBy):
     item = models.ForeignKey(NavigationBarItem,
                              on_delete=models.CASCADE)
     language = models.CharField(choices=settings.LANGUAGES,
