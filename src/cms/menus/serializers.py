@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from cms.api.serializers import UniCMSContentTypeClass, UniCMSCreateUpdateSerializer
 from cms.contexts.serializers import WebPathSerializer
+from cms.publications.serializers import PublicationSerializer
 
 from . models import *
 
@@ -42,6 +43,8 @@ class MenuItemSerializer(UniCMSCreateUpdateSerializer,
         data = super().to_representation(instance)
         webpath = WebPathSerializer(instance.webpath)
         data['webpath'] = webpath.data
+        inherited_content = PublicationSerializer(instance.inherited_content)
+        data['inherited_content'] = inherited_content.data
         return data
 
     class Meta:
