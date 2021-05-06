@@ -75,9 +75,22 @@ def load_item_inherited_content(context, item):
     request = context['request']
     language = getattr(request, 'LANGUAGE_CODE', '')
 
-    if item.inherited_content:
+    if item.inherited_content and item.inherited_content.is_active:
         item.inherited_content.translate_as(lang=language)
         return item.inherited_content
+
+
+@register.simple_tag(takes_context=True)
+def load_item_publication(context, item):
+    _func_name = 'load_item_publication'
+    _log_msg = f'Template Tag {_func_name}'
+
+    request = context['request']
+    language = getattr(request, 'LANGUAGE_CODE', '')
+
+    if item.publication and item.publication.is_active:
+        item.publication.translate_as(lang=language)
+        return item.publication
 
 
 def _loop_item_childs(item, path, language):

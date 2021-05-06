@@ -113,11 +113,12 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
         if self.url:
             return self.url
         elif self.webpath:
-            if self.publication:
-                ctx_webpath = self.publication.get_publication_context(webpath=self.webpath)
-                return ctx_webpath.url if ctx_webpath else ''
-            else:
-                return self.webpath.get_full_path()
+            # does it have sense?
+            # if self.publication:
+                # ctx_webpath = self.publication.get_publication_context(webpath=self.webpath)
+                # return ctx_webpath.url if ctx_webpath else ''
+            # else:
+            return self.webpath.get_full_path()
         else: # pragma: no cover
             return ''
 
