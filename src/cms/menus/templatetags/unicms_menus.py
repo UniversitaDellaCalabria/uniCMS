@@ -91,10 +91,12 @@ def load_current_item_from_menu(context):
     path = append_slash(request.path)
 
     for item in context['items']:
-        if item.webpath:
-            if path == f'/{settings.CMS_PATH_PREFIX}{item.webpath.path}':
+        webpath = item.webpath
+        if webpath and not webpath.is_alias:
+            if path == webpath.get_full_path():
                 return item.get_childs(lang=language)
         for child in item.get_childs():
-            if child.webpath:
-                if path == f'/{settings.CMS_PATH_PREFIX}{child.webpath.path}':
+            webpath = child.webpath
+            if webpath and not webpath.is_alias:
+                if path == webpath.get_full_path():
                     return child.get_childs(lang=language)
