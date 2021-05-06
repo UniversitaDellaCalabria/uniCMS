@@ -24,6 +24,9 @@ class MenuItemForm(ModelForm):
         setattr(self.fields['webpath'],
                 FORM_SOURCE_LABEL,
                 reverse('unicms_api:webpath-all-options'))
+        setattr(self.fields['publication'],
+                FORM_SOURCE_LABEL,
+                reverse('unicms_api:editorial-board-publications-options'))
         setattr(self.fields['inherited_content'],
                 FORM_SOURCE_LABEL,
                 reverse('unicms_api:editorial-board-publications-options'))
@@ -31,7 +34,7 @@ class MenuItemForm(ModelForm):
     class Meta:
         model = NavigationBarItem
         fields = ['menu', 'name', 'webpath', 'parent', 'url',
-                  # 'publication',
+                  'publication',
                   'inherited_content',
                   'order', 'is_active']
 

@@ -80,6 +80,18 @@ def load_item_inherited_content(context, item):
         return item.inherited_content
 
 
+def _loop_item_childs(item, path, language):
+    webpath = item.webpath
+    if webpath and not webpath.is_alias:
+        if path == webpath.get_full_path():
+            return {'item': item,
+                    'childs': item.get_childs(lang=language)}
+    for child in item.get_childs():
+        result = _loop_item_childs(child, path, language)
+        if result: return result
+    return {}
+
+
 @register.simple_tag(takes_context=True)
 def load_current_item_from_menu(context):
     _func_name = 'load_current_item_from_menu'
@@ -91,12 +103,5 @@ def load_current_item_from_menu(context):
     path = append_slash(request.path)
 
     for item in context['items']:
-        webpath = item.webpath
-        if webpath and not webpath.is_alias:
-            if path == webpath.get_full_path():
-                return item.get_childs(lang=language)
-        for child in item.get_childs():
-            webpath = child.webpath
-            if webpath and not webpath.is_alias:
-                if path == webpath.get_full_path():
-                    return child.get_childs(lang=language)
+        result = _loop_item_childs(item, path, language)
+        if result: return result

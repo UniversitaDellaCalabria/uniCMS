@@ -45,6 +45,8 @@ class MenuItemSerializer(UniCMSCreateUpdateSerializer,
         data['webpath'] = webpath.data
         inherited_content = PublicationSerializer(instance.inherited_content)
         data['inherited_content'] = inherited_content.data
+        publication = PublicationSerializer(instance.publication)
+        data['publication'] = publication.data
         return data
 
     class Meta:
