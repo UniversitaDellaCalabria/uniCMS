@@ -75,8 +75,9 @@ def load_item_inherited_content(context, item):
     request = context['request']
     language = getattr(request, 'LANGUAGE_CODE', '')
 
-    item.inherited_content.translate_as(lang=language)
-    return item.inherited_content
+    if item.inherited_content:
+        item.inherited_content.translate_as(lang=language)
+        return item.inherited_content
 
 
 @register.simple_tag(takes_context=True)
@@ -87,7 +88,13 @@ def load_current_item_from_menu(context):
     request = context['request']
     language = getattr(request, 'LANGUAGE_CODE', '')
 
+    path = append_slash(request.path)
+
     for item in context['items']:
         if item.webpath:
-            if append_slash(request.path) == f'/{settings.CMS_PATH_PREFIX}{item.webpath.path}':
+            if path == f'/{settings.CMS_PATH_PREFIX}{item.webpath.path}':
                 return item.get_childs(lang=language)
+        for child in item.get_childs():
+            if child.webpath:
+                if path == f'/{settings.CMS_PATH_PREFIX}{child.webpath.path}':
+                    return child.get_childs(lang=language)
