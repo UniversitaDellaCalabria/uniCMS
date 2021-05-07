@@ -70,7 +70,7 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
                                            'the parent one, on save'))
     alias = models.ForeignKey('WebPath',
                               null=True, blank=True,
-                              on_delete=models.CASCADE,
+                              on_delete=models.SET_NULL,
                               related_name="alias_path",
                               help_text=_('Alias that would be '
                                           'redirected to ...'))

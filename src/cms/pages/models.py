@@ -85,7 +85,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
                                 on_delete=models.CASCADE,
                                 limit_choices_to={'is_active': True},)
     base_template = models.ForeignKey(PageTemplate,
-                                      on_delete=models.CASCADE,
+                                      on_delete=models.PROTECT,
                                       limit_choices_to={'is_active': True},)
     description = models.TextField(null=True, blank=True,
                                    help_text=_("Description "
@@ -324,7 +324,7 @@ class PageCarousel(SectionAbstractModel, ActivableModel, SortableModel,
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     carousel = models.ForeignKey(Carousel, null=False, blank=False,
-                                 on_delete=models.CASCADE)
+                                 on_delete=models.PROTECT)
 
     class Meta:
         verbose_name_plural = _("Page Carousel")
@@ -356,7 +356,7 @@ class PageMedia(SectionAbstractModel, ActivableModel, SortableModel,
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     media = models.ForeignKey(Media, null=False, blank=False,
-                              on_delete=models.CASCADE)
+                              on_delete=models.PROTECT)
     url = models.URLField(help_text=_("url"),
                           null=True, blank=True)
 
@@ -373,7 +373,7 @@ class PageMenu(SectionAbstractModel, ActivableModel, SortableModel,
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     menu = models.ForeignKey(NavigationBar, null=False, blank=False,
-                             on_delete=models.CASCADE)
+                             on_delete=models.PROTECT)
 
     class Meta:
         verbose_name_plural = _("Page Navigation Bars")
@@ -389,7 +389,7 @@ class PageBlock(ActivableModel, SectionAbstractModel, SortableModel,
                              on_delete=models.CASCADE)
     block = models.ForeignKey(TemplateBlock, null=False, blank=False,
                               limit_choices_to={'is_active': True},
-                              on_delete=models.CASCADE)
+                              on_delete=models.PROTECT)
 
     class Meta:
         verbose_name_plural = _("Page Block")
@@ -407,7 +407,7 @@ class PageRelated(TimeStampedModel, SortableModel, ActivableModel,
                              related_name='parent_page',
                              on_delete=models.CASCADE)
     related_page = models.ForeignKey(Page, null=False, blank=False,
-                                     on_delete=models.CASCADE,
+                                     on_delete=models.PROTECT,
                                      related_name="related_page")
 
     class Meta:
@@ -438,7 +438,7 @@ class PagePublication(TimeStampedModel, SortableModel, ActivableModel,
                              on_delete=models.CASCADE)
     publication = models.ForeignKey('cmspublications.Publication',
                                     null=False, blank=False,
-                                    on_delete=models.CASCADE)
+                                    on_delete=models.PROTECT)
     # related_name="publication_content")
 
     class Meta:
@@ -452,7 +452,7 @@ class PageMediaCollection(SectionAbstractModel, ActivableModel, SortableModel,
                           TimeStampedModel, CreatedModifiedBy):
     page = models.ForeignKey(Page, on_delete=models.CASCADE)
     collection = models.ForeignKey(MediaCollection,
-                                   on_delete=models.CASCADE)
+                                   on_delete=models.PROTECT)
 
     class Meta:
         verbose_name_plural = _("Page Media Collection")

@@ -89,7 +89,7 @@ class Media(ActivableModel, TimeStampedModel, AbstractMedia,
 
 class MediaCollectionItem(ActivableModel, SortableModel,
                           TimeStampedModel, CreatedModifiedBy):
-    media = models.ForeignKey(Media, on_delete=models.CASCADE,
+    media = models.ForeignKey(Media, on_delete=models.PROTECT,
                               limit_choices_to={'is_active': True},)
     collection = models.ForeignKey(MediaCollection,
                                    on_delete=models.CASCADE,
@@ -100,4 +100,4 @@ class MediaCollectionItem(ActivableModel, SortableModel,
         verbose_name_plural = _("Media Collection Items")
 
     def __str__(self): # pragma: no cover
-        return '{} {}'.format(self.collection, self.media)
+        return '[{}] {}'.format(self.collection, self.media)
