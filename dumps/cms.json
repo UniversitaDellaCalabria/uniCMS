@@ -5053,6 +5053,8 @@
   "model": "cmspages.pageblock",
   "pk": 69,
   "fields": {
+    "created": "2020-12-29T11:21:44.555Z",
+    "modified": "2020-12-29T11:59:49.677Z",
     "order": 3,
     "is_active": false,
     "section": "banner",
@@ -5090,6 +5092,8 @@
   "model": "cmspages.pageblock",
   "pk": 74,
   "fields": {
+    "created": "2020-12-29T11:21:44.555Z",
+    "modified": "2020-12-29T11:59:49.677Z",
     "order": 5,
     "is_active": true,
     "section": "2-mid-top-a",
@@ -5114,6 +5118,8 @@
   "model": "cmspages.pageblock",
   "pk": 77,
   "fields": {
+    "created": "2020-12-29T11:21:44.555Z",
+    "modified": "2020-12-29T11:59:49.677Z",
     "order": 1,
     "is_active": true,
     "section": "2-center-content",
@@ -5190,6 +5196,8 @@
   "model": "cmspages.pageblock",
   "pk": 92,
   "fields": {
+    "created": "2020-12-29T11:21:44.555Z",
+    "modified": "2020-12-29T11:59:49.677Z",
     "order": 6,
     "is_active": true,
     "section": "1-center-top-a",
