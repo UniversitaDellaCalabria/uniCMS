@@ -24,8 +24,7 @@ class MediaUnitTest(TestCase):
     def create_media(cls, **kwargs):
         data = {'title': 'media1',
                 'file': f'{settings.MEDIA_ROOT}/images/categories/eventi.jpg',
-                'description': 'blah blah',
-                'is_active': 1}
+                'description': 'blah blah'}
         for k,v in kwargs.items():
             data[k] = v
         obj = Media.objects.create(**data)
@@ -66,8 +65,7 @@ class MediaUnitTest(TestCase):
     def test_create_faulty_media_ext(cls):
         data = {'title': 'media1',
                 'file': f'{settings.MEDIA_ROOT}/unit_tests/icon_small.arj',
-                'description': 'blah blah',
-                'is_active': 1}
+                'description': 'blah blah'}
 
         media = cls.create_media(**data)
         try:
@@ -81,8 +79,7 @@ class MediaUnitTest(TestCase):
         os.system(f'dd if=/dev/zero of={fpath} bs={FILE_MAX_SIZE+1024} count=1' )
         data = {'title': 'media1',
                 'file': fpath,
-                'description': 'blah blah',
-                'is_active': 1}
+                'description': 'blah blah'}
 
         media = cls.create_media(**data)
         try:
@@ -96,15 +93,14 @@ class MediaUnitTest(TestCase):
     def test_create_faulty_media_size_ratio(cls):
         data = {'title': 'media1',
                 'file': f'{settings.MEDIA_ROOT}/unit_tests/faulty_size.jpg',
-                'description': 'blah blah',
-                'is_active': 1}
+                'description': 'blah blah'}
 
         media = cls.create_media(**data)
         try:
             validate_image_size_ratio(media.file)
         except Exception as e:
             assert isinstance(e, ValidationError)
-    
+
     def tearDown(self):
         match = f'{settings.MEDIA_ROOT}/medias/{timezone.now().year}/eventi_*.*'
         for i in glob(match):

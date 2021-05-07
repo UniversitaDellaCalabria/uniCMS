@@ -32,6 +32,7 @@ class MediaList(UniCMSListCreateAPIView):
     description = ""
     search_fields = ['title', 'file', 'description']
     permission_classes = [MediaGetCreatePermissions]
+    filterset_fields = ['created', 'modified', 'created_by']
     serializer_class = MediaSerializer
     queryset = Media.objects.all()
 

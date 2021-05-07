@@ -10,7 +10,7 @@ class MediaForm(ModelForm):
 
     class Meta:
         model = Media
-        fields = ['title', 'file', 'description', 'is_active']
+        fields = ['title', 'file', 'description']
 
 
 class MediaCollectionForm(ModelForm):

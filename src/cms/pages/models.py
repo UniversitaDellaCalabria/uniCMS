@@ -219,8 +219,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         if getattr(self, '_medias', None): # pragma: no cover
             return self._medias
         self._medias = PageMedia.objects.filter(page=self,
-                                                is_active=True,
-                                                media__is_active=True).\
+                                                is_active=True).\
             order_by('order')
         return self._medias
 

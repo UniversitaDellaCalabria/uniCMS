@@ -48,8 +48,7 @@ class MediaAPIUnitTest(TestCase):
         path = f'{settings.MEDIA_ROOT}/images/categories/eventi.jpg'
 
         data = {'title': 'media1 api-test',
-                'description': 'blah blah',
-                'is_active': 1}
+                'description': 'blah blah'}
         url = reverse('unicms_api:medias')
 
         # accessible to staff users only
@@ -115,8 +114,7 @@ class MediaAPIUnitTest(TestCase):
         img_file.seek(0)
         data = {'title': 'media1 api-test',
                 'description': 'put',
-                'file': img_file,
-                'is_active': 0}
+                'file': img_file}
         content = encode_multipart('put_data', data)
         content_type = 'multipart/form-data; boundary=put_data'
         # user hasn't permission
@@ -128,7 +126,6 @@ class MediaAPIUnitTest(TestCase):
         res = req.put(url, content, content_type=content_type)
         media.refresh_from_db()
         assert media.title == 'media1 api-test'
-        assert not media.is_active
 
         # GET SelectField Options
         url = reverse('unicms_api:media-options')

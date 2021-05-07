@@ -66,7 +66,7 @@ class MediaCollection(ActivableModel, TimeStampedModel,
         return self.name
 
 
-class Media(ActivableModel, TimeStampedModel, AbstractMedia,
+class Media(TimeStampedModel, AbstractMedia,
             AbstractLockable, CreatedModifiedBy):
     title = models.CharField(max_length=60, blank=False, null=False,
                              help_text=_("Media file title"))
@@ -89,11 +89,9 @@ class Media(ActivableModel, TimeStampedModel, AbstractMedia,
 
 class MediaCollectionItem(ActivableModel, SortableModel,
                           TimeStampedModel, CreatedModifiedBy):
-    media = models.ForeignKey(Media, on_delete=models.PROTECT,
-                              limit_choices_to={'is_active': True},)
+    media = models.ForeignKey(Media, on_delete=models.PROTECT)
     collection = models.ForeignKey(MediaCollection,
-                                   on_delete=models.CASCADE,
-                                   limit_choices_to={'is_active': True},)
+                                   on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['order']
