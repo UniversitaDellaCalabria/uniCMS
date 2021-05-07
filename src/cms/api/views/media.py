@@ -79,11 +79,12 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         media = self.get_queryset().first()
+        response = super().delete(request, *args, **kwargs)
         try:
             os.remove(media.file.path)
         except Exception: # pragma: no cover
             logger.warning(f'File {media.file.path} not found')
-        return super().delete(request, *args, **kwargs)
+        return response
 
 
 class MediaFormView(APIView):
