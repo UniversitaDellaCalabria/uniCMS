@@ -6888,22 +6888,6 @@
   }
 },
 {
-  "model": "cmspublications.publicationattachment",
-  "pk": 1,
-  "fields": {
-    "created": "2020-11-25T09:51:03.248Z",
-    "modified": "2020-11-25T09:51:03.248Z",
-    "order": 10,
-    "is_active": true,
-    "file_size": 137610,
-    "file_type": "image/png",
-    "publication": 1,
-    "name": "allegato di prova",
-    "file": "publications_attachments/1/Schermata_da_2020-09-09_11-57-00.png",
-    "description": "Descrizione dell'allegato"
-  }
-},
-{
   "model": "cmspublications.publicationlocalization",
   "pk": 1,
   "fields": {
