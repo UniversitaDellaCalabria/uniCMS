@@ -1,21 +1,26 @@
+import json
 import logging
 
 from django.contrib.admin.models import ADDITION
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import ProtectedError
+from django.utils.translation import gettext_lazy as _
+
 from django_filters.rest_framework import DjangoFilterBackend
 
 from cms.contexts.utils import log_obj_event
 
-from rest_framework import generics
-from rest_framework import filters
+from rest_framework import filters, generics
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
 
 from .. concurrency import (is_lock_cache_available,
                             get_lock_from_cache,
                             set_lock_to_cache,
                             LOCK_MESSAGE)
+from .. exceptions import LoggedPermissionDenied
 from .. pagination import UniCmsApiPagination, UniCmsSelectOptionsApiPagination
 
 
@@ -84,7 +89,13 @@ class UniCMSCachedRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPI
     def delete(self, request, *args, **kwargs):
         item = self.get_queryset().first()
         check_locks(item, request.user)
-        return super().delete(request, *args, **kwargs)
+        try:
+            return super().delete(request, *args, **kwargs)
+        except ProtectedError as e:
+            response = {'detail': f'{_("This item cannot be deleted. It is used by: ")} {e.protected_objects}'}
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=item,
+                                         detail=response)
 
     class Meta:
         abstract = True

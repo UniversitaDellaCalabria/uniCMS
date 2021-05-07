@@ -81,7 +81,7 @@ class AbstractPublication(TimeStampedModel, ActivableModel):
                                     max_length=33,
                                     default='html')
     presentation_image = models.ForeignKey(Media, null=True, blank=True,
-                                           on_delete=models.CASCADE)
+                                           on_delete=models.PROTECT)
     # state = models.CharField(choices=PAGE_STATES,
     # max_length=33,
     # default='draft')
@@ -320,7 +320,7 @@ class PublicationContext(TimeStampedModel, ActivableModel,
                          AbstractPublicable, SectionAbstractModel,
                          SortableModel, CreatedModifiedBy):
     publication = models.ForeignKey(Publication, null=False, blank=False,
-                                    on_delete=models.CASCADE)
+                                    on_delete=models.PROTECT)
     webpath = models.ForeignKey(WebPath, on_delete=models.CASCADE)
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
@@ -376,7 +376,7 @@ class PublicationRelated(TimeStampedModel, SortableModel, ActivableModel,
                                     related_name='parent_publication',
                                     on_delete=models.CASCADE)
     related = models.ForeignKey(Publication, null=False, blank=False,
-                                on_delete=models.CASCADE,
+                                on_delete=models.PROTECT,
                                 related_name="related_publication")
 
     class Meta:
@@ -405,7 +405,7 @@ class PublicationBlock(SectionAbstractModel,TimeStampedModel,
     publication = models.ForeignKey(Publication, null=False, blank=False,
                                     on_delete=models.CASCADE)
     block = models.ForeignKey(TemplateBlock, null=False, blank=False,
-                              on_delete=models.CASCADE)
+                              on_delete=models.PROTECT)
 
     class Meta:
         verbose_name_plural = _("Publication Page Block")
@@ -422,7 +422,7 @@ class PublicationGallery(TimeStampedModel, ActivableModel, SortableModel,
     publication = models.ForeignKey(Publication,
                                     on_delete=models.CASCADE)
     collection = models.ForeignKey(MediaCollection,
-                                   on_delete=models.CASCADE)
+                                   on_delete=models.PROTECT)
 
     class Meta:
         verbose_name_plural = _("Publication Image Gallery")

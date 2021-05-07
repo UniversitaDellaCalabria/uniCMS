@@ -79,7 +79,7 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
     name = models.CharField(max_length=60, blank=False, null=False)
     webpath = models.ForeignKey(WebPath,
                                 null=True, blank=True,
-                                on_delete=models.CASCADE,
+                                on_delete=models.SET_NULL,
                                 related_name="linked_page")
     parent = models.ForeignKey('NavigationBarItem',
                                null=True, blank=True,
@@ -90,11 +90,11 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
     publication = models.ForeignKey('cmspublications.Publication',
                                     null=True, blank=True,
                                     related_name='pub',
-                                    on_delete=models.CASCADE)
+                                    on_delete=models.SET_NULL)
     inherited_content = models.ForeignKey('cmspublications.Publication',
                                           null=True, blank=True,
                                           related_name='inherited_content',
-                                          on_delete=models.CASCADE,
+                                          on_delete=models.SET_NULL,
                                           help_text=_("Takes additional "
                                                       "contents from a "
                                                       "publication"))

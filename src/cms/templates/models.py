@@ -25,11 +25,11 @@ CMS_LINKS_LABELS = getattr(settings, 'CMS_LINKS_LABELS',
 class CreatedModifiedBy(models.Model):
     created_by = models.ForeignKey(get_user_model(),
                                    null=True, blank=True,
-                                   on_delete=models.CASCADE,
+                                   on_delete=models.SET_NULL,
                                    related_name='%(class)s_created_by')
     modified_by = models.ForeignKey(get_user_model(),
                                     null=True, blank=True,
-                                    on_delete=models.CASCADE,
+                                    on_delete=models.SET_NULL,
                                     related_name='%(class)s_modified_by')
 
     class Meta:
@@ -147,7 +147,7 @@ class PageTemplateBlock(TimeStampedModel,
                                  on_delete=models.CASCADE,
                                  limit_choices_to={'is_active': True},)
     block = models.ForeignKey(TemplateBlock, null=False, blank=False,
-                              on_delete=models.CASCADE)
+                              on_delete=models.PROTECT)
     section = models.CharField(max_length=33, blank=True, null=True,
                                help_text=_("Specify the container "
                                            "section in the template where "

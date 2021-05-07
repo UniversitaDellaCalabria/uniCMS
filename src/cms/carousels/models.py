@@ -25,7 +25,8 @@ class Carousel(ActivableModel, TimeStampedModel, CreatedModifiedBy,
     def get_items(self, lang=settings.LANGUAGE):
         items = []
         for i in self.carouselitem_set.filter(carousel=self,
-                                              is_active=True,).order_by('order'):
+                                              is_active=True)\
+                                      .order_by('order'):
             items.append(i.localized(lang=lang))
         return items
 
@@ -37,7 +38,7 @@ class CarouselItem(ActivableModel, TimeStampedModel,
                    SortableModel, CreatedModifiedBy):
     carousel = models.ForeignKey(Carousel,
                                  on_delete=models.CASCADE)
-    image = models.ForeignKey(Media, on_delete=models.CASCADE)
+    image = models.ForeignKey(Media, on_delete=models.PROTECT)
     pre_heading = models.CharField(max_length=120, blank=True, null=True,
                                    help_text=_("Pre Heading"))
     heading = models.CharField(max_length=120, blank=True, null=True,
@@ -62,7 +63,7 @@ class CarouselItem(ActivableModel, TimeStampedModel,
         return self
 
     def __str__(self):
-        return '{} {}'.format(self.carousel, self.heading)
+        return '[{}] {}'.format(self.carousel, self.heading)
 
 
 class CarouselItemLocalization(ActivableModel,
