@@ -17,7 +17,7 @@ class SearchTranslationEntry(BaseModel):
 
 class SearchEntry(BaseModel):
     title : str
-    heading : str
+    heading : Optional[str]
     content_type : str
     content_id : str
     image : Optional[str]

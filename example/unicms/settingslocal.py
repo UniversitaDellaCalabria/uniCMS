@@ -18,7 +18,7 @@ AUTH_USER_MODEL = 'accounts.User'
 
 # Application definition
 
-SESSION_COOKIE_DOMAIN=".unicms_example.it"
+SESSION_COOKIE_DOMAIN=".unical.it"
 
 INSTALLED_APPS = [
     'accounts',

@@ -54,7 +54,7 @@ class Command(BaseCommand):
             for obj in model.objects.filter(is_active=True):
                 if obj.is_publicable:
                     entry = _func(obj)
-                    data.append(entry)
+                    if entry: data.append(entry)
             collection.insert_many(data, ordered=False)
             count = collection.find(query).count()
             print(f'-- Inserted {len(data)} elements. --')
