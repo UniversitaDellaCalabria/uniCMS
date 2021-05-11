@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
@@ -290,6 +291,10 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         # if no permissions
         return False
 
+    @property
+    def is_publicable(self) -> bool:
+        return self.is_active
+
     def is_publicable_by(self, user=None):
         if not user: return False
 
@@ -365,6 +370,11 @@ class PublicationContext(TimeStampedModel, ActivableModel,
         result = self.publication.serialize()
         result['path'] = self.url
         return result
+
+    @property
+    def is_publicated(self) -> bool:
+        now = timezone.localtime()
+        return self.date_start <= now and self.date_end >= now
 
     def __str__(self):
         return '{} {}'.format(self.publication, self.webpath)

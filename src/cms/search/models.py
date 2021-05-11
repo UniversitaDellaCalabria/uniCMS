@@ -64,12 +64,16 @@ def page_to_entry(page_object):
 
 def publication_to_entry(pub_object, contexts=None):
     app_label, model = pub_object._meta.label_lower.split('.')
-    # contexts = pub_object.publicationcontext_set.filter(is_active=True).\
-    # order_by('date_start')
+    contexts = pub_object.get_publication_contexts().order_by('date_start')
     if not contexts:
         # it doesn't have any real publication
         return
-    first_context = contexts.first()
+    first_context = None
+    for context in contexts:
+        if context.is_publicated:
+            first_context = context
+            break
+    if not first_context: return
     urls = set([f'//{i.webpath.site.domain}{i.url}' for i in contexts])
     sites = set([f'{i.webpath.site.domain}' for i in contexts])
     data = {
