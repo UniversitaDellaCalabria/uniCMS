@@ -8,6 +8,6 @@ urlpatterns = []
 CMS_PATH_PREFIX = getattr(settings, 'CMS_PATH_PREFIX', '')
 
 # Public API Resources
-urlpatterns += path('api/search',
+urlpatterns += path('api/search/',
                     api_views.ApiSearchEngine.as_view(),
                     name='api-search-engine'),

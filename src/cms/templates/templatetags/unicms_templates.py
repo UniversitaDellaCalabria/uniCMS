@@ -36,3 +36,10 @@ def blocks_in_position(context, section):
         logger.warning(f'No blocks in {section} sub-sections')
         return False
     return True if page.get_blocks(section=section) else False
+
+
+@register.simple_tag
+def settings_value(name, **kwargs):
+    value = getattr(settings, name, None)
+    if value and kwargs: return value.format(**kwargs)
+    return value

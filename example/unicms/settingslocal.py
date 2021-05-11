@@ -18,6 +18,8 @@ AUTH_USER_MODEL = 'accounts.User'
 
 # Application definition
 
+SESSION_COOKIE_DOMAIN=".unicms_example.it"
+
 INSTALLED_APPS = [
     'accounts',
 
@@ -136,8 +138,6 @@ else:
     }
     DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
 
-
-
 CMS_CACHE_ENABLED = True
 
 CMS_CACHE_KEY_PREFIX = 'unicms_'
@@ -146,7 +146,10 @@ CMS_CACHE_TTL = 25
 # set to 0 means infinite
 CMS_CACHE_MAX_ENTRIES = 0
 # request.get_raw_uri() that matches the following would be ignored by cache ...
-CMS_CACHE_EXCLUDED_MATCHES =  ['/search?', '/portale/search?',]
+CMS_CACHE_EXCLUDED_MATCHES =  ['/search?']
+
+CMS_PATH_PREFIX = 'portale/'
+CMS_CACHE_EXCLUDED_MATCHES.append('/portale/search?')
 
 # Static files (CSS, JavaScript, Images)
 STATICFILES_FINDERS = [
@@ -233,7 +236,6 @@ LOGGING = {
 }
 
 CMS_TEMPLATES_FOLDER = 'templates/unicms'
-CMS_PATH_PREFIX = 'portale/'
 
 CMS_PUBLICATION_VIEW_PREFIX_PATH = 'contents/news/view/'
 CMS_PUBLICATION_LIST_PREFIX_PATH = 'contents/news/list'
