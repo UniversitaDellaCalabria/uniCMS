@@ -4,7 +4,9 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
-from rest_framework import generics
+from django_filters.rest_framework import DjangoFilterBackend
+
+from rest_framework import filters, generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.schemas.openapi import AutoSchema
 
@@ -20,6 +22,7 @@ from rest_framework.views import APIView
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied, LoggedValidationException
+from .. pagination import UniCmsApiPagination
 from .. serializers import UniCMSFormSerializer
 
 
@@ -258,3 +261,23 @@ class WebpathLogsView(ObjectLogEntriesList):
                                  site=site)
         content_type_id = ContentType.objects.get_for_model(item).pk
         return super().get_queryset(object_id, content_type_id)
+
+
+class EditorialBoardWebpathAllListSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listWebPathAll'
+
+
+class WebpathAllList(generics.ListAPIView):
+    """
+    """
+    description = ""
+    serializer_class = WebPathSerializer
+    queryset = WebPath.objects.all()
+    schema = EditorialBoardWebpathAllListSchema()
+    permission_classes = [IsAdminUser]
+    filter_backends = [filters.SearchFilter,
+                       DjangoFilterBackend,
+                       filters.OrderingFilter]
+    filterset_fields = ['is_active', 'created', 'modified', 'created_by']
+    pagination_class = UniCmsApiPagination

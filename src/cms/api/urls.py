@@ -117,6 +117,7 @@ urlpatterns += path(f'{w_prefix}/', webpath.WebpathList.as_view(), name='editori
 urlpatterns += path(f'{w_prefix}/<int:pk>/', webpath.WebpathView.as_view(), name='editorial-board-site-webpath'),
 urlpatterns += path(f'{w_prefix}/<int:pk>/logs/', webpath.WebpathLogsView.as_view(), name='editorial-board-site-webpath-logs'),
 urlpatterns += path(f'{w_prefix}/form/', webpath.WebpathFormView.as_view(), name='editorial-board-site-webpath-form'),
+urlpatterns += path(f'{eb_prefix}/sites/webpaths/', webpath.WebpathAllList.as_view(), name='webpath-all'),
 urlpatterns += path(f'{eb_prefix}/sites/webpaths/options/', webpath.WebpathAllOptionList.as_view(), name='webpath-all-options'),
 urlpatterns += path(f'{w_prefix}/options/', webpath.WebpathOptionList.as_view(), name='webpath-options'),
 urlpatterns += path(f'{w_prefix}/options/<int:pk>/', webpath.WebpathOptionView.as_view(), name='webpath-option'),
@@ -134,6 +135,7 @@ urlpatterns += path(f'{pa_prefix}/form/', page.PageFormView.as_view(), name='edi
 urlpatterns += path(f'{w_prefix}/pages/form/', page.PageGenericFormView.as_view(), name='editorial-board-site-webpath-page-form-generic'),
 urlpatterns += path(f'{pa_prefix}/<int:pk>/copy-as-draft/', page.PageCopyAsDraftView.as_view(),
                     name='editorial-board-site-webpath-page-copy-as-draft'),
+urlpatterns += path(f'{eb_prefix}/sites/webpaths/pages/', page.PageAllList.as_view(), name='all-pages'),
 
 # page blocks
 pab_prefix = f'{pa_prefix}/<int:page_id>/blocks'

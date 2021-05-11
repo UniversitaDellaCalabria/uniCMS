@@ -2,6 +2,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
+from django_filters.rest_framework import DjangoFilterBackend
+
+from rest_framework import filters, generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
@@ -17,6 +20,7 @@ from cms.pages.utils import copy_page_as_draft
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, check_locks
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
+from .. pagination import UniCmsApiPagination
 from .. serializers import UniCMSFormSerializer
 
 
@@ -422,3 +426,23 @@ class PageRelatedObjectLogsView(ObjectLogEntriesList):
 
     def get_queryset(self, object_id, content_type_id):
         return super().get_queryset(object_id, content_type_id)
+
+
+class EditorialBoardPageAllListSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listPageAll'
+
+
+class PageAllList(generics.ListAPIView):
+    """
+    """
+    description = ""
+    serializer_class = PageSerializer
+    queryset = Page.objects.all()
+    schema = EditorialBoardPageAllListSchema()
+    permission_classes = [IsAdminUser]
+    filter_backends = [filters.SearchFilter,
+                       DjangoFilterBackend,
+                       filters.OrderingFilter]
+    filterset_fields = ['is_active', 'created', 'modified', 'created_by']
+    pagination_class = UniCmsApiPagination
