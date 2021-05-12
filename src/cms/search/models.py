@@ -40,6 +40,7 @@ class SearchEntry(BaseModel):
 def page_to_entry(page_object):
     app_label, model = page_object._meta.label_lower.split('.')
     sites = [page_object.webpath.site.domain]
+
     data = {
         "title": page_object.name,
         "heading": page_object.description,
@@ -47,7 +48,7 @@ def page_to_entry(page_object):
         "content_id": page_object.pk,
         "content": "",
         "sites": sites,
-        "urls": [f'{sites[0]}{page_object.webpath.get_full_path()}',],
+        "urls": [f'//{sites[0]}{page_object.webpath.get_full_path()}',],
         "categories": [page_object.get_type_display()],
         "tags": [i for i in page_object.tags.values_list('name', flat=1)],
         "indexed": timezone.localtime(),
