@@ -126,11 +126,17 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
                                                       is_active=True)
 
     def image_url(self):
+        image_path = ''
         if self.presentation_image:
             image_path = self.presentation_image.file
         else: # pragma: no cover
-            image_path = self.category.first().image
-        return sanitize_path(f'{settings.MEDIA_URL}/{image_path}')
+            categories = self.category.all()
+            for category in categories:
+                if category.image:
+                    image_path = category.image
+                    break
+        return sanitize_path(f'{settings.MEDIA_URL}/{image_path}') \
+            if image_path else image_path
 
     @property
     def categories(self):
