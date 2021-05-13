@@ -125,11 +125,12 @@ def _get_others_same_level_items(item, path, language):
         if path == webpath.get_full_path():
             parent = item.parent
             if parent:
-                return parent.get_childs(lang=language, exclude=item)
+                return {'parent': parent,
+                        'items': parent.get_childs(lang=language, exclude=item)}
     for child in item.get_childs():
         result = _get_others_same_level_items(child, path, language)
         if result: return result
-    return None
+    return {}
 
 
 @register.simple_tag(takes_context=True)
