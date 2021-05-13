@@ -125,7 +125,7 @@ def _get_others_same_level_items(item, path, language):
         if path == webpath.get_full_path():
             parent = item.parent
             if parent:
-                return {'parent': parent,
+                return {'parent': parent.localized(lang=language),
                         'items': parent.get_childs(lang=language, exclude=item)}
     for child in item.get_childs():
         result = _get_others_same_level_items(child, path, language)
