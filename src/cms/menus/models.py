@@ -156,13 +156,18 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
                 data['childs'].append(ser_child)
         return data
 
-    def get_childs(self, lang=settings.LANGUAGE, only_active=True):
+    def get_childs(self,
+                   lang=settings.LANGUAGE,
+                   only_active=True,
+                   exclude=None):
         if self.pk:
             items = NavigationBarItem.objects.filter(parent=self,
                                                      menu=self.menu).\
                                               order_by('order')
             if only_active:
                 items = items.filter(is_active=True)
+            if exclude:
+                items = items.exclude(pk=exclude.pk)
             # if getattr(self, 'language', lang):
             for item in items:
                 item.localized(lang)

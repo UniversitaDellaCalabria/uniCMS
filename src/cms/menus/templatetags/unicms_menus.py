@@ -93,16 +93,15 @@ def load_item_publication(context, item):
         return item.publication
 
 
-def _loop_item_childs(item, path, language):
+def _get_current_item(item, path, language):
     webpath = item.webpath
     if webpath and not webpath.is_alias:
         if path == webpath.get_full_path():
-            return {'item': item,
-                    'childs': item.get_childs(lang=language)}
+            return item
     for child in item.get_childs():
-        result = _loop_item_childs(child, path, language)
+        result = _get_current_item(child, path, language)
         if result: return result
-    return {}
+    return None
 
 
 @register.simple_tag(takes_context=True)
@@ -116,5 +115,33 @@ def load_current_item_from_menu(context):
     path = append_slash(request.path)
 
     for item in context['items']:
-        result = _loop_item_childs(item, path, language)
+        result = _get_current_item(item, path, language)
+        if result: return result
+
+
+def _get_others_same_level_items(item, path, language):
+    webpath = item.webpath
+    if webpath and not webpath.is_alias:
+        if path == webpath.get_full_path():
+            parent = item.parent
+            if parent:
+                return parent.get_childs(lang=language, exclude=item)
+    for child in item.get_childs():
+        result = _get_others_same_level_items(child, path, language)
+        if result: return result
+    return None
+
+
+@register.simple_tag(takes_context=True)
+def load_other_items_from_menu(context):
+    _func_name = 'load_other_items_from_menu'
+    _log_msg = f'Template Tag {_func_name}'
+
+    request = context['request']
+    language = getattr(request, 'LANGUAGE_CODE', '')
+
+    path = append_slash(request.path)
+
+    for item in context['items']:
+        result = _get_others_same_level_items(item, path, language)
         if result: return result
