@@ -11,7 +11,8 @@ from . models import WebPath, WebSite
 
 class EditorialBoardLockUserForm(forms.Form):
 
-    user = forms.ModelChoiceField(queryset=get_user_model().objects.filter(is_staff=True))
+    user = forms.ModelChoiceField(label="User",
+                                  queryset=get_user_model().objects.filter(is_staff=True))
 
 
 class WebPathForm(ModelForm):

@@ -124,7 +124,9 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
 
     def localized(self, lang=settings.LANGUAGE, **kwargs):
         i18n = NavigationBarItemLocalization.objects.filter(item=self,
-                                                            language=lang).first()
+                                                            language=lang,
+                                                            is_active=True)\
+                                                    .first()
         if i18n: # pragma: no cover
             self.name = i18n.name
             self.language = lang

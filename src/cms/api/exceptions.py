@@ -1,5 +1,7 @@
 import logging
 
+from django.utils.translation import gettext_lazy as _
+
 from rest_framework.exceptions import PermissionDenied, ValidationError
 
 
@@ -10,7 +12,8 @@ class LoggedPermissionDenied(PermissionDenied):
 
     def __init__(self, *args, **kwargs):
         logger.warning(f'API {kwargs.get("classname")} {kwargs.get("resource")} permission denied')
-        super().__init__(detail=kwargs.get('detail',''))
+        super().__init__(detail=kwargs.get('detail', _('You do not have permission to perform this action.')))
+
 
 class LoggedValidationException(ValidationError):
 

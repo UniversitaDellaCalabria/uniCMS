@@ -55,7 +55,9 @@ class CarouselItem(ActivableModel, TimeStampedModel,
 
     def localized(self, lang=settings.LANGUAGE):
         i18n = CarouselItemLocalization.objects.filter(carousel_item=self,
-                                                       language=lang).first()
+                                                       language=lang,
+                                                       is_active=True)\
+                                                .first()
         if i18n:
             self.heading = i18n.heading
             self.pre_heading = i18n.pre_heading
