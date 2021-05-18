@@ -2,9 +2,10 @@ from copy import deepcopy
 
 from django.utils.translation import gettext_lazy as _
 
-from cms.contexts.models import CreatedModifiedBy, WebPath, models, settings
+from cms.contexts.models import WebPath, models, settings
 from cms.contexts.models_abstract import AbstractLockable
 from cms.templates.models import (ActivableModel,
+                                  CreatedModifiedBy,
                                   SortableModel,
                                   TimeStampedModel)
 
@@ -108,8 +109,8 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
             raise Exception(_("Can't choose a child as parent!"))
         super(self.__class__, self).save(*args, **kwargs)
 
-    @property
-    def link(self):
+    # @property
+    def link(self, request=None):
         if self.url:
             return self.url
         elif self.webpath:
@@ -118,7 +119,8 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
                 # ctx_webpath = self.publication.get_publication_context(webpath=self.webpath)
                 # return ctx_webpath.url if ctx_webpath else ''
             # else:
-            return self.webpath.get_full_path()
+            # return self.webpath.get_full_path()
+            return self.webpath.get_site_path(request)
         else: # pragma: no cover
             return ''
 
@@ -145,7 +147,7 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
                     url = self.url,
                     publication_id = self.publication.pk if self.publication else None,
                     webpath_id = self.webpath.pk if self.webpath else None,
-                    link = self.link,
+                    link = self.link(),
                     is_active = self.is_active,
                     order = self.order,
                     level=level

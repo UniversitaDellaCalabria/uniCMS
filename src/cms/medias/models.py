@@ -5,9 +5,9 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from cms.contexts.models import CreatedModifiedBy
 from cms.contexts.models_abstract import AbstractLockable
 from cms.templates.models import (ActivableModel,
+                                  CreatedModifiedBy,
                                   SortableModel,
                                   TimeStampedModel)
 

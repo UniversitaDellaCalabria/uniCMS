@@ -113,6 +113,21 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         url = f'/{CMS_PATH_PREFIX}{self.fullpath}'
         return sanitize_path(url)
 
+    def get_site_path(self, request=None):
+        """
+        returns webpath full path with site domain
+        """
+        if self.is_alias:
+            return self.redirect_url
+        # ports to exclude
+        excluded_ports = [80,443]
+        if request and request.META['SERVER_PORT'] not in excluded_ports:
+            domain = f'{self.site.domain}:{request.META["SERVER_PORT"]}'
+        else:
+            domain = f'{self.site.domain}'
+        url = f'{domain}/{CMS_PATH_PREFIX}{self.fullpath}'
+        return sanitize_path(url)
+
     def save(self, *args, **kwargs):
         # manage aliases
         if self.alias:

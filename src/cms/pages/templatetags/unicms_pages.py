@@ -32,7 +32,7 @@ def load_blocks(context, section=None):
                                   page=page,
                                   webpath=webpath)
         try:
-            result += obj.render()
+            result += obj.render() or SafeString('')
         except Exception as e: # pragma: no cover
             logger.exception(('Block {} failed rendering '
                               '({}): {}').format(block, obj, e))
