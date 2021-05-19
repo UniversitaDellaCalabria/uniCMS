@@ -373,7 +373,7 @@ class PageCopyAsDraftView(APIView):
         if not item: raise Http404
         has_permission = item.is_publicable_by(request.user)
         if has_permission:
-            new_page = copy_page_as_draft(item)
+            new_page = copy_page_as_draft(item, request.user)
             result = self.serializer_class(new_page)
             return Response(result.data)
         raise LoggedPermissionDenied(classname=self.__class__.__name__,

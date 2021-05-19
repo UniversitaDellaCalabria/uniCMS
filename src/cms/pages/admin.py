@@ -22,7 +22,7 @@ class AbstractPreviewableAdmin(AbstractCreatedModifiedBy):
         if "_save_draft" in request.POST:
             _msg = ("Draft of '{}' [{}] been created. You can preview it if is_active=True "
                     "and 'Draft view mode' is set on.").format(obj, obj.pk)
-            draft = copy_page_as_draft(obj)
+            draft = copy_page_as_draft(obj, request.user)
             self.message_user(request, _msg)
             url = reverse('admin:cmspages_page_change',
                           kwargs={'object_id': draft.pk})
@@ -46,7 +46,7 @@ class AbstractPreviewableAdmin(AbstractCreatedModifiedBy):
 
 def make_page_draft(modeladmin, request, queryset):
     for obj in queryset:
-        copy_page_as_draft(obj)
+        copy_page_as_draft(obj, request.user)
 
 
 make_page_draft.short_description = _("Make page Draft")

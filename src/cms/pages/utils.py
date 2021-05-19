@@ -1,9 +1,11 @@
 from django.utils import timezone
 
 
-def copy_page_as_draft(obj):
+def copy_page_as_draft(obj, user=None):
     draft = obj.__dict__.copy()
     draft['state'] = 'draft'
+    draft['created_by'] = user
+    draft['modified_by'] = None
     draft['draft_of'] = obj.pk
     for attr in "id pk _state created_by modified_by created modified".split(' '):
         if draft.get(attr):
