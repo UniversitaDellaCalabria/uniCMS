@@ -125,8 +125,9 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
             domain = f'{self.site.domain}:{request.META["SERVER_PORT"]}'
         else:
             domain = f'{self.site.domain}'
-        url = f'{domain}/{CMS_PATH_PREFIX}{self.fullpath}'
-        return sanitize_path(url)
+        path = sanitize_path(f'{CMS_PATH_PREFIX}{self.fullpath}')
+        url = f'//{domain}/{path}'
+        return url
 
     def save(self, *args, **kwargs):
         # manage aliases
