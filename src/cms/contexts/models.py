@@ -120,7 +120,7 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         if self.is_alias:
             return self.redirect_url
         # ports to exclude
-        excluded_ports = [80,443]
+        excluded_ports = ["80", "443"]
         if request and request.META['SERVER_PORT'] not in excluded_ports:
             domain = f'{self.site.domain}:{request.META["SERVER_PORT"]}'
         else:
