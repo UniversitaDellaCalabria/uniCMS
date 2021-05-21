@@ -39,7 +39,7 @@ class AbstractImportableMenu(object):
 
 class NavigationBar(TimeStampedModel, ActivableModel, CreatedModifiedBy,
                     AbstractImportableMenu, AbstractLockable):
-    name = models.CharField(max_length=33, blank=False, null=False)
+    name = models.CharField(max_length=255, blank=False, null=False)
 
     class Meta:
         verbose_name_plural = _("Context Navigation Menus")
