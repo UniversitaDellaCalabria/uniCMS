@@ -15,6 +15,8 @@ from django.template.exceptions import (TemplateDoesNotExist,
 
 from copy import deepcopy
 
+from django_auto_serializer.auto_serializer import *
+
 
 logger = logging.getLogger(__name__)
 CMS_PATH_PREFIX = getattr(settings, 'CMS_PATH_PREFIX', '')
@@ -176,3 +178,28 @@ def log_obj_event(user, obj, data={}, action_flag=CHANGE):
                                 object_repr = obj.__str__(),
                                 action_flag = action_flag,
                                 change_message = f'{msg}: {data}' or msg)
+
+
+def clone(obj,
+          excluded_fields=[],
+          excluded_childrens=[],
+          custom_values={},
+          recursive_custom_values={}):
+    """
+    clone object using django_auto_serializer
+    """
+    try:
+        si = SerializableInstance(obj,
+                                  excluded_fields=excluded_fields,
+                                  excluded_childrens=excluded_childrens,
+                                  auto_fields = False,
+                                  change_uniques = True,
+                                  duplicate = True)
+        si.serialize_tree()
+        si.remove_duplicates()
+        isi = ImportableSerializedInstance(si.dict)
+        new_obj = isi.save(custom_values=custom_values,
+                           recursive_custom_values=recursive_custom_values)
+        return new_obj
+    except Exception as e:
+        raise e

@@ -329,6 +329,7 @@ menu_prefix = f'{eb_prefix}/menus'
 urlpatterns += path(f'{menu_prefix}/', menu.MenuList.as_view(), name='editorial-board-menus'),
 urlpatterns += path(f'{menu_prefix}/<int:pk>/', menu.MenuView.as_view(), name='editorial-board-menu'),
 urlpatterns += path(f'{menu_prefix}/<int:pk>/logs/', menu.MenuLogsView.as_view(), name='editorial-board-menu-logs'),
+urlpatterns += path(f'{menu_prefix}/<int:pk>/clone/', menu.MenuCloneView.as_view(), name='editorial-board-menu-clone'),
 urlpatterns += path(f'{menu_prefix}/form/', menu.MenuFormView.as_view(), name='editorial-board-menu-form'),
 
 # menu items

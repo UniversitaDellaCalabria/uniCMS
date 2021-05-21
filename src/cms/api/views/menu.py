@@ -2,6 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 
 from rest_framework.exceptions import NotFound, PermissionDenied
@@ -11,13 +12,14 @@ from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
 from cms.contexts.decorators import detect_language
+from cms.contexts.utils import clone
 from cms.menus.forms import MenuForm
 from cms.menus.models import NavigationBar
 from cms.menus.serializers import MenuSerializer
 
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
 from . logs import ObjectLogEntriesList
-from .. exceptions import LoggedPermissionDenied
+from .. exceptions import LoggedPermissionDenied, LoggedValidationException
 from .. permissions import MenuGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
@@ -170,3 +172,40 @@ class MenuLogsView(ObjectLogEntriesList):
         item = get_object_or_404(NavigationBar, pk=object_id)
         content_type_id = ContentType.objects.get_for_model(item).pk
         return super().get_queryset(object_id, content_type_id)
+
+
+class MenuCloneSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'cloneMenu'
+
+
+class MenuCloneView(APIView):
+
+    schema = MenuCloneSchema()
+    description = ""
+    permission_classes = [MenuGetCreatePermissions]
+    serializer_class = MenuSerializer
+
+    def get_queryset(self):
+        """
+        """
+        menu_id = self.kwargs['pk']
+        menus = NavigationBar.objects.filter(pk=menu_id)
+        return menus
+
+    def get(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
+        try:
+            new_menu = clone(item,
+                             excluded_fields=['created', 'modified'],
+                             excluded_childrens=['pagemenu'],
+                             custom_values={'name': f'{item.name} (copy {timezone.localtime()})'},
+                             recursive_custom_values={'created_by': request.user,
+                                                      'modified_by': None})
+        except Exception as e:
+            raise LoggedValidationException(classname=self.__class__.__name__,
+                                            resource=request.method,
+                                            detail=e)
+        result = self.serializer_class(new_menu)
+        return Response(result.data)

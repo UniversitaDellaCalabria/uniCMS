@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from cms.menus.models import NavigationBar
+from cms.menus.models import NavigationBar, NavigationBarItem
 from cms.menus.tests import MenuUnitTest
 
 from cms.contexts.tests import ContextUnitTest
@@ -60,6 +60,18 @@ class MenuAPIUnitTest(TestCase):
         url = reverse('unicms_api:editorial-board-menu-logs', kwargs={'pk': menu.pk})
         res = req.get(url, content_type='application/json',)
         assert isinstance(res.json(), dict)
+
+        # CLONE
+        current_menus = NavigationBar.objects.all().count()
+        url = reverse('unicms_api:editorial-board-menu-clone', kwargs={'pk': menu.pk})
+        res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+        new_current_menus = NavigationBar.objects.all().count()
+        assert new_current_menus == current_menus + 1
+        source_items = NavigationBarItem.objects.filter(menu=menu)
+        new_menu = NavigationBar.objects.last()
+        dest_items = NavigationBarItem.objects.filter(menu=new_menu)
+        assert source_items.count() == dest_items.count()
 
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-menu', kwargs={'pk': menu.pk})
