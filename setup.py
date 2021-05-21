@@ -9,13 +9,20 @@ _pkg_name = 'cms'
 
 
 def get_requirements(fname='requirements.txt'):
+    regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
     fopen = open(fname, 'r')
-    return fopen.read().splitlines()
-
+    install_requirements = []
+    dependency_links=[]
+    packages = fopen.read().splitlines()
+    for ir in packages:
+        url = re.findall(regex, ir)
+        install_requirements.append(ir) if not url \
+        else dependency_links.append(url[0][0])
+    return [install_requirements, dependency_links]
 
 setup(
     name="unicms",
-    version='0.17.0',
+    version='0.17.1',
     description="uniCMS is a Django Web Content Management System",
     author='Giuseppe De Marco, Francesco Filicetti',
     author_email='giuseppe.demarco@unical.it, francesco.filicetti@unical.it',
@@ -37,6 +44,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Topic :: Software Development :: Libraries :: Python Modules"],
-    install_requires=get_requirements(),
+    install_requires=get_requirements()[0],
+    dependency_links=get_requirements()[1],
     zip_safe=False,
     )
