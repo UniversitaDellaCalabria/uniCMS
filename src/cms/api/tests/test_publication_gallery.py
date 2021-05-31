@@ -36,7 +36,7 @@ class PublicationGalleryAPIUnitTest(TestCase):
         collection = MediaUnitTest.create_media_collection()
 
         # pulication list
-        url = reverse('unicms_api:editorial-board-publication-galleries',
+        url = reverse('unicms_api:editorial-board-publication-media-collections',
                       kwargs={'publication_id': pub.pk})
 
         # accessible to staff users only
@@ -66,14 +66,14 @@ class PublicationGalleryAPIUnitTest(TestCase):
         assert(pub_gallery)
 
         # GET LOGS
-        url = reverse('unicms_api:editorial-board-publication-gallery-logs',
+        url = reverse('unicms_api:editorial-board-publication-media-collection-logs',
                       kwargs={'publication_id': pub.pk,
                               'pk': pub_gallery.pk})
         res = req.get(url, content_type='application/json',)
         assert isinstance(res.json(), dict)
 
         # GET, patch, put, delete
-        url = reverse('unicms_api:editorial-board-publication-gallery',
+        url = reverse('unicms_api:editorial-board-publication-media-collection',
                       kwargs={'publication_id': pub.pk,
                               'pk': pub_gallery.pk})
 
@@ -134,7 +134,7 @@ class PublicationGalleryAPIUnitTest(TestCase):
             assert True
 
         # form
-        url = reverse('unicms_api:editorial-board-publication-gallery-form',
+        url = reverse('unicms_api:editorial-board-publication-media-collection-form',
                       kwargs={'publication_id': pub.pk})
         res = req.get(url)
         assert isinstance(res.json(), list)

@@ -118,14 +118,14 @@ class PublicationUnitTest(TestCase):
         publink.__str__()
         pub.related_links
 
-        # pub gallery
+        # pub media collection
         media_col = MediaUnitTest.create_media_collection()
 
         pubga = PublicationGallery.objects.create(publication = pub,
                                                   collection = media_col,
                                                   is_active=1)
         pubga.__str__()
-        pub.related_galleries
+        pub.related_media_collections
 
         # pub loc
         pub.translate_as(lang='en')

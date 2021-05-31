@@ -280,14 +280,14 @@ urlpatterns += path(f'{puli_prefix}/<int:pk>/logs/', publication_link.Publicatio
                     name='editorial-board-publication-link-logs'),
 urlpatterns += path(f'{puli_prefix}/form/', publication_link.PublicationLinkFormView.as_view(), name='editorial-board-publication-link-form'),
 
-# publication galleries
-pug_prefix = f'{pu_prefix}/<int:publication_id>/galleries'
-urlpatterns += path(f'{pug_prefix}/', publication_gallery.PublicationGalleryList.as_view(), name='editorial-board-publication-galleries'),
-urlpatterns += path(f'{pug_prefix}/<int:pk>/', publication_gallery.PublicationGalleryView.as_view(), name='editorial-board-publication-gallery'),
+# publication media collections
+pug_prefix = f'{pu_prefix}/<int:publication_id>/media-collections/'
+urlpatterns += path(f'{pug_prefix}/', publication_gallery.PublicationGalleryList.as_view(), name='editorial-board-publication-media-collections'),
+urlpatterns += path(f'{pug_prefix}/<int:pk>/', publication_gallery.PublicationGalleryView.as_view(), name='editorial-board-publication-media-collection'),
 urlpatterns += path(f'{pug_prefix}/<int:pk>/logs/', publication_gallery.PublicationGalleryLogsView.as_view(),
-                    name='editorial-board-publication-gallery-logs'),
+                    name='editorial-board-publication-media-collection-logs'),
 urlpatterns += path(f'{pug_prefix}/form/', publication_gallery.PublicationGalleryFormView.as_view(),
-                    name='editorial-board-publication-gallery-form'),
+                    name='editorial-board-publication-media-collection-form'),
 
 # publication localizations
 pulo_prefix = f'{pu_prefix}/<int:publication_id>/localizations'

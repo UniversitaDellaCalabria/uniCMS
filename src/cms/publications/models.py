@@ -166,18 +166,14 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         return self.publicationlink_set.all()
 
     @property
-    def related_galleries(self):
-        if getattr(self, '_related_galleries', None): # pragma: no cover
-            return self._related_galleries
-        pub_galleries = PublicationGallery.objects.filter(publication=self,
-                                                          is_active=True,
-                                                          collection__is_active=True)
-        # galleries = []
-        # for pub_gallery in pub_galleries:
-        # if pub_gallery.collection.get_items():
-        # galleries.append(pub_gallery)
-        self._related_galleries = pub_galleries
-        return self._related_galleries
+    def related_media_collections(self):
+        if getattr(self, '_related_media_collections', None): # pragma: no cover
+            return self._related_media_collections
+        pub_collections = PublicationGallery.objects.filter(publication=self,
+                                                            is_active=True,
+                                                            collection__is_active=True)
+        self._related_media_collections = pub_collections
+        return self._related_media_collections
 
     def translate_as(self, lang):
         """
@@ -441,7 +437,7 @@ class PublicationGallery(TimeStampedModel, ActivableModel, SortableModel,
                                    on_delete=models.PROTECT)
 
     class Meta:
-        verbose_name_plural = _("Publication Image Gallery")
+        verbose_name_plural = _("Publication Media Collection")
 
     def __str__(self):
         return '{} {}'.format(self.publication, self.collection)
