@@ -281,7 +281,7 @@ urlpatterns += path(f'{puli_prefix}/<int:pk>/logs/', publication_link.Publicatio
 urlpatterns += path(f'{puli_prefix}/form/', publication_link.PublicationLinkFormView.as_view(), name='editorial-board-publication-link-form'),
 
 # publication media collections
-pug_prefix = f'{pu_prefix}/<int:publication_id>/media-collections/'
+pug_prefix = f'{pu_prefix}/<int:publication_id>/media-collections'
 urlpatterns += path(f'{pug_prefix}/', publication_media_collection.PublicationMediaCollectionList.as_view(), name='editorial-board-publication-media-collections'),
 urlpatterns += path(f'{pug_prefix}/<int:pk>/', publication_media_collection.PublicationMediaCollectionView.as_view(), name='editorial-board-publication-media-collection'),
 urlpatterns += path(f'{pug_prefix}/<int:pk>/logs/', publication_media_collection.PublicationMediaCollectionLogsView.as_view(),
