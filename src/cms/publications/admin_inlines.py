@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from . models import (PublicationAttachment, PublicationBlock,
-                      PublicationContext, PublicationGallery,
+                      PublicationContext, PublicationMediaCollection,
                       PublicationLink, PublicationLocalization,
                       PublicationRelated)
 
@@ -41,8 +41,8 @@ class PublicationLinkInline(admin.StackedInline):
     classes = ['collapse']
 
 
-class PublicationGalleryInline(admin.TabularInline):
-    model = PublicationGallery
+class PublicationMediaCollectionInline(admin.TabularInline):
+    model = PublicationMediaCollection
     extra = 0
     classes = ['collapse']
     raw_id_fields = ['collection']

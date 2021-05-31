@@ -1,7 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
 
-from cms.publications.forms import PublicationGalleryForm
+from cms.publications.forms import PublicationMediaCollectionForm
 from cms.publications.models import *
 from cms.publications.serializers import *
 
@@ -13,60 +13,60 @@ from .. serializers import UniCMSFormSerializer
 from .. views.publication import PublicationRelatedObject, PublicationRelatedObjectList, PublicationRelatedObjectLogsView
 
 
-class PublicationGalleryList(PublicationRelatedObjectList):
+class PublicationMediaCollectionList(PublicationRelatedObjectList):
     """
     """
     description = ""
     search_fields = ['collection__name', 'collection__description']
     ordering_fields = ['id', 'collection__name',
                        'collection__description', 'order', 'is_active']
-    serializer_class = PublicationGallerySerializer
+    serializer_class = PublicationMediaCollectionSerializer
 
     def get_queryset(self):
         """
         """
         super().get_data()
         if self.publication:
-            return PublicationGallery.objects.filter(publication=self.publication)
-        return PublicationGallery.objects.none() # pragma: no cover
+            return PublicationMediaCollection.objects.filter(publication=self.publication)
+        return PublicationMediaCollection.objects.none() # pragma: no cover
 
 
-class PublicationGalleryView(PublicationRelatedObject):
+class PublicationMediaCollectionView(PublicationRelatedObject):
     """
     """
     description = ""
-    serializer_class = PublicationGallerySerializer
+    serializer_class = PublicationMediaCollectionSerializer
 
     def get_queryset(self):
         """
         """
         super().get_data()
-        return PublicationGallery.objects.filter(pk=self.pk,
-                                                 publication=self.publication)
+        return PublicationMediaCollection.objects.filter(pk=self.pk,
+                                                         publication=self.publication)
 
 
-class PublicationGalleryFormView(APIView):
+class PublicationMediaCollectionFormView(APIView):
 
     def get(self, *args, **kwargs):
-        form = PublicationGalleryForm(publication_id=kwargs.get('publication_id'))
+        form = PublicationMediaCollectionForm(publication_id=kwargs.get('publication_id'))
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
 
 
-class PublicationGalleryLogsSchema(AutoSchema):
+class PublicationMediaCollectionLogsSchema(AutoSchema):
     def get_operation_id(self, path, method):# pragma: no cover
-        return 'listPublicationGalleryLogs'
+        return 'listPublicationMediaCollectionLogs'
 
 
-class PublicationGalleryLogsView(PublicationRelatedObjectLogsView):
+class PublicationMediaCollectionLogsView(PublicationRelatedObjectLogsView):
 
-    schema = PublicationGalleryLogsSchema()
+    schema = PublicationMediaCollectionLogsSchema()
 
     def get_queryset(self):
         """
         """
         super().get_data()
-        item = get_object_or_404(PublicationGallery.objects.select_related('publication'),
+        item = get_object_or_404(PublicationMediaCollection.objects.select_related('publication'),
                                  pk=self.pk,
                                  publication=self.publication)
         content_type_id = ContentType.objects.get_for_model(item).pk

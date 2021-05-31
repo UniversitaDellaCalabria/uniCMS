@@ -19,7 +19,7 @@ class PublicationAdmin(AbstractCreatedModifiedBy):
                PublicationRelatedInline,
                PublicationLinkInline,
                PublicationAttachmentInline,
-               PublicationGalleryInline,
+               PublicationMediaCollectionInline,
                PublicationBlockInline)
     raw_id_fields = ('presentation_image',)
 

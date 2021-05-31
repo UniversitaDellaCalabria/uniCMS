@@ -6,7 +6,7 @@ from . views import (carousel, carousel_item, carousel_item_link,
                      media, media_collection, media_collection_item,
                      publication, publication_attachment,
                      publication_link, publication_localization,
-                     publication_gallery, publication_block,
+                     publication_media_collection, publication_block,
                      publication_related,
                      website, webpath, webpath_pub_context,
                      page, page_block, page_carousel, page_link,
@@ -282,11 +282,11 @@ urlpatterns += path(f'{puli_prefix}/form/', publication_link.PublicationLinkForm
 
 # publication media collections
 pug_prefix = f'{pu_prefix}/<int:publication_id>/media-collections/'
-urlpatterns += path(f'{pug_prefix}/', publication_gallery.PublicationGalleryList.as_view(), name='editorial-board-publication-media-collections'),
-urlpatterns += path(f'{pug_prefix}/<int:pk>/', publication_gallery.PublicationGalleryView.as_view(), name='editorial-board-publication-media-collection'),
-urlpatterns += path(f'{pug_prefix}/<int:pk>/logs/', publication_gallery.PublicationGalleryLogsView.as_view(),
+urlpatterns += path(f'{pug_prefix}/', publication_media_collection.PublicationMediaCollectionList.as_view(), name='editorial-board-publication-media-collections'),
+urlpatterns += path(f'{pug_prefix}/<int:pk>/', publication_media_collection.PublicationMediaCollectionView.as_view(), name='editorial-board-publication-media-collection'),
+urlpatterns += path(f'{pug_prefix}/<int:pk>/logs/', publication_media_collection.PublicationMediaCollectionLogsView.as_view(),
                     name='editorial-board-publication-media-collection-logs'),
-urlpatterns += path(f'{pug_prefix}/form/', publication_gallery.PublicationGalleryFormView.as_view(),
+urlpatterns += path(f'{pug_prefix}/form/', publication_media_collection.PublicationMediaCollectionFormView.as_view(),
                     name='editorial-board-publication-media-collection-form'),
 
 # publication localizations

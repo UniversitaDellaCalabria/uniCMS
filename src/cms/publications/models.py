@@ -169,9 +169,9 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
     def related_media_collections(self):
         if getattr(self, '_related_media_collections', None): # pragma: no cover
             return self._related_media_collections
-        pub_collections = PublicationGallery.objects.filter(publication=self,
-                                                            is_active=True,
-                                                            collection__is_active=True)
+        pub_collections = PublicationMediaCollection.objects.filter(publication=self,
+                                                                    is_active=True,
+                                                                    collection__is_active=True)
         self._related_media_collections = pub_collections
         return self._related_media_collections
 
@@ -429,8 +429,8 @@ class PublicationBlock(SectionAbstractModel,TimeStampedModel,
                                     self.section or '#')
 
 
-class PublicationGallery(TimeStampedModel, ActivableModel, SortableModel,
-                         CreatedModifiedBy):
+class PublicationMediaCollection(TimeStampedModel, ActivableModel,
+                                 SortableModel, CreatedModifiedBy):
     publication = models.ForeignKey(Publication,
                                     on_delete=models.CASCADE)
     collection = models.ForeignKey(MediaCollection,

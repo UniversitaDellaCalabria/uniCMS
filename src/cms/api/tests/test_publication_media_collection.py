@@ -11,7 +11,7 @@ from cms.contexts.tests import ContextUnitTest
 from cms.medias.tests import MediaUnitTest
 
 
-from cms.publications.models import Publication, PublicationGallery
+from cms.publications.models import Publication, PublicationMediaCollection
 from cms.publications.tests import PublicationUnitTest
 
 
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-class PublicationGalleryAPIUnitTest(TestCase):
+class PublicationMediaCollectionAPIUnitTest(TestCase):
 
     def setUp(self):
         pass
@@ -61,21 +61,21 @@ class PublicationGalleryAPIUnitTest(TestCase):
         req.force_login(user)
         res = req.post(url, data=data, follow=1,
                        content_type='application/json')
-        pub_gallery = PublicationGallery.objects.filter(publication=pub,
-                                                        collection=collection).first()
-        assert(pub_gallery)
+        pub_coll = PublicationMediaCollection.objects.filter(publication=pub,
+                                                             collection=collection).first()
+        assert(pub_coll)
 
         # GET LOGS
         url = reverse('unicms_api:editorial-board-publication-media-collection-logs',
                       kwargs={'publication_id': pub.pk,
-                              'pk': pub_gallery.pk})
+                              'pk': pub_coll.pk})
         res = req.get(url, content_type='application/json',)
         assert isinstance(res.json(), dict)
 
         # GET, patch, put, delete
         url = reverse('unicms_api:editorial-board-publication-media-collection',
                       kwargs={'publication_id': pub.pk,
-                              'pk': pub_gallery.pk})
+                              'pk': pub_coll.pk})
 
         # GET
         res = req.get(url, content_type='application/json',)
@@ -101,8 +101,8 @@ class PublicationGalleryAPIUnitTest(TestCase):
         res = req.patch(url, data,
                         content_type='application/json',
                         follow=1)
-        pub_gallery.refresh_from_db()
-        assert pub_gallery.collection == collection2
+        pub_coll.refresh_from_db()
+        assert pub_coll.collection == collection2
 
         # PUT
         pub.created_by = None
@@ -117,8 +117,8 @@ class PublicationGalleryAPIUnitTest(TestCase):
         # user has permission
         req.force_login(user)
         res = req.put(url, data, content_type='application/json')
-        pub_gallery.refresh_from_db()
-        assert pub_gallery.collection == collection
+        pub_coll.refresh_from_db()
+        assert pub_coll.collection == collection
 
         # DELETE
         # user hasn't permission
@@ -129,7 +129,7 @@ class PublicationGalleryAPIUnitTest(TestCase):
         req.force_login(user)
         res = req.delete(url)
         try:
-            pub_gallery.refresh_from_db()
+            pub_coll.refresh_from_db()
         except ObjectDoesNotExist:
             assert True
 

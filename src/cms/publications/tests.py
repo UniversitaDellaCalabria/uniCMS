@@ -21,7 +21,7 @@ from cms.pages.templatetags.unicms_pages import cms_categories
 from cms.publications.templatetags.unicms_publications import (load_publication,
                                                                load_publications_preview)
 from . models import (Publication, PublicationAttachment, PublicationBlock,
-                      PublicationContext, PublicationGallery, PublicationLink,
+                      PublicationContext, PublicationMediaCollection, PublicationLink,
                       PublicationLocalization, PublicationRelated)
 
 
@@ -121,9 +121,9 @@ class PublicationUnitTest(TestCase):
         # pub media collection
         media_col = MediaUnitTest.create_media_collection()
 
-        pubga = PublicationGallery.objects.create(publication = pub,
-                                                  collection = media_col,
-                                                  is_active=1)
+        pubga = PublicationMediaCollection.objects.create(publication = pub,
+                                                          collection = media_col,
+                                                          is_active=1)
         pubga.__str__()
         pub.related_media_collections
 

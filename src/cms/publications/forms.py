@@ -3,7 +3,12 @@ from django.urls import reverse
 
 from cms.api.settings import FORM_SOURCE_LABEL
 
-from . models import Publication, PublicationAttachment, PublicationGallery, PublicationLink, PublicationLocalization, PublicationRelated
+from . models import (Publication,
+                      PublicationAttachment,
+                      PublicationMediaCollection,
+                      PublicationLink,
+                      PublicationLocalization,
+                      PublicationRelated)
 
 
 class PublicationForm(ModelForm):
@@ -36,7 +41,7 @@ class PublicationAttachmentForm(ModelForm):
                   'order', 'is_active']
 
 
-class PublicationGalleryForm(ModelForm):
+class PublicationMediaCollectionForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         publication_id = kwargs.pop('publication_id', None)
@@ -45,7 +50,7 @@ class PublicationGalleryForm(ModelForm):
             self.fields['publication'].queryset = Publication.objects.filter(pk=publication_id)
 
     class Meta:
-        model = PublicationGallery
+        model = PublicationMediaCollection
         fields = ['publication', 'collection', 'order', 'is_active']
 
 

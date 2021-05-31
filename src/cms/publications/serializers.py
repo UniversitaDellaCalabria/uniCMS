@@ -121,8 +121,8 @@ class PublicationBlockSerializer(UniCMSCreateUpdateSerializer,
         fields = '__all__'
 
 
-class PublicationGallerySerializer(UniCMSCreateUpdateSerializer,
-                                   UniCMSContentTypeClass):
+class PublicationMediaCollectionSerializer(UniCMSCreateUpdateSerializer,
+                                           UniCMSContentTypeClass):
     publication = PublicationForeignKey()
 
     def to_representation(self, instance):
@@ -132,7 +132,7 @@ class PublicationGallerySerializer(UniCMSCreateUpdateSerializer,
         return data
 
     class Meta:
-        model = PublicationGallery
+        model = PublicationMediaCollection
         fields = '__all__'
 
 
