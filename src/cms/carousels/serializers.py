@@ -92,3 +92,16 @@ class CarouselItemLinkLocalizationSerializer(UniCMSCreateUpdateSerializer,
         model = CarouselItemLinkLocalization
         fields = '__all__'
         read_only_fields = ('created_by', 'modified_by')
+
+
+class CarouselSelectOptionsSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['value'] = instance.pk
+        data['text'] = instance.name
+        return data
+
+    class Meta:
+        model = Carousel
+        fields = ()

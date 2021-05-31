@@ -48,6 +48,9 @@ class PublicationMediaCollectionForm(ModelForm):
         super().__init__(*args, **kwargs)
         if publication_id:
             self.fields['publication'].queryset = Publication.objects.filter(pk=publication_id)
+        setattr(self.fields['collection'],
+                FORM_SOURCE_LABEL,
+                reverse('unicms_api:media-collection-options'))
 
     class Meta:
         model = PublicationMediaCollection

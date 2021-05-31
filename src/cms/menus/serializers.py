@@ -74,3 +74,16 @@ class MenuItemLocalizationSerializer(UniCMSCreateUpdateSerializer,
         model = NavigationBarItemLocalization
         fields = '__all__'
         read_only_fields = ('created_by', 'modified_by')
+
+
+class MenuSelectOptionsSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['value'] = instance.pk
+        data['text'] = instance.name
+        return data
+
+    class Meta:
+        model = NavigationBar
+        fields = ()

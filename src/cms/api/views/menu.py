@@ -15,9 +15,9 @@ from cms.contexts.decorators import detect_language
 from cms.contexts.utils import clone
 from cms.menus.forms import MenuForm
 from cms.menus.models import NavigationBar
-from cms.menus.serializers import MenuSerializer
+from cms.menus.serializers import MenuSelectOptionsSerializer, MenuSerializer
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
+from . generics import *
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied, LoggedValidationException
 from .. permissions import MenuGetCreatePermissions
@@ -209,3 +209,33 @@ class MenuCloneView(APIView):
                                             detail=e)
         result = self.serializer_class(new_menu)
         return Response(result.data)
+
+
+class EditorialBoardMenuOptionListSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listMenuSelectOptions'
+
+
+class MenuOptionList(UniCMSListSelectOptionsAPIView):
+    """
+    """
+    description = ""
+    search_fields = ['name']
+    serializer_class = MenuSelectOptionsSerializer
+    queryset = NavigationBar.objects.all()
+    schema = EditorialBoardMenuOptionListSchema()
+
+
+class MenuOptionView(generics.RetrieveAPIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+    serializer_class = MenuSelectOptionsSerializer
+
+    def get_queryset(self):
+        """
+        """
+        menu_id = self.kwargs['pk']
+        menu = NavigationBar.objects.filter(pk=menu_id)
+        return menu

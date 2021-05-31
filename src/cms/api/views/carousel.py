@@ -98,3 +98,33 @@ class CarouselLogsView(ObjectLogEntriesList):
         item = get_object_or_404(Carousel, pk=object_id)
         content_type_id = ContentType.objects.get_for_model(item).pk
         return super().get_queryset(object_id, content_type_id)
+
+
+class EditorialBoardCarouselOptionListSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listCarouselSelectOptions'
+
+
+class CarouselOptionList(UniCMSListSelectOptionsAPIView):
+    """
+    """
+    description = ""
+    search_fields = ['name']
+    serializer_class = CarouselSelectOptionsSerializer
+    queryset = Carousel.objects.all()
+    schema = EditorialBoardCarouselOptionListSchema()
+
+
+class CarouselOptionView(generics.RetrieveAPIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+    serializer_class = CarouselSelectOptionsSerializer
+
+    def get_queryset(self):
+        """
+        """
+        carousel_id = self.kwargs['pk']
+        carousel = Carousel.objects.filter(pk=carousel_id)
+        return carousel

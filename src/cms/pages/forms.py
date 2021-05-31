@@ -63,6 +63,9 @@ class PageCarouselForm(ModelForm):
         super().__init__(*args, **kwargs)
         if page_id:
             self.fields['page'].queryset = Page.objects.filter(pk=page_id)
+        setattr(self.fields['carousel'],
+                FORM_SOURCE_LABEL,
+                reverse('unicms_api:carousel-options'))
 
     class Meta:
         model = PageCarousel
@@ -92,6 +95,9 @@ class PageMediaCollectionForm(ModelForm):
         super().__init__(*args, **kwargs)
         if page_id:
             self.fields['page'].queryset = Page.objects.filter(pk=page_id)
+        setattr(self.fields['collection'],
+                FORM_SOURCE_LABEL,
+                reverse('unicms_api:media-collection-options'))
 
     class Meta:
         model = PageMediaCollection
@@ -131,6 +137,9 @@ class PageMenuForm(ModelForm):
         super().__init__(*args, **kwargs)
         if page_id:
             self.fields['page'].queryset = Page.objects.filter(pk=page_id)
+        setattr(self.fields['menu'],
+                FORM_SOURCE_LABEL,
+                reverse('unicms_api:editorial-board-menu-options'))
 
     class Meta:
         model = PageMenu

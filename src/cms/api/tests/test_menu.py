@@ -118,8 +118,19 @@ class MenuAPIUnitTest(TestCase):
         assert menu.name == 'menu api-test'
         assert not menu.is_active
 
+        # GET SelectField Options
+        url = reverse('unicms_api:editorial-board-menu-options')
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
+        url = reverse('unicms_api:editorial-board-menu-option',
+                      kwargs={'pk': menu.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
         # DELETE
         # user hasn't permission
+        url = reverse('unicms_api:editorial-board-menu', kwargs={'pk': menu.pk})
         req.force_login(user2)
         res = req.delete(url)
         assert res.status_code == 403

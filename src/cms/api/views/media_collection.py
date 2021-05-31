@@ -92,7 +92,7 @@ class MediaCollectionOptionList(UniCMSListSelectOptionsAPIView):
     """
     """
     description = ""
-    search_fields = ['title']
+    search_fields = ['name']
     serializer_class = MediaCollectionSelectOptionsSerializer
     queryset = MediaCollection.objects.all()
     schema = EditorialBoardMediaCollectionOptionListSchema()

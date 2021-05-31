@@ -70,6 +70,8 @@ urlpatterns += path(f'{c_prefix}/', carousel.CarouselList.as_view(), name='carou
 urlpatterns += path(f'{c_prefix}/<int:pk>/', carousel.CarouselView.as_view(), name='carousel'),
 urlpatterns += path(f'{c_prefix}/<int:pk>/logs/', carousel.CarouselLogsView.as_view(), name='carousel-logs'),
 urlpatterns += path(f'{c_prefix}/form/', carousel.CarouselFormView.as_view(), name='carousel-form'),
+urlpatterns += path(f'{c_prefix}/options/', carousel.CarouselOptionList.as_view(), name='carousel-options'),
+urlpatterns += path(f'{c_prefix}/options/<int:pk>/', carousel.CarouselOptionView.as_view(), name='carousel-option'),
 
 # carousel items
 ci_prefix = f'{c_prefix}/<int:carousel_id>/items'
@@ -331,6 +333,8 @@ urlpatterns += path(f'{menu_prefix}/<int:pk>/', menu.MenuView.as_view(), name='e
 urlpatterns += path(f'{menu_prefix}/<int:pk>/logs/', menu.MenuLogsView.as_view(), name='editorial-board-menu-logs'),
 urlpatterns += path(f'{menu_prefix}/<int:pk>/clone/', menu.MenuCloneView.as_view(), name='editorial-board-menu-clone'),
 urlpatterns += path(f'{menu_prefix}/form/', menu.MenuFormView.as_view(), name='editorial-board-menu-form'),
+urlpatterns += path(f'{menu_prefix}/options/', menu.MenuOptionList.as_view(), name='editorial-board-menu-options'),
+urlpatterns += path(f'{menu_prefix}/options/<int:pk>/', menu.MenuOptionView.as_view(), name='editorial-board-menu-option'),
 
 # menu items
 mei_prefix = f'{menu_prefix}/<int:menu_id>/items'

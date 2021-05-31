@@ -108,8 +108,19 @@ class CarouselAPIUnitTest(TestCase):
         assert carousel.name == 'carousel api-test'
         assert not carousel.is_active
 
+        # GET SelectField Options
+        url = reverse('unicms_api:carousel-options')
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
+        url = reverse('unicms_api:carousel-option',
+                      kwargs={'pk': carousel.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
         # DELETE
         # user hasn't permission
+        url = reverse('unicms_api:carousel', kwargs={'pk': carousel.pk})
         req.force_login(user2)
         res = req.delete(url)
         assert res.status_code == 403
