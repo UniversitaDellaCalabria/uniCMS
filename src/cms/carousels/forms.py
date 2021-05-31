@@ -22,7 +22,8 @@ class CarouselItemForm(ModelForm):
             self.fields['carousel'].queryset = Carousel.objects.filter(pk=carousel_id)
         setattr(self.fields['image'],
                 FORM_SOURCE_LABEL,
-                reverse('unicms_api:media-options'))
+                # only images
+                reverse('unicms_api:media-options') + '?file_type=image%2Fwebp')
 
     class Meta:
         model = CarouselItem

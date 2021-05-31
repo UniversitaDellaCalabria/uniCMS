@@ -27,8 +27,12 @@ class MediaSerializer(UniCMSCreateUpdateSerializer,
         data = super().to_representation(instance)
         data['file_size'] = instance.file_size_kb
         try:
-            w,y = get_image_width_height(instance.file)
-            data['file_dimensions'] = f'{w}px*{y}px'
+            size = get_image_width_height(instance.file)
+            if size:
+                w,y = size
+                data['file_dimensions'] = f'{w}px*{y}px'
+            else:
+                data['file_dimensions'] = ''
         except FileNotFoundError: # pragma: no cover
             data['file_dimensions'] = ''
         return data

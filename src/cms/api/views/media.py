@@ -30,9 +30,9 @@ class MediaList(UniCMSListCreateAPIView):
     """
     """
     description = ""
-    search_fields = ['title', 'file', 'description']
+    search_fields = ['title', 'file', 'description', 'file_type']
     permission_classes = [MediaGetCreatePermissions]
-    filterset_fields = ['created', 'modified', 'created_by']
+    filterset_fields = ['created', 'modified', 'created_by', 'file_type']
     serializer_class = MediaSerializer
     queryset = Media.objects.all()
 
@@ -107,6 +107,7 @@ class MediaOptionList(UniCMSListSelectOptionsAPIView):
     description = ""
     search_fields = ['title']
     serializer_class = MediaSelectOptionsSerializer
+    filterset_fields = ['file_type']
     queryset = Media.objects.all()
     schema = EditorialBoardMediaOptionListSchema()
 
