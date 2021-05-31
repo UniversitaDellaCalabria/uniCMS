@@ -2,10 +2,18 @@ import logging
 import magic
 import os
 
+from django.conf import settings
+
 from io import BytesIO
 from PIL import Image
 
+from . import settings as app_settings
+
 logger = logging.getLogger(__name__)
+
+
+FILETYPE_IMAGE = getattr(settings, 'FILETYPE_IMAGE',
+                         app_settings.FILETYPE_IMAGE)
 
 
 def get_file_type_size(media_obj) -> dict:
@@ -22,8 +30,13 @@ def get_file_type_size(media_obj) -> dict:
 
 
 def get_image_width_height(fopen):
-    pil = Image.open(fopen)
-    return pil.size
+    mime = magic.Magic(mime=True)
+    fopen.seek(0)
+    mimetype = mime.from_buffer(fopen.read())
+    fopen.seek(0)
+    if mimetype in FILETYPE_IMAGE:
+        pil = Image.open(fopen)
+        return pil.size
 
 
 def to_webp(fobj):

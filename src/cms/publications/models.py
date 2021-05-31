@@ -40,7 +40,7 @@ class Category(TimeStampedModel, CreatedModifiedBy):
     image = models.ImageField(upload_to="images/categories",
                               null=True, blank=True,
                               max_length=512,
-                              validators=[validate_file_extension,
+                              validators=[validate_image_file_extension,
                                           validate_file_size])
 
     class Meta:
@@ -463,7 +463,9 @@ class PublicationAttachment(TimeStampedModel, SortableModel, ActivableModel,
                             help_text=_("Specify the container "
                                         "section in the template where "
                                         "this block would be rendered."))
-    file = models.FileField(upload_to=publication_attachment_path)
+    file = models.FileField(upload_to=publication_attachment_path,
+                            validators=[validate_file_extension,
+                                        validate_file_size])
     description = models.TextField()
 
     class Meta:

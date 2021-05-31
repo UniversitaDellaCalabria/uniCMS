@@ -12,7 +12,8 @@ class PublicationForm(ModelForm):
         super().__init__(*args, **kwargs)
         setattr(self.fields['presentation_image'],
                 FORM_SOURCE_LABEL,
-                reverse('unicms_api:media-options'))
+                # only images
+                reverse('unicms_api:media-options') + '?file_type=image%2Fwebp')
 
     class Meta:
         model = Publication
