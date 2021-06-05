@@ -8,6 +8,7 @@ from django.http import (Http404,
                          HttpResponseRedirect)
 from django.shortcuts import render, get_object_or_404
 from django.utils.module_loading import import_string
+from django.utils.translation import gettext_lazy as _
 
 from cms.pages.models import Page
 from urllib.parse import urlparse
@@ -51,7 +52,7 @@ def cms_dispatch(request):
             return handler.as_view()
         except Exception as e: # pragma: no cover
             logger.exception(f'{path}:{e}')
-            raise Http404("CMS Page not found")
+            raise Http404(_("CMS Page not found"))
 
     # go further with webpath matching
     path = append_slash(path)
@@ -71,7 +72,7 @@ def cms_dispatch(request):
         page = published_page
 
     if not page:
-        raise Http404("CMS Page not found")
+        raise Http404(_("CMS Page not found"))
     context = {
         'website': website,
         'path': path,
@@ -87,12 +88,12 @@ def pagePreview(request, page_id):
     webpath = page.webpath
     website = webpath.site
     if not website.is_managed_by(request.user):
-        return HttpResponse("non hai permessi sul sito!")
+        return HttpResponse(_("Permission Denied on this website"))
     permission = EditorialBoardEditors.get_permission(webpath=webpath,
                                                       user=request.user)
     editor_perms = is_editor(permission)
     if not editor_perms:
-        return HttpResponse("non hai permessi sul webpath!")
+        return HttpResponse(_("Permission Denied on this webpath"))
 
     context = {
         'website': website,
