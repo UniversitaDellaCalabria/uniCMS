@@ -43,8 +43,3 @@ def settings_value(name, **kwargs):
     value = getattr(settings, name, None)
     if value and kwargs: return value.format(**kwargs)
     return value
-
-
-@register.simple_tag
-def installed_app(app_name):
-    return app_name in settings.INSTALLED_APPS

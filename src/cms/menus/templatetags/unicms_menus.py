@@ -100,7 +100,7 @@ def _get_current_item(item, path, language):
     for child in item.get_childs():
         result = _get_current_item(child, path, language)
         if result: return result
-    return None
+    return None # pragma: no cover
 
 
 @register.simple_tag(takes_context=True)
@@ -129,7 +129,7 @@ def _get_others_same_level_items(item, path, language):
     for child in item.get_childs():
         result = _get_others_same_level_items(child, path, language)
         if result: return result
-    return {}
+    return {} # pragma: no cover
 
 
 @register.simple_tag(takes_context=True)

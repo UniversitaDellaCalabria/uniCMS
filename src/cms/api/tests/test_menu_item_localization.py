@@ -90,6 +90,14 @@ class MenuItemLocalizationAPIUnitTest(TestCase):
         res = req.get(url, content_type='application/json',)
         assert isinstance(res.json(), dict)
 
+        # redis lock set
+        ct = ContentType.objects.get_for_model(localization)
+        url = reverse('unicms_api:editorial-board-redis-lock-set',
+                      kwargs={'content_type_id': ct.pk,
+                              'object_id': localization.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
         # GET, patch, put, delete
         url = reverse('unicms_api:menu-item-localization',
                       kwargs={'menu_id': menu.pk,

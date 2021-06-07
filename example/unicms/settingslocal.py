@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django_filters',
 
     # 'unicms_editorial_board',
+    # 'unicms_unical_storage_handler',
 ]
 
 # Database
@@ -244,10 +245,16 @@ CMS_PUBLICATION_URL_VIEW_REGEXP = f'^(?P<webpath>[\/a-zA-Z0-9\.\-\_]*)({CMS_PUBL
 
 CMS_HANDLERS_PATHS = [CMS_PUBLICATION_VIEW_PREFIX_PATH,
                       CMS_PUBLICATION_LIST_PREFIX_PATH]
+
 CMS_APP_REGEXP_URLPATHS = {
     'cms.publications.handlers.PublicationViewHandler' : CMS_PUBLICATION_URL_VIEW_REGEXP,
     'cms.publications.handlers.PublicationListHandler' : CMS_PUBLICATION_URL_LIST_REGEXP,
 }
+
+if "unicms_unical_storage_handler" in INSTALLED_APPS:
+    from unicms_unical_storage_handler.settings import *
+    CMS_HANDLERS_PATHS.extend(CMS_STORAGE_HANDLERS_PATHS)
+    CMS_APP_REGEXP_URLPATHS.update(CMS_STORAGE_APP_REGEXP_URLPATHS)
 
 TEMPLATES = [
     {

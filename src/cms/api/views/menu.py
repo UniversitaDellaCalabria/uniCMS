@@ -203,7 +203,7 @@ class MenuCloneView(APIView):
                              custom_values={'name': f'{item.name} (copy {timezone.localtime()})'},
                              recursive_custom_values={'created_by': request.user,
                                                       'modified_by': None})
-        except Exception as e:
+        except Exception as e: # pragma: no cover
             raise LoggedValidationException(classname=self.__class__.__name__,
                                             resource=request.method,
                                             detail=e)

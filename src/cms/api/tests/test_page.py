@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -168,6 +169,14 @@ class PageAPIUnitTest(TestCase):
                               'webpath_id': webpath.pk,
                               'pk': page.pk})
         res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
+        # redis lock set
+        ct = ContentType.objects.get_for_model(page)
+        url = reverse('unicms_api:editorial-board-redis-lock-set',
+                      kwargs={'content_type_id': ct.pk,
+                              'object_id': page.pk})
+        res = req.get(url)
         assert isinstance(res.json(), dict)
 
         # GET, patch, put, delete

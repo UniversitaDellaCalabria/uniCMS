@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from cms.api.utils import check_user_permission_on_object
 from cms.contexts.models_abstract import AbstractLockable
 from cms.medias.models import Media
 from cms.templates.models import (CMS_LINKS_LABELS,
@@ -64,6 +65,11 @@ class CarouselItem(ActivableModel, TimeStampedModel,
             self.description = i18n.description
         return self
 
+    def is_lockable_by(self, user):
+        item = self.carousel
+        permission = check_user_permission_on_object(user=user, obj=item)
+        return permission['granted']
+
     def __str__(self):
         return '[{}] {}'.format(self.carousel, self.heading)
 
@@ -87,6 +93,11 @@ class CarouselItemLocalization(ActivableModel,
     class Meta:
         verbose_name_plural = _("Carousel Item Localization")
 
+    def is_lockable_by(self, user):
+        item = self.carousel_item.carousel
+        permission = check_user_permission_on_object(user=user, obj=item)
+        return permission['granted']
+
     def __str__(self):
         return '{} {}'.format(self.carousel_item, self.language)
 
@@ -108,6 +119,11 @@ class CarouselItemLink(ActivableModel, TimeStampedModel, SortableModel,
     def get_title(self):
         return self.title if self.title_preset == 'custom' else self.title_preset
 
+    def is_lockable_by(self, user):
+        item = self.carousel_item.carousel
+        permission = check_user_permission_on_object(user=user, obj=item)
+        return permission['granted']
+
     def __str__(self):
         return '{} {}'.format(self.carousel_item, self.url)
 
@@ -124,6 +140,11 @@ class CarouselItemLinkLocalization(ActivableModel, TimeStampedModel,
 
     class Meta:
         verbose_name_plural = _("Carousel Item Links")
+
+    def is_lockable_by(self, user):
+        item = self.carousel_item_link.carousel_item.carousel
+        permission = check_user_permission_on_object(user=user, obj=item)
+        return permission['granted']
 
     def __str__(self):
         return '{} {}'.format(self.carousel_item_link.carousel_item.carousel,

@@ -2,6 +2,7 @@ from copy import deepcopy
 
 from django.utils.translation import gettext_lazy as _
 
+from cms.api.utils import check_user_permission_on_object
 from cms.contexts.models import WebPath, models, settings
 from cms.contexts.models_abstract import AbstractLockable
 from cms.templates.models import (ActivableModel,
@@ -209,6 +210,11 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
                                                  is_active=True).count()
         return count
 
+    def is_lockable_by(self, user):
+        item = self.menu
+        permission = check_user_permission_on_object(user=user, obj=item)
+        return permission['granted']
+
     def __str__(self):
         return '{}: {} ({})'.format(self.menu,
                                     self.name,
@@ -226,6 +232,11 @@ class NavigationBarItemLocalization(ActivableModel, TimeStampedModel,
 
     class Meta:
         verbose_name_plural = _("Context Navigation Menu Item Localizations")
+
+    def is_lockable_by(self, user):
+        item = self.item.menu
+        permission = check_user_permission_on_object(user=user, obj=item)
+        return permission['granted']
 
     def __str__(self):
         return '{} - {}'.format(self.item, self.language)

@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.models import EditorialBoardLock, EditorialBoardLockUser
@@ -14,7 +15,7 @@ from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
 from . generics import UniCMSListCreateAPIView
-from .. concurrency import get_lock_from_cache, LOCK_MESSAGE
+from .. concurrency import *
 from .. exceptions import LoggedPermissionDenied
 
 
@@ -127,9 +128,35 @@ class RedisLockView(APIView):
         content_type_id = self.kwargs['content_type_id']
         object_id = self.kwargs['object_id']
         lock = get_lock_from_cache(content_type_id, object_id)
-        if lock[0] and not lock[0] == request.user.pk:
+        if lock[0] and not lock[0] == request.user.pk: # pragma: no cover
             owner_user = get_user_model().objects.filter(pk=lock[0]).first()
             return Response({'lock': lock,
                              'message': LOCK_MESSAGE.format(user=owner_user,
                                                             ttl=lock[1])})
         return Response({})
+
+
+class RedisLockSetView(APIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+
+    def get(self, request, *args, **kwargs):
+        content_type_id = self.kwargs['content_type_id']
+        object_id = self.kwargs['object_id']
+        ct = get_object_or_404(ContentType, pk=content_type_id)
+        obj = get_object_or_404(ct.model_class(), pk=object_id)
+        lock = get_lock_from_cache(content_type_id, object_id)
+        if lock[0] and not lock[0] == request.user.pk: # pragma: no cover
+            owner_user = get_user_model().objects.filter(pk=lock[0]).first()
+            return Response({'lock': lock,
+                             'message': LOCK_MESSAGE.format(user=owner_user,
+                                                            ttl=lock[1])})
+        if obj.is_lockable_by(request.user):
+            set_lock_to_cache(user_id=request.user.pk,
+                              content_type_id=content_type_id,
+                              object_id=object_id)
+            return Response({'message': _('Lock successfully set')})
+        raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                     resource=request.method)

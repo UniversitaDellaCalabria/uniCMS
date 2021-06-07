@@ -49,7 +49,7 @@ class PlaceHolderBlock(JSONBlock):
     """
 
     def sanitize_template(self):
-        if not self.content.get('template'):
+        if not self.content.get('template'): # pragma: no cover
             self.content['template'] = SafeString('')
 
 

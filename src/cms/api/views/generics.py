@@ -16,9 +16,8 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 
-from .. concurrency import (is_lock_cache_available,
-                            get_lock_from_cache,
-                            set_lock_to_cache,
+from .. concurrency import (get_lock_from_cache,
+                            # set_lock_to_cache,
                             LOCK_MESSAGE)
 from .. exceptions import LoggedPermissionDenied
 from .. pagination import UniCmsApiPagination, UniCmsSelectOptionsApiPagination
@@ -50,20 +49,19 @@ class UniCMSListCreateAPIView(generics.ListCreateAPIView):
         abstract = True
 
 
-def check_locks(item, user, force=False):
+def check_locks(item, user):
     content_type_id = ContentType.objects.get_for_model(item).pk
     object_id = item.pk
     user_id = user.pk
-    if is_lock_cache_available() or force:
-        lock = get_lock_from_cache(content_type_id, object_id)
-        user_lock = lock[0]
-        owner_user = get_user_model().objects.filter(pk=user_lock).first()
-        if user_lock and not user_lock == user_id:
-            logger.debug(f'{user} tried to access to {owner_user} actually used by {item}')
-            raise PermissionDenied(LOCK_MESSAGE.format(user=owner_user,
-                                                       ttl=lock[1]),
-                                   403)
-        set_lock_to_cache(user_id, content_type_id, object_id)
+    lock = get_lock_from_cache(content_type_id, object_id)
+    user_lock = lock[0]
+    owner_user = get_user_model().objects.filter(pk=user_lock).first()
+    if user_lock and not user_lock == user_id:
+        logger.debug(f'{user} tried to access to {owner_user} actually used by {item}')
+        raise PermissionDenied(LOCK_MESSAGE.format(user=owner_user,
+                                                  ttl=lock[1]),
+                               403)
+    # set_lock_to_cache(user_id, content_type_id, object_id)
 
 
 class UniCMSCachedRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):

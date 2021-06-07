@@ -5,6 +5,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from cms.api.utils import check_user_permission_on_object
 from cms.contexts.models_abstract import AbstractLockable
 from cms.templates.models import (ActivableModel,
                                   CreatedModifiedBy,
@@ -96,6 +97,11 @@ class MediaCollectionItem(ActivableModel, SortableModel,
     class Meta:
         ordering = ['order']
         verbose_name_plural = _("Media Collection Items")
+
+    def is_lockable_by(self, user): # pragma: no cover
+        item = self.collection
+        permission = check_user_permission_on_object(user=user, obj=item)
+        return permission['granted']
 
     def __str__(self): # pragma: no cover
         return '[{}] {}'.format(self.collection, self.media)

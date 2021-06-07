@@ -50,7 +50,7 @@ class PageHeadingLocalizationList(UniCMSListCreateAPIView):
             # get page
             page = serializer.validated_data.get('heading').page
             # check permissions on page
-            has_permission = page.is_editable_by(request.user)
+            has_permission = page.is_localizable_by(request.user)
             if not has_permission:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
@@ -90,7 +90,7 @@ class PageHeadingLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         if not item: raise Http404
         page = item.heading.page
         # check permissions on page
-        has_permission = page.is_editable_by(request.user)
+        has_permission = page.is_localizable_by(request.user)
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
@@ -101,7 +101,7 @@ class PageHeadingLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         if not item: raise Http404
         page = item.heading.page
         # check permissions on page
-        has_permission = page.is_editable_by(request.user)
+        has_permission = page.is_localizable_by(request.user)
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
@@ -112,7 +112,7 @@ class PageHeadingLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         if not item: raise Http404
         page = item.heading.page
         # check permissions on page
-        has_permission = page.is_editable_by(request.user)
+        has_permission = page.is_localizable_by(request.user)
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)

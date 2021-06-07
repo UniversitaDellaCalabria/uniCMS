@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -84,7 +85,22 @@ class PageLocalizationAPIUnitTest(TestCase):
                               'webpath_id': webpath.pk,
                               'page_id': page.pk,
                               'pk': page_loc.pk})
+        # site is not managed by user2
+        req.force_login(user2)
+        res = req.get(url)
+        assert res.status_code == 403
+        # site is managed by user
+        req.force_login(user)
+        res = req.get(url)
         res = req.get(url, content_type='application/json',)
+        assert isinstance(res.json(), dict)
+
+        # redis lock set
+        ct = ContentType.objects.get_for_model(page_loc)
+        url = reverse('unicms_api:editorial-board-redis-lock-set',
+                      kwargs={'content_type_id': ct.pk,
+                              'object_id': page_loc.pk})
+        res = req.get(url)
         assert isinstance(res.json(), dict)
 
         # GET, patch, put, delete

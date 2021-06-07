@@ -3,7 +3,7 @@
 omit =
     *manage.py
     */distutils/*
-    tests/*
+    */tests/*
     */apps/*
     */migrations/*
     */site-packages/*
@@ -14,3 +14,4 @@ omit =
     */medias/admin.py
     */templates/admin.py
     */unicms-editorial-board/*
+    */unicms-unical-storage-handler/*

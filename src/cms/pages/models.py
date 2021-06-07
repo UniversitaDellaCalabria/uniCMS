@@ -318,8 +318,17 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         return '{} [{}]'.format(self.name, self.state)
 
 
+class AbstractLockablePageElement(models.Model):
+    class Meta:
+        abstract = True
+
+    def is_lockable_by(self, user):
+        return True if self.page.is_editable_by(user) else False
+
+
 class PageCarousel(SectionAbstractModel, ActivableModel, SortableModel,
-                   TimeStampedModel, CreatedModifiedBy):
+                   TimeStampedModel, CreatedModifiedBy,
+                   AbstractLockablePageElement):
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     carousel = models.ForeignKey(Carousel, null=False, blank=False,
@@ -333,7 +342,8 @@ class PageCarousel(SectionAbstractModel, ActivableModel, SortableModel,
                                   self.section or '#')
 
 
-class PageLocalization(TimeStampedModel, ActivableModel, CreatedModifiedBy):
+class PageLocalization(TimeStampedModel, ActivableModel,
+                       CreatedModifiedBy, AbstractLockablePageElement):
     title = models.CharField(max_length=256,
                              null=False, blank=False)
     page = models.ForeignKey(Page,
@@ -346,12 +356,16 @@ class PageLocalization(TimeStampedModel, ActivableModel, CreatedModifiedBy):
     class Meta:
         verbose_name_plural = _("Page Localizations")
 
+    def is_lockable_by(self, user):
+        return True if self.page.is_localizable_by(user) else False
+
     def __str__(self):
         return '{} {}'.format(self.page, self.language)
 
 
 class PageMedia(SectionAbstractModel, ActivableModel, SortableModel,
-                TimeStampedModel, CreatedModifiedBy):
+                TimeStampedModel, CreatedModifiedBy,
+                AbstractLockablePageElement):
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     media = models.ForeignKey(Media, null=False, blank=False,
@@ -368,7 +382,8 @@ class PageMedia(SectionAbstractModel, ActivableModel, SortableModel,
 
 
 class PageMenu(SectionAbstractModel, ActivableModel, SortableModel,
-               TimeStampedModel, CreatedModifiedBy):
+               TimeStampedModel, CreatedModifiedBy,
+               AbstractLockablePageElement):
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     menu = models.ForeignKey(NavigationBar, null=False, blank=False,
@@ -383,7 +398,8 @@ class PageMenu(SectionAbstractModel, ActivableModel, SortableModel,
 
 
 class PageBlock(ActivableModel, SectionAbstractModel, SortableModel,
-                TimeStampedModel, CreatedModifiedBy):
+                TimeStampedModel, CreatedModifiedBy,
+                AbstractLockablePageElement):
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     block = models.ForeignKey(TemplateBlock, null=False, blank=False,
@@ -401,7 +417,7 @@ class PageBlock(ActivableModel, SectionAbstractModel, SortableModel,
 
 
 class PageRelated(TimeStampedModel, SortableModel, ActivableModel,
-                  CreatedModifiedBy):
+                  CreatedModifiedBy, AbstractLockablePageElement):
     page = models.ForeignKey(Page, null=False, blank=False,
                              related_name='parent_page',
                              on_delete=models.CASCADE)
@@ -417,7 +433,8 @@ class PageRelated(TimeStampedModel, SortableModel, ActivableModel,
         return '{} {}'.format(self.page, self.related_page)
 
 
-class PageLink(TimeStampedModel, SortableModel, CreatedModifiedBy):
+class PageLink(TimeStampedModel, SortableModel, CreatedModifiedBy,
+               AbstractLockablePageElement):
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     name = models.CharField(max_length=256, null=False, blank=False)
@@ -431,7 +448,7 @@ class PageLink(TimeStampedModel, SortableModel, CreatedModifiedBy):
 
 
 class PagePublication(TimeStampedModel, SortableModel, ActivableModel,
-                      CreatedModifiedBy):
+                      CreatedModifiedBy, AbstractLockablePageElement):
     page = models.ForeignKey(Page, null=False, blank=False,
                              # related_name='container_page',
                              on_delete=models.CASCADE)
@@ -448,7 +465,8 @@ class PagePublication(TimeStampedModel, SortableModel, ActivableModel,
 
 
 class PageMediaCollection(SectionAbstractModel, ActivableModel, SortableModel,
-                          TimeStampedModel, CreatedModifiedBy):
+                          TimeStampedModel, CreatedModifiedBy,
+                          AbstractLockablePageElement):
     page = models.ForeignKey(Page, on_delete=models.CASCADE)
     collection = models.ForeignKey(MediaCollection,
                                    on_delete=models.PROTECT)
@@ -461,7 +479,8 @@ class PageMediaCollection(SectionAbstractModel, ActivableModel, SortableModel,
 
 
 class PageHeading(SectionAbstractModel, ActivableModel, SortableModel,
-                  TimeStampedModel, CreatedModifiedBy):
+                  TimeStampedModel, CreatedModifiedBy,
+                  AbstractLockablePageElement):
     page = models.ForeignKey(Page, null=False, blank=False,
                              on_delete=models.CASCADE)
     title = models.CharField(max_length=256, null=False, blank=False)
@@ -487,7 +506,8 @@ class PageHeading(SectionAbstractModel, ActivableModel, SortableModel,
 
 class PageHeadingLocalization(ActivableModel,
                               TimeStampedModel, SortableModel,
-                              CreatedModifiedBy):
+                              CreatedModifiedBy,
+                              AbstractLockablePageElement):
     heading = models.ForeignKey(PageHeading, on_delete=models.CASCADE)
     language = models.CharField(choices=settings.LANGUAGES,
                                 max_length=12, null=False,blank=False,
@@ -497,6 +517,9 @@ class PageHeadingLocalization(ActivableModel,
 
     class Meta:
         verbose_name_plural = _("Page Heading Localizations")
+
+    def is_lockable_by(self, user):
+        return True if self.heading.page.is_localizable_by(user) else False
 
     def __str__(self):
         return '{} {}'.format(self.heading, self.language)

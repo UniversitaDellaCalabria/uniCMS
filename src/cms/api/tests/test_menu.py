@@ -61,6 +61,14 @@ class MenuAPIUnitTest(TestCase):
         res = req.get(url, content_type='application/json',)
         assert isinstance(res.json(), dict)
 
+        # redis lock set
+        ct = ContentType.objects.get_for_model(menu)
+        url = reverse('unicms_api:editorial-board-redis-lock-set',
+                      kwargs={'content_type_id': ct.pk,
+                              'object_id': menu.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
         # CLONE
         current_menus = NavigationBar.objects.all().count()
         url = reverse('unicms_api:editorial-board-menu-clone', kwargs={'pk': menu.pk})

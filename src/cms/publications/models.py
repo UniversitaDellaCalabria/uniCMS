@@ -323,6 +323,14 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         return f'{self.name} ({self.title})'
 
 
+class AbstractLockablePublicationElement(models.Model):
+    class Meta:
+        abstract = True
+
+    def is_lockable_by(self, user):
+        return True if self.publication.is_editable_by(user) else False
+
+
 class PublicationContext(TimeStampedModel, ActivableModel,
                          AbstractPublicable, SectionAbstractModel,
                          SortableModel, CreatedModifiedBy):
@@ -378,12 +386,15 @@ class PublicationContext(TimeStampedModel, ActivableModel,
         now = timezone.localtime()
         return self.date_start <= now and self.date_end >= now
 
+    def is_lockable_by(self, user):
+        return self.webpath.is_publicable_by(user)
+
     def __str__(self):
         return '{} {}'.format(self.publication, self.webpath)
 
 
 class PublicationRelated(TimeStampedModel, SortableModel, ActivableModel,
-                         CreatedModifiedBy):
+                         CreatedModifiedBy, AbstractLockablePublicationElement):
     publication = models.ForeignKey(Publication, null=False, blank=False,
                                     related_name='parent_publication',
                                     on_delete=models.CASCADE)
@@ -399,7 +410,8 @@ class PublicationRelated(TimeStampedModel, SortableModel, ActivableModel,
         return '{} {}'.format(self.publication, self.related)
 
 
-class PublicationLink(TimeStampedModel, CreatedModifiedBy):
+class PublicationLink(TimeStampedModel, CreatedModifiedBy,
+                      AbstractLockablePublicationElement):
     publication = models.ForeignKey(Publication, null=False, blank=False,
                                     on_delete=models.CASCADE)
     name = models.CharField(max_length=256, null=False, blank=False)
@@ -413,7 +425,8 @@ class PublicationLink(TimeStampedModel, CreatedModifiedBy):
 
 
 class PublicationBlock(SectionAbstractModel,TimeStampedModel,
-                       ActivableModel, SortableModel, CreatedModifiedBy):
+                       ActivableModel, SortableModel, CreatedModifiedBy,
+                       AbstractLockablePublicationElement):
     publication = models.ForeignKey(Publication, null=False, blank=False,
                                     on_delete=models.CASCADE)
     block = models.ForeignKey(TemplateBlock, null=False, blank=False,
@@ -430,7 +443,8 @@ class PublicationBlock(SectionAbstractModel,TimeStampedModel,
 
 
 class PublicationMediaCollection(TimeStampedModel, ActivableModel,
-                                 SortableModel, CreatedModifiedBy):
+                                 SortableModel, CreatedModifiedBy,
+                                 AbstractLockablePublicationElement):
     publication = models.ForeignKey(Publication,
                                     on_delete=models.CASCADE)
     collection = models.ForeignKey(MediaCollection,
@@ -450,7 +464,8 @@ def publication_attachment_path(instance, filename): # pragma: no cover
 
 
 class PublicationAttachment(TimeStampedModel, SortableModel, ActivableModel,
-                            AbstractMedia, CreatedModifiedBy):
+                            AbstractMedia, CreatedModifiedBy,
+                            AbstractLockablePublicationElement):
 
     publication = models.ForeignKey(Publication, null=False, blank=False,
                                     related_name='page_attachment',
@@ -473,7 +488,7 @@ class PublicationAttachment(TimeStampedModel, SortableModel, ActivableModel,
 
 
 class PublicationLocalization(TimeStampedModel, ActivableModel,
-                              CreatedModifiedBy):
+                              CreatedModifiedBy, AbstractLockablePublicationElement):
     title = models.CharField(max_length=256,
                              null=False, blank=False,
                              help_text=_("Heading, Headline"))
@@ -491,6 +506,9 @@ class PublicationLocalization(TimeStampedModel, ActivableModel,
 
     class Meta:
         verbose_name_plural = _("Publication Localizations")
+
+    def is_lockable_by(self, user):
+        return self.publication.is_localizable_by(user)
 
     def __str__(self):
         return '{} {}'.format(self.publication, self.language)
