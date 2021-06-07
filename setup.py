@@ -1,8 +1,14 @@
+import os
 import re
 import sys
 
 from glob import glob
 from setuptools import setup, find_packages
+
+
+with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
+    README = readme.read()
+
 
 _src_folder = 'src'
 _pkg_name = 'cms'
@@ -24,6 +30,8 @@ setup(
     name="unicms",
     version='0.19.0',
     description="uniCMS is a Django Web Content Management System",
+    long_description=README,
+    long_description_content_type='text/markdown',
     author='Giuseppe De Marco, Francesco Filicetti',
     author_email='giuseppe.demarco@unical.it, francesco.filicetti@unical.it',
     license="Apache 2.0",
