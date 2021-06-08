@@ -283,6 +283,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
 
     def is_localizable_by(self, user=None):
         if not user: return False
+        if user.is_superuser: return True
         # check if user has EditorialBoard editor permissions on object
         # and check for locks on webpath
         webpath = self.webpath
@@ -293,6 +294,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
 
     def is_editable_by(self, user=None):
         if not user: return False
+        if user.is_superuser: return True
         # check if user has EditorialBoard editor permissions on object
         # and check for locks on webpath
         webpath = self.webpath
@@ -303,6 +305,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
 
     def is_publicable_by(self, user=None):
         if not user: return False
+        if user.is_superuser: return True
         # check if user has EditorialBoard editor permissions on object
         # and check for locks on webpath
         webpath = self.webpath
