@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
-from . generics import UniCMSListCreateAPIView
+from . generics import check_locks, UniCMSListCreateAPIView
 from .. concurrency import *
 from .. exceptions import LoggedPermissionDenied
 
@@ -65,6 +65,10 @@ class ObjectUserLocksList(UniCMSListCreateAPIView):
             if not hasattr(obj, 'is_lockable_by') or not obj.is_lockable_by(request.user):
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
+
+            # redis locks
+            check_locks(obj, request.user)
+
             existent = EditorialBoardLockUser.objects.filter(lock__content_type=content_type,
                                                              lock__object_id=object_id,
                                                              user=user).first()
@@ -97,6 +101,7 @@ class ObjectUserLocksView(generics.RetrieveDestroyAPIView):
         """
         content_type_id = self.kwargs['content_type_id']
         object_id = self.kwargs['object_id']
+
         lock_id = self.kwargs['pk']
         locks = EditorialBoardLockUser.objects.filter(pk=lock_id,
                                                       lock__object_id=object_id,
@@ -106,16 +111,20 @@ class ObjectUserLocksView(generics.RetrieveDestroyAPIView):
     def delete(self, request, *args, **kwargs):
         items = self.get_queryset()
         if not items: raise Http404
-        permission = False
-        if request.user.is_superuser:
-            permission = True
-        else:
-            user_lock = items.filter(user=request.user).first()
-            if user_lock: permission = True
-        if not permission:
-            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+
+        # redis locks
+        one_lock = items.first()
+        content_type_id = one_lock.lock.content_type.pk
+        object_id = one_lock.lock.object_id
+        content_type = ContentType.objects.get_for_id(content_type_id)
+        obj = content_type.get_object_for_this_type(pk=object_id)
+        check_locks(obj, request.user)
+
+        user_lock = items.filter(user=request.user).first()
+        if request.user.is_superuser or user_lock:
+            return super().delete(request, *args, **kwargs)
+        raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
-        return super().delete(request, *args, **kwargs)
 
 
 class RedisLockView(APIView):
