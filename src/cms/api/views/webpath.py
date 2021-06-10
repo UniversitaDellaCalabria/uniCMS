@@ -296,6 +296,43 @@ class WebpathCloneSchema(AutoSchema):
     def get_operation_id(self, path, method):# pragma: no cover
         return 'cloneWebPath'
 
+    def get_operation(self, path, method):
+        op = super().get_operation(path, method)
+        op['parameters'].append(
+            {
+                "name": "parent",
+                "in": "query",
+                "required": True,
+                "description": "Destination webpath",
+                'schema': {'type': 'integer'}
+            })
+        op['parameters'].append(
+            {
+                "name": "exclude_pages",
+                "in": "query",
+                "required": False,
+                "description": "If true exclude webpath pages from cloning",
+                'schema': {'type': 'boolean'}
+            })
+        op['parameters'].append(
+            {
+                "name": "exclude_news",
+                "in": "query",
+                "required": False,
+                "description": "If true exclude webpath news from cloning",
+                'schema': {'type': 'boolean'}
+            })
+        op['parameters'].append(
+            {
+                "name": "only_childs",
+                "in": "query",
+                "required": False,
+                "description": "If true only webpath childs are cloned",
+                'schema': {'type': 'boolean'}
+            }
+        )
+        return op
+
 
 class WebpathCloneView(APIView):
 
