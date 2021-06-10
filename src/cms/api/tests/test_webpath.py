@@ -513,3 +513,43 @@ class WebpathAPIUnitTest(TestCase):
         ebu.save()
         res = req.get(url)
         assert isinstance(res.json(), dict)
+
+    def test_clone(self):
+        req = Client()
+        ebu = ContextUnitTest.create_editorialboard_user()
+        webpath = ebu.webpath
+        url = reverse('unicms_api:editorial-board-site-webpath-clone',
+                      kwargs={'site_id': webpath.site.pk,
+                              'pk': webpath.pk})
+
+        parent = ContextUnitTest.create_webpath(site=webpath.site,
+                                                path='parent')
+        data = {'exclude_pages': 1,
+                'exclude_news': 1}
+
+        # accessible to staff users only
+        res = req.post(url, data=data,
+                       content_type='application/json', follow=1)
+        assert res.status_code == 403
+
+        user = ebu.user
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
+        req.force_login(user)
+        res = req.post(url, data=data,
+                       content_type='application/json', follow=1)
+        # no parent in data
+        assert res.status_code == 404
+
+        data['parent'] = parent.pk
+        res = req.post(url, data=data,
+                       content_type='application/json', follow=1)
+        assert res.status_code == 200
+
+        # form
+        url = reverse('unicms_api:editorial-board-site-webpath-clone-form',
+                      kwargs={'site_id': webpath.site.pk,
+                              'pk': webpath.pk})
+        res = req.get(url)
+        assert isinstance(res.json(), list)

@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.forms import ModelForm
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from cms.api.settings import FORM_SOURCE_LABEL
 from cms.publications.models import PublicationContext
@@ -64,3 +65,26 @@ class PublicationContextForm(ModelForm):
                   'date_start', 'date_end',
                   'in_evidence_start', 'in_evidence_end',
                   'order', 'is_active']
+
+
+class WebPathCloneForm(forms.Form):
+    parent = forms.ModelChoiceField(label=_('Parent'),
+                                    queryset=None, required=True,
+                                    help_text=_("Parent element in which insert the new webpaths"))
+    exclude_pages = forms.BooleanField(label=_('Exclude pages'),
+                                      required=False,
+                                      help_text=_("Exclude webpaths' pages"))
+    exclude_news = forms.BooleanField(label=_('Exclude news'),
+                                      required=False,
+                                      help_text=_("Exclude webpaths' news"))
+    only_childs = forms.BooleanField(label=_('Only childs'),
+                                     required=False,
+                                     help_text=_("Take only webpath children"))
+
+    def __init__(self, *args, **kwargs):
+        site_id = kwargs.pop('site_id', None)
+        super().__init__(*args, **kwargs)
+        self.fields['parent'].queryset = WebPath.objects.filter(site__is_active=True)
+        setattr(self.fields['parent'],
+                FORM_SOURCE_LABEL,
+                reverse('unicms_api:webpath-all-options'))

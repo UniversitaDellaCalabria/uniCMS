@@ -123,6 +123,8 @@ urlpatterns += path(f'{eb_prefix}/sites/webpaths/', webpath.WebpathAllList.as_vi
 urlpatterns += path(f'{eb_prefix}/sites/webpaths/options/', webpath.WebpathAllOptionList.as_view(), name='webpath-all-options'),
 urlpatterns += path(f'{w_prefix}/options/', webpath.WebpathOptionList.as_view(), name='webpath-options'),
 urlpatterns += path(f'{w_prefix}/options/<int:pk>/', webpath.WebpathOptionView.as_view(), name='webpath-option'),
+urlpatterns += path(f'{w_prefix}/<int:pk>/clone/', webpath.WebpathCloneView.as_view(), name='editorial-board-site-webpath-clone'),
+urlpatterns += path(f'{w_prefix}/<int:pk>/clone/form/', webpath.WebpathCloneFormView.as_view(), name='editorial-board-site-webpath-clone-form'),
 
 # pages
 pa_prefix = f'{w_prefix}/<int:webpath_id>/pages'

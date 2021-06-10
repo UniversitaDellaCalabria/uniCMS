@@ -3,6 +3,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -11,10 +13,10 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.schemas.openapi import AutoSchema
 
 from cms.contexts import settings as contexts_settings
-from cms.contexts.forms import WebPathForm
+from cms.contexts.forms import WebPathForm, WebPathCloneForm
 from cms.contexts.models import EditorialBoardEditors, EditorialBoardLockUser, WebPath, WebSite
 from cms.contexts.serializers import WebPathSerializer, WebPathSelectOptionsSerializer
-from cms.contexts.utils import is_publisher
+from cms.contexts.utils import clone, is_publisher
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -281,3 +283,87 @@ class WebpathAllList(generics.ListAPIView):
                        filters.OrderingFilter]
     filterset_fields = ['is_active', 'created', 'modified', 'created_by']
     pagination_class = UniCmsApiPagination
+
+
+class WebpathCloneFormView(APIView):
+    def get(self, *args, **kwargs):
+        form = WebPathCloneForm()
+        form_fields = UniCMSFormSerializer.serialize(form)
+        return Response(form_fields)
+
+
+class WebpathCloneSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'cloneWebPath'
+
+
+class WebpathCloneView(APIView):
+
+    schema = WebpathCloneSchema()
+    description = ""
+    permission_classes = [IsAdminUser]
+
+    def get_queryset(self):
+        """
+        """
+        site_id = self.kwargs['site_id']
+        pk = self.kwargs['pk']
+        site = get_object_or_404(WebSite, pk=site_id, is_active=True)
+        return WebPath.objects.filter(pk=pk, site=site)
+
+    def post(self, request, *args, **kwargs):
+        item = self.get_queryset().first()
+        if not item: raise Http404
+
+        # get POST data
+        parent_id = request.data.get('parent', None)
+        exclude_pages = request.data.get('exclude_pages', 0)
+        exclude_news = request.data.get('exclude_news', 0)
+        only_childs = request.data.get('only_childs', 0)
+
+        if not parent_id:
+            raise Http404
+
+        # check permissions on parent
+        parent = get_object_or_404(WebPath, pk=parent_id)
+        has_permission = parent.is_publicable_by(user=request.user,
+                                                 parent=True)
+        if not has_permission:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+
+        # exclue relations
+        excluded_childrens = ['editorialboardeditors',
+                              'linked_page',
+                              'navigationbaritem']
+        if exclude_pages:
+            excluded_childrens.append('page')
+        if exclude_news:
+            excluded_childrens.append('publicationcontext')
+
+        # set new parent
+        custom_values = {'parent': parent}
+
+        # set values to all childs
+        recursive_values = {'created_by': request.user,
+                            'modified_by': None,
+                            'site': parent.site,
+                            'date_start': timezone.localtime(),
+                            'date_end': timezone.localtime() + timezone.timedelta(days=30),
+                            'in_evidence_start': None,
+                            'in_evidence_end': None}
+
+        # clone full tree or get only childs (useful to clone a root in another root!)
+        to_apply = WebPath.objects.filter(parent=item) if only_childs else [item]
+        for element in to_apply:
+            try:
+                clone(element,
+                      excluded_fields=['created', 'modified'],
+                      excluded_childrens=excluded_childrens,
+                      custom_values=custom_values,
+                      recursive_custom_values=recursive_values)
+            except Exception as e: # pragma: no cover
+                raise LoggedValidationException(classname=self.__class__.__name__,
+                                                resource=request.method,
+                                                detail=e)
+        return Response(_("Cloning done with success!"))
