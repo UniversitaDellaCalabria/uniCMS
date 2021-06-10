@@ -51,11 +51,12 @@ class EditorialBoardLockAPIUnitTest(TestCase):
         assert isinstance(res.json(), dict)
 
         # webpath redis redislocks set
-        url = reverse('unicms_api:editorial-board-redis-lock-set',
-                      kwargs={'content_type_id': webpath_ct.pk,
-                              'object_id': webpath.pk})
+        url = reverse('unicms_api:editorial-board-redis-lock-set')
 
-        res = req.get(url)
+        data = {'content_type_id': webpath_ct.pk,
+                'object_id': webpath.pk}
+        res = req.post(url, data,
+                       content_type='application/json', follow=1)
         assert isinstance(res.json(), dict)
 
         # webpath locks list

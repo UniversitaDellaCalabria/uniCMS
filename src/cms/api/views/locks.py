@@ -145,15 +145,47 @@ class RedisLockView(APIView):
         return Response({})
 
 
+class RedisLockSetSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'setRedisLock'
+
+    def get_operation(self, path, method): # pragma: no cover
+        op = super().get_operation(path, method)
+        op['parameters'].append(
+            {
+                "name": "content_type_id",
+                "in": "query",
+                "required": True,
+                "description": "Locking object content_type id",
+                'schema': {'type': 'integer'}
+            }
+        )
+        op['parameters'].append(
+            {
+                "name": "object_id",
+                "in": "query",
+                "required": True,
+                "description": "Locking object id",
+                'schema': {'type': 'integer'}
+            }
+        )
+        return op
+
+
 class RedisLockSetView(APIView):
     """
     """
     description = ""
     permission_classes = [IsAdminUser]
+    schema = RedisLockSetSchema()
 
-    def get(self, request, *args, **kwargs):
-        content_type_id = self.kwargs['content_type_id']
-        object_id = self.kwargs['object_id']
+    def post(self, request, *args, **kwargs):
+        content_type_id = request.data.get('content_type_id', None)
+        object_id = request.data.get('object_id', None)
+
+        if not all([content_type_id, object_id]):
+            raise Http404
+
         ct = get_object_or_404(ContentType, pk=content_type_id)
         obj = get_object_or_404(ct.model_class(), pk=object_id)
         lock = get_lock_from_cache(content_type_id, object_id)

@@ -362,7 +362,7 @@ urlpatterns += path(f'{eb_prefix}/locks/<int:content_type_id>/<int:object_id>/<i
 urlpatterns += path(f'{eb_prefix}/users/form/', webpath_pub_context.EditorialBoardLockUserFormView.as_view(), name='users-form'),
 urlpatterns += path(f'{eb_prefix}/redis-lock/<int:content_type_id>/<int:object_id>/',
                     locks.RedisLockView.as_view(), name='editorial-board-redis-lock'),
-urlpatterns += path(f'{eb_prefix}/redis-lock/<int:content_type_id>/<int:object_id>/set/',
+urlpatterns += path(f'{eb_prefix}/redis-lock/set/',
                     locks.RedisLockSetView.as_view(), name='editorial-board-redis-lock-set'),
 
 # users

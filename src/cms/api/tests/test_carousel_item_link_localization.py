@@ -94,10 +94,10 @@ class CarouselItemLinkLocalizationAPIUnitTest(TestCase):
 
         # redis lock set
         ct = ContentType.objects.get_for_model(carousel_item_link_localization)
-        url = reverse('unicms_api:editorial-board-redis-lock-set',
-                      kwargs={'content_type_id': ct.pk,
-                              'object_id': carousel_item_link_localization.pk})
-        res = req.get(url)
+        data = {'content_type_id': ct.pk,
+                'object_id': carousel_item_link_localization.pk}
+        res = req.post(url, data,
+                       content_type='application/json', follow=1)
         assert isinstance(res.json(), dict)
 
         # GET, patch, put, delete

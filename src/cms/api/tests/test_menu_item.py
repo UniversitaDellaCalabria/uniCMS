@@ -94,10 +94,11 @@ class MenuItemAPIUnitTest(TestCase):
 
         # redis lock set
         ct = ContentType.objects.get_for_model(menu_item)
-        url = reverse('unicms_api:editorial-board-redis-lock-set',
-                      kwargs={'content_type_id': ct.pk,
-                              'object_id': menu_item.pk})
-        res = req.get(url)
+        url = reverse('unicms_api:editorial-board-redis-lock-set')
+        data = {'content_type_id': ct.pk,
+                'object_id': menu_item.pk}
+        res = req.post(url, data,
+                       content_type='application/json', follow=1)
         assert isinstance(res.json(), dict)
 
         # GET, patch, put, delete

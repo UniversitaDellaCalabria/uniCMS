@@ -296,7 +296,7 @@ class WebpathCloneSchema(AutoSchema):
     def get_operation_id(self, path, method):# pragma: no cover
         return 'cloneWebPath'
 
-    def get_operation(self, path, method):
+    def get_operation(self, path, method): # pragma: no cover
         op = super().get_operation(path, method)
         op['parameters'].append(
             {
@@ -305,7 +305,8 @@ class WebpathCloneSchema(AutoSchema):
                 "required": True,
                 "description": "Destination webpath",
                 'schema': {'type': 'integer'}
-            })
+            }
+        )
         op['parameters'].append(
             {
                 "name": "exclude_pages",
@@ -313,7 +314,8 @@ class WebpathCloneSchema(AutoSchema):
                 "required": False,
                 "description": "If true exclude webpath pages from cloning",
                 'schema': {'type': 'boolean'}
-            })
+            }
+        )
         op['parameters'].append(
             {
                 "name": "exclude_news",
@@ -321,7 +323,8 @@ class WebpathCloneSchema(AutoSchema):
                 "required": False,
                 "description": "If true exclude webpath news from cloning",
                 'schema': {'type': 'boolean'}
-            })
+            }
+        )
         op['parameters'].append(
             {
                 "name": "only_childs",

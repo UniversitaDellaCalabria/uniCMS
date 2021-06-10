@@ -53,8 +53,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
 
-    # 'unicms_editorial_board',
-    # 'unicms_unical_storage_handler',
+    'unicms_editorial_board',
+    'unicms_unical_storage_handler',
 ]
 
 # Database
@@ -74,8 +74,8 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 100 * 100
 
 LANGUAGE_CODE = 'it-it'
 LANGUAGE = LANGUAGE_CODE.split('-')[0]
-TIME_ZONE = 'UTC'
-# TIME_ZONE = 'Europe/Rome'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Rome'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
