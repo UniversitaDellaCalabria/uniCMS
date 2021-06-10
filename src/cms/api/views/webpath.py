@@ -301,7 +301,7 @@ class WebpathCloneSchema(AutoSchema):
         op['parameters'].append(
             {
                 "name": "parent",
-                "in": "query",
+                "in": "form",
                 "required": True,
                 "description": "Destination webpath",
                 'schema': {'type': 'integer'}
@@ -310,7 +310,7 @@ class WebpathCloneSchema(AutoSchema):
         op['parameters'].append(
             {
                 "name": "exclude_pages",
-                "in": "query",
+                "in": "form",
                 "required": False,
                 "description": "If true exclude webpath pages from cloning",
                 'schema': {'type': 'boolean'}
@@ -319,7 +319,7 @@ class WebpathCloneSchema(AutoSchema):
         op['parameters'].append(
             {
                 "name": "exclude_news",
-                "in": "query",
+                "in": "form",
                 "required": False,
                 "description": "If true exclude webpath news from cloning",
                 'schema': {'type': 'boolean'}
@@ -328,7 +328,7 @@ class WebpathCloneSchema(AutoSchema):
         op['parameters'].append(
             {
                 "name": "only_childs",
-                "in": "query",
+                "in": "form",
                 "required": False,
                 "description": "If true only webpath childs are cloned",
                 'schema': {'type': 'boolean'}

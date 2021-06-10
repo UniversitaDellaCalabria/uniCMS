@@ -154,7 +154,7 @@ class RedisLockSetSchema(AutoSchema):
         op['parameters'].append(
             {
                 "name": "content_type_id",
-                "in": "query",
+                "in": "form",
                 "required": True,
                 "description": "Locking object content_type id",
                 'schema': {'type': 'integer'}
@@ -163,7 +163,7 @@ class RedisLockSetSchema(AutoSchema):
         op['parameters'].append(
             {
                 "name": "object_id",
-                "in": "query",
+                "in": "form",
                 "required": True,
                 "description": "Locking object id",
                 'schema': {'type': 'integer'}
