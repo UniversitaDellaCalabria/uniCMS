@@ -42,7 +42,7 @@ class WebPathAdmin(AbstractCreatedModifiedBy):
 class EditorialBoardEditorsAdmin(AbstractCreatedModifiedBy):
     list_display = ('user', 'permission', 'webpath', 'is_active')
     list_filter = ('permission', 'created', 'modified', 'is_active')
-    search_fields = ('user', )
+    search_fields = ('user__first_name', 'user__last_name')
     readonly_fields = ('created', 'modified')
 
 
