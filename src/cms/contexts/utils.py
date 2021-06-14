@@ -28,10 +28,12 @@ def get_CMS_HOOKS():
 
 
 def detect_user_language(request):
-    lang = request.GET.get('lang',
-                           translation.get_language_from_request(request))
+    req_lang =  translation.get_language_from_request(request) # is browser language
+    current = request.session.get(translation.LANGUAGE_SESSION_KEY, req_lang)
+    lang = request.GET.get('lang', current)
     translation.activate(lang)
-    request.LANGUAGE_CODE = translation.get_language()
+    request.LANGUAGE_CODE = lang
+    request.session[translation.LANGUAGE_SESSION_KEY] = lang
     return lang
 
 

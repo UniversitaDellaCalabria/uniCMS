@@ -27,8 +27,11 @@ def _build_breadcrumbs(webpath: WebPath):
 def language_menu(context, template=None):
     request = context['request']
     languages = {k:v for k,v in dict(settings.LANGUAGES).items()}
-    current_args = urllib.parse.urlencode(request.GET)
-    data = {v:f'?{current_args}&lang={k}' for k,v in languages.items()}
+    get_params = dict(request.GET)
+    get_params.pop('lang', False)
+    current_args = urllib.parse.urlencode(get_params)
+    char = '&' if current_args else ''
+    data = {v:f'?{current_args}{ char }lang={k}' for k,v in languages.items()}
     if template: # pragma: no cover
         return handle_faulty_templates(template, data, name='language_menu')
     return data
