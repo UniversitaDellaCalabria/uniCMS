@@ -14,10 +14,8 @@ from cms.templates.models import (CMS_LINKS_LABELS,
 
 class Carousel(ActivableModel, TimeStampedModel, CreatedModifiedBy,
                AbstractLockable):
-    name = models.CharField(max_length=160, blank=False,
-                            null=False, unique=False)
-    description = models.TextField(max_length=2048,
-                                   null=False, blank=False)
+    name = models.CharField(max_length=160)
+    description = models.TextField(max_length=2048)
 
     class Meta:
         ordering = ['name']
@@ -40,13 +38,15 @@ class CarouselItem(ActivableModel, TimeStampedModel,
     carousel = models.ForeignKey(Carousel,
                                  on_delete=models.CASCADE)
     image = models.ForeignKey(Media, on_delete=models.PROTECT)
-    pre_heading = models.CharField(max_length=120, blank=True, null=True,
-                                   help_text=_("Pre Heading"))
-    heading = models.CharField(max_length=120, blank=True, null=True,
-                               help_text=_("Heading"))
+    pre_heading = models.CharField(
+        max_length=120, blank=True, default='', help_text=_('Pre Heading')
+    )
+    heading = models.CharField(
+        max_length=120, blank=True, default='', help_text=_('Heading')
+    )
 
     # hopefully markdown here!
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(default='', blank=True)
 
     class Meta:
         verbose_name_plural = _("Carousel Items")
@@ -79,16 +79,16 @@ class CarouselItemLocalization(ActivableModel,
                                CreatedModifiedBy):
     carousel_item = models.ForeignKey(CarouselItem,
                                       on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES,
-                                max_length=12, null=False,blank=False,
-                                default='en')
-    pre_heading = models.CharField(max_length=120, blank=True, null=True,
-                                   help_text=_("Pre Heading"))
-    heading = models.CharField(max_length=120, blank=True, null=True,
-                               help_text=_("Heading"))
+    language = models.CharField(choices=settings.LANGUAGES, max_length=12, default='en')
+    pre_heading = models.CharField(
+        max_length=120, blank=True, default='', help_text=_('Pre Heading')
+    )
+    heading = models.CharField(
+        max_length=120, blank=True, default='', help_text=_('Heading')
+    )
 
     # hopefully markdown here!
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, default='')
 
     class Meta:
         verbose_name_plural = _("Carousel Item Localization")
@@ -109,8 +109,7 @@ class CarouselItemLink(ActivableModel, TimeStampedModel, SortableModel,
     title_preset = models.CharField(choices=CMS_LINKS_LABELS,
                                     default='custom',
                                     max_length=33)
-    title = models.CharField(max_length=120, blank=True, null=True,
-                             help_text=_("Title"))
+    title = models.CharField(max_length=120, blank=True, default='', help_text=_('Title'))
     url = models.CharField(max_length=2048)
 
     class Meta:
@@ -132,11 +131,8 @@ class CarouselItemLinkLocalization(ActivableModel, TimeStampedModel,
                                    SortableModel, CreatedModifiedBy):
     carousel_item_link = models.ForeignKey(CarouselItemLink,
                                            on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES,
-                                max_length=12, null=False,blank=False,
-                                default='en')
-    title = models.CharField(max_length=120, blank=True, null=True,
-                             help_text=_("Title"))
+    language = models.CharField(choices=settings.LANGUAGES, max_length=12, default='en')
+    title = models.CharField(max_length=120, blank=True, default='', help_text=_('Title'))
 
     class Meta:
         verbose_name_plural = _("Carousel Item Links")

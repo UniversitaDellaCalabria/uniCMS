@@ -31,6 +31,7 @@ def check_user_permission_on_object(user, obj, permission='change'):
     # if there is not lock, no permission
     if not locks: return {'granted': False}
     # if user is in lock user list, has permissions
-    if locks.filter(user=user): return {'granted': True, 'locked': True}
+    if locks.filter(user=user).exists():
+        return {'granted': True, 'locked': True}
     # else no permissions but obj is locked
     return {'granted': False, 'locked':True}

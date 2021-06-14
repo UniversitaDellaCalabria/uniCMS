@@ -631,7 +631,7 @@ class PageUnitTest(TestCase):
         parent = MenuUnitTest.create_menu_item()
         child = MenuUnitTest.create_menu_item(menu=parent.menu,
                                               parent=parent,
-                                              url=None,
+                                              url='',
                                               webpath=webpath)
         template_context = dict(request=req,
                                 page=page,
@@ -654,7 +654,7 @@ class PageUnitTest(TestCase):
         parent = MenuUnitTest.create_menu_item()
         child = MenuUnitTest.create_menu_item(menu=parent.menu,
                                               parent=parent,
-                                              url=None,
+                                              url='',
                                               webpath=webpath)
         child = MenuUnitTest.create_menu_item(menu=parent.menu,
                                               parent=parent)

@@ -33,10 +33,8 @@ CMS_IMAGE_CATEGORY_SIZE = getattr(settings, 'CMS_IMAGE_CATEGORY_SIZE',
 
 
 class Category(TimeStampedModel, CreatedModifiedBy):
-    name = models.CharField(max_length=160, blank=False,
-                            null=False, unique=False)
-    description = models.TextField(max_length=1024,
-                                   null=False, blank=False)
+    name = models.CharField(max_length=160)
+    description = models.TextField(max_length=1024)
     image = models.ImageField(upload_to="images/categories",
                               null=True, blank=True,
                               max_length=512,
@@ -67,20 +65,13 @@ class AbstractPublication(TimeStampedModel, ActivableModel):
     CONTENT_TYPES = (('markdown', 'markdown'),
                      ('html', 'html'))
 
-    name = models.CharField(max_length=256,
-                            null=False, blank=False)
-    title = models.CharField(max_length=256,
-                             null=False, blank=False,
-                             help_text=_("Heading, Headline"))
-    subheading = models.TextField(max_length=1024,
-                                  null=True,blank=True,
-                                  help_text=_("Strap line (press)"))
-    content = models.TextField(null=True,blank=True,
-                               help_text=_('Content'))
-    content_type = models.CharField(choices=CONTENT_TYPES,
-                                    null=False, blank=False,
-                                    max_length=33,
-                                    default='html')
+    name = models.CharField(max_length=256)
+    title = models.CharField(max_length=256, help_text=_('Heading, Headline'))
+    subheading = models.TextField(
+        max_length=1024, default='', blank=True, help_text=_('Strap line (press)')
+    )
+    content = models.TextField(default='', blank=True, help_text=_('Content'))
+    content_type = models.CharField(choices=CONTENT_TYPES, max_length=33, default='html')
     presentation_image = models.ForeignKey(Media, null=True, blank=True,
                                            on_delete=models.PROTECT)
     # state = models.CharField(choices=PAGE_STATES,
@@ -90,8 +81,7 @@ class AbstractPublication(TimeStampedModel, ActivableModel):
     # date_end = models.DateTimeField()
     category = models.ManyToManyField(Category)
 
-    note = models.TextField(null=True,blank=True,
-                            help_text=_('Editorial Board notes'))
+    note = models.TextField(default='', blank=True, help_text=_('Editorial Board notes'))
 
     class Meta:
         abstract = True
@@ -102,7 +92,7 @@ class AbstractPublication(TimeStampedModel, ActivableModel):
 
 # class Publication(AbstractPublication, AbstractPublicable, CreatedModifiedBy):
 class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
-    slug = models.SlugField(null=True, blank=True, max_length=256)
+    slug = models.SlugField(default='', blank=True, max_length=256)
     tags = TaggableManager()
     relevance = models.IntegerField(default=0, blank=True)
 
@@ -158,7 +148,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
     def first_available_url(self):
         pubcontx = PublicationContext.objects.filter(publication=self,
                                                      webpath__is_active=True)
-        if pubcontx:
+        if pubcontx.exists():
             return pubcontx.first().url
 
     @property
@@ -167,7 +157,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
 
     @property
     def related_media_collections(self):
-        if getattr(self, '_related_media_collections', None): # pragma: no cover
+        if getattr(self, '_related_media_collections', None):
             return self._related_media_collections
         pub_collections = PublicationMediaCollection.objects.filter(publication=self,
                                                                     is_active=True,
@@ -334,8 +324,7 @@ class AbstractLockablePublicationElement(models.Model):
 class PublicationContext(TimeStampedModel, ActivableModel,
                          AbstractPublicable, SectionAbstractModel,
                          SortableModel, CreatedModifiedBy):
-    publication = models.ForeignKey(Publication, null=False, blank=False,
-                                    on_delete=models.PROTECT)
+    publication = models.ForeignKey(Publication, on_delete=models.PROTECT)
     webpath = models.ForeignKey(WebPath, on_delete=models.CASCADE)
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
@@ -395,12 +384,12 @@ class PublicationContext(TimeStampedModel, ActivableModel,
 
 class PublicationRelated(TimeStampedModel, SortableModel, ActivableModel,
                          CreatedModifiedBy, AbstractLockablePublicationElement):
-    publication = models.ForeignKey(Publication, null=False, blank=False,
-                                    related_name='parent_publication',
-                                    on_delete=models.CASCADE)
-    related = models.ForeignKey(Publication, null=False, blank=False,
-                                on_delete=models.PROTECT,
-                                related_name="related_publication")
+    publication = models.ForeignKey(
+        Publication, related_name='parent_publication', on_delete=models.CASCADE
+    )
+    related = models.ForeignKey(
+        Publication, on_delete=models.PROTECT, related_name='related_publication'
+    )
 
     class Meta:
         verbose_name_plural = _("Related Publications")
@@ -412,9 +401,8 @@ class PublicationRelated(TimeStampedModel, SortableModel, ActivableModel,
 
 class PublicationLink(TimeStampedModel, CreatedModifiedBy,
                       AbstractLockablePublicationElement):
-    publication = models.ForeignKey(Publication, null=False, blank=False,
-                                    on_delete=models.CASCADE)
-    name = models.CharField(max_length=256, null=False, blank=False)
+    publication = models.ForeignKey(Publication, on_delete=models.CASCADE)
+    name = models.CharField(max_length=256)
     url = models.URLField(help_text=_("url"))
 
     class Meta:
@@ -427,10 +415,8 @@ class PublicationLink(TimeStampedModel, CreatedModifiedBy,
 class PublicationBlock(SectionAbstractModel,TimeStampedModel,
                        ActivableModel, SortableModel, CreatedModifiedBy,
                        AbstractLockablePublicationElement):
-    publication = models.ForeignKey(Publication, null=False, blank=False,
-                                    on_delete=models.CASCADE)
-    block = models.ForeignKey(TemplateBlock, null=False, blank=False,
-                              on_delete=models.PROTECT)
+    publication = models.ForeignKey(Publication, on_delete=models.CASCADE)
+    block = models.ForeignKey(TemplateBlock, on_delete=models.PROTECT)
 
     class Meta:
         verbose_name_plural = _("Publication Page Block")
@@ -467,13 +453,18 @@ class PublicationAttachment(TimeStampedModel, SortableModel, ActivableModel,
                             AbstractMedia, CreatedModifiedBy,
                             AbstractLockablePublicationElement):
 
-    publication = models.ForeignKey(Publication, null=False, blank=False,
-                                    related_name='page_attachment',
-                                    on_delete=models.CASCADE)
-    name = models.CharField(max_length=60, blank=True, null=True,
-                            help_text=_("Specify the container "
-                                        "section in the template where "
-                                        "this block would be rendered."))
+    publication = models.ForeignKey(
+        Publication, related_name='page_attachment', on_delete=models.CASCADE
+    )
+    name = models.CharField(
+        max_length=60,
+        blank=True,
+        default='',
+        help_text=_(
+            'Specify the container section in the template where this block would be'
+            ' rendered.'
+        ),
+    )
     file = models.FileField(upload_to=publication_attachment_path,
                             validators=[validate_file_extension,
                                         validate_file_size])
@@ -489,20 +480,13 @@ class PublicationAttachment(TimeStampedModel, SortableModel, ActivableModel,
 
 class PublicationLocalization(TimeStampedModel, ActivableModel,
                               CreatedModifiedBy, AbstractLockablePublicationElement):
-    title = models.CharField(max_length=256,
-                             null=False, blank=False,
-                             help_text=_("Heading, Headline"))
-    publication = models.ForeignKey(Publication,
-                                    null=False, blank=False,
-                                    on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES,
-                                max_length=12, null=False,blank=False,
-                                default='en')
-    subheading = models.TextField(max_length=1024,
-                                  null=True,blank=True,
-                                  help_text=_("Strap line (press)"))
-    content = models.TextField(null=True,blank=True,
-                               help_text=_('Content'))
+    title = models.CharField(max_length=256, help_text=_('Heading, Headline'))
+    publication = models.ForeignKey(Publication, on_delete=models.CASCADE)
+    language = models.CharField(choices=settings.LANGUAGES, max_length=12, default='en')
+    subheading = models.TextField(
+        max_length=1024, default='', blank=True, help_text=_('Strap line (press)')
+    )
+    content = models.TextField(default='', blank=True, help_text=_('Content'))
 
     class Meta:
         verbose_name_plural = _("Publication Localizations")

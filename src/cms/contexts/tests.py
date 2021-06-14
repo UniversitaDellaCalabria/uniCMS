@@ -49,7 +49,7 @@ class ContextUnitTest(TestCase):
                 'name': "Example WebPath",
                 'parent': None,
                 'alias': None,
-                'alias_url': None,
+                'alias_url': '',
                 'path': '/',
                 'is_active': True}
         for k,v in kwargs.items():

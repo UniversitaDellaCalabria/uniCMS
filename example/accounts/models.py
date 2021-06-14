@@ -6,18 +6,18 @@ from django.conf import settings
 
 
 class User(AbstractUser):
-    first_name = models.CharField(_('Name'), max_length=250,
+    first_name = models.CharField(_('Name'), max_length=250,  # django-doctor: disable=nullable-string-field
                                   blank=True, null=True)
-    last_name = models.CharField(_('Surname'), max_length=250,
+    last_name = models.CharField(_('Surname'), max_length=250,  # django-doctor: disable=nullable-string-field
                                  blank=True, null=True)
     is_active = models.BooleanField(_('active'), default=True)
-    email = models.EmailField(_('email address'), blank=True, null=True)
-    taxpayer_id = models.CharField(_("Taxpayer's identification number"),
+    email = models.EmailField(_('email address'), blank=True, null=True)  # django-doctor: disable=nullable-string-field
+    taxpayer_id = models.CharField(_("Taxpayer's identification number"),  # django-doctor: disable=nullable-string-field
                                    max_length=32,
                                    blank=True, null=True)
-    matricola_studente = models.CharField(max_length=255,
+    matricola_studente = models.CharField(max_length=255,  # django-doctor: disable=nullable-string-field
                                           blank=True, null=True)
-    matricola_dipendente = models.CharField(max_length=255,
+    matricola_dipendente = models.CharField(max_length=255,  # django-doctor: disable=nullable-string-field
                                             blank=True, null=True)
 
     def __str__(self):

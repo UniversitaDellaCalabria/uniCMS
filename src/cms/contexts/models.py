@@ -23,12 +23,8 @@ CMS_PATH_PREFIX = getattr(settings, 'CMS_PATH_PREFIX', '')
 
 
 class WebSite(ActivableModel):
-    name = models.CharField(max_length=254,
-                            unique=True,
-                            blank=False, null=False)
-    domain = models.CharField(max_length=254,
-                              blank=False, null=False,
-                              unique=True)
+    name = models.CharField(max_length=254, unique=True)
+    domain = models.CharField(max_length=254, unique=True)
 
     class Meta:
         verbose_name_plural = _("Sites")
@@ -45,7 +41,8 @@ class WebSite(ActivableModel):
                                                            user=user,
                                                            is_active=True,
                                                            permission__gt=0)
-        if permissions: return True
+        if permissions.exists():
+            return True
         return False
 
     def __str__(self):
@@ -61,7 +58,7 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
     site = models.ForeignKey(WebSite,
                              null=True, blank=True,
                              on_delete=models.CASCADE)
-    name = models.CharField(max_length=254, blank=False, null=False)
+    name = models.CharField(max_length=254)
     parent = models.ForeignKey('WebPath',
                                null=True, blank=True,
                                on_delete=models.CASCADE,
@@ -74,12 +71,14 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
                               related_name="alias_path",
                               help_text=_('Alias that would be '
                                           'redirected to ...'))
-    alias_url = models.TextField(max_length=2048,
-                                 null=True, blank=True)
-    path = models.TextField(max_length=2048, null=False, blank=False)
-    fullpath = models.TextField(max_length=2048, null=True, blank=True,
-                                help_text=_("final path prefixed with the "
-                                            "parent path"))
+    alias_url = models.TextField(max_length=2048, default='', blank=True)
+    path = models.TextField(max_length=2048)
+    fullpath = models.TextField(
+        max_length=2048,
+        default='',
+        blank=True,
+        help_text=_('final path prefixed with the parent path'),
+    )
 
     class Meta:
         verbose_name_plural = _("Site Contexts (WebPaths)")
@@ -230,9 +229,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy, ActivableModel)
     """
     user = models.ForeignKey(get_user_model(),
                              on_delete=models.CASCADE)
-    permission = models.IntegerField(blank=False, null=False,
-                                     choices=CMS_CONTEXT_PERMISSIONS,
-                                     default=0)
+    permission = models.IntegerField(choices=CMS_CONTEXT_PERMISSIONS, default=0)
     webpath = models.ForeignKey(WebPath,
                                 on_delete=models.CASCADE,
                                 null=True, blank=True)
@@ -314,12 +311,8 @@ class EditorialBoardLock(models.Model):
 
 
 class EditorialBoardLockUser(models.Model):
-    lock = models.ForeignKey(EditorialBoardLock,
-                             on_delete=models.CASCADE,
-                             null=False, blank=False)
-    user = models.ForeignKey(get_user_model(),
-                             on_delete=models.CASCADE,
-                             null=False, blank=False)
+    lock = models.ForeignKey(EditorialBoardLock, on_delete=models.CASCADE)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = _("Editorial Board Locks Owners")
@@ -343,7 +336,8 @@ class EditorialBoardLockUser(models.Model):
         # if there is not lock, ok
         if not locks: return True
         # if user is in lock user list, has permissions
-        if locks.filter(user=user): return True
+        if locks.filter(user=user).exists():
+            return True
         # else no permissions but obj is locked
         return False
 

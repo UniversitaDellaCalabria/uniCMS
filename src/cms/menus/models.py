@@ -40,7 +40,7 @@ class AbstractImportableMenu(object):
 
 class NavigationBar(TimeStampedModel, ActivableModel, CreatedModifiedBy,
                     AbstractImportableMenu, AbstractLockable):
-    name = models.CharField(max_length=255, blank=False, null=False)
+    name = models.CharField(max_length=255)
 
     class Meta:
         verbose_name_plural = _("Context Navigation Menus")
@@ -78,7 +78,7 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
     menu = models.ForeignKey(NavigationBar,
                              on_delete=models.CASCADE,
                              related_name="related_menu")
-    name = models.CharField(max_length=60, blank=False, null=False)
+    name = models.CharField(max_length=60)
     webpath = models.ForeignKey(WebPath,
                                 null=True, blank=True,
                                 on_delete=models.SET_NULL,
@@ -88,7 +88,7 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
                                on_delete=models.CASCADE,
                                related_name="related_parent")
     url = models.CharField(help_text=_("url"),
-                           null=True, blank=True, max_length=2048)
+                           default='', blank=True, max_length=2048)
     publication = models.ForeignKey('cmspublications.Publication',
                                     null=True, blank=True,
                                     related_name='pub',
@@ -140,18 +140,18 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
     def serialize(self, lang=settings.LANGUAGE, deep=False,
                   level=0, only_active=True):
         data = dict(
-                    id = self.pk,
-                    menu_id = self.menu.pk,
-                    parent_id = getattr(self.parent, 'pk', None),
-                    parent_name = getattr(self.parent, 'name', None),
-                    name = self.name,
-                    url = self.url,
-                    publication_id = self.publication.pk if self.publication else None,
-                    webpath_id = self.webpath.pk if self.webpath else None,
-                    link = self.link(),
-                    is_active = self.is_active,
-                    order = self.order,
-                    level=level
+            id=self.pk,
+            menu_id=self.menu_id,
+            parent_id=getattr(self.parent, 'pk', None),
+            parent_name=getattr(self.parent, 'name', None),
+            name=self.name,
+            url=self.url,
+            publication_id=self.publication_id if self.publication else None,
+            webpath_id=self.webpath_id if self.webpath else None,
+            link=self.link(),
+            is_active=self.is_active,
+            order=self.order,
+            level=level,
         )
         if deep:
             data['childs'] = []
@@ -225,10 +225,8 @@ class NavigationBarItemLocalization(ActivableModel, TimeStampedModel,
                                     CreatedModifiedBy):
     item = models.ForeignKey(NavigationBarItem,
                              on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES,
-                                max_length=12, null=False,blank=False,
-                                default='en')
-    name = models.CharField(max_length=33, blank=False, null=False)
+    language = models.CharField(choices=settings.LANGUAGES, max_length=12, default='en')
+    name = models.CharField(max_length=33)
 
     class Meta:
         verbose_name_plural = _("Context Navigation Menu Item Localizations")

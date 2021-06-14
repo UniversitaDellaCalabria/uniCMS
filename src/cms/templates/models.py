@@ -71,13 +71,18 @@ class SectionAbstractModel(models.Model):
 
 
 class AbstractPageBlock(TimeStampedModel, ActivableModel):
-    name = models.CharField(max_length=60, blank=True, null=True,
-                            help_text=_("Specify the container "
-                                        "section in the template where "
-                                        "this block would be rendered."))
-    content = models.TextField(help_text=_("according to the "
-                                           "block template schema"),
-                               blank=True, null=True)
+    name = models.CharField(
+        max_length=60,
+        blank=True,
+        default="",
+        help_text=_(
+            "Specify the container section in the template where this block would be"
+            " rendered."
+        ),
+    )
+    content = models.TextField(
+        help_text=_("according to the block template schema"), blank=True, default=""
+    )
 
     class Meta:
         abstract = True
@@ -100,15 +105,14 @@ class AbstractTemplate(models.Model):
 
 class PageTemplate(TimeStampedModel, ActivableModel, AbstractTemplate,
                    CreatedModifiedBy):
-    name = models.CharField(max_length=160, blank=True, null=True)
+    name = models.CharField(max_length=160, blank=True, default="")
     template_file = models.CharField(max_length=1024,
-                                     blank=False, null=False,
                                      choices=CMS_PAGE_TEMPLATES or (('', 'No templates found'),))
     image = models.ImageField(upload_to="images/page_templates_previews",
                               null=True, blank=True, max_length=512)
-    note = models.TextField(null=True, blank=True,
-                            help_text=_("Editorial Board Notes, "
-                                        "not visible by public."))
+    note = models.TextField(
+        default="", blank=True, help_text=_("Editorial Board Notes, not visible by public.")
+    )
 
     class Meta:
         ordering = ['name']
@@ -119,17 +123,22 @@ class PageTemplate(TimeStampedModel, ActivableModel, AbstractTemplate,
 
 
 class TemplateBlock(AbstractPageBlock, AbstractTemplate, CreatedModifiedBy):
-    name = models.CharField(max_length=60, blank=True, null=True,
-                            help_text=_("Specify the container "
-                                        "section in the template where "
-                                        "this block would be rendered."))
-    description = models.TextField(null=True,blank=True,
-                                   help_text=_('Description of this block'))
-    type = models.TextField(choices=CMS_BLOCK_TYPES,
-                            blank=False, null=False)
-    content = models.TextField(help_text=_("according to the "
-                                           "block template schema"),
-                               blank=True, null=True)
+    name = models.CharField(
+        max_length=60,
+        blank=True,
+        default="",
+        help_text=_(
+            "Specify the container section in the template where this block would be"
+            " rendered."
+        ),
+    )
+    description = models.TextField(
+        default="", blank=True, help_text=_("Description of this block")
+    )
+    type = models.TextField(choices=CMS_BLOCK_TYPES)
+    content = models.TextField(
+        help_text=_("according to the block template schema"), blank=True, default=""
+    )
     image = models.ImageField(upload_to="images/block_templates_previews",
                               null=True, blank=True, max_length=512)
 
@@ -146,8 +155,7 @@ class PageTemplateBlock(TimeStampedModel,
     template = models.ForeignKey(PageTemplate,
                                  on_delete=models.CASCADE,
                                  limit_choices_to={'is_active': True},)
-    block = models.ForeignKey(TemplateBlock, null=False, blank=False,
-                              on_delete=models.PROTECT)
+    block = models.ForeignKey(TemplateBlock, on_delete=models.PROTECT)
     section = models.CharField(max_length=33, blank=True, null=True,
                                help_text=_("Specify the container "
                                            "section in the template where "

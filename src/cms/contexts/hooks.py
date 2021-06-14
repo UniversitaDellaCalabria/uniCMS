@@ -36,7 +36,8 @@ def used_by(obj):
                           used_by_object_id=obj.pk)
 
         already_used = EntryUsedBy.objects.filter(**entry_dict)
-        if already_used: continue
+        if already_used.exists():
+            continue
         EntryUsedBy.objects.create(**entry_dict)
 
     # inlines fks
@@ -55,5 +56,6 @@ def used_by(obj):
                           used_by_object_id=obj.pk)
 
         already_used = EntryUsedBy.objects.filter(**entry_dict)
-        if already_used: continue
+        if already_used.exists():
+            continue
         EntryUsedBy.objects.create(**entry_dict)
