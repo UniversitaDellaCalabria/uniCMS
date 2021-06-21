@@ -163,8 +163,13 @@ def log_obj_event(user, obj, data={}, action_flag=CHANGE):
     """
     msg = _("changed") if action_flag == CHANGE else _("added")
 
-    data = deepcopy(data)
-    data = dict(data)
+    # ex: FILE_UPLOAD_MAX_MEMORY_SIZE exceeded
+    # TypeError: cannot pickle '_io.BufferedRandom' object
+    try:
+        data = deepcopy(data)
+        data = dict(data)
+    except Exception:
+        data = {}
 
     # pop readonly fields from logged dict
     data.pop('id', None)
@@ -179,7 +184,7 @@ def log_obj_event(user, obj, data={}, action_flag=CHANGE):
                                 object_id = obj.pk,
                                 object_repr = obj.__str__(),
                                 action_flag = action_flag,
-                                change_message = f'{msg}: {data}' or msg)
+                                change_message = f'{msg}: {data}' if data else msg)
 
 
 def clone(obj,
