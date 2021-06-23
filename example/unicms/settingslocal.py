@@ -16,9 +16,12 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 AUTH_USER_MODEL = 'accounts.User'
 
-# Application definition
-
+# multisite preferences (comment these options if unnecessary)
 SESSION_COOKIE_DOMAIN=".unical.it"
+MAIN_WEBSITE = 2
+
+
+# Application definition
 
 INSTALLED_APPS = [
     'accounts',
@@ -29,9 +32,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'sass_processor',
-    'bootstrap_italia_template',
 
     'taggit',
     'taggit_serializer',
@@ -47,8 +47,10 @@ INSTALLED_APPS = [
     'cms.api',
     'cms.search',
 
+    'sass_processor',
     'unicms_template_unical',
     'unicms_template_italia',
+    'bootstrap_italia_template',
 
     'rest_framework',
     'django_filters',
