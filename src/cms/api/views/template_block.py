@@ -23,7 +23,6 @@ class TemplatesBlockList(generics.ListAPIView):
     filterset_fields = ['is_active', 'created', 'modified']
     pagination_class = UniCmsApiPagination
     search_fields = ['name', 'description', 'type']
-    ordering_fields = ['name', 'type', 'description']
     serializer_class = TemplatesBlockSerializer
     queryset = TemplateBlock.objects.filter(is_active=True)
 
