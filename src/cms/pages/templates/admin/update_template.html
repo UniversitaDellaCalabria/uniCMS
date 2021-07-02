@@ -1,0 +1,20 @@
+{% extends 'admin/change_form.html' %}
+
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans "Update template to selected pages" %}</h1>
+<p>{% trans "Selected pages" %}: {{ pages.count }}</p>
+<form action="" method="post">
+    {{ form.template.errors }}
+    {{ form.template.label_tag }}
+    {{ form.template }}
+    {% for page in pages %}
+        <input type="hidden" name="_selected_action" value="{{ page.pk }}" />
+    {% endfor %}
+    {% csrf_token %}
+    <input type="hidden" name="action" value="update_template" />
+    <input style="background: #79c8ab;" type="submit" name="update_template" value="Update">
+</form>
+
+{% endblock %}

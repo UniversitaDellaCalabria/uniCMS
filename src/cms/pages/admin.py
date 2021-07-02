@@ -8,6 +8,8 @@ from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.admin import AbstractCreatedModifiedBy
+
+from . admin_actions import update_template
 from . admin_inlines import *
 from . models import *
 from . utils import copy_page_as_draft
@@ -73,7 +75,9 @@ class PageAdmin(AbstractPreviewableAdmin, nested_admin.NestedModelAdmin):
                PageMediaCollectionInline,
                PageLinkInline,
                PageHeadingInline)
-    actions = AbstractPreviewableAdmin.actions + [make_page_draft,]
+    actions = AbstractPreviewableAdmin.actions + [make_page_draft,
+                                                  update_template]
+
     raw_id_fields = ['webpath', 'base_template']
 
     def save_model(self, request, obj, form, change):

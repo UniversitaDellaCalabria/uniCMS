@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import Form, ModelChoiceField, ModelForm
 from django.urls import reverse
 
 from cms.api.settings import FORM_SOURCE_LABEL
@@ -14,6 +14,7 @@ from cms.pages.models import (Page,
                               PageMenu,
                               PagePublication,
                               PageRelated)
+from cms.templates.models import PageTemplate
 
 from . models import WebPath
 
@@ -203,3 +204,9 @@ class PageHeadingLocalizationForm(ModelForm):
         model = PageHeadingLocalization
         fields = ['heading', 'title', 'description', 'language',
                   'order', 'is_active']
+
+
+class PageTemplatesListForm(Form):
+
+    template = ModelChoiceField(label="Template",
+                                queryset=PageTemplate.objects.all())
