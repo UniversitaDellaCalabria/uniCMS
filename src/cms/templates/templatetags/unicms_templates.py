@@ -52,4 +52,4 @@ def settings_value(name, **kwargs):
 def random_id():
     # letters = string.ascii_lowercase
     # return ''.join(random.choice(letters) for i in range(10))
-    return secrets.randbelow(9999)
+    return f"id_{secrets.randbelow(9999)}"
