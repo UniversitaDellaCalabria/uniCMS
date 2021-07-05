@@ -57,7 +57,7 @@ def load_menu(context, template, section=None, menu_id=None):
 
 
 @register.simple_tag(takes_context=True)
-def load_item_childs(context, item):
+def load_item_childs(context, item, exclude=None):
     _func_name = 'load_item_childs'
     _log_msg = f'Template Tag {_func_name}'
 
@@ -65,7 +65,8 @@ def load_item_childs(context, item):
         request = context['request']
         language = getattr(request, 'LANGUAGE_CODE', '')
 
-        return item.get_childs(lang=language)
+        return item.get_childs(lang=language,
+                               exclude=exclude)
 
 
 @register.simple_tag(takes_context=True)
