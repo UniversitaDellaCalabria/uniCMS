@@ -118,22 +118,29 @@ def load_current_item_from_menu(context):
         if result: return result
 
 
-def _get_others_same_level_items(item, path, language):
+def _get_others_same_level_items(item, path, language, exclude_item=True):
     webpath = item.webpath
     if webpath and not webpath.is_alias:
         if path == webpath.get_full_path():
             parent = item.parent
-            if parent:
-                return {'parent': parent.localized(lang=language),
-                        'items': parent.get_childs(lang=language, exclude=item)}
+            # if parent:
+            items = parent.get_childs(lang=language, exclude=item) \
+                    if exclude_item \
+                    else parent.get_childs(lang=language)
+            return {'parent': parent.localized(lang=language),
+                    'items': items,
+                    'current': item}
     for child in item.get_childs():
-        result = _get_others_same_level_items(child, path, language)
+        result = _get_others_same_level_items(child,
+                                              path,
+                                              language,
+                                              exclude_item=exclude_item)
         if result: return result
     return {} # pragma: no cover
 
 
 @register.simple_tag(takes_context=True)
-def load_other_items_from_menu(context):
+def load_other_items_from_menu(context, exclude_item=True):
     _func_name = 'load_other_items_from_menu'
     _log_msg = f'Template Tag {_func_name}'
 
@@ -143,5 +150,8 @@ def load_other_items_from_menu(context):
     path = append_slash(request.path)
 
     for item in context['items']:
-        result = _get_others_same_level_items(item, path, language)
+        result = _get_others_same_level_items(item,
+                                              path,
+                                              language,
+                                              exclude_item=exclude_item)
         if result: return result

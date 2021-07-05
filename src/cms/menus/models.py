@@ -164,7 +164,7 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
     def get_childs(self,
                    lang=settings.LANGUAGE,
                    only_active=True,
-                   exclude=None):
+                   exclude=False):
         if self.pk:
             items = NavigationBarItem.objects.filter(parent=self,
                                                      menu=self.menu).\
