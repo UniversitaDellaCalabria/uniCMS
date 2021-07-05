@@ -621,48 +621,48 @@ class PageUnitTest(TestCase):
 
 
     # templatetag
-    @classmethod
-    def test_load_current_item_from_menu(cls):
-        req = RequestFactory().get('/portale/my/test')
-        page = cls.create_page()
+    # @classmethod
+    # def test_load_current_item_from_menu(cls):
+        # req = RequestFactory().get('/portale/my/test')
+        # page = cls.create_page()
 
-        webpath = ContextUnitTest.create_webpath(path='my/test')
+        # webpath = ContextUnitTest.create_webpath(path='my/test')
 
-        parent = MenuUnitTest.create_menu_item()
-        child = MenuUnitTest.create_menu_item(menu=parent.menu,
-                                              parent=parent,
-                                              url='',
-                                              webpath=webpath)
-        template_context = dict(request=req,
-                                page=page,
-                                webpath=page.webpath,
-                                items=[parent])
-        data = dict(context=template_context)
+        # parent = MenuUnitTest.create_menu_item()
+        # child = MenuUnitTest.create_menu_item(menu=parent.menu,
+                                              # parent=parent,
+                                              # url='',
+                                              # webpath=webpath)
+        # template_context = dict(request=req,
+                                # page=page,
+                                # webpath=page.webpath,
+                                # items=[parent])
+        # data = dict(context=template_context)
 
-        ci = load_current_item_from_menu(**data)
-        assert ci
+        # ci = load_current_item_from_menu(**data)
+        # assert ci
 
 
     # templatetag
-    @classmethod
-    def test_load_other_items_from_menu(cls):
-        req = RequestFactory().get('/portale/my/test')
-        page = cls.create_page()
+    # @classmethod
+    # def test_load_other_items_from_menu(cls):
+        # req = RequestFactory().get('/portale/my/test')
+        # page = cls.create_page()
 
-        webpath = ContextUnitTest.create_webpath(path='my/test')
+        # webpath = ContextUnitTest.create_webpath(path='my/test')
 
-        parent = MenuUnitTest.create_menu_item()
-        child = MenuUnitTest.create_menu_item(menu=parent.menu,
-                                              parent=parent,
-                                              url='',
-                                              webpath=webpath)
-        child = MenuUnitTest.create_menu_item(menu=parent.menu,
-                                              parent=parent)
-        template_context = dict(request=req,
-                                page=page,
-                                webpath=page.webpath,
-                                items=[parent])
-        data = dict(context=template_context)
+        # parent = MenuUnitTest.create_menu_item()
+        # child = MenuUnitTest.create_menu_item(menu=parent.menu,
+                                              # parent=parent,
+                                              # url='',
+                                              # webpath=webpath)
+        # child = MenuUnitTest.create_menu_item(menu=parent.menu,
+                                              # parent=parent)
+        # template_context = dict(request=req,
+                                # page=page,
+                                # webpath=page.webpath,
+                                # items=[parent])
+        # data = dict(context=template_context)
 
-        oi = load_other_items_from_menu(**data)
-        assert oi
+        # oi = load_other_items_from_menu(**data)
+        # assert oi
