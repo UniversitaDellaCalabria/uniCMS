@@ -1,4 +1,7 @@
 import logging
+# import random
+import secrets
+# import string
 
 from django import template
 from django.conf import settings
@@ -43,3 +46,10 @@ def settings_value(name, **kwargs):
     value = getattr(settings, name, None)
     if value and kwargs: return value.format(**kwargs)
     return value
+
+
+@register.simple_tag
+def random_id():
+    # letters = string.ascii_lowercase
+    # return ''.join(random.choice(letters) for i in range(10))
+    return secrets.randbelow(9999)

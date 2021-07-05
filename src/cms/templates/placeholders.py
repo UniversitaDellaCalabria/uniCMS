@@ -90,19 +90,8 @@ class CarouselPlaceHolder(AbstractPlaceholder):
         super().__init__(context, content)
         self.carousels = self.page.get_carousels()
 
-    def build_identifier(self):
-        # random identifier using random.choices()
-        N = 4
-        # generating random strings
-        choices = random.choices(string.ascii_lowercase + string.digits, k = N)
-        self.identifier = ''.join(choices)
-
-    def hook(self):
-        self.build_identifier()
-
     def build_data_dict(self):
-        data = {'carousel_items': self.entry.carousel.get_items(self.language),
-                'carousel_identifier': self.identifier}
+        data = {'carousel_items': self.entry.carousel.get_items(self.language)}
         return {**self.content,**data}
 
 
