@@ -72,9 +72,9 @@ def load_publications_preview(context, template,
                                     in_evidence=in_evidence,
                                     categories_csv=categories_csv,
                                     tags_csv=tags_csv)
-
     pub_in_context = PublicationContext.objects.\
         filter(**query_params).\
+        distinct().\
         order_by('order')[0:number]
     if not pub_in_context: return SafeString('')
 
