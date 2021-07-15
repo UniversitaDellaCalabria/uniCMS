@@ -253,10 +253,19 @@ CMS_APP_REGEXP_URLPATHS = {
     'cms.publications.handlers.PublicationListHandler' : CMS_PUBLICATION_URL_LIST_REGEXP,
 }
 
+# UNICAL STORAGE HANDLER
 if "unicms_unical_storage_handler" in INSTALLED_APPS:
+
     from unicms_unical_storage_handler.settings import *
+
     CMS_HANDLERS_PATHS.extend(CMS_STORAGE_HANDLERS_PATHS)
     CMS_APP_REGEXP_URLPATHS.update(CMS_STORAGE_APP_REGEXP_URLPATHS)
+
+    ALLOWED_UNICMS_SITES = [2]
+    ALLOWED_CDS_COURSETYPES = ['L','LM','LM5','LM6','M1-270','M2-270']
+# END UNICAL STORAGE HANDLER
+
+
 
 TEMPLATES = [
     {
