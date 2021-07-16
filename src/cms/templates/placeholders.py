@@ -105,7 +105,8 @@ class LinkPlaceHolder(AbstractPlaceholder):
 
     def build_data_dict(self):
         data = {'name': self.entry.name,
-                'url': self.entry.url}
+                'url': self.entry.url,
+                'request': self.request}
         return {**self.content,**data}
 
 
