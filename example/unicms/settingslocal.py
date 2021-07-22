@@ -263,6 +263,9 @@ if "unicms_unical_storage_handler" in INSTALLED_APPS:
 
     ALLOWED_UNICMS_SITES = [2]
     ALLOWED_CDS_COURSETYPES = ['L','LM','LM5','LM6','M1-270','M2-270']
+    ALLOWED_ADDRESSBOOK_STRUCTURE_TYPES = ['AREAUOC', 'DIP', 'MCRA','SET']
+    ALLOWED_ADDRESSBOOK_ROLES = ['PO', 'PA', 'RU', 'RD', 'ND', 'AR',
+                                 'BS', 'CB', 'CC', 'DR', 'NM']
 # END UNICAL STORAGE HANDLER
 
 
