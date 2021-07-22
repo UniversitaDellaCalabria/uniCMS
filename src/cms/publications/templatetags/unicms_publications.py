@@ -1,6 +1,7 @@
 import logging
 
 from django import template
+from django.db.models import Q
 from django.utils import timezone
 from django.utils.safestring import SafeString
 
@@ -12,7 +13,7 @@ logger = logging.getLogger(__name__)
 register = template.Library()
 
 
-def _get_pub_qparams(context, webpath, section = None, in_evidence=False,
+def _get_pub_qparams(context, webpath, section = None,
                      categories_csv=None, tags_csv=None):
     now = timezone.localtime()
     query_params = dict(webpath=context['webpath'],
@@ -22,9 +23,7 @@ def _get_pub_qparams(context, webpath, section = None, in_evidence=False,
                         date_end__gt=now)
     if section:
         query_params['section'] = section
-    if in_evidence:
-        query_params['in_evidence_start__lte'] = now
-        query_params['in_evidence_end__gt'] = now
+
     if categories_csv:
         cats = [i.strip() for i in categories_csv.split(',')]
         query_params['publication__category__name__in'] = cats
@@ -69,13 +68,20 @@ def load_publications_preview(context, template,
     query_params = _get_pub_qparams(context=context ,
                                     webpath=webpath,
                                     section=section,
-                                    in_evidence=in_evidence,
                                     categories_csv=categories_csv,
                                     tags_csv=tags_csv)
     pub_in_context = PublicationContext.objects.\
-        filter(**query_params).\
-        distinct().\
-        order_by('order')[0:number]
+                     filter(**query_params).\
+                     distinct().\
+                     order_by('order','-date_start')
+
+    if in_evidence:
+        now = timezone.localtime()
+        pub_in_context = pub_in_context.filter(Q(in_evidence_end__gt=now) |
+                                               Q(in_evidence_end__isnull=True),
+                                               in_evidence_start__lt=now)
+    pub_in_context = pub_in_context[0:number]
+
     if not pub_in_context: return SafeString('')
 
     # i18n
