@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.utils.safestring import SafeString
 
 from cms.contexts.utils import handle_faulty_templates
-from cms.publications.models import Publication, PublicationContext
+from cms.publications.models import Category, Publication, PublicationContext
 
 
 logger = logging.getLogger(__name__)
@@ -14,7 +14,9 @@ register = template.Library()
 
 
 def _get_pub_qparams(context, webpath, section = None,
-                     categories_csv=None, tags_csv=None):
+                     categories_csv=None,
+                     exclude_categories=False,
+                     tags_csv=None):
     now = timezone.localtime()
     query_params = dict(webpath=context['webpath'],
                         is_active=True,
@@ -26,7 +28,12 @@ def _get_pub_qparams(context, webpath, section = None,
 
     if categories_csv:
         cats = [i.strip() for i in categories_csv.split(',')]
-        query_params['publication__category__name__in'] = cats
+        if exclude_categories:
+            categories = Category.objects.exclude(name__in=cats).\
+                                          values_list('name', flat=True)
+            query_params['publication__category__name__in'] = categories
+        else:
+            query_params['publication__category__name__in'] = cats
     if tags_csv:
         tags = [i.strip() for i in tags_csv.split(',')]
         query_params['publication__tags__name__in'] = tags
@@ -62,13 +69,16 @@ def load_publications_preview(context, template,
                               section = None,
                               number=5,
                               in_evidence=False,
-                              categories_csv=None, tags_csv=None):
+                              categories_csv=None,
+                              exclude_categories=False,
+                              tags_csv=None):
     request = context['request']
     webpath = context['webpath']
     query_params = _get_pub_qparams(context=context ,
                                     webpath=webpath,
                                     section=section,
                                     categories_csv=categories_csv,
+                                    exclude_categories=exclude_categories,
                                     tags_csv=tags_csv)
     pub_in_context = PublicationContext.objects.\
                      filter(**query_params).\

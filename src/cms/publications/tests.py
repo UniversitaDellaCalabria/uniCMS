@@ -344,6 +344,10 @@ class PublicationUnitTest(TestCase):
         lm = load_publications_preview(**data)
         assert not lm
 
+        data['exclude_categories'] = True
+        lm = load_publications_preview(**data)
+        assert not lm
+
         data['tags_csv'] = 'ciao,mamma'
         lm = load_publications_preview(**data)
         assert not lm

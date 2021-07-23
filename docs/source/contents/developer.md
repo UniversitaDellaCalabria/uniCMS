@@ -162,12 +162,14 @@ pass a single active publication to a template.<br>
 
 * **load_publications_preview**<br>
 returns all published publications in a context and passes them to a template.<br>
-*arguments*: template, section (opt), number (opt, default=5),
-in_evidence (opt, default=False), categories_csv (opt), tags_csv (opt)<br>
+*arguments*: template, section (opt), number (opt, default=6),
+in_evidence (opt, default=False), categories_csv (opt),
+exclude_categories (opt, default=False), tags_csv (opt)<br>
 *example*:
 ````
     {% load_publications_preview template="publ.html" number="3" %}
     {% load_publications_preview template="publ.html" categories="Research, Study" %}
+    {% load_publications_preview template="publ.html" categories="Research" exclude_categories=True %}
     {% load_publications_preview template="publ.html" tags_csv="read, sport" %}
     {% load_publications_preview template="publ.html" in_evidence=True %}
 ````
