@@ -44,6 +44,7 @@ class EditorialBoardEditorsAdmin(AbstractCreatedModifiedBy):
     list_filter = ('permission', 'created', 'modified', 'is_active')
     search_fields = ('user__first_name', 'user__last_name')
     readonly_fields = ('created', 'modified')
+    raw_id_fields = ('user', 'webpath', )
 
 
 class EditorialBoardLockUserAdminInline(admin.TabularInline):
