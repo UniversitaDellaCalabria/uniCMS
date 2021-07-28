@@ -1,0 +1,788 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-28 15:46+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: api/exceptions.py:15
+msgid "You do not have permission to perform this action."
+msgstr "Non disponi dei permessi per eseguire questa azione"
+
+#: api/serializers.py:100
+msgid "Field required"
+msgstr "Campo richiesto"
+
+#: api/settings.py:10
+#, python-brace-format
+msgid "Unable to make changes. {user} is currently editing this item"
+msgstr "Impossibile apportare modifiche. {user} sta attualmente modificando questo elemento"
+
+#: api/views/locks.py:76
+msgid "This lock was already set"
+msgstr "Questo lock è stato già impostato"
+
+#: api/views/locks.py:201
+msgid "Lock successfully set"
+msgstr "Lock impostato con successo"
+
+#: api/views/webpath.py:410
+msgid "Cloning done with success!"
+msgstr "Clonazione effettuata con successo!"
+
+#: carousels/models.py:22
+msgid "Carousels"
+msgstr "Caroselli"
+
+#: carousels/models.py:42 carousels/models.py:84
+msgid "Pre Heading"
+msgstr "Pre testata"
+
+#: carousels/models.py:45 carousels/models.py:87
+msgid "Heading"
+msgstr "Testata"
+
+#: carousels/models.py:52
+msgid "Carousel Items"
+msgstr "Elementi del carosello"
+
+#: carousels/models.py:94
+msgid "Carousel Item Localization"
+msgstr "Traduzioni dell'elemento del carosello"
+
+#: carousels/models.py:112 carousels/models.py:135
+msgid "Title"
+msgstr "Titolo"
+
+#: carousels/models.py:116 carousels/models.py:138
+msgid "Carousel Item Links"
+msgstr "Link dell'elemento del carosello"
+
+#: contexts/forms.py:71
+msgid "Parent"
+msgstr "Genitore"
+
+#: contexts/forms.py:73
+msgid "Parent element in which insert the new webpaths"
+msgstr "Elemento genitore in cui innestare il nuovo percorso"
+
+#: contexts/forms.py:74
+msgid "Exclude pages"
+msgstr "Escludi pagine"
+
+#: contexts/forms.py:76
+msgid "Exclude webpaths' pages"
+msgstr "Escludi le pagine dei percorso"
+
+#: contexts/forms.py:77
+msgid "Exclude news"
+msgstr "Escludi notizie"
+
+#: contexts/forms.py:79
+msgid "Exclude webpaths' news"
+msgstr "Escludi notizie dei percorso"
+
+#: contexts/forms.py:80
+msgid "Only childs"
+msgstr "Solo figli"
+
+#: contexts/forms.py:82
+msgid "Take only webpath children"
+msgstr "Considera esclusivamente i figli del percorso"
+
+#: contexts/models.py:30
+msgid "Sites"
+msgstr "Siti web"
+
+#: contexts/models.py:66
+msgid "path be prefixed with the parent one, on save"
+msgstr "il percorso deve essere preceduto da quello padre, al salvataggio"
+
+#: contexts/models.py:72
+msgid "Alias that would be redirected to ..."
+msgstr "Alias che verrebbe reindirizzato a..."
+
+#: contexts/models.py:80
+msgid "final path prefixed with the parent path"
+msgstr "percorso finale preceduto dal percorso padre"
+
+#: contexts/models.py:84
+msgid "Site Contexts (WebPaths)"
+msgstr ""
+
+#: contexts/models.py:238
+msgid "Editorial Board Users"
+msgstr "Utenti dell'Editorial Board"
+
+#: contexts/models.py:298 contexts/models.py:352
+msgid "content type"
+msgstr ""
+
+#: contexts/models.py:306
+msgid "Editorial Board Locks"
+msgstr "Lock dell'Editorial Board"
+
+#: contexts/models.py:318
+msgid "Editorial Board Locks Owners"
+msgstr "Proprietari dei lock dell'Editorial Board"
+
+#: contexts/models.py:361
+msgid "used by content type"
+msgstr ""
+
+#: contexts/models.py:370
+msgid "Entries Used By"
+msgstr "Voci usate da"
+
+#: contexts/settings.py:5
+msgid "disable permissions in context"
+msgstr "disabilita permessi in questo contesto"
+
+#: contexts/settings.py:7
+msgid "can translate content in their own context"
+msgstr "possono tradurre i contenuti nel proprio contesto"
+
+#: contexts/settings.py:8
+msgid "can translate content in their own context and descendants"
+msgstr ""
+
+#: contexts/settings.py:10
+msgid "can edit content created by them in their own context"
+msgstr "possono tradurre contenuti nel proprio contesto e discendenti"
+
+#: contexts/settings.py:11
+msgid "can edit content in their own context"
+msgstr "possono modificare contenuti nel proprio contesto"
+
+#: contexts/settings.py:12
+msgid "can edit content in their own context and descendants"
+msgstr "possono modificare contenuti nel proprio contesto e discendenti"
+
+#: contexts/settings.py:14
+msgid "can publish content in their own context"
+msgstr "possono pubblicare contenuti nel proprio contesto"
+
+#: contexts/settings.py:15
+msgid "can publish content in their own context and descendants"
+msgstr "possono pubblicare contenuti nel proprio contesto e discendenti"
+
+#: contexts/templatetags/unicms_contexts.py:22
+msgid "Home"
+msgstr ""
+
+#: contexts/utils.py:95
+msgid "You entered in {}"
+msgstr "Sei entrato in {}"
+
+#: contexts/utils.py:164
+msgid "changed"
+msgstr "modificato"
+
+#: contexts/utils.py:164
+msgid "added"
+msgstr "aggiunto"
+
+#: contexts/views.py:55 contexts/views.py:75
+msgid "CMS Page not found"
+msgstr "Pagina non trovata"
+
+#: contexts/views.py:91
+msgid "Permission Denied on this website"
+msgstr "Permesso negato in questo sito web"
+
+#: contexts/views.py:96
+msgid "Permission Denied on this webpath"
+msgstr "Permesso negato in questo percorso"
+
+#: medias/models.py:60
+msgid "Media Collections"
+msgstr "Collezioni di media"
+
+#: medias/models.py:73
+msgid "Media file title"
+msgstr "Titolo del file"
+
+#: medias/models.py:81
+msgid "Media"
+msgstr ""
+
+#: medias/models.py:99
+msgid "Media Collection Items"
+msgstr "Elementi della collezione"
+
+#: menus/models.py:46
+msgid "Context Navigation Menus"
+msgstr "Menu di navigazione"
+
+#: menus/models.py:90 pages/models.py:376 pages/models.py:444
+#: publications/models.py:406
+msgid "url"
+msgstr ""
+
+#: menus/models.py:100
+msgid "Takes additional contents from a publication"
+msgstr "Prende contenuti aggiuntivi da una pubblicazione"
+
+#: menus/models.py:105
+msgid "Context Navigation Menu Items"
+msgstr "Voci del menu di navigazione"
+
+#: menus/models.py:110
+msgid "Can't choose a child as parent!"
+msgstr "Non si può sceglere un elemento figlio come genitore"
+
+#: menus/models.py:232
+msgid "Context Navigation Menu Item Localizations"
+msgstr "Traduzioni della voce di menu"
+
+#: pages/admin.py:54
+msgid "Make page Draft"
+msgstr "Porta la pagina in bozza"
+
+#: pages/apps.py:8
+msgid "pages"
+msgstr "pagine"
+
+#: pages/models.py:30
+msgid "Draft"
+msgstr "Bozza"
+
+#: pages/models.py:31
+msgid "Published"
+msgstr "Pubblicata"
+
+#: pages/models.py:91
+msgid "Description used for SEO."
+msgstr "Descrizione usata per SEO."
+
+#: pages/models.py:100
+msgid "Page"
+msgstr "Pagina"
+
+#: pages/models.py:101
+msgid "Home Page"
+msgstr ""
+
+#: pages/models.py:105
+msgid "Pages"
+msgstr "Pagine"
+
+#: pages/models.py:341
+msgid "Page Carousel"
+msgstr ""
+
+#: pages/models.py:360
+msgid "Page Localizations"
+msgstr "Traduzioni della pagina"
+
+#: pages/models.py:380
+msgid "Page Medias"
+msgstr "Media della pagina"
+
+#: pages/models.py:396
+msgid "Page Navigation Bars"
+msgstr "Menu della pagina"
+
+#: pages/models.py:413
+msgid "Page Block"
+msgstr ""
+
+#: pages/models.py:432
+msgid "Related Pages"
+msgstr "Pagine relative"
+
+#: pages/models.py:447
+msgid "Page Links"
+msgstr "Link della pagina"
+
+#: pages/models.py:464
+msgid "Publication Contents"
+msgstr ""
+
+#: pages/models.py:478
+msgid "Page Media Collection"
+msgstr "Collezioni di media della pagina"
+
+#: pages/models.py:493
+msgid "Page Headings"
+msgstr "Testate della pagina"
+
+#: pages/models.py:522
+msgid "Page Heading Localizations"
+msgstr "Traduzioni della testata della pagina"
+
+#: pages/templates/admin/change_form_preview.html:9
+msgid "Duplicate as a Draft"
+msgstr "Duplica come bozza"
+
+#: pages/templates/admin/update_template.html:6
+msgid "Update template to selected pages"
+msgstr "Aggiorna il template delle pagine selezionate"
+
+#: pages/templates/admin/update_template.html:7
+msgid "Selected pages"
+msgstr "Pagine selezionate"
+
+#: publications/apps.py:8
+msgid "publications"
+msgstr "pubblicazioni"
+
+#: publications/handlers.py:72 publications/handlers.py:82
+msgid "News"
+msgstr "Notizie"
+
+#: publications/models.py:46
+msgid "Content Categories"
+msgstr "Categorie di contenuti"
+
+#: publications/models.py:60
+msgid "Image of this Category"
+msgstr "Immagine della categoria"
+
+#: publications/models.py:69 publications/models.py:483
+msgid "Heading, Headline"
+msgstr "Testata, titolo"
+
+#: publications/models.py:71 publications/models.py:487
+msgid "Strap line (press)"
+msgstr "Sottotitolo (stampa)"
+
+#: publications/models.py:73 publications/models.py:489
+msgid "Content"
+msgstr "Contenuto"
+
+#: publications/models.py:84
+msgid "Editorial Board notes"
+msgstr "Note dell'editorial board"
+
+#: publications/models.py:100
+msgid "Publications"
+msgstr "Pubblicazioni"
+
+#: publications/models.py:335
+msgid "Publication Contexts"
+msgstr "Contesti della pubblicazione"
+
+#: publications/models.py:395
+msgid "Related Publications"
+msgstr "Pubblicazioni relative"
+
+#: publications/models.py:409
+msgid "Publication Links"
+msgstr "Link della pubblicazione"
+
+#: publications/models.py:422
+msgid "Publication Page Block"
+msgstr ""
+
+#: publications/models.py:440
+msgid "Publication Media Collection"
+msgstr ""
+
+#: publications/models.py:464 templates/models.py:64 templates/models.py:79
+#: templates/models.py:131 templates/models.py:160
+msgid ""
+"Specify the container section in the template where this block would be "
+"rendered."
+msgstr "Specifica la sezione del contenitore nel modello in cui verrà visualizzato questo blocco"
+
+#: publications/models.py:474
+msgid "Publication Attachments"
+msgstr "Allegati della pubblicazione"
+
+#: publications/models.py:492
+msgid "Publication Localizations"
+msgstr "Traduzioni della pubblicazione"
+
+#: templates/models.py:84 templates/models.py:140
+msgid "according to the block template schema"
+msgstr "secondo lo schema del modello di blocco"
+
+#: templates/models.py:114
+msgid "Editorial Board Notes, not visible by public."
+msgstr "Note dell'editorial board, non visibili al pubblico"
+
+#: templates/models.py:119
+msgid "Page Templates"
+msgstr "Templates"
+
+#: templates/models.py:136
+msgid "Description of this block"
+msgstr "Descrizione di questo block"
+
+#: templates/models.py:147
+msgid "Template Blocks"
+msgstr "Blocchi dei template"
+
+#: templates/models.py:174
+msgid "Page Template Blocks"
+msgstr "Blocchi della pagina"
+
+#: templates/settings.py:16
+msgid "Pre-Head"
+msgstr ""
+
+#: templates/settings.py:17
+msgid "Head"
+msgstr ""
+
+#: templates/settings.py:19
+msgid "Menu-1"
+msgstr ""
+
+#: templates/settings.py:20
+msgid "Menu-2"
+msgstr ""
+
+#: templates/settings.py:21
+msgid "Menu-3"
+msgstr ""
+
+#: templates/settings.py:22
+msgid "Menu-4"
+msgstr ""
+
+#: templates/settings.py:24
+msgid "Banner"
+msgstr ""
+
+#: templates/settings.py:25
+msgid "Slider-2"
+msgstr ""
+
+#: templates/settings.py:27
+msgid "Pre-Footer"
+msgstr ""
+
+#: templates/settings.py:28
+msgid "Footer"
+msgstr ""
+
+#: templates/settings.py:29
+msgid "Post-Footer"
+msgstr ""
+
+#: templates/settings.py:32
+msgid "Breadcrumbs"
+msgstr ""
+
+#: templates/settings.py:37
+msgid "Section 1 - Top A"
+msgstr ""
+
+#: templates/settings.py:38
+msgid "Section 1 - Top B"
+msgstr ""
+
+#: templates/settings.py:39
+msgid "Section 1 - Top C"
+msgstr ""
+
+#: templates/settings.py:40
+msgid "Section 1 - Middle Top A"
+msgstr ""
+
+#: templates/settings.py:41
+msgid "Section 1 - Middle Top B"
+msgstr ""
+
+#: templates/settings.py:42
+msgid "Section 1 - Middle Top C"
+msgstr ""
+
+#: templates/settings.py:43
+msgid "Section 1 - Left A"
+msgstr ""
+
+#: templates/settings.py:44
+msgid "Section 1 - Left B"
+msgstr ""
+
+#: templates/settings.py:45
+msgid "Section 1 - Center Top A"
+msgstr ""
+
+#: templates/settings.py:46
+msgid "Section 1 - Center Top B"
+msgstr ""
+
+#: templates/settings.py:47
+msgid "Section 1 - Center Top C"
+msgstr ""
+
+#: templates/settings.py:48
+msgid "Section 1 - Center Content"
+msgstr ""
+
+#: templates/settings.py:49
+msgid "Section 1 - Center Bottom A"
+msgstr ""
+
+#: templates/settings.py:50
+msgid "Section 1 - Center Bottom B"
+msgstr ""
+
+#: templates/settings.py:51
+msgid "Section 1 - Center Bottom C"
+msgstr ""
+
+#: templates/settings.py:52
+msgid "Section 1 - Right A"
+msgstr ""
+
+#: templates/settings.py:53
+msgid "Section 1 - Right B"
+msgstr ""
+
+#: templates/settings.py:54
+msgid "Section 1 - Middle Bottom A"
+msgstr ""
+
+#: templates/settings.py:55
+msgid "Section 1 - Middle Bottom B"
+msgstr ""
+
+#: templates/settings.py:56
+msgid "Section 1 - Middle Bottom C"
+msgstr ""
+
+#: templates/settings.py:57
+msgid "Section 1 - Bottom A"
+msgstr ""
+
+#: templates/settings.py:58
+msgid "Section 1 - Bottom B"
+msgstr ""
+
+#: templates/settings.py:59
+msgid "Section 1 - Bottom C"
+msgstr ""
+
+#: templates/settings.py:66
+msgid "Section 2 - Top A"
+msgstr ""
+
+#: templates/settings.py:67
+msgid "Section 2 - Top B"
+msgstr ""
+
+#: templates/settings.py:68
+msgid "Section 2 - Top C"
+msgstr ""
+
+#: templates/settings.py:69
+msgid "Section 2 - Middle Top A"
+msgstr ""
+
+#: templates/settings.py:70
+msgid "Section 2 - Middle Top B"
+msgstr ""
+
+#: templates/settings.py:71
+msgid "Section 2 - Middle Top C"
+msgstr ""
+
+#: templates/settings.py:72
+msgid "Section 2 - Left A"
+msgstr ""
+
+#: templates/settings.py:73
+msgid "Section 2 - Left B"
+msgstr ""
+
+#: templates/settings.py:74
+msgid "Section 2 - Center Top A"
+msgstr ""
+
+#: templates/settings.py:75
+msgid "Section 2 - Center Top B"
+msgstr ""
+
+#: templates/settings.py:76
+msgid "Section 2 - Center Top C"
+msgstr ""
+
+#: templates/settings.py:77
+msgid "Section 2 - Center Content"
+msgstr ""
+
+#: templates/settings.py:78
+msgid "Section 2 - Center Bottom A"
+msgstr ""
+
+#: templates/settings.py:79
+msgid "Section 2 - Center Bottom B"
+msgstr ""
+
+#: templates/settings.py:80
+msgid "Section 2 - Center Bottom C"
+msgstr ""
+
+#: templates/settings.py:81
+msgid "Section 2 - Right A"
+msgstr ""
+
+#: templates/settings.py:82
+msgid "Section 2 - Right B"
+msgstr ""
+
+#: templates/settings.py:83
+msgid "Section 2 - Middle Bottom A"
+msgstr ""
+
+#: templates/settings.py:84
+msgid "Section 2 - Middle Bottom B"
+msgstr ""
+
+#: templates/settings.py:85
+msgid "Section 2 - Middle Bottom C"
+msgstr ""
+
+#: templates/settings.py:86
+msgid "Section 2 - Bottom A"
+msgstr ""
+
+#: templates/settings.py:87
+msgid "Section 2 - Bottom B"
+msgstr ""
+
+#: templates/settings.py:88
+msgid "Section 2 - Bottom C"
+msgstr ""
+
+#: templates/settings.py:94
+msgid "Section 3 - Top A"
+msgstr ""
+
+#: templates/settings.py:95
+msgid "Section 3 - Top B"
+msgstr ""
+
+#: templates/settings.py:96
+msgid "Section 3 - Top C"
+msgstr ""
+
+#: templates/settings.py:97
+msgid "Section 3 - Middle Top A"
+msgstr ""
+
+#: templates/settings.py:98
+msgid "Section 3 - Middle Top B"
+msgstr ""
+
+#: templates/settings.py:99
+msgid "Section 3 - Middle Top C"
+msgstr ""
+
+#: templates/settings.py:100
+msgid "Section 3 - Left A"
+msgstr ""
+
+#: templates/settings.py:101
+msgid "Section 3 - Left B"
+msgstr ""
+
+#: templates/settings.py:102
+msgid "Section 3 - Center Top A"
+msgstr ""
+
+#: templates/settings.py:103
+msgid "Section 3 - Center Top B"
+msgstr ""
+
+#: templates/settings.py:104
+msgid "Section 3 - Center Top C"
+msgstr ""
+
+#: templates/settings.py:105
+msgid "Section 3 - Center Content"
+msgstr ""
+
+#: templates/settings.py:106
+msgid "Section 3 - Center Bottom A"
+msgstr ""
+
+#: templates/settings.py:107
+msgid "Section 3 - Center Bottom B"
+msgstr ""
+
+#: templates/settings.py:108
+msgid "Section 3 - Center Bottom C"
+msgstr ""
+
+#: templates/settings.py:109
+msgid "Section 3 - Right A"
+msgstr ""
+
+#: templates/settings.py:110
+msgid "Section 3 - Right B"
+msgstr ""
+
+#: templates/settings.py:111
+msgid "Section 3 - Middle Bottom A"
+msgstr ""
+
+#: templates/settings.py:112
+msgid "Section 3 - Middle Bottom B"
+msgstr ""
+
+#: templates/settings.py:113
+msgid "Section 3 - Middle Bottom C"
+msgstr ""
+
+#: templates/settings.py:114
+msgid "Section 3 - Bottom A"
+msgstr ""
+
+#: templates/settings.py:115
+msgid "Section 3 - Bottom B"
+msgstr ""
+
+#: templates/settings.py:116
+msgid "Section 3 - Bottom C"
+msgstr ""
+
+#: templates/settings.py:159
+msgid "View"
+msgstr ""
+
+#: templates/settings.py:160
+msgid "Open"
+msgstr "Apri"
+
+#: templates/settings.py:161
+msgid "Read More"
+msgstr "Leggi di più"
+
+#: templates/settings.py:162
+msgid "More"
+msgstr "Ancora"
+
+#: templates/settings.py:163
+msgid "Get in"
+msgstr "Entra"
+
+#: templates/settings.py:164
+msgid "Enter"
+msgstr "Entra"
+
+#: templates/settings.py:165
+msgid "Submit"
+msgstr "Invia"
+
+#: templates/settings.py:166
+msgid "custom"
+msgstr "personalizzato"
