@@ -49,7 +49,5 @@ def settings_value(name, **kwargs):
 
 
 @register.simple_tag
-def random_id():
-    # letters = string.ascii_lowercase
-    # return ''.join(random.choice(letters) for i in range(10))
-    return f"id_{secrets.randbelow(9999)}"
+def random_id(uid=None):
+    return uid or f"id_{secrets.randbelow(9999)}"

@@ -266,6 +266,7 @@ if "unicms_unical_storage_handler" in INSTALLED_APPS:
     ALLOWED_ADDRESSBOOK_STRUCTURE_TYPES = ['AREAUOC', 'DIP', 'MCRA','SET']
     ALLOWED_ADDRESSBOOK_ROLES = ['PO', 'PA', 'RU', 'RD', 'ND', 'AR',
                                  'BS', 'CB', 'CC', 'DR', 'NM']
+    INITIAL_STRUCTURE_FATHER = "170005"
 # END UNICAL STORAGE HANDLER
 
 
