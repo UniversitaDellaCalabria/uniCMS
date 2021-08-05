@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include, re_path
 
-from rest_framework import routers, permissions
+from rest_framework import permissions #, routers
 from rest_framework.renderers import JSONOpenAPIRenderer
 from rest_framework.schemas import get_schema_view
 
@@ -40,8 +40,8 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # API
-router = routers.DefaultRouter()
-urlpatterns += re_path('^api', include(router.urls)),
+# router = routers.DefaultRouter()
+# urlpatterns += re_path('^api/', include(router.urls)),
 
 # API schemas
 try:

@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic import TemplateView
 
 from . views import (carousel, carousel_item, carousel_item_link,
                      carousel_item_link_localization,
@@ -20,8 +21,15 @@ from . views import (carousel, carousel_item, carousel_item_link,
 
 urlpatterns = []
 
+urlpatterns += path('api/',
+                    TemplateView.as_view(
+                        template_name='redoc.html',
+                        extra_context={'schema_url':'openapi-schema'}
+                    ),
+                    name='unicms-api-redoc'),
+
 # Public API Resources
-urlpatterns += path('api/contexts', publication.ApiContext.as_view(), name='api-contexts'),
+# urlpatterns += path('api/contexts', publication.ApiContext.as_view(), name='api-contexts'),
 
 # I would have preferred a regexp .. but openapi schema generator ...
 # re_path('api/news/by-context/(?P<webpath_id>\d+)/?(?P<category_name>[a-zA-Z0-9]*)?'

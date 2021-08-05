@@ -1,0 +1,24 @@
+{% extends "rest_framework/base.html" %}
+
+{% block breadcrumbs %}
+<ul class="breadcrumb">
+
+    <li><a href="{% url 'unicms_api:unicms-api-redoc' %}">API Root</a></li>
+
+    {% for breadcrumb_name, breadcrumb_url in breadcrumblist %}
+        {% if forloop.last %}
+            <li class="active">
+                <a href="{{ breadcrumb_url }}">
+                    {{ breadcrumb_name }}
+                </a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{ breadcrumb_url }}">
+                    {{ breadcrumb_name }}
+                </a>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endblock %}

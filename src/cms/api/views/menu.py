@@ -30,7 +30,7 @@ class ApiMenu(APIView):
     """
     """
     description = 'Get a Menu in JSON format'
-    # permission_classes = [permissions.IsAdminUser]
+    # permission_classes = [IsAdminUser]
 
     def get(self, request, menu_id):
         """
