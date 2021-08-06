@@ -20,7 +20,7 @@ from cms.menus.serializers import MenuSelectOptionsSerializer, MenuSerializer
 from . generics import *
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied, LoggedValidationException
-from .. permissions import MenuGetCreatePermissions
+from .. permissions import MenuGetCreatePermissions, UNICMSSafePermissions
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
 
@@ -30,7 +30,10 @@ class ApiMenu(APIView):
     """
     """
     description = 'Get a Menu in JSON format'
-    # permission_classes = [IsAdminUser]
+
+    # if safe method, no permissions required
+    # else user must be staff/superuser
+    permission_classes = [UNICMSSafePermissions]
 
     def get(self, request, menu_id):
         """
@@ -48,9 +51,6 @@ class ApiMenu(APIView):
         """
         create a new menu, only for staff users
         """
-        if not request.user.is_staff:
-            raise PermissionDenied(detail="Error 403, forbidden", code=403)
-
         childs = request.data.get('childs')
 
         # post method

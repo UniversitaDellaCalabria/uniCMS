@@ -1,7 +1,21 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
-class AbstractUserGetCreatePermissions(BasePermission):
+class UNICMSSafePermissions(BasePermission):
+    """
+    """
+    def has_permission(self, request, view):
+
+        method = request.method
+        if method in SAFE_METHODS:
+            return True
+
+        user = request.user
+        if user.is_staff: return True
+        if user.is_superuser: return True
+
+
+class UNICMSUserGetCreatePermissions(BasePermission):
     """
     """
 
@@ -19,7 +33,7 @@ class AbstractUserGetCreatePermissions(BasePermission):
         abstract = True
 
 
-class CarouselGetCreatePermissions(AbstractUserGetCreatePermissions):
+class CarouselGetCreatePermissions(UNICMSUserGetCreatePermissions):
     """
     """
 
@@ -27,7 +41,7 @@ class CarouselGetCreatePermissions(AbstractUserGetCreatePermissions):
         return super().has_permission(request, view, 'cmscarousels', 'carousel')
 
 
-class PublicationGetCreatePermissions(AbstractUserGetCreatePermissions):
+class PublicationGetCreatePermissions(UNICMSUserGetCreatePermissions):
     """
     """
 
@@ -35,7 +49,7 @@ class PublicationGetCreatePermissions(AbstractUserGetCreatePermissions):
         return super().has_permission(request, view, 'cmspublications', 'publication')
 
 
-class MediaGetCreatePermissions(AbstractUserGetCreatePermissions):
+class MediaGetCreatePermissions(UNICMSUserGetCreatePermissions):
     """
     """
 
@@ -43,7 +57,7 @@ class MediaGetCreatePermissions(AbstractUserGetCreatePermissions):
         return super().has_permission(request, view, 'cmsmedias', 'media')
 
 
-class MediaCollectionGetCreatePermissions(AbstractUserGetCreatePermissions):
+class MediaCollectionGetCreatePermissions(UNICMSUserGetCreatePermissions):
     """
     """
 
@@ -51,7 +65,7 @@ class MediaCollectionGetCreatePermissions(AbstractUserGetCreatePermissions):
         return super().has_permission(request, view, 'cmsmedias', 'mediacollection')
 
 
-class MenuGetCreatePermissions(AbstractUserGetCreatePermissions):
+class MenuGetCreatePermissions(UNICMSUserGetCreatePermissions):
     """
     """
 
