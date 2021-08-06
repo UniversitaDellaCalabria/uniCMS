@@ -32,6 +32,7 @@ class CarouselItemAPIUnitTest(TestCase):
                                             is_staff=True)
         carousel_item = CarouselUnitTest.create_carousel_item()
         carousel = carousel_item.carousel
+
         # carousel list
         url = reverse('unicms_api:carousel-items',
                       kwargs={'carousel_id': carousel.pk})

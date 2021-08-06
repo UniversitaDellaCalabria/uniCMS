@@ -99,6 +99,17 @@ class ContextUnitTest(TestCase):
 
         webpath.delete()
 
+    def test_same_of_existent_webpath(self):
+        webpath = self.create_webpath()
+        kwargs =  {'name': webpath.name,
+                   'parent': webpath.parent,
+                   'path': webpath.path,
+                   'is_active': True}
+        try:
+            webpath2 = WebPath.objects.create(**kwargs)
+        except Exception as e:
+            assert e
+
     def test_parented_webpath(self):
         webpath = self.create_webpath()
         kwargs =  {'name': "Example WebPath child1",
@@ -111,6 +122,12 @@ class ContextUnitTest(TestCase):
 
         # covers child updates
         webpath.save()
+
+        try:
+            webpath.parent = webpath
+            webpath.save()
+        except Exception as e:
+            assert e
 
     def test_aliased_webpath(self):
         webpath = self.create_webpath()
@@ -130,6 +147,11 @@ class ContextUnitTest(TestCase):
         webpath2.alias = None
         assert webpath2.redirect_url == _url == webpath2.get_full_path()
 
+        try:
+            webpath.alias = webpath
+            webpath.save()
+        except Exception as e:
+            assert e
 
     def test_editorialboard_user(self):
         ebe = self.create_editorialboard_user()

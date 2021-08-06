@@ -112,12 +112,13 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         url = f'/{CMS_PATH_PREFIX}{self.fullpath}'
         return sanitize_path(url)
 
-    def get_site_path(self, request=None):
+    def get_site_path(self, request=None): # pragma: no cover
         """
         returns webpath full path with site domain
         """
         if self.is_alias:
             return self.redirect_url
+
         # ports to exclude
         excluded_ports = ["80", "443"]
         if request and request.META['SERVER_PORT'] not in excluded_ports:
@@ -129,9 +130,18 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         return url
 
     def save(self, *args, **kwargs):
+
+        # parent different from self
+        if self.parent == self:
+            raise Exception("Can't set himself as parent")
+
+        # alias different from self
+        if self.alias == self:
+            raise Exception("Can't set himself as alias")
+
         # manage aliases
-        if self.alias:
-            self.site = self.alias.site
+        # if self.alias:
+            # self.site = self.alias.site
 
         # alias or alias_url
         if self.alias and self.alias_url: # pragma: no cover
@@ -339,7 +349,7 @@ class EditorialBoardLockUser(models.Model):
         if locks.filter(user=user).exists():
             return True
         # else no permissions but obj is locked
-        return False
+        return False # pragma: no cover
 
     def __str__(self): # pragma: no cover
         return f'{self.lock} {self.user}'

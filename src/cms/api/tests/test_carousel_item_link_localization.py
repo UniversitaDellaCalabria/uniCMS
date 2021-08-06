@@ -33,6 +33,10 @@ class CarouselItemLinkLocalizationAPIUnitTest(TestCase):
         carousel_item_link = carousel_item_link_localization.carousel_item_link
         carousel_item = carousel_item_link.carousel_item
         carousel = carousel_item.carousel
+
+        # test if carousel is locable by user
+        carousel_item_link_localization.is_lockable_by(user)
+
         # carousel list
         url = reverse('unicms_api:carousel-item-link-localizations',
                       kwargs={'carousel_id': carousel.pk,

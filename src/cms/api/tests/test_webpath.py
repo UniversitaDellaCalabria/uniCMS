@@ -1,11 +1,14 @@
 import datetime
 import logging
 
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from cms.contexts.models import WebPath
+from cms.contexts.models import (EditorialBoardLock,
+                                 EditorialBoardLockUser,
+                                 WebPath)
 from cms.contexts.tests import ContextUnitTest
 
 
@@ -413,6 +416,12 @@ class WebpathAPIUnitTest(TestCase):
         user.save()
         req.force_login(user)
 
+        # set EditorialBoard lock for this user on parent
+        webpath_ct = ContentType.objects.get_for_model(parent)
+        lock = EditorialBoardLock.objects.create(content_type=webpath_ct,
+                                                 object_id=parent.pk)
+        user_lock = EditorialBoardLockUser.objects.create(lock=lock,
+                                                          user=user)
         # no site
         data['parent'] = parent.pk
         data['site'] = None

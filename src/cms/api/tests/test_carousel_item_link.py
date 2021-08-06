@@ -32,6 +32,10 @@ class CarouselItemLinkAPIUnitTest(TestCase):
         carousel_item_link = CarouselUnitTest.create_carousel_item_link()
         carousel_item = carousel_item_link.carousel_item
         carousel = carousel_item.carousel
+
+        # test if carousel is locable by user
+        carousel_item_link.is_lockable_by(user)
+
         # carousel list
         url = reverse('unicms_api:carousel-item-links',
                       kwargs={'carousel_id': carousel.pk,
