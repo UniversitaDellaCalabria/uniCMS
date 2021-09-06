@@ -155,3 +155,22 @@ class MediaAPIUnitTest(TestCase):
         url = reverse('unicms_api:media-form')
         res = req.get(url)
         assert isinstance(res.json(), list)
+
+
+    def test_media_filetypes(self):
+        """
+        Media allowed file types
+        """
+        req = Client()
+        user = ContextUnitTest.create_user()
+
+        url = reverse('unicms_api:media-filetype-list')
+
+        # accessible to staff users only
+        res = req.get(url)
+        assert res.status_code == 403
+        user.is_staff = True
+        user.save()
+        req.force_login(user)
+        res = req.get(url)
+        assert isinstance(res.json(), list)

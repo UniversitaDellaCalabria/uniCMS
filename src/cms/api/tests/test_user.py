@@ -20,7 +20,7 @@ class UserAPIUnitTest(TestCase):
 
     def test_user(self):
         """
-        Carousel API
+        Current User API
         """
         req = Client()
         user = ContextUnitTest.create_user()
@@ -35,3 +35,22 @@ class UserAPIUnitTest(TestCase):
         req.force_login(user)
         res = req.get(url)
         assert isinstance(res.json(), list)
+
+    def test_user_detail(self):
+        """
+        User Detail API
+        """
+        req = Client()
+        user = ContextUnitTest.create_user()
+
+        url = reverse('unicms_api:user-detail',
+                      kwargs={'user_id': user.pk})
+
+        # accessible to staff users only
+        res = req.get(url)
+        assert res.status_code == 403
+        user.is_staff = True
+        user.save()
+        req.force_login(user)
+        res = req.get(url)
+        assert isinstance(res.json(), object)

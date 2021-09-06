@@ -1,10 +1,12 @@
 import logging
 import os
 
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
+from cms.medias import settings as media_settings
 from cms.medias.forms import MediaForm
 from cms.medias.models import Media
 from cms.medias.serializers import MediaSerializer, MediaSelectOptionsSerializer
@@ -24,6 +26,9 @@ from .. utils import check_user_permission_on_object
 
 
 logger = logging.getLogger(__name__)
+
+FILETYPE_ALLOWED = getattr(settings, 'FILETYPE_ALLOWED',
+                           media_settings.FILETYPE_ALLOWED)
 
 
 class MediaList(UniCMSListCreateAPIView):
@@ -143,3 +148,17 @@ class MediaLogsView(ObjectLogEntriesList):
         item = get_object_or_404(Media, pk=object_id)
         content_type_id = ContentType.objects.get_for_model(item).pk
         return super().get_queryset(object_id, content_type_id)
+
+
+class MediaFileTypeAllowedList(generics.ListAPIView):
+    """
+    """
+    description = ""
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        """
+        """
+        return Response(tuple(sorted(FILETYPE_ALLOWED)))
+
+

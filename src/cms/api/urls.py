@@ -55,6 +55,7 @@ urlpatterns += path(f'{m_prefix}/<int:pk>/logs/', media.MediaLogsView.as_view(),
 urlpatterns += path(f'{m_prefix}/form/', media.MediaFormView.as_view(), name='media-form'),
 urlpatterns += path(f'{m_prefix}/options/', media.MediaOptionList.as_view(), name='media-options'),
 urlpatterns += path(f'{m_prefix}/options/<int:pk>/', media.MediaOptionView.as_view(), name='media-option'),
+urlpatterns += path(f'{m_prefix}/allowed-filetypes/', media.MediaFileTypeAllowedList.as_view(), name='media-filetype-list'),
 
 # media collections
 mc_prefix = f'{eb_prefix}/media-collections'
@@ -376,4 +377,5 @@ urlpatterns += path(f'{eb_prefix}/redis-lock/set/',
 # users
 u_prefix = f'{eb_prefix}/users'
 # urlpatterns += path(f'{u_prefix}/form/', webpath_pub_context.EditorialBoardLockUserFormView.as_view(), name='users-form'),
+urlpatterns += path(f'{u_prefix}/<int:user_id>/', users.UserDetail.as_view(), name='user-detail'),
 urlpatterns += path(f'{u_prefix}/current/', users.CurrentUserIDView.as_view(), name='users-current'),
