@@ -150,7 +150,7 @@ class MediaLogsView(ObjectLogEntriesList):
         return super().get_queryset(object_id, content_type_id)
 
 
-class MediaFileTypeAllowedList(generics.ListAPIView):
+class MediaFileTypeAllowedList(APIView):
     """
     """
     description = ""
