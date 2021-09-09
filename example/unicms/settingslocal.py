@@ -20,7 +20,6 @@ AUTH_USER_MODEL = 'accounts.User'
 SESSION_COOKIE_DOMAIN=".unical.it"
 MAIN_WEBSITE = 2
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,6 +37,7 @@ INSTALLED_APPS = [
     'nested_admin',
 
     'cms.templates',
+    'cms.contacts',
     'cms.contexts',
     'cms.carousels',
     'cms.menus',

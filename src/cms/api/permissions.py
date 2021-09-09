@@ -41,6 +41,14 @@ class CarouselGetCreatePermissions(UNICMSUserGetCreatePermissions):
         return super().has_permission(request, view, 'cmscarousels', 'carousel')
 
 
+class ContactGetCreatePermissions(UNICMSUserGetCreatePermissions):
+    """
+    """
+
+    def has_permission(self, request, view):
+        return super().has_permission(request, view, 'cmscontacts', 'contact')
+
+
 class PublicationGetCreatePermissions(UNICMSUserGetCreatePermissions):
     """
     """

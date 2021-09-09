@@ -1,9 +1,11 @@
-from django.urls import path
+from django.urls import path, re_path
 from django.views.generic import TemplateView
 
 from . views import (carousel, carousel_item, carousel_item_link,
                      carousel_item_link_localization,
                      carousel_item_localization,
+                     contact, contact_info, contact_localization,
+                     contact_info_localization,
                      media, media_collection, media_collection_item,
                      publication, publication_attachment,
                      publication_link, publication_localization,
@@ -21,7 +23,7 @@ from . views import (carousel, carousel_item, carousel_item_link,
 
 urlpatterns = []
 
-urlpatterns += path('api/',
+urlpatterns += re_path(r'api/$',
                     TemplateView.as_view(
                         template_name='redoc.html',
                         extra_context={'schema_url':'openapi-schema'}
@@ -117,6 +119,43 @@ urlpatterns += path(f'{cilil_prefix}/<int:pk>/logs/',
                     carousel_item_link_localization.CarouselItemLinkLocalizationLogsView.as_view(), name='carousel-item-link-localization-logs'),
 urlpatterns += path(f'{cilil_prefix}/form/', carousel_item_link_localization.CarouselItemLinkLocalizationFormView.as_view(),
                     name='carousel-item-link-localization-form'),
+
+# contacts
+co_prefix = f'{eb_prefix}/contacts'
+urlpatterns += path(f'{co_prefix}/', contact.ContactList.as_view(), name='contacts'),
+urlpatterns += path(f'{co_prefix}/<int:pk>/', contact.ContactView.as_view(), name='contact'),
+urlpatterns += path(f'{co_prefix}/<int:pk>/logs/', contact.ContactLogsView.as_view(), name='contact-logs'),
+urlpatterns += path(f'{co_prefix}/form/', contact.ContactFormView.as_view(), name='contact-form'),
+urlpatterns += path(f'{co_prefix}/options/', contact.ContactOptionList.as_view(), name='contact-options'),
+urlpatterns += path(f'{co_prefix}/options/<int:pk>/', contact.ContactOptionView.as_view(), name='contact-option'),
+
+# contact localizations
+colo_prefix = f'{co_prefix}/<int:contact_id>/localizations'
+urlpatterns += path(f'{colo_prefix}/', contact_localization.ContactLocalizationList.as_view(), name='contact-localizations'),
+urlpatterns += path(f'{colo_prefix}/<int:pk>/', contact_localization.ContactLocalizationView.as_view(),
+                    name='contact-localization'),
+urlpatterns += path(f'{colo_prefix}/<int:pk>/logs/', contact_localization.ContactLocalizationLogsView.as_view(),
+                    name='contact-localization-logs'),
+urlpatterns += path(f'{colo_prefix}/form/', contact_localization.ContactLocalizationFormView.as_view(),
+                    name='contact-localization-form'),
+
+# contact infos
+coi_prefix = f'{co_prefix}/<int:contact_id>/infos'
+urlpatterns += path(f'{coi_prefix}/', contact_info.ContactInfoList.as_view(), name='contact-infos'),
+urlpatterns += path(f'{coi_prefix}/<int:pk>/', contact_info.ContactInfoView.as_view(), name='contact-info'),
+urlpatterns += path(f'{coi_prefix}/<int:pk>/logs/', contact_info.ContactInfoLogsView.as_view(), name='contact-info-logs'),
+urlpatterns += path(f'{coi_prefix}/form/', contact_info.ContactInfoFormView.as_view(), name='contact-info-form'),
+urlpatterns += path(f'{co_prefix}/infos/form/', contact_info.ContactInfoGenericFormView.as_view(), name='contact-info-form-generic'),
+
+# contact info localizations
+coilo_prefix = f'{coi_prefix}/<int:contact_info_id>/localizations'
+urlpatterns += path(f'{coilo_prefix}/', contact_info_localization.ContactInfoLocalizationList.as_view(), name='contact-info-localizations'),
+urlpatterns += path(f'{coilo_prefix}/<int:pk>/', contact_info_localization.ContactInfoLocalizationView.as_view(),
+                    name='contact-info-localization'),
+urlpatterns += path(f'{coilo_prefix}/<int:pk>/logs/', contact_info_localization.ContactInfoLocalizationLogsView.as_view(),
+                    name='contact-info-localization-logs'),
+urlpatterns += path(f'{coilo_prefix}/form/', contact_info_localization.ContactInfoLocalizationFormView.as_view(),
+                    name='contact-info-localization-form'),
 
 # websites
 urlpatterns += path(f'{eb_prefix}/sites/', website.EditorWebsiteList.as_view(), name='editorial-board-sites'),

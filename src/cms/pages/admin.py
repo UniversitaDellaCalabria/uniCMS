@@ -68,6 +68,7 @@ class PageAdmin(AbstractPreviewableAdmin, nested_admin.NestedModelAdmin):
     inlines = (PageLocalizationInline,
                PageMenuInline,
                PageCarouselInline,
+               PageContactInline,
                PageBlockInline,
                PagePublicationInline,
                PageRelatedInline,

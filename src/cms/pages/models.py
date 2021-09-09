@@ -5,6 +5,8 @@ from django.utils import timezone
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
+from cms.contacts.models import Contact
+
 from cms.contexts.models import *
 from cms.contexts.models_abstract import AbstractLockable
 
@@ -77,10 +79,8 @@ class AbstractPublicable(models.Model):
 
 class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
            AbstractPublicable, CreatedModifiedBy, AbstractLockable):
-    name = models.CharField(max_length=160,
-                            blank=False, null=False)
-    title = models.CharField(max_length=256,
-                             null=False, blank=False)
+    name = models.CharField(max_length=160)
+    title = models.CharField(max_length=256)
     webpath = models.ForeignKey(WebPath,
                                 on_delete=models.CASCADE,
                                 limit_choices_to={'is_active': True},)
@@ -215,6 +215,15 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             order_by('order')
         return self._carousels
 
+    def get_contacts(self):
+        if getattr(self, '_contacts', None): # pragma: no cover
+            return self._contacts
+        self._contacts = PageContact.objects.filter(page=self,
+                                                    is_active=True,
+                                                    contact__is_active=True).\
+            order_by('order')
+        return self._contacts
+
     def get_medias(self):
         if getattr(self, '_medias', None): # pragma: no cover
             return self._medias
@@ -332,10 +341,8 @@ class AbstractLockablePageElement(models.Model):
 class PageCarousel(SectionAbstractModel, ActivableModel, SortableModel,
                    TimeStampedModel, CreatedModifiedBy,
                    AbstractLockablePageElement):
-    page = models.ForeignKey(Page, null=False, blank=False,
-                             on_delete=models.CASCADE)
-    carousel = models.ForeignKey(Carousel, null=False, blank=False,
-                                 on_delete=models.PROTECT)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
+    carousel = models.ForeignKey(Carousel, on_delete=models.PROTECT)
 
     class Meta:
         verbose_name_plural = _("Page Carousel")
@@ -345,16 +352,27 @@ class PageCarousel(SectionAbstractModel, ActivableModel, SortableModel,
                                   self.section or '#')
 
 
+class PageContact(SectionAbstractModel, ActivableModel, SortableModel,
+                  TimeStampedModel, CreatedModifiedBy,
+                  AbstractLockablePageElement):
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
+    contact = models.ForeignKey(Contact, on_delete=models.PROTECT)
+
+    class Meta:
+        verbose_name_plural = _("Page Contact")
+
+    def __str__(self):
+        return '{} {} :{}'.format(self.page, self.contact,
+                                  self.section or '#')
+
+
 class PageLocalization(TimeStampedModel, ActivableModel,
                        CreatedModifiedBy, AbstractLockablePageElement):
-    title = models.CharField(max_length=256,
-                             null=False, blank=False)
+    title = models.CharField(max_length=256)
     page = models.ForeignKey(Page,
-                             null=False, blank=False,
                              on_delete=models.CASCADE)
     language = models.CharField(choices=settings.LANGUAGES,
-                                max_length=12, null=False,blank=False,
-                                default='en')
+                                max_length=12, default='en')
 
     class Meta:
         verbose_name_plural = _("Page Localizations")
@@ -369,10 +387,8 @@ class PageLocalization(TimeStampedModel, ActivableModel,
 class PageMedia(SectionAbstractModel, ActivableModel, SortableModel,
                 TimeStampedModel, CreatedModifiedBy,
                 AbstractLockablePageElement):
-    page = models.ForeignKey(Page, null=False, blank=False,
-                             on_delete=models.CASCADE)
-    media = models.ForeignKey(Media, null=False, blank=False,
-                              on_delete=models.PROTECT)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
+    media = models.ForeignKey(Media, on_delete=models.PROTECT)
     url = models.URLField(help_text=_("url"),
                           null=True, blank=True)
 
@@ -387,10 +403,8 @@ class PageMedia(SectionAbstractModel, ActivableModel, SortableModel,
 class PageMenu(SectionAbstractModel, ActivableModel, SortableModel,
                TimeStampedModel, CreatedModifiedBy,
                AbstractLockablePageElement):
-    page = models.ForeignKey(Page, null=False, blank=False,
-                             on_delete=models.CASCADE)
-    menu = models.ForeignKey(NavigationBar, null=False, blank=False,
-                             on_delete=models.PROTECT)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
+    menu = models.ForeignKey(NavigationBar, on_delete=models.PROTECT)
 
     class Meta:
         verbose_name_plural = _("Page Navigation Bars")
@@ -403,9 +417,8 @@ class PageMenu(SectionAbstractModel, ActivableModel, SortableModel,
 class PageBlock(ActivableModel, SectionAbstractModel, SortableModel,
                 TimeStampedModel, CreatedModifiedBy,
                 AbstractLockablePageElement):
-    page = models.ForeignKey(Page, null=False, blank=False,
-                             on_delete=models.CASCADE)
-    block = models.ForeignKey(TemplateBlock, null=False, blank=False,
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
+    block = models.ForeignKey(TemplateBlock,
                               limit_choices_to={'is_active': True},
                               on_delete=models.PROTECT)
 
@@ -421,10 +434,10 @@ class PageBlock(ActivableModel, SectionAbstractModel, SortableModel,
 
 class PageRelated(TimeStampedModel, SortableModel, ActivableModel,
                   CreatedModifiedBy, AbstractLockablePageElement):
-    page = models.ForeignKey(Page, null=False, blank=False,
+    page = models.ForeignKey(Page,
                              related_name='parent_page',
                              on_delete=models.CASCADE)
-    related_page = models.ForeignKey(Page, null=False, blank=False,
+    related_page = models.ForeignKey(Page,
                                      on_delete=models.PROTECT,
                                      related_name="related_page")
 
@@ -438,9 +451,8 @@ class PageRelated(TimeStampedModel, SortableModel, ActivableModel,
 
 class PageLink(TimeStampedModel, SortableModel, CreatedModifiedBy,
                AbstractLockablePageElement):
-    page = models.ForeignKey(Page, null=False, blank=False,
-                             on_delete=models.CASCADE)
-    name = models.CharField(max_length=256, null=False, blank=False)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
+    name = models.CharField(max_length=256)
     url = models.URLField(help_text=_("url"))
 
     class Meta:
@@ -452,11 +464,10 @@ class PageLink(TimeStampedModel, SortableModel, CreatedModifiedBy,
 
 class PagePublication(TimeStampedModel, SortableModel, ActivableModel,
                       CreatedModifiedBy, AbstractLockablePageElement):
-    page = models.ForeignKey(Page, null=False, blank=False,
+    page = models.ForeignKey(Page,
                              # related_name='container_page',
                              on_delete=models.CASCADE)
     publication = models.ForeignKey('cmspublications.Publication',
-                                    null=False, blank=False,
                                     on_delete=models.PROTECT)
     # related_name="publication_content")
 
@@ -484,9 +495,8 @@ class PageMediaCollection(SectionAbstractModel, ActivableModel, SortableModel,
 class PageHeading(SectionAbstractModel, ActivableModel, SortableModel,
                   TimeStampedModel, CreatedModifiedBy,
                   AbstractLockablePageElement):
-    page = models.ForeignKey(Page, null=False, blank=False,
-                             on_delete=models.CASCADE)
-    title = models.CharField(max_length=256, null=False, blank=False)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE)
+    title = models.CharField(max_length=256)
     description = models.TextField(null=True, blank=True)
 
     class Meta:
@@ -513,9 +523,9 @@ class PageHeadingLocalization(ActivableModel,
                               AbstractLockablePageElement):
     heading = models.ForeignKey(PageHeading, on_delete=models.CASCADE)
     language = models.CharField(choices=settings.LANGUAGES,
-                                max_length=12, null=False,blank=False,
+                                max_length=12,
                                 default='en')
-    title = models.CharField(max_length=256, null=False, blank=False)
+    title = models.CharField(max_length=256)
     description = models.TextField(null=True, blank=True)
 
     class Meta:

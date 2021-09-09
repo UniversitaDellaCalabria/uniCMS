@@ -7,6 +7,8 @@ from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
+from cms.contacts.templatetags.unicms_contacts import load_contact
+from cms.contacts.tests import ContactUnitTest
 from cms.carousels.templatetags.unicms_carousels import load_carousel
 from cms.carousels.tests import CarouselUnitTest
 from cms.contexts.tests import ContextUnitTest
@@ -23,7 +25,7 @@ from cms.templates.placeholders import *
 from cms.templates.tests import TemplateUnitTest
 from cms.templates.templatetags.unicms_templates import blocks_in_position
 
-from . models import (Page, PageBlock, PageCarousel,
+from . models import (Page, PageBlock, PageCarousel, PageContact,
                       PageHeading, PageHeadingLocalization, PageLink,
                       PageLocalization, PageMedia, PageMediaCollection,
                       PageMenu, PageRelated)
@@ -103,6 +105,14 @@ class PageUnitTest(TestCase):
                                          section='banner',
                                          is_active=1)
         pc.__str__()
+
+        # page contact
+        contact = ContactUnitTest.create_contact()
+        pco = PageContact.objects.create(page = obj,
+                                        contact=contact,
+                                        section='1-right-b',
+                                        is_active=1)
+        pco.__str__()
 
         # page heading
         phead = PageHeading.objects.create(page = obj,
@@ -239,6 +249,22 @@ class PageUnitTest(TestCase):
         data['carousel_id'] = 101
         lm = load_carousel(**data)
         assert 'italia_carousel' not in lm
+
+
+    @classmethod
+    def test_page_load_contact(cls):
+        obj = cls.create_page(date_end=timezone.localtime())
+        req = RequestFactory().get('/')
+        template_context = dict(request=req,
+                                webpath=obj.webpath,
+                                page=obj)
+
+        data = dict(context=template_context,
+                    section='1-right-b',
+                    template='that.html')
+
+        lm = load_contact(**data)
+        assert lm
 
 
     # templatetag

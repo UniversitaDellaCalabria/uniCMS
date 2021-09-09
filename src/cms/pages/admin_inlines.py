@@ -5,6 +5,7 @@ from django.contrib import admin
 from . models import (Page,
                       PageBlock,
                       PageCarousel,
+                      PageContact,
                       PageHeading,
                       PageHeadingLocalization,
                       PageLink,
@@ -63,6 +64,14 @@ class PageCarouselInline(nested_admin.NestedTabularInline):
     extra = 0
     classes = ['collapse']
     raw_id_fields = ("carousel",)
+    sortable_field_name = "order"
+
+
+class PageContactInline(nested_admin.NestedTabularInline):
+    model = PageContact
+    extra = 0
+    classes = ['collapse']
+    raw_id_fields = ("contact",)
     sortable_field_name = "order"
 
 

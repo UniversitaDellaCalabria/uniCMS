@@ -5,6 +5,7 @@ from cms.api.settings import FORM_SOURCE_LABEL
 from cms.pages.models import (Page,
                               PageBlock,
                               PageCarousel,
+                              PageContact,
                               PageHeading,
                               PageHeadingLocalization,
                               PageLink,
@@ -71,6 +72,22 @@ class PageCarouselForm(ModelForm):
     class Meta:
         model = PageCarousel
         fields = ['page', 'carousel', 'order', 'is_active']
+
+
+class PageContactForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        page_id = kwargs.pop('page_id', None)
+        super().__init__(*args, **kwargs)
+        if page_id:
+            self.fields['page'].queryset = Page.objects.filter(pk=page_id)
+        setattr(self.fields['contact'],
+                FORM_SOURCE_LABEL,
+                reverse('unicms_api:contact-options'))
+
+    class Meta:
+        model = PageContact
+        fields = ['page', 'contact', 'order', 'is_active']
 
 
 class PageMediaForm(ModelForm):

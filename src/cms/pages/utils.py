@@ -20,7 +20,7 @@ def copy_page_as_draft(obj, user=None):
     new_obj.tags.add(*tags)
 
     # now replicate all its childs and menus
-    for i in ('pageblock_set', 'pagecarousel_set',
+    for i in ('pageblock_set', 'pagecarousel_set', 'pagecontact_set',
               'pagelink_set', 'pagemenu_set', 'pagepublication_set',
               'pagemedia_set', 'pagelocalization_set',
               'pageheading_set', 'pagemediacollection_set',

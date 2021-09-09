@@ -4,6 +4,7 @@ from cms.api.serializers import (UniCMSContentTypeClass,
                                  UniCMSCreateUpdateSerializer,
                                  UniCMSTagsValidator)
 from cms.carousels.serializers import CarouselSerializer
+from cms.contacts.serializers import ContactSerializer
 from cms.contexts.models import WebPath
 from cms.contexts.serializers import WebPathSerializer
 from cms.medias.serializers import MediaSerializer, MediaCollectionSerializer
@@ -92,6 +93,20 @@ class PageCarouselSerializer(UniCMSContentTypeClass):
         data = super().to_representation(instance)
         carousel = CarouselSerializer(instance.carousel)
         data['carousel'] = carousel.data
+        return data
+
+    class Meta:
+        model = PageCarousel
+        fields = '__all__'
+
+
+class PageContactSerializer(UniCMSContentTypeClass):
+    page = PageForeignKey()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        contact = ContactSerializer(instance.contact)
+        data['contact'] = contact.data
         return data
 
     class Meta:
