@@ -25,7 +25,7 @@ class Carousel(ActivableModel, TimeStampedModel, CreatedModifiedBy,
         items = []
         for i in self.carouselitem_set.filter(carousel=self,
                                               is_active=True)\
-                                      .order_by('order'):
+                .order_by('order'):
             items.append(i.localized(lang=lang))
         return items
 

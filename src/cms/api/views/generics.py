@@ -1,4 +1,3 @@
-import json
 import logging
 
 from django.contrib.admin.models import ADDITION
@@ -14,7 +13,6 @@ from cms.contexts.utils import log_obj_event
 from rest_framework import filters, generics
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAdminUser
-from rest_framework.response import Response
 
 from .. concurrency import (get_lock_from_cache,
                             # set_lock_to_cache,
@@ -59,7 +57,7 @@ def check_locks(item, user):
     if user_lock and not user_lock == user_id:
         logger.debug(f'{user} tried to access to {owner_user} actually used by {item}')
         raise PermissionDenied(LOCK_MESSAGE.format(user=owner_user,
-                                                  ttl=lock[1]),
+                                                   ttl=lock[1]),
                                403)
     # set_lock_to_cache(user_id, content_type_id, object_id)
 

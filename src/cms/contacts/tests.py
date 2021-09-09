@@ -2,9 +2,8 @@ import logging
 
 from django.test import TestCase
 
-from cms.medias.tests import MediaUnitTest
 
-from . models import *
+from . models import Contact, ContactInfo, ContactInfoLocalization, ContactLocalization
 
 
 logger = logging.getLogger(__name__)

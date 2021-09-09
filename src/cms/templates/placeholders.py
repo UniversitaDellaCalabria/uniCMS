@@ -1,6 +1,4 @@
 import logging
-import random
-import string
 
 from django.utils.safestring import SafeString
 

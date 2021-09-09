@@ -64,10 +64,10 @@ class MenuItemLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         menu_item_id = self.kwargs['menu_item_id']
         item_id = self.kwargs['pk']
         items = NavigationBarItemLocalization.objects\
-                                        .select_related('item')\
-                                        .filter(pk=item_id,
-                                                item__menu__pk=menu_id,
-                                                item__pk=menu_item_id)
+            .select_related('item')\
+            .filter(pk=item_id,
+                    item__menu__pk=menu_id,
+                    item__pk=menu_item_id)
         return items
 
     def patch(self, request, *args, **kwargs):

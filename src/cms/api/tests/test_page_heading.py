@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from cms.contexts.tests import ContextUnitTest
 
-from cms.pages.models import PageHeading, PageHeadingLocalization
+from cms.pages.models import PageHeading
 from cms.pages.tests import PageUnitTest
 
 

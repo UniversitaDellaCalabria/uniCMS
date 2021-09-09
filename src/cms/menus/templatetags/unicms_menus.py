@@ -1,10 +1,9 @@
 import logging
 
 from django import template
-from django.conf import settings
 from django.utils.safestring import SafeString
 
-from cms.contexts.utils import handle_faulty_templates, append_slash
+from cms.contexts.utils import handle_faulty_templates
 from cms.menus.models import NavigationBar
 
 
@@ -59,7 +58,7 @@ def load_menu(context, template, section=None, menu_id=None):
 @register.simple_tag(takes_context=True)
 def load_item_childs(context, item, exclude=None):
     _func_name = 'load_item_childs'
-    _log_msg = f'Template Tag {_func_name}'
+    f'Template Tag {_func_name}'
 
     if item:
         request = context['request']
@@ -72,7 +71,7 @@ def load_item_childs(context, item, exclude=None):
 @register.simple_tag(takes_context=True)
 def load_item_inherited_content(context, item):
     _func_name = 'load_item_inherited_content'
-    _log_msg = f'Template Tag {_func_name}'
+    f'Template Tag {_func_name}'
 
     if item and item.inherited_content and item.inherited_content.is_active:
         request = context['request']
@@ -84,12 +83,10 @@ def load_item_inherited_content(context, item):
 @register.simple_tag(takes_context=True)
 def load_item_publication(context, item):
     _func_name = 'load_item_publication'
-    _log_msg = f'Template Tag {_func_name}'
+    f'Template Tag {_func_name}'
 
     if item and item.publication and item.publication.is_active:
         request = context['request']
         language = getattr(request, 'LANGUAGE_CODE', '')
         item.publication.translate_as(lang=language)
         return item.publication
-
-

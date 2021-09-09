@@ -106,7 +106,7 @@ class ContextUnitTest(TestCase):
                    'path': webpath.path,
                    'is_active': True}
         try:
-            webpath2 = WebPath.objects.create(**kwargs)
+            WebPath.objects.create(**kwargs)
         except Exception as e:
             assert e
 

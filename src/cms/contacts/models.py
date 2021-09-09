@@ -5,8 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from cms.api.utils import check_user_permission_on_object
 from cms.contexts.models_abstract import AbstractLockable
 from cms.medias.models import Media
-from cms.templates.models import (CMS_LINKS_LABELS,
-                                  ActivableModel,
+from cms.templates.models import (ActivableModel,
                                   CreatedModifiedBy,
                                   SortableModel,
                                   TimeStampedModel)
@@ -31,7 +30,6 @@ class Contact(ActivableModel, TimeStampedModel, CreatedModifiedBy,
     image = models.ForeignKey(Media, on_delete=models.PROTECT,
                               null=True, blank=True)
 
-
     class Meta:
         ordering = ['name']
         verbose_name_plural = _("Contacts")
@@ -50,7 +48,7 @@ class Contact(ActivableModel, TimeStampedModel, CreatedModifiedBy,
         infos = []
         for i in self.contactinfo_set.filter(contact=self,
                                              is_active=True)\
-                                      .order_by('order'):
+                .order_by('order'):
             infos.append(i.localized(lang=lang))
         return infos
 
@@ -116,16 +114,16 @@ class ContactInfo(ActivableModel, TimeStampedModel,
 
 
 class ContactInfoLocalization(ActivableModel,
-                               TimeStampedModel, SortableModel,
-                               CreatedModifiedBy):
+                              TimeStampedModel, SortableModel,
+                              CreatedModifiedBy):
     contact_info = models.ForeignKey(ContactInfo,
                                      on_delete=models.CASCADE)
     language = models.CharField(choices=settings.LANGUAGES,
                                 max_length=12,
                                 default='en')
     label = models.CharField(max_length=160,
-                            blank=True,
-                            default='')
+                             blank=True,
+                             default='')
     value = models.CharField(max_length=160, blank=True, default='')
 
     class Meta:

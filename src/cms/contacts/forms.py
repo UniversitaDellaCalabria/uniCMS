@@ -3,7 +3,7 @@ from django.urls import reverse
 
 from cms.api.settings import FORM_SOURCE_LABEL
 
-from . models import *
+from . models import Contact, ContactInfo, ContactInfoLocalization, ContactLocalization
 
 
 class ContactForm(ModelForm):

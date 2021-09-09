@@ -81,9 +81,9 @@ def load_publications_preview(context, template,
                                     exclude_categories=exclude_categories,
                                     tags_csv=tags_csv)
     pub_in_context = PublicationContext.objects.\
-                     filter(**query_params).\
-                     distinct().\
-                     order_by('order','-date_start')
+        filter(**query_params).\
+        distinct().\
+        order_by('order','-date_start')
 
     if in_evidence:
         now = timezone.localtime()

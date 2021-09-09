@@ -47,7 +47,7 @@ class MenuItemLocalizationForm(ModelForm):
         super().__init__(*args, **kwargs)
         if menu_id and menu_item_id:
             self.fields['item'].queryset = NavigationBarItem.objects.filter(pk=menu_item_id,
-                                                                                 menu__pk=menu_id)
+                                                                            menu__pk=menu_id)
 
     class Meta:
         model = NavigationBarItemLocalization

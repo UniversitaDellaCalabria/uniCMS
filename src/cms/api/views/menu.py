@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 
-from rest_framework.exceptions import NotFound, PermissionDenied
+from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
@@ -17,7 +17,7 @@ from cms.menus.forms import MenuForm
 from cms.menus.models import NavigationBar
 from cms.menus.serializers import MenuSelectOptionsSerializer, MenuSerializer
 
-from . generics import *
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView, generics
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied, LoggedValidationException
 from .. permissions import MenuGetCreatePermissions, UNICMSSafePermissions

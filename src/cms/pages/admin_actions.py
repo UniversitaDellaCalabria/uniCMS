@@ -30,4 +30,5 @@ def update_template(self, request, queryset):
                            'pages':queryset,
                            'form': form})
 
+
 update_template.short_description = "Update template"

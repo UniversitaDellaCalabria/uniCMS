@@ -15,7 +15,7 @@ from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
 from . generics import check_locks, UniCMSListCreateAPIView
-from .. concurrency import *
+from .. concurrency import LOCK_MESSAGE, get_lock_from_cache, set_lock_to_cache
 from .. exceptions import LoggedPermissionDenied
 
 
@@ -124,7 +124,7 @@ class ObjectUserLocksView(generics.RetrieveDestroyAPIView):
         if request.user.is_superuser or user_lock:
             return super().delete(request, *args, **kwargs)
         raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                         resource=request.method)
+                                     resource=request.method)
 
 
 class RedisLockView(APIView):

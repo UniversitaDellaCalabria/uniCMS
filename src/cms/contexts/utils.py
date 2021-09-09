@@ -15,7 +15,7 @@ from django.template.exceptions import (TemplateDoesNotExist,
 
 from copy import deepcopy
 
-from django_auto_serializer.auto_serializer import *
+from django_auto_serializer.auto_serializer import ImportableSerializedInstance, SerializableInstance
 
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ def get_CMS_HOOKS():
 
 
 def detect_user_language(request):
-    req_lang =  translation.get_language_from_request(request) # is browser language
+    req_lang = translation.get_language_from_request(request) # is browser language
     current = request.session.get(translation.LANGUAGE_SESSION_KEY, req_lang)
     lang = request.GET.get('lang', current)
     translation.activate(lang)

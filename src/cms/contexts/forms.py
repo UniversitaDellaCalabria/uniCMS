@@ -72,8 +72,8 @@ class WebPathCloneForm(forms.Form):
                                     queryset=None, required=True,
                                     help_text=_("Parent element in which insert the new webpaths"))
     exclude_pages = forms.BooleanField(label=_('Exclude pages'),
-                                      required=False,
-                                      help_text=_("Exclude webpaths' pages"))
+                                       required=False,
+                                       help_text=_("Exclude webpaths' pages"))
     exclude_news = forms.BooleanField(label=_('Exclude news'),
                                       required=False,
                                       help_text=_("Exclude webpaths' news"))
@@ -82,7 +82,7 @@ class WebPathCloneForm(forms.Form):
                                      help_text=_("Take only webpath children"))
 
     def __init__(self, *args, **kwargs):
-        site_id = kwargs.pop('site_id', None)
+        kwargs.pop('site_id', None)
         super().__init__(*args, **kwargs)
         self.fields['parent'].queryset = WebPath.objects.filter(site__is_active=True)
         setattr(self.fields['parent'],

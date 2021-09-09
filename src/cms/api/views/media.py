@@ -160,5 +160,3 @@ class MediaFileTypeAllowedList(APIView):
         """
         """
         return Response(tuple(sorted(FILETYPE_ALLOWED)))
-
-

@@ -17,7 +17,7 @@ class UniCmsApiPagination(PageNumberPagination):
     def get_paginated_response(self, data):
         return Response({
             'count': self.page.paginator.count,
-            'next':  self.url_refactor(self.get_next_link()),
+            'next': self.url_refactor(self.get_next_link()),
             'previous': self.url_refactor(self.get_previous_link()),
             'page': int(self.request.query_params.get('page', 1)),
             'per_page': self.page_size,

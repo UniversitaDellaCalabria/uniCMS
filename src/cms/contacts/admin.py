@@ -3,7 +3,7 @@ import nested_admin
 from django.contrib import admin
 
 from cms.contexts.admin import AbstractCreatedModifiedBy
-from . models import *
+from . models import Contact, ContactInfo, ContactInfoLocalization, ContactLocalization
 
 
 class ContactInfoLocalizationInline(nested_admin.NestedStackedInline):

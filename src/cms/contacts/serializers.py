@@ -43,7 +43,7 @@ class ContactSerializer(UniCMSCreateUpdateSerializer,
 
 
 class ContactInfoSerializer(UniCMSCreateUpdateSerializer,
-                             UniCMSContentTypeClass):
+                            UniCMSContentTypeClass):
     contact = ContactForeignKey()
 
     class Meta:

@@ -117,8 +117,8 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
         elif self.webpath:
             # does it have sense?
             # if self.publication:
-                # ctx_webpath = self.publication.get_publication_context(webpath=self.webpath)
-                # return ctx_webpath.url if ctx_webpath else ''
+            # ctx_webpath = self.publication.get_publication_context(webpath=self.webpath)
+            # return ctx_webpath.url if ctx_webpath else ''
             # else:
             # return self.webpath.get_full_path()
             return self.webpath.get_site_path(request)
