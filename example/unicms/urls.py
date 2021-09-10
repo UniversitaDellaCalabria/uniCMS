@@ -80,14 +80,35 @@ if 'cms.search' in settings.INSTALLED_APPS:
 
 if 'unicms_editorial_board' in settings.INSTALLED_APPS:
     urlpatterns += path('',
-                        include(('unicms_editorial_board.urls', 'unicms_editorial_board'),
+                        include(('unicms_editorial_board.urls',
+                                 'unicms_editorial_board'),
                                  namespace="unicms_editorial_board"),
                         name="unicms_editorial_board"),
 
-# local_url_prefix = 'local'
-urlpatterns += path('login/',
-                    auth_views.LoginView.as_view(template_name='login.html'),
-                    name='login'),
-urlpatterns += path('logout/',
-                    auth_views.LogoutView.as_view(template_name='logout.html', next_page='/'),
-                    name='logout'),
+
+if 'saml2_sp' in settings.INSTALLED_APPS:
+    from djangosaml2 import saml2_views
+
+    import saml2_sp.urls
+
+    urlpatterns += path('', include((saml2_sp.urls, 'sp',))),
+
+    urlpatterns += path('{}/login/'.format(settings.SAML2_URL_PREFIX),
+                           saml2_views.LoginView.as_view(), name='login'),
+    urlpatterns += path('{}/acs/'.format(settings.SAML2_URL_PREFIX),
+                           saml2_views.AssertionConsumerServiceView.as_view(), name='saml2_acs'),
+    urlpatterns += path('{}/logout/'.format(settings.SAML2_URL_PREFIX),
+                           saml2_views.LogoutInitView.as_view(), name='logout'),
+    urlpatterns += path('{}/ls/'.format(settings.SAML2_URL_PREFIX),
+                           saml2_views.LogoutView.as_view(), name='saml2_ls'),
+    urlpatterns += path('{}/ls/post/'.format(settings.SAML2_URL_PREFIX),
+                           saml2_views.LogoutView.as_view(), name='saml2_ls_post'),
+    urlpatterns += path('{}/metadata/'.format(settings.SAML2_URL_PREFIX),
+                           saml2_views.MetadataView.as_view(), name='saml2_metadata'),
+else:
+    urlpatterns += path('{}/login/'.format(settings.LOCAL_URL_PREFIX),
+                        auth_views.LoginView.as_view(template_name='login.html'),
+                        name='login'),
+    urlpatterns += path('{}/logout/'.format(settings.LOCAL_URL_PREFIX),
+                        auth_views.LogoutView.as_view(template_name='logout.html', next_page='/'),
+                        name='logout'),

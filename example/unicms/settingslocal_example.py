@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0jg!+quiguen7)-!%rl32(ya+uf6w8lr58)g4-k^s%5+-86b+l'
+SECRET_KEY = 'your_secret_key'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -55,8 +55,16 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
 
-    # 'unicms_editorial_board',
-    # 'unicms_unical_storage_handler',
+    # editorial board app
+    'unicms_editorial_board',
+
+    # Unical storage API hanler
+    'unicms_unical_storage_handler',
+
+    # SAML2 SP
+    'djangosaml2',
+    'saml2_sp',
+
 ]
 
 # Database
@@ -112,7 +120,6 @@ MIDDLEWARE = [
 HTML_MINIFY = True
 EXCLUDE_FROM_MINIFYING = ('^admin/',)
 
-
 if os.environ.get('CI'):
     CACHES = {
     'default': {
@@ -151,7 +158,7 @@ CMS_CACHE_MAX_ENTRIES = 0
 # request.get_raw_uri() that matches the following would be ignored by cache ...
 CMS_CACHE_EXCLUDED_MATCHES =  ['/search?']
 
-CMS_PATH_PREFIX = 'portale/'
+
 CMS_CACHE_EXCLUDED_MATCHES.append('/portale/search?')
 
 # Static files (CSS, JavaScript, Images)
@@ -238,6 +245,8 @@ LOGGING = {
     }
 }
 
+CMS_PATH_PREFIX = 'portale/'
+
 CMS_TEMPLATES_FOLDER = 'templates/unicms'
 
 CMS_PUBLICATION_VIEW_PREFIX_PATH = 'contents/news/view/'
@@ -270,8 +279,6 @@ if "unicms_unical_storage_handler" in INSTALLED_APPS:
 
     ALLOWED_STRUCTURE_TYPES = ['AREAUOC', 'AMCEN', 'DIP', 'MCRA','SET']
 # END UNICAL STORAGE HANDLER
-
-
 
 TEMPLATES = [
     {
@@ -383,9 +390,29 @@ CMS_HOOKS = {
 
 SEARCH_ELEMENTS_IN_PAGE = 4
 
+# DjangoSAML2 conf
+if 'djangosaml2'  in INSTALLED_APPS:
+    from saml2_sp.settings import *
+
+    MIDDLEWARE.append('djangosaml2.middleware.SamlSessionMiddleware')
+
+    # pySAML2 SP mandatory
+    SESSION_EXPIRE_AT_BROWSER_CLOSE=True
+
+    SAML2_URL_PREFIX = 'saml2'
+    LOGIN_URL = f'/{SAML2_URL_PREFIX}/login'
+    LOGOUT_URL = f'/{SAML2_URL_PREFIX}/logout'
+
+    AUTHENTICATION_BACKENDS = (
+        'django.contrib.auth.backends.ModelBackend',
+        'djangosaml2.backends.Saml2Backend',
+    )
+else:
+    LOCAL_URL_PREFIX = 'local'
+    LOGIN_URL = f'/{LOCAL_URL_PREFIX}/login/'
+    LOGOUT_URL = f'/{LOCAL_URL_PREFIX}/logout/'
+
+LOGOUT_REDIRECT_URL=f'/{CMS_PATH_PREFIX}'
+
 FILETYPE_IMAGE_YX_RATIO_MIN = 0.25
 FILETYPE_IMAGE_YX_RATIO_MAX = 2
-
-LOCAL_URL_PREFIX = 'local'
-LOGIN_URL = f'/{LOCAL_URL_PREFIX}/login/'
-LOGOUT_URL = f'/{LOCAL_URL_PREFIX}/logout/'

@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+example/saml2_sp/*
 example/static/*
 example/templates/*
 
