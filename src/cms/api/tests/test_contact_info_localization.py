@@ -146,6 +146,7 @@ class ContactInfoLocalizationAPIUnitTest(TestCase):
         data = {'contact_info': contact_info.pk,
                 'language': 'en',
                 'label': 'putted label',
+                'value': 'new value',
                 'is_active': 0}
         # user hasn't permission
         req.force_login(user2)

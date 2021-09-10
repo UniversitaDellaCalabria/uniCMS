@@ -30,7 +30,7 @@ class ContactInfoForm(ModelForm):
 
     class Meta:
         model = ContactInfo
-        fields = ['contact', 'label', 'info_type', 'order', 'is_active']
+        fields = ['contact', 'info_type', 'label', 'value', 'order', 'is_active']
 
 
 class ContactLocalizationForm(ModelForm):

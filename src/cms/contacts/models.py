@@ -87,7 +87,7 @@ class ContactInfo(ActivableModel, TimeStampedModel,
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
     info_type = models.CharField(choices=EXTRA_INFO_TYPES,
                                  max_length=15)
-    label = models.CharField(max_length=160, blank=True, default='')
+    label = models.CharField(max_length=160)
     value = models.CharField(max_length=160)
 
     class Meta:
@@ -121,10 +121,8 @@ class ContactInfoLocalization(ActivableModel,
     language = models.CharField(choices=settings.LANGUAGES,
                                 max_length=12,
                                 default='en')
-    label = models.CharField(max_length=160,
-                             blank=True,
-                             default='')
-    value = models.CharField(max_length=160, blank=True, default='')
+    label = models.CharField(max_length=160)
+    value = models.CharField(max_length=160)
 
     class Meta:
         verbose_name_plural = _("Contact Info Localizations")
