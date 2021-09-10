@@ -3,7 +3,9 @@ import json
 from django.template import Context, Template
 from django.utils.safestring import mark_safe
 
-from cms.templates.placeholders import (SafeString, load_carousel_placeholder,
+from cms.templates.placeholders import (SafeString,
+                                        load_carousel_placeholder,
+                                        load_contact_placeholder,
                                         load_heading_placeholder,
                                         load_link_placeholder,
                                         load_media_placeholder,
@@ -63,6 +65,18 @@ class CarouselPlaceholderBlock(PlaceHolderBlock):
         context = self.get_context()
         return load_carousel_placeholder(context=context,
                                          content=self.content)
+
+
+class ContactPlaceholderBlock(PlaceHolderBlock):
+    """
+    Contact PlaceHolder
+    """
+
+    def render(self):
+        self.sanitize_template()
+        context = self.get_context()
+        return load_contact_placeholder(context=context,
+                                        content=self.content)
 
 
 class LinkPlaceholderBlock(PlaceHolderBlock):

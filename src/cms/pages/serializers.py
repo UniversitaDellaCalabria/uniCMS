@@ -110,7 +110,7 @@ class PageContactSerializer(UniCMSContentTypeClass):
         return data
 
     class Meta:
-        model = PageCarousel
+        model = PageContact
         fields = '__all__'
 
 

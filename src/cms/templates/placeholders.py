@@ -93,6 +93,20 @@ class CarouselPlaceHolder(AbstractPlaceholder):
         return {**self.content,**data}
 
 
+class ContactPlaceHolder(AbstractPlaceholder):
+    collection_name = 'contacts'
+    ph_name = 'cms.templates.blocks.ContactPlaceholderBlock'
+
+    def __init__(self, context:dict, content:dict):
+        super().__init__(context, content)
+        self.contacts = self.page.get_contacts()
+
+    def build_data_dict(self):
+        data = {'contact': self.entry.contact.localized(self.language),
+                'contact_infos': self.entry.contact.get_infos(self.language)}
+        return {**self.content,**data}
+
+
 class LinkPlaceHolder(AbstractPlaceholder):
     collection_name = 'links'
     ph_name = 'cms.templates.blocks.LinkPlaceholderBlock'
@@ -198,6 +212,10 @@ def load_menu_placeholder(*args, **kwargs):
 
 def load_carousel_placeholder(*args, **kwargs):
     return CarouselPlaceHolder(*args, **kwargs)()
+
+
+def load_contact_placeholder(*args, **kwargs):
+    return ContactPlaceHolder(*args, **kwargs)()
 
 
 def load_link_placeholder(*args, **kwargs):

@@ -413,6 +413,31 @@ class PageUnitTest(TestCase):
 
     # placeholders
     @classmethod
+    def test_load_contact_placeholder(cls):
+        page = cls.create_page()
+        webpath = page.webpath
+        req = RequestFactory().get('/')
+
+        block = ContactPlaceholderBlock(
+            request = req,
+            webpath = webpath,
+            page = page,
+            content = '{"template" :"that_template.html"}'
+        )
+
+        template_block = TemplateBlock.objects.create(
+            name = 'contact test',
+            type = 'cms.templates.blocks.ContactPlaceholderBlock',
+            is_active = True
+        )
+        page_block = PageBlock.objects.create(page=page,
+                                              block = template_block,
+                                              is_active=1)
+        lm = block.render()
+        assert lm
+
+    # placeholders
+    @classmethod
     def test_load_link_placeholder(cls):
         page = cls.create_page()
         webpath = page.webpath

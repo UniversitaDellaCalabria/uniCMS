@@ -12,8 +12,8 @@ from . views import (carousel, carousel_item, carousel_item_link,
                      publication_media_collection, publication_block,
                      publication_related,
                      website, webpath, webpath_pub_context,
-                     page, page_block, page_carousel, page_link,
-                     page_media, page_media_collection,
+                     page, page_block, page_carousel, page_contact,
+                     page_link, page_media, page_media_collection,
                      page_menu, page_publication,
                      page_heading, page_heading_localization,
                      page_related, page_localization, page_template,
@@ -229,6 +229,14 @@ urlpatterns += path(f'{pac_prefix}/<int:pk>/', page_carousel.PageCarouselView.as
 urlpatterns += path(f'{pac_prefix}/<int:pk>/logs/', page_carousel.PageCarouselLogsView.as_view(),
                     name='editorial-board-site-webpath-page-carousel-logs'),
 urlpatterns += path(f'{pac_prefix}/form/', page_carousel.PageCarouselFormView.as_view(), name='editorial-board-site-webpath-page-carousel-form'),
+
+# page contacts
+paco_prefix = f'{pa_prefix}/<int:page_id>/contacts'
+urlpatterns += path(f'{paco_prefix}/', page_contact.PageContactList.as_view(), name='editorial-board-site-webpath-page-contacts'),
+urlpatterns += path(f'{paco_prefix}/<int:pk>/', page_contact.PageContactView.as_view(), name='editorial-board-site-webpath-page-contact'),
+urlpatterns += path(f'{paco_prefix}/<int:pk>/logs/', page_contact.PageContactLogsView.as_view(),
+                    name='editorial-board-site-webpath-page-contact-logs'),
+urlpatterns += path(f'{paco_prefix}/form/', page_contact.PageContactFormView.as_view(), name='editorial-board-site-webpath-page-contact-form'),
 
 # page localizations
 palo_prefix = f'{pa_prefix}/<int:page_id>/localizations'
