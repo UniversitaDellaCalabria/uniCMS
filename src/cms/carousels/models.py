@@ -116,7 +116,8 @@ class CarouselItemLink(ActivableModel, TimeStampedModel, SortableModel,
         verbose_name_plural = _("Carousel Item Links")
 
     def get_title(self):
-        return self.title if self.title_preset == 'custom' else self.title_preset
+        labels_dict = dict(CMS_LINKS_LABELS)
+        return self.title if self.title_preset == 'custom' else labels_dict[self.title_preset]
 
     def is_lockable_by(self, user):
         item = self.carousel_item.carousel

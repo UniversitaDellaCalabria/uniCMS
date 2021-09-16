@@ -118,7 +118,6 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         # something that caches ...
         if hasattr(self, f'_blocks_{section}'):
             return getattr(self, f'_blocks_{section}')
-        #
 
         # query_params = dict(is_active=True)
         query_params = {}
@@ -186,7 +185,6 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         if _blocks:
             # cache result ...
             setattr(self, f'_blocks_{section}', _blocks)
-
         return _blocks
 
     def get_blocks_placeholders(self):
