@@ -142,11 +142,13 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
     @property
     def related_contexts(self):
         return PublicationContext.objects.filter(publication=self,
+                                                 is_active=True,
                                                  webpath__is_active=True)
 
     @property
     def first_available_url(self):
         pubcontx = PublicationContext.objects.filter(publication=self,
+                                                     is_active=True,
                                                      webpath__is_active=True)
         if pubcontx.exists():
             return pubcontx.first().url
