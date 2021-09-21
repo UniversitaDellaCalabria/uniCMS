@@ -140,16 +140,32 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         return [i for i in related]
 
     @property
-    def related_contexts(self):
-        return PublicationContext.objects.filter(publication=self,
-                                                 is_active=True,
-                                                 webpath__is_active=True)
+    def related_contexts(self, unique_webpath=True, published=True):
+        contexts = PublicationContext.objects.select_related('webpath')\
+                                             .filter(publication=self,
+                                                     is_active=True,
+                                                     webpath__is_active=True)
+        if published:
+            now = timezone.localtime()
+            contexts = contexts.filter(date_start__lte=now,
+                                       date_end__gte=now)
+        if not unique_webpath: return contexts
+        webpaths = []
+        unique_contexts = []
+        for context in contexts:
+            if context.webpath in webpaths: continue
+            webpaths.append(context.webpath)
+            unique_contexts.append(context)
+        return unique_contexts
 
     @property
     def first_available_url(self):
+        now = timezone.localtime()
         pubcontx = PublicationContext.objects.filter(publication=self,
                                                      is_active=True,
-                                                     webpath__is_active=True)
+                                                     webpath__is_active=True,
+                                                     date_start__lte=now,
+                                                     date_end__gte=now)
         if pubcontx.exists():
             return pubcontx.first().url
 
@@ -373,7 +389,7 @@ class PublicationContext(TimeStampedModel, ActivableModel,
         return result
 
     @property
-    def is_publicated(self) -> bool:
+    def is_published(self) -> bool:
         now = timezone.localtime()
         return self.date_start <= now and self.date_end >= now
 

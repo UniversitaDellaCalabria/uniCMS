@@ -71,7 +71,7 @@ def publication_to_entry(pub_object, contexts=None):
         return
     first_context = None
     for context in contexts:
-        if context.is_publicated:
+        if context.is_published:
             first_context = context
             break
     if not first_context: return
