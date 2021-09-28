@@ -5,6 +5,7 @@ from cms.contexts.serializers import LogEntrySerializer
 from rest_framework import filters, generics
 from rest_framework.permissions import IsAdminUser
 
+from .. ordering import StableOrderingFilter
 from .. pagination import UniCmsApiPagination
 
 
@@ -14,7 +15,7 @@ class ObjectLogEntriesList(generics.ListAPIView):
     description = ""
     permission_classes = [IsAdminUser]
     filter_backends = [filters.SearchFilter,
-                       filters.OrderingFilter]
+                       StableOrderingFilter]
     search_fields = ['user__first_name','user__last_name',
                      'change_message']
     pagination_class = UniCmsApiPagination

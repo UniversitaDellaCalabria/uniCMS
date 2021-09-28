@@ -9,6 +9,7 @@ from rest_framework import filters
 from rest_framework.permissions import IsAdminUser
 from rest_framework.schemas.openapi import AutoSchema
 
+from .. ordering import StableOrderingFilter
 from .. pagination import UniCmsApiPagination
 
 
@@ -19,7 +20,7 @@ class TemplatesBlockList(generics.ListAPIView):
     permission_classes = [IsAdminUser]
     filter_backends = [filters.SearchFilter,
                        DjangoFilterBackend,
-                       filters.OrderingFilter]
+                       StableOrderingFilter]
     filterset_fields = ['is_active', 'created', 'modified']
     pagination_class = UniCmsApiPagination
     search_fields = ['name', 'description', 'type']
@@ -48,7 +49,7 @@ class TemplateBlockList(generics.ListAPIView):
     permission_classes = [IsAdminUser]
     filter_backends = [filters.SearchFilter,
                        DjangoFilterBackend,
-                       filters.OrderingFilter]
+                       StableOrderingFilter]
     filterset_fields = ['is_active', 'created', 'modified']
     pagination_class = None
     schema = SingleTemplateBlockListSchema()

@@ -18,6 +18,7 @@ from .. concurrency import (get_lock_from_cache,
                             # set_lock_to_cache,
                             LOCK_MESSAGE)
 from .. exceptions import LoggedPermissionDenied
+from .. ordering import StableOrderingFilter
 from .. pagination import UniCmsApiPagination, UniCmsSelectOptionsApiPagination
 
 
@@ -29,7 +30,7 @@ class UniCMSListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [IsAdminUser]
     filter_backends = [filters.SearchFilter,
                        DjangoFilterBackend,
-                       filters.OrderingFilter]
+                       StableOrderingFilter]
     filterset_fields = ['is_active', 'created', 'modified', 'created_by']
     pagination_class = UniCmsApiPagination
 
@@ -102,7 +103,7 @@ class UniCMSListSelectOptionsAPIView(generics.ListAPIView):
     permission_classes = [IsAdminUser]
     filter_backends = [filters.SearchFilter,
                        DjangoFilterBackend,
-                       filters.OrderingFilter]
+                       StableOrderingFilter]
     pagination_class = UniCmsSelectOptionsApiPagination
     ordering = ['id']
 

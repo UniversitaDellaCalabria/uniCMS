@@ -24,6 +24,7 @@ from rest_framework.views import APIView
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied, LoggedValidationException
+from .. ordering import StableOrderingFilter
 from .. pagination import UniCmsApiPagination
 from .. serializers import UniCMSFormSerializer
 
@@ -281,7 +282,7 @@ class WebpathAllList(generics.ListAPIView):
     permission_classes = [IsAdminUser]
     filter_backends = [filters.SearchFilter,
                        DjangoFilterBackend,
-                       filters.OrderingFilter]
+                       StableOrderingFilter]
     filterset_fields = ['is_active', 'created', 'modified', 'created_by']
     pagination_class = UniCmsApiPagination
 

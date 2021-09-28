@@ -20,6 +20,7 @@ from cms.pages.utils import copy_page_as_draft
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, check_locks
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
+from .. ordering import StableOrderingFilter
 from .. pagination import UniCmsApiPagination
 from .. serializers import UniCMSFormSerializer
 
