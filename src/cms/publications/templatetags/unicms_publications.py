@@ -67,7 +67,7 @@ def load_publication(context, template, publication_id):
 @register.simple_tag(takes_context=True)
 def load_publications_preview(context, template,
                               section = None,
-                              number=5,
+                              number=0,
                               in_evidence=False,
                               categories_csv=None,
                               exclude_categories=False,
@@ -90,7 +90,8 @@ def load_publications_preview(context, template,
         pub_in_context = pub_in_context.filter(Q(in_evidence_end__gt=now) |
                                                Q(in_evidence_end__isnull=True),
                                                in_evidence_start__lt=now)
-    pub_in_context = pub_in_context[0:number]
+    if number > 0:
+        pub_in_context = pub_in_context[0:number]
 
     if not pub_in_context: return SafeString('')
 
