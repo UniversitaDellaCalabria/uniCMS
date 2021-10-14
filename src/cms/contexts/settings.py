@@ -23,3 +23,7 @@ CMS_CACHE_TTL = 25
 CMS_CACHE_MAX_ENTRIES = 0
 # request.get_raw_uri() that matches the following would be not cached
 CMS_CACHE_EXCLUDED_MATCHES = ['/search?',]
+
+# SITEMAPS PRIORITIES
+SITEMAP_WEBPATHS_PRIORITY = 0.6
+SITEMAP_NEWS_PRIORITY = 0.6

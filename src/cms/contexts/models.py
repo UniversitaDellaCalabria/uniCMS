@@ -82,6 +82,7 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
 
     class Meta:
         verbose_name_plural = _("Site Contexts (WebPaths)")
+        ordering = ['name']
 
     def split(self) -> list:
         """
@@ -111,6 +112,9 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
             return self.redirect_url
         url = f'/{CMS_PATH_PREFIX}{self.fullpath}'
         return sanitize_path(url)
+
+    def get_absolute_url(self):
+        return self.get_full_path()
 
     def get_site_path(self, request=None): # pragma: no cover
         """

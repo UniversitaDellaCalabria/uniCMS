@@ -3,16 +3,22 @@ import re
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.sitemaps import GenericSitemap
+from django.contrib.sitemaps.views import sitemap
 from django.http import (Http404,
                          HttpResponse,
                          HttpResponseRedirect)
 from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
 from cms.pages.models import Page
+from cms.publications.models import PublicationContext
+
 from urllib.parse import urlparse
 
+from . import settings as app_settings
 from . decorators import unicms_cache
 from . models import EditorialBoardEditors, WebSite, WebPath
 from . utils import append_slash, is_editor
@@ -22,14 +28,26 @@ logger = logging.getLogger(__name__)
 CMS_PATH_PREFIX = getattr(settings, 'CMS_PATH_PREFIX', '')
 CMS_APP_REGEXP_URLPATHS_LOADED = {import_string(k):v
                                   for k,v in getattr(settings, 'CMS_APP_REGEXP_URLPATHS', {}).items()}
+SITEMAP_NEWS_PRIORITY = getattr(settings, 'SITEMAP_NEWS_PRIORITY',
+                                app_settings.SITEMAP_NEWS_PRIORITY)
+SITEMAP_WEBPATHS_PRIORITY = getattr(settings, 'SITEMAP_WEBPATHS_PRIORITY',
+                                    app_settings.SITEMAP_WEBPATHS_PRIORITY)
+
+def _get_site_from_host(request):
+    requested_site = re.match(r'^[a-zA-Z0-9\.\-\_]*',
+                              request.get_host()).group()
+
+    website = get_object_or_404(WebSite,
+                                domain=requested_site,
+                                is_active=True)
+    return website
 
 
 @unicms_cache
 def cms_dispatch(request):
-    requested_site = re.match(r'^[a-zA-Z0-9\.\-\_]*',
-                              request.get_host()).group()
 
-    website = get_object_or_404(WebSite, domain = requested_site)
+    website = _get_site_from_host(request)
+
     path = urlparse(request.get_full_path()).path.replace(CMS_PATH_PREFIX, '')
 
     _msg_head = 'APP REGEXP URL HANDLERS:'
@@ -84,7 +102,8 @@ def cms_dispatch(request):
 
 @staff_member_required
 def pagePreview(request, page_id):
-    page = get_object_or_404(Page, pk=page_id)
+    page = get_object_or_404(Page.objects.select_related('webpath'),
+                             pk=page_id)
     webpath = page.webpath
     website = webpath.site
     if not website.is_managed_by(request.user):
@@ -103,3 +122,29 @@ def pagePreview(request, page_id):
         'page': page,
     }
     return render(request, page.base_template.template_file, context)
+
+
+def unicms_sitemap(request):
+    website = _get_site_from_host(request)
+
+    webpaths_map = {
+        'queryset': WebPath.objects.filter(site=website, is_active=True),
+        'date_field': 'modified',
+    }
+    news_map = {
+        'queryset': PublicationContext.objects.filter(webpath__site=website,
+                                                      webpath__is_active=True,
+                                                      date_start__lte=timezone.localtime(),
+                                                      date_end__gte=timezone.localtime(),
+                                                      publication__is_active=True),
+        'date_field': 'modified',
+    }
+
+    sitemap_dict = {'webpaths': GenericSitemap(webpaths_map,
+                                               priority=SITEMAP_WEBPATHS_PRIORITY),
+                    'news': GenericSitemap(news_map,
+                                           priority=SITEMAP_NEWS_PRIORITY)
+                    }
+
+    sitemaps = sitemap(request, sitemaps=sitemap_dict)
+    return HttpResponse(sitemaps.render(), content_type='text/xml')

@@ -671,6 +671,13 @@ class PageUnitTest(TestCase):
         assert ic
 
 
+    def test_unicms_sitemap(self):
+        obj = self.create_page(webpath_path='/')
+        url = reverse('unicms:unicms_sitemap')
+        res = self.client.get(url)
+        assert res.status_code == 200
+
+
     # templatetag
     # @classmethod
     # def test_load_current_item_from_menu(cls):

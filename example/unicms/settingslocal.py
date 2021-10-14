@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.sitemaps',
     'django.contrib.staticfiles',
 
     'taggit',
@@ -55,17 +56,28 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
 
-    # 'unicms_editorial_board',
-    # 'unicms_unical_storage_handler',
+    'unicms_editorial_board',
+    'unicms_unical_storage_handler',
 ]
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+    # },
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'unicms',
+        'HOST': 'localhost',
+        'USER': 'root',
+        'PASSWORD': 'filicetti85',
+        'PORT': '',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 
@@ -76,8 +88,8 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 100 * 100
 
 LANGUAGE_CODE = 'it-it'
 LANGUAGE = LANGUAGE_CODE.split('-')[0]
-TIME_ZONE = 'UTC'
-# TIME_ZONE = 'Europe/Rome'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Rome'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
