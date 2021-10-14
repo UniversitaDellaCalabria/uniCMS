@@ -160,7 +160,8 @@ class MenuPlaceHolder(AbstractPlaceholder):
     def build_data_dict(self):
         data = {'items': self.entry.menu.get_items(lang=self.language,
                                                    parent__isnull=True),
-                'request': self.request}
+                'request': self.request,
+                'page': self.page}
         return {**self.content,**data}
 
 
