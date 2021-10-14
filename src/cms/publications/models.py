@@ -351,6 +351,7 @@ class PublicationContext(TimeStampedModel, ActivableModel,
 
     class Meta:
         verbose_name_plural = _("Publication Contexts")
+        ordering = ['order']
 
     @property
     def path_prefix(self):
@@ -375,6 +376,9 @@ class PublicationContext(TimeStampedModel, ActivableModel,
     def url(self):
         url = f'{self.webpath.get_full_path()}{self.path_prefix}/{self.publication.slug}'
         return sanitize_path(url)
+
+    def get_absolute_url(self):
+        return self.url
 
     @property
     def name(self):

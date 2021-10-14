@@ -1,15 +1,15 @@
 import datetime
 import logging
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase
-
 
 from . exceptions import ReservedWordException
 from . models import *
 from . settings import *
 from . templatetags.unicms_contexts import *
-
+from . utils import sanitize_path
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
