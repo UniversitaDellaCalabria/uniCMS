@@ -82,7 +82,7 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
 
     class Meta:
         verbose_name_plural = _("Site Contexts (WebPaths)")
-        ordering = ['name']
+        ordering = ['fullpath']
 
     def split(self) -> list:
         """
