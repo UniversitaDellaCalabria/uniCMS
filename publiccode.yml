@@ -72,11 +72,11 @@ description:
       licensed under the Apache 2.0.
     screenshots:
       - >-
-        https://raw.githubusercontent.com/UniversitaDellaCalabria/uniCMS/raw/main/docs/source/images/home_portale.png
+        https://raw.githubusercontent.com/UniversitaDellaCalabria/uniCMS/main/docs/source/images/home_portale.png
       - >-
-        https://raw.githubusercontent.com/UniversitaDellaCalabria/uniCMS/raw/main/docs/source/images/portale_long.png
+        https://raw.githubusercontent.com/UniversitaDellaCalabria/uniCMS/main/docs/source/images/portale_long.png
       - >-
-        https://raw.githubusercontent.com/UniversitaDellaCalabria/uniCMS/raw/main/docs/source/images/template_stack.png
+        https://raw.githubusercontent.com/UniversitaDellaCalabria/uniCMS/main/docs/source/images/template_stack.png
     shortDescription: >-
       uniCMS is a Web Application Content Management System developed
       on top of Django Framework.
