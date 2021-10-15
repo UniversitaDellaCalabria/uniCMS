@@ -71,6 +71,12 @@ description:
       The entire uniCMS project code is open sourced and therefore
       licensed under the Apache 2.0.
     screenshots:
+      - >-
+        https://github.com/UniversitaDellaCalabria/uniCMS/raw/main/docs/source/images/home_portale.png
+      - >-
+        https://github.com/UniversitaDellaCalabria/uniCMS/raw/main/docs/source/images/portale_long.png
+      - >-
+        https://github.com/UniversitaDellaCalabria/uniCMS/raw/main/docs/source/images/template_stack.png
     shortDescription: >-
       uniCMS is a Web Application Content Management System developed
       using Django Framework. The project is created by a group of
