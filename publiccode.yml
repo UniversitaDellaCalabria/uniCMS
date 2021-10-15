@@ -79,9 +79,7 @@ description:
         https://github.com/UniversitaDellaCalabria/uniCMS/raw/main/docs/source/images/template_stack.png
     shortDescription: >-
       uniCMS is a Web Application Content Management System developed
-      using Django Framework. The project is created by a group of
-      passionate developers who introduces bespoke design
-      and architecture for a next generation CMS
+      on top of Django Framework.
 developmentStatus: stable
 intendedAudience:
   scope:
