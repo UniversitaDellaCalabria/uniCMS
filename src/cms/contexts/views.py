@@ -126,6 +126,7 @@ def pagePreview(request, page_id):
 
 def unicms_sitemap(request):
     website = _get_site_from_host(request)
+    protocol =  'https' if request.is_secure() else 'http'
 
     webpaths_map = {
         'queryset': WebPath.objects.filter(site=website, is_active=True),
@@ -141,9 +142,11 @@ def unicms_sitemap(request):
     }
 
     sitemap_dict = {'webpaths': GenericSitemap(webpaths_map,
-                                               priority=SITEMAP_WEBPATHS_PRIORITY),
+                                               priority=SITEMAP_WEBPATHS_PRIORITY,
+                                               protocol=protocol),
                     'news': GenericSitemap(news_map,
-                                           priority=SITEMAP_NEWS_PRIORITY)
+                                           priority=SITEMAP_NEWS_PRIORITY,
+                                           protocol=protocol)
                     }
 
     sitemaps = sitemap(request, sitemaps=sitemap_dict)
