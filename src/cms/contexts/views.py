@@ -126,7 +126,7 @@ def pagePreview(request, page_id):
 
 def unicms_sitemap(request):
     website = _get_site_from_host(request)
-    protocol =  'https' if request.is_secure() else 'http'
+    protocol =  request.scheme
 
     webpaths_map = {
         'queryset': WebPath.objects.filter(site=website, is_active=True),
