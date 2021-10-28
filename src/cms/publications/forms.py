@@ -24,6 +24,18 @@ class PublicationForm(ModelForm):
         model = Publication
         fields = ['name', 'title', 'subheading', 'content',
                   'presentation_image', 'category',
+                  'note', 'tags', 'relevance', 'is_active']
+
+
+class PublicationEditForm(PublicationForm):
+    """
+    same of PublicationForm but without 'is_active'
+    """
+
+    class Meta:
+        model = Publication
+        fields = ['name', 'title', 'subheading', 'content',
+                  'presentation_image', 'category',
                   'note', 'tags', 'relevance']
 
 
