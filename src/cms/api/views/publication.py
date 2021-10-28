@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from cms.contexts.decorators import detect_language
 from cms.contexts.models import WebPath
 
-from cms.publications.forms import PublicationForm
+from cms.publications.forms import PublicationEditForm, PublicationForm
 from cms.publications.models import Publication, PublicationContext
 from cms.publications.paginators import Paginator
 from cms.publications.serializers import PublicationSerializer, PublicationSelectOptionsSerializer
@@ -146,6 +146,11 @@ class PublicationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
+        # edit is_active params (only for owner or publisher)
+        if item.is_active != request.data['is_active']:
+            if not item.is_publicable_by(request.user):
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -155,6 +160,11 @@ class PublicationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
+        # edit is_active params (only for owner or publisher)
+        if item.is_active != request.data['is_active']:
+            if not item.is_publicable_by(request.user):
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=request.method)
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -287,6 +297,14 @@ class PublicationFormView(APIView):
 
     def get(self, *args, **kwargs):
         form = PublicationForm()
+        form_fields = UniCMSFormSerializer.serialize(form)
+        return Response(form_fields)
+
+
+class PublicationEditFormView(APIView):
+
+    def get(self, *args, **kwargs):
+        form = PublicationEditForm()
         form_fields = UniCMSFormSerializer.serialize(form)
         return Response(form_fields)
 

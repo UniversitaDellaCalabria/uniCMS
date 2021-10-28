@@ -58,6 +58,7 @@ class PublicationAPIUnitTest(TestCase):
                 'note':'',
                 'relevance':'0',
                 'tags': ["hi","tag"],
+                'is_active': True
         }
         # user hasn't permission
         req.force_login(user2)
@@ -101,7 +102,8 @@ class PublicationAPIUnitTest(TestCase):
         assert isinstance(res.json(), dict)
 
         # PATCH
-        data = {'title': 'patched'}
+        data = {'title': 'patched',
+                'is_active': False}
         # user hasn't permission
         req.force_login(user2)
         res = req.patch(url, data,
@@ -135,6 +137,7 @@ class PublicationAPIUnitTest(TestCase):
                 'note':'',
                 'relevance':'0',
                 'tags': ["hi","tag"],
+                'is_active': True
         }
         # user hasn't permission
         req.force_login(user2)
@@ -171,6 +174,11 @@ class PublicationAPIUnitTest(TestCase):
 
         # form
         url = reverse('unicms_api:editorial-board-publication-form')
+        res = req.get(url)
+        assert isinstance(res.json(), list)
+
+        # form
+        url = reverse('unicms_api:editorial-board-publication-edit-form')
         res = req.get(url)
         assert isinstance(res.json(), list)
 

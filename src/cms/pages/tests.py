@@ -266,6 +266,15 @@ class PageUnitTest(TestCase):
         lm = load_contact(**data)
         assert lm
 
+        contact = ContactUnitTest.create_contact()
+        data = dict(context=template_context,
+                    section='1-right-b',
+                    template='that.html',
+                    contact_id=contact.pk)
+
+        lm2 = load_contact(**data)
+        assert lm2
+
 
     # templatetag
     @classmethod

@@ -312,6 +312,7 @@ urlpatterns += path(f'{pu_prefix}/<int:pk>/logs/', publication.PublicationLogsVi
 urlpatterns += path(f'{pu_prefix}/<int:pk>/change-status/', publication.PublicationChangeStateView.as_view(),
                     name='editorial-board-publication-change-status'),
 urlpatterns += path(f'{pu_prefix}/form/', publication.PublicationFormView.as_view(), name='editorial-board-publication-form'),
+urlpatterns += path(f'{pu_prefix}/edit-form/', publication.PublicationEditFormView.as_view(), name='editorial-board-publication-edit-form'),
 urlpatterns += path(f'{pu_prefix}/options/', publication.PublicationOptionList.as_view(), name='editorial-board-publications-options'),
 urlpatterns += path(f'{pu_prefix}/options/<int:pk>/', publication.PublicationOptionView.as_view(), name='editorial-board-publications-option'),
 

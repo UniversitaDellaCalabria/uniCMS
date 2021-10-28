@@ -54,14 +54,14 @@ class PublicationSerializer(TaggitSerializer,
         categories = []
         for category in instance.category.all():
             categories.append(CategorySerializer(category).data)
-        data['category'] = categories
+        data['category_data'] = categories
         data['full_name'] = instance.__str__()
         return data
 
     class Meta:
         model = Publication
         fields = '__all__'
-        read_only_fields = ('is_active', 'created_by', 'modified_by', 'content_type')
+        read_only_fields = ('created_by', 'modified_by', 'content_type')
 
 
 class PublicationSelectOptionsSerializer(serializers.ModelSerializer):
