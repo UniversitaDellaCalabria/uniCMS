@@ -21,7 +21,8 @@ class PublicationAdmin(AbstractCreatedModifiedBy):
                PublicationAttachmentInline,
                PublicationMediaCollectionInline,
                PublicationBlockInline)
-    raw_id_fields = ('presentation_image',)
+    raw_id_fields = ('preview_image',
+                     'presentation_image',)
 
     class Media:
         js = ("js/ckeditor5/ckeditor.js",

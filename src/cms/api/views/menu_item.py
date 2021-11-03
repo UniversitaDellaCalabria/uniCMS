@@ -23,7 +23,7 @@ class MenuItemList(UniCMSListCreateAPIView):
     """
     """
     description = ""
-    search_fields = ['name', 'webpath', 'url', 'parent', 'publication']
+    # search_fields = ['name', 'webpath', 'url', 'parent', 'publication']
     serializer_class = MenuItemSerializer
 
     def get_queryset(self): # pragma: no cover

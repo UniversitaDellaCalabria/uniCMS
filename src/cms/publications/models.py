@@ -72,8 +72,12 @@ class AbstractPublication(TimeStampedModel, ActivableModel):
     )
     content = models.TextField(default='', blank=True, help_text=_('Content'))
     content_type = models.CharField(choices=CONTENT_TYPES, max_length=33, default='html')
+    preview_image = models.ForeignKey(Media, null=True, blank=True,
+                                      on_delete=models.PROTECT,
+                                      related_name="preview_image")
     presentation_image = models.ForeignKey(Media, null=True, blank=True,
-                                           on_delete=models.PROTECT)
+                                           on_delete=models.PROTECT,
+                                           related_name="presentation_image")
     # state = models.CharField(choices=PAGE_STATES,
     # max_length=33,
     # default='draft')
@@ -117,7 +121,9 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
 
     def image_url(self):
         image_path = ''
-        if self.presentation_image:
+        if self.preview_image:
+            image_path = self.preview_image.file
+        elif self.presentation_image:
             image_path = self.presentation_image.file
         else: # pragma: no cover
             categories = self.category.all()

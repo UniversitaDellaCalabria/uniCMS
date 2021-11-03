@@ -127,10 +127,10 @@ name: uniCMS
 platforms:
   - linux
   - web
-releaseDate: '2021-10-28'
+releaseDate: '2021-11-03'
 roadmap: 'https://github.com/UniversitaDellaCalabria/uniCMS/issues'
 softwareType: standalone/web
-softwareVersion: v0.28.0
+softwareVersion: v0.29.0
 url: 'https://github.com/UniversitaDellaCalabria/uniCMS'
 usedBy:
   - Università della Calabria - https://www.unical.it

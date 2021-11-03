@@ -15,6 +15,10 @@ class PublicationForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        setattr(self.fields['preview_image'],
+                FORM_SOURCE_LABEL,
+                # only images
+                reverse('unicms_api:media-options') + '?file_type=image%2Fwebp')
         setattr(self.fields['presentation_image'],
                 FORM_SOURCE_LABEL,
                 # only images
@@ -23,7 +27,7 @@ class PublicationForm(ModelForm):
     class Meta:
         model = Publication
         fields = ['name', 'title', 'subheading', 'content',
-                  'presentation_image', 'category',
+                  'preview_image', 'presentation_image', 'category',
                   'note', 'tags', 'relevance', 'is_active']
 
 
@@ -35,7 +39,7 @@ class PublicationEditForm(PublicationForm):
     class Meta:
         model = Publication
         fields = ['name', 'title', 'subheading', 'content',
-                  'presentation_image', 'category',
+                  'preview_image', 'presentation_image', 'category',
                   'note', 'tags', 'relevance']
 
 
