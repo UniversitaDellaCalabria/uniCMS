@@ -14,9 +14,11 @@ from cms.templates.models import (ActivableModel,
 CONTACT_TYPES = (('person', _('Person')),
                  ('structure', _('Structure')),)
 EXTRA_INFO_TYPES = (('email', _('Email')),
+                    ('hours', _('Hours')),
                     ('location', _('Location')),
                     ('phone', _('Phone')),
-                    ('website', _('Website')))
+                    ('website', _('Website')),
+                    ('other', _('Other')))
 
 
 class Contact(ActivableModel, TimeStampedModel, CreatedModifiedBy,
