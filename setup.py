@@ -28,7 +28,7 @@ def get_requirements(fname='requirements.txt'):
 
 setup(
     name="unicms",
-    version='0.28.0',
+    version='0.29.0',
     description="uniCMS is a Django Web Content Management System",
     long_description=README,
     long_description_content_type='text/markdown',

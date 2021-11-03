@@ -49,6 +49,8 @@ class PublicationSerializer(TaggitSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
+        preview_image = MediaSerializer(instance.preview_image)
+        data['preview_image'] = preview_image.data
         presentation_image = MediaSerializer(instance.presentation_image)
         data['presentation_image'] = presentation_image.data
         categories = []
