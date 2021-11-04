@@ -119,9 +119,9 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         return PublicationLocalization.objects.filter(publication=self,
                                                       is_active=True)
 
-    def image_url(self):
+    def image_url(self, force_main=False):
         image_path = ''
-        if self.preview_image:
+        if self.preview_image and not force_main:
             image_path = self.preview_image.file
         elif self.presentation_image:
             image_path = self.presentation_image.file
@@ -133,6 +133,19 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
                     break
         return sanitize_path(f'{settings.MEDIA_URL}/{image_path}') \
             if image_path else image_path
+
+    def image_main_url(self):
+        return self.image_url(force_main=True)
+
+    def image_title(self):
+        if self.preview_image: return self.preview_image.title
+        if self.presentation_image: return self.presentation_image.title
+        return self.title
+
+    def image_description(self):
+        if self.preview_image: return self.preview_image.description
+        if self.presentation_image: return self.presentation_image.description
+        return self.subheading
 
     @property
     def categories(self):
