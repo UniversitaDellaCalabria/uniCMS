@@ -14,6 +14,7 @@ from rest_framework.views import APIView
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
+from .. permissions import UNICMSSafePermissions
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
 
@@ -21,6 +22,7 @@ from .. utils import check_user_permission_on_object
 class MediaCollectionItemList(UniCMSListCreateAPIView):
     """
     """
+    permission_classes = [UNICMSSafePermissions]
     description = ""
     serializer_class = MediaCollectionItemSerializer
     search_fields = ['media__title', 'media__file', 'media__description',
