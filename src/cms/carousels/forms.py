@@ -24,10 +24,14 @@ class CarouselItemForm(ModelForm):
                 FORM_SOURCE_LABEL,
                 # only images
                 reverse('unicms_api:media-options') + '?file_type=image%2Fwebp')
+        setattr(self.fields['mobile_image'],
+                FORM_SOURCE_LABEL,
+                # only images
+                reverse('unicms_api:media-options') + '?file_type=image%2Fwebp')
 
     class Meta:
         model = CarouselItem
-        fields = ['carousel', 'image', 'pre_heading',
+        fields = ['carousel', 'image', 'mobile_image', 'pre_heading',
                   'heading', 'description', 'order', 'is_active']
 
 
