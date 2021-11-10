@@ -37,7 +37,13 @@ class CarouselItem(ActivableModel, TimeStampedModel,
                    SortableModel, CreatedModifiedBy):
     carousel = models.ForeignKey(Carousel,
                                  on_delete=models.CASCADE)
-    image = models.ForeignKey(Media, on_delete=models.PROTECT)
+    image = models.ForeignKey(Media,
+                              on_delete=models.PROTECT,
+                              related_name="image")
+    mobile_image = models.ForeignKey(Media,
+                                     on_delete=models.PROTECT,
+                                     blank=True, null=True,
+                                     related_name="mobile_image")
     pre_heading = models.CharField(
         max_length=120, blank=True, default='', help_text=_('Pre Heading')
     )
