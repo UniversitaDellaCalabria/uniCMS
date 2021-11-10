@@ -35,9 +35,10 @@ class MediaCollectionItemAPIUnitTest(TestCase):
         url = reverse('unicms_api:media-collection-items',
                       kwargs={'collection_id': collection.pk})
 
-        # accessible to staff users only
+        # accessible to all in GET
         res = req.get(url)
-        assert res.status_code == 403
+        # assert res.status_code == 403
+        assert res.status_code == 200
         user.is_staff = True
         user.save()
         req.force_login(user)
