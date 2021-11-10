@@ -34,7 +34,7 @@ class CarouselItemInline(nested_admin.NestedStackedInline):
     inlines = (CarouselItemLocalizationInline, CarouselItemLinkInline,)
     sortable_field_name = "order"
     classes = ['collapse']
-    raw_id_fields = ('image',)
+    raw_id_fields = ('image', 'mobile_image')
 
 
 @admin.register(Carousel)
