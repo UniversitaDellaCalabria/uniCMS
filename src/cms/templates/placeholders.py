@@ -33,6 +33,10 @@ class AbstractPlaceholder(object):
     def log_msg(self): # pragma: no cover
         return f'Template Tag {self.iam}'
 
+    def build_data_dict(self):
+        data = {'uid': f'id_{self.entry.pk}'}
+        return {**self.content,**data}
+
     def get_entry(self, entry):
         return entry[1]
 
@@ -89,8 +93,9 @@ class CarouselPlaceHolder(AbstractPlaceholder):
         self.carousels = self.page.get_carousels()
 
     def build_data_dict(self):
-        data = {'carousel_items': self.entry.carousel.get_items(self.language)}
-        return {**self.content,**data}
+        data = super().build_data_dict()
+        data['carousel_items'] = self.entry.carousel.get_items(self.language)
+        return
 
 
 class ContactPlaceHolder(AbstractPlaceholder):
@@ -102,9 +107,10 @@ class ContactPlaceHolder(AbstractPlaceholder):
         self.contacts = self.page.get_contacts()
 
     def build_data_dict(self):
-        data = {'contact': self.entry.contact.localized(self.language),
-                'contact_infos': self.entry.contact.get_infos(self.language)}
-        return {**self.content,**data}
+        data = super().build_data_dict()
+        data['contact'] = self.entry.contact.localized(self.language)
+        data['contact_infos'] = self.entry.contact.get_infos(self.language)
+        return data
 
 
 class LinkPlaceHolder(AbstractPlaceholder):
@@ -116,11 +122,11 @@ class LinkPlaceHolder(AbstractPlaceholder):
         self.links = self.page.get_links()
 
     def build_data_dict(self):
-        data = {'name': self.entry.name,
-                'url': self.entry.url,
-                'request': self.request,
-                'uid': f'id_{self.entry.pk}'}
-        return {**self.content,**data}
+        data = super().build_data_dict()
+        data['name'] = self.entry.name
+        data['url'] = self.entry.url
+        data['request'] = self.request
+        return data
 
 
 class MediaPlaceHolder(AbstractPlaceholder):
@@ -132,8 +138,10 @@ class MediaPlaceHolder(AbstractPlaceholder):
         self.medias = self.page.get_medias()
 
     def build_data_dict(self):
-        data = {'media': self.entry.media, 'url': self.entry.url}
-        return {**self.content,**data}
+        data = super().build_data_dict()
+        data['media'] = self.entry.media
+        data['url'] = self.entry.url
+        return data
 
 
 class MediaCollectionPlaceHolder(AbstractPlaceholder):
@@ -145,8 +153,9 @@ class MediaCollectionPlaceHolder(AbstractPlaceholder):
         self.media_collections = self.page.get_media_collections()
 
     def build_data_dict(self):
-        data = {'collection': self.entry.collection}
-        return {**self.content,**data}
+        data = super().build_data_dict()
+        data['collection'] = self.entry.collection
+        return data
 
 
 class MenuPlaceHolder(AbstractPlaceholder):
@@ -158,11 +167,12 @@ class MenuPlaceHolder(AbstractPlaceholder):
         self.menus = self.page.get_menus()
 
     def build_data_dict(self):
-        data = {'items': self.entry.menu.get_items(lang=self.language,
-                                                   parent__isnull=True),
-                'request': self.request,
-                'page': self.page}
-        return {**self.content,**data}
+        data = super().build_data_dict()
+        data['items'] = self.entry.menu.get_items(lang=self.language,
+                                                  parent__isnull=True)
+        data['request'] = self.request
+        data['page'] = self.page
+        return data
 
 
 class PublicationPlaceHolder(AbstractPlaceholder):
@@ -178,8 +188,10 @@ class PublicationPlaceHolder(AbstractPlaceholder):
 
     def build_data_dict(self):
         self.entry.translate_as(lang=self.language)
-        data = {'publication': self.entry, 'webpath': self.webpath}
-        return {**self.content,**data}
+        data = super().build_data_dict()
+        data['publication'] = self.entry
+        data['webpath'] = self.webpath
+        return data
 
 
 class HeadingPlaceholder(AbstractPlaceholder):
@@ -195,8 +207,10 @@ class HeadingPlaceholder(AbstractPlaceholder):
 
     def build_data_dict(self):
         self.entry.translate_as(lang=self.language)
-        data = {'heading': self.entry, 'webpath': self.webpath}
-        return {**self.content,**data}
+        data = super().build_data_dict()
+        data['heading'] = self.entry
+        data['webpath'] = self.webpath
+        return data
 
 
 def load_media_placeholder(*args, **kwargs):
