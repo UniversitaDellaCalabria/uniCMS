@@ -95,7 +95,7 @@ class CarouselPlaceHolder(AbstractPlaceholder):
     def build_data_dict(self):
         data = super().build_data_dict()
         data['carousel_items'] = self.entry.carousel.get_items(self.language)
-        return
+        return data
 
 
 class ContactPlaceHolder(AbstractPlaceholder):
