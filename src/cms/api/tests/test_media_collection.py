@@ -45,7 +45,7 @@ class MediaCollectionAPIUnitTest(TestCase):
         # media data
         data = {'name': 'media collections api-test',
                 'description': 'blah blah',
-                'tags': '["test","unit"]',
+                'tags': ["test","unit"],
                 'is_active': 1}
 
         # accessible to staff users only

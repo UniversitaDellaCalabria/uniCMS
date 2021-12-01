@@ -63,7 +63,7 @@ class PageAPIUnitTest(TestCase):
                 'base_template': template.pk,
                 'date_start': timezone.localtime(),
                 'date_end': timezone.localtime() + timezone.timedelta(hours=1),
-                'tags': ["hi","tag"]
+                'tags': ["hi","tag"],
         }
         # user hasn't permission
         req.force_login(user2)

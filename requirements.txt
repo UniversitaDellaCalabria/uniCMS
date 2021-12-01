@@ -2,7 +2,7 @@ django>=2.0,<4.0
 git+https://github.com/UniversitaDellaCalabria/django-auto-serializer@dev
 django-filter
 django-nested-admin>=3.3.2
-django-taggit
+django-taggit<=1.5.1
 django-taggit-serializer
 pillow>=7.2.0
 python-magic>=0.4.18
