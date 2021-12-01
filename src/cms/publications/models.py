@@ -111,7 +111,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
                 # 'published': self.date_start,
                 'subheading': self.subheading,
                 'categories': (i.name for i in self.categories),
-                'tags': (i.name for i in self.tags.all()),
+                'tags': [i.name for i in self.tags.all()],
                 'published_in': (f'{i.webpath.site}{i.webpath.fullpath}'
                                  for i in self.publicationcontext_set.all())}
 

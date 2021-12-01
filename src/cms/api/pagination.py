@@ -15,13 +15,15 @@ class UniCmsApiPagination(PageNumberPagination):
         return pattern.sub('//', url) if url else None
 
     def get_paginated_response(self, data):
+        real_page_size = int(self.request.query_params.get(self.page_size_query_param, 0)) or self.page_size
+
         return Response({
             'count': self.page.paginator.count,
             'next': self.url_refactor(self.get_next_link()),
             'previous': self.url_refactor(self.get_previous_link()),
             'page': int(self.request.query_params.get('page', 1)),
-            'per_page': self.page_size,
-            'total_pages': math.ceil(self.page.paginator.count / self.page_size),
+            'per_page': real_page_size,
+            'total_pages': math.ceil(self.page.paginator.count / real_page_size),
             'results': data,
         })
 

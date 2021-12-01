@@ -157,7 +157,7 @@ class ApiSearchEngine(APIView):
 
         # pagination
         elements_in_page = getattr(settings, 'SEARCH_ELEMENTS_IN_PAGE', 25)
-        total_elements = res.count()
+        total_elements = res.collection.count_documents({})
         if total_elements >= elements_in_page:
             total_pages = math.ceil(total_elements / elements_in_page)
         else:

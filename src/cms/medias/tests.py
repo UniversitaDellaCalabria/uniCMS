@@ -33,7 +33,7 @@ class MediaUnitTest(TestCase):
     @classmethod
     def create_media_collection(cls, **kwargs):
         data = {'name': 'media1',
-                'tags': 'ciao,mamma',
+                'tags': ['ciao', 'mamma'],
                 'description': 'blah blah',
                 'is_active': 1}
         for k,v in kwargs.items():
