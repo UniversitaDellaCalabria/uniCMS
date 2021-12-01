@@ -58,6 +58,8 @@ INSTALLED_APPS = [
 
     # 'unicms_editorial_board',
     # 'unicms_unical_storage_handler',
+    # 'unicms_calendar',
+
 ]
 
 # Database
@@ -68,6 +70,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+
 }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100 * 100
@@ -254,6 +257,15 @@ CMS_APP_REGEXP_URLPATHS = {
     'cms.publications.handlers.PublicationListHandler' : CMS_PUBLICATION_URL_LIST_REGEXP,
 }
 
+# UNICMS CALENDAR HANDLER
+if "unicms_calendar" in INSTALLED_APPS:
+
+    from unicms_calendar.settings import *
+
+    CMS_HANDLERS_PATHS.extend(CMS_CALENDAR_HANDLERS_PATHS)
+    CMS_APP_REGEXP_URLPATHS.update(CMS_CALENDAR_APP_REGEXP_URLPATHS)
+# END UNICMS CALENDAR HANDLER
+
 # UNICAL STORAGE HANDLER
 if "unicms_unical_storage_handler" in INSTALLED_APPS:
 
@@ -264,15 +276,14 @@ if "unicms_unical_storage_handler" in INSTALLED_APPS:
 
     ALLOWED_UNICMS_SITES = [2]
     ALLOWED_CDS_COURSETYPES = ['L','LM','LM5','LM6','M1-270','M2-270']
+    ALLOWED_STRUCTURE_TYPES = ['ARE','DRZ', 'AMCEN', 'APL',
+                               'DIP', 'MCRA','SET', 'SEV','SRZ',
+                               'CDS', 'CEN', 'CCS']
     ALLOWED_ADDRESSBOOK_ROLES = ['PO', 'PA', 'RU', 'RD', 'ND', 'AR',
                                  'BS', 'CB', 'CC', 'DR', 'NM']
     ALLOWED_TEACHER_ROLES = ['PO', 'PA', 'RU', 'RD']
     INITIAL_STRUCTURE_FATHER = "170005"
-
-    ALLOWED_STRUCTURE_TYPES = ['DIP', 'MCRA','SET', 'SEV']
 # END UNICAL STORAGE HANDLER
-
-
 
 TEMPLATES = [
     {

@@ -86,6 +86,14 @@ if 'unicms_editorial_board' in settings.INSTALLED_APPS:
                         name="unicms_editorial_board"),
 
 
+if 'unicms_calendar' in settings.INSTALLED_APPS:
+    urlpatterns += path('',
+                        include(('unicms_calendar.urls',
+                                 'unicms_calendar'),
+                                 namespace="unicms_calendar"),
+                        name="unicms_calendar"),
+
+
 if 'saml2_sp' in settings.INSTALLED_APPS:
     from djangosaml2 import saml2_views
 
@@ -112,3 +120,6 @@ else:
     urlpatterns += path('{}/logout/'.format(settings.LOCAL_URL_PREFIX),
                         auth_views.LogoutView.as_view(template_name='logout.html', next_page='/'),
                         name='logout'),
+
+# if 'newsletter' in settings.INSTALLED_APPS:
+    # urlpatterns += path('newsletter/', include('newsletter.urls')),
