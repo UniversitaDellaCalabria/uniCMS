@@ -6,7 +6,7 @@ django-taggit<=1.5.1
 django-taggit-serializer
 pillow>=7.2.0
 python-magic>=0.4.18
-pymongo>=3.11.0
+pymongo>=4.0
 django-rest-framework
 uritemplate
 pyyaml
