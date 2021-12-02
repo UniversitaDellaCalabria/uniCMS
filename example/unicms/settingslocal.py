@@ -258,9 +258,13 @@ CMS_APP_REGEXP_URLPATHS = {
     'cms.publications.handlers.PublicationListHandler' : CMS_PUBLICATION_URL_LIST_REGEXP,
 }
 
+# UNICMS ITALIA TEMPLATE
+if "unicms_template_italia" in INSTALLED_APPS:
+    from unicms_template_italia.settings import *
+# END UNICMS ITALIA TEMPLATE
+
 # UNICMS CALENDAR HANDLER
 if "unicms_calendar" in INSTALLED_APPS:
-
     from unicms_calendar.settings import *
 
     CMS_HANDLERS_PATHS.extend(CMS_CALENDAR_HANDLERS_PATHS)
@@ -269,7 +273,6 @@ if "unicms_calendar" in INSTALLED_APPS:
 
 # UNICAL STORAGE HANDLER
 if "unicms_unical_storage_handler" in INSTALLED_APPS:
-
     from unicms_unical_storage_handler.settings import *
 
     CMS_HANDLERS_PATHS.extend(CMS_STORAGE_HANDLERS_PATHS)
