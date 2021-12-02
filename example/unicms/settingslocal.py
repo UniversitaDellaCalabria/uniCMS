@@ -49,7 +49,10 @@ INSTALLED_APPS = [
     'cms.search',
 
     'sass_processor',
+
     'unicms_template_unical',
+    'unicms_unical_storage_handler',
+
     'unicms_template_italia',
     'bootstrap_italia_template',
 
@@ -57,7 +60,6 @@ INSTALLED_APPS = [
     'django_filters',
 
     # 'unicms_editorial_board',
-    # 'unicms_unical_storage_handler',
     # 'unicms_calendar',
 
 ]
