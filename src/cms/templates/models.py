@@ -14,12 +14,12 @@ CMS_BLOCK_TYPES = getattr(settings, 'CMS_BLOCK_TYPES',
                           app_settings.CMS_BLOCK_TYPES)
 CMS_BLOCK_TEMPLATES = getattr(settings, 'CMS_BLOCK_TEMPLATES',
                               app_settings.CMS_BLOCK_TEMPLATES)
-CMS_TEMPLATE_BLOCK_SECTIONS = getattr(settings, 'CMS_TEMPLATE_BLOCK_SECTIONS',
-                                      app_settings.CMS_TEMPLATE_BLOCK_SECTIONS)
 CMS_PAGE_TEMPLATES = getattr(settings, 'CMS_PAGE_TEMPLATES',
                              app_settings.CMS_PAGE_TEMPLATES)
 CMS_LINKS_LABELS = getattr(settings, 'CMS_LINKS_LABELS',
                            app_settings.CMS_LINKS_LABELS)
+
+CMS_TEMPLATE_BLOCK_SECTIONS = getattr(settings, 'CMS_TEMPLATE_BLOCK_SECTIONS')
 
 
 class CreatedModifiedBy(models.Model):

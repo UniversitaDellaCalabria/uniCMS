@@ -12,8 +12,7 @@ import cms.templates.settings as app_settings
 logger = logging.getLogger(__name__)
 register = template.Library()
 
-CMS_TEMPLATE_BLOCK_SECTIONS = getattr(settings, "CMS_TEMPLATE_BLOCK_SECTIONS",
-                                      app_settings.CMS_TEMPLATE_BLOCK_SECTIONS)
+CMS_TEMPLATE_BLOCK_SECTIONS = getattr(settings, "CMS_TEMPLATE_BLOCK_SECTIONS")
 
 
 @register.simple_tag
