@@ -53,6 +53,7 @@ class PublicationSerializer(TaggitSerializer,
         data['preview_image'] = preview_image.data
         presentation_image = MediaSerializer(instance.presentation_image)
         data['presentation_image'] = presentation_image.data
+        data['image'] = instance.image_url()
         categories = []
         for category in instance.category.all():
             categories.append(CategorySerializer(category).data)
@@ -96,6 +97,7 @@ class PublicationContextSerializer(UniCMSCreateUpdateSerializer,
         data['publication'] = publication.data
         webpath = WebPathSerializer(instance.webpath)
         data['webpath'] = webpath.data
+        data['path'] = instance.url
         return data
 
     class Meta:
