@@ -11,8 +11,9 @@ from cms.contexts.models import WebPath
 
 from cms.publications.forms import PublicationEditForm, PublicationForm
 from cms.publications.models import Publication, PublicationContext
-from cms.publications.paginators import Paginator
-from cms.publications.serializers import PublicationSerializer, PublicationSelectOptionsSerializer
+from cms.publications.serializers import (PublicationSerializer,
+                                          PublicationContextSerializer,
+                                          PublicationSelectOptionsSerializer)
 from cms.publications.utils import publication_context_base_filter
 
 from rest_framework import generics
@@ -24,6 +25,7 @@ from rest_framework.views import APIView
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView, check_locks
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
+from .. pagination import UniCmsApiPagination
 from .. permissions import PublicationGetCreatePermissions
 from .. serializers import UniCMSFormSerializer
 from .. utils import check_user_permission_on_object
@@ -48,32 +50,23 @@ class PublicationDetail(generics.RetrieveAPIView):
 
 
 @method_decorator(detect_language, name='dispatch')
-class ApiPublicationsByContext(APIView):
+class ApiPublicationsByContext(generics.ListAPIView):
     """
     """
     description = 'ApiPublicationsByContext'
+    pagination_class = UniCmsApiPagination
+    serializer_class = PublicationContextSerializer
     # authentication_classes = [authentication.TokenAuthentication]
     # permission_classes = [permissions.IsAdminUser]
 
-    def get(self, request, webpath_id, category_name=None):
+    def get_queryset(self):
         query_params = publication_context_base_filter()
-        query_params.update({'webpath__pk': webpath_id})
-
-        category_name = category_name or request.GET.get('category_name')
-        if category_name:
-            query_params['publication__category__name__iexact'] = category_name
+        query_params.update({'webpath__pk': self.kwargs['webpath_id']})
+        category = self.request.GET.get('category')
+        if category:
+            query_params['publication__category__pk'] = category
         pubcontx = PublicationContext.objects.filter(**query_params)
-        paginator = Paginator(queryset=pubcontx, request=request)
-
-        try:
-            page_num = int(request.GET.get('page_number', 1))
-        except Exception as e: # pragma: no cover
-            logger.error(f'API {self.__class__.__name__} paginator number: {e}')
-            raise ValidationError('Wrong page_number value')
-
-        paged = paginator.get_page(page_num)
-        result = paged.serialize()
-        return Response(result)
+        return pubcontx
 
 
 @method_decorator(detect_language, name='dispatch')

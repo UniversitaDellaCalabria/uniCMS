@@ -282,9 +282,9 @@ if "unicms_unical_storage_handler" in INSTALLED_APPS:
     ALLOWED_CDS_COURSETYPES = ['L','LM','LM5','LM6','M1-270','M2-270']
     ALLOWED_STRUCTURE_TYPES = ['ARE','DRZ', 'AMCEN', 'APL',
                                'DIP', 'MCRA','SET', 'SEV','SRZ',
-                               'CDS', 'CEN', 'CCS']
+                               'CDS', 'CEN', 'CCS', 'UDS']
     ALLOWED_ADDRESSBOOK_ROLES = ['PO', 'PA', 'RU', 'RD', 'ND', 'AR',
-                                 'BS', 'CB', 'CC', 'DR', 'NM']
+                                 'BS', 'CB', 'CC', 'DR', 'NM', 'DC']
     ALLOWED_TEACHER_ROLES = ['PO', 'PA', 'RU', 'RD']
     INITIAL_STRUCTURE_FATHER = "170005"
 # END UNICAL STORAGE HANDLER
@@ -405,3 +405,5 @@ FILETYPE_IMAGE_YX_RATIO_MAX = 2
 LOCAL_URL_PREFIX = 'local'
 LOGIN_URL = f'/{LOCAL_URL_PREFIX}/login/'
 LOGOUT_URL = f'/{LOCAL_URL_PREFIX}/logout/'
+
+CMS_PAGE_SIZE = 9

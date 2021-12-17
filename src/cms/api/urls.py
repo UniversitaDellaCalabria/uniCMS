@@ -37,7 +37,7 @@ urlpatterns += re_path(r'api/$',
 # re_path('api/news/by-context/(?P<webpath_id>\d+)/?(?P<category_name>[a-zA-Z0-9]*)?'
 
 urlpatterns += path('api/news/by-context/<int:webpath_id>', publication.ApiPublicationsByContext.as_view(), name='api-news-by-contexts'),
-urlpatterns += path('api/news/by-context/<int:webpath_id>/<str:category_name>',
+urlpatterns += path('api/news/by-context/<int:webpath_id>/<int:category>',
                     publication.ApiPublicationsByContextCategory.as_view(), name='api-news-by-contexts-category'),
 urlpatterns += path('api/news/view/<str:slug>', publication.PublicationDetail.as_view(), name='publication-detail'),
 

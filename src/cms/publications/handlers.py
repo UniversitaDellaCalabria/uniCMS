@@ -1,17 +1,20 @@
-
 from django.conf import settings
 from django.http import (HttpResponse,
                          Http404)
 from django.template import Template, Context
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.handlers import BaseContentHandler
 from cms.contexts.utils import contextualize_template, sanitize_path
 from cms.pages.models import Page
 
-from . models import PublicationContext
-from . settings import CMS_PUBLICATION_LIST_PREFIX_PATH
+from . models import Category, PublicationContext
+from . settings import CMS_PUBLICATION_LIST_PREFIX_PATH, CMS_PAGE_SIZE
 from . utils import publication_context_base_filter
+
+
+PAGE_SIZE = getattr(settings, 'CMS_PAGE_SIZE', CMS_PAGE_SIZE)
 
 
 class PublicationViewHandler(BaseContentHandler):
@@ -83,12 +86,18 @@ class PublicationListHandler(BaseContentHandler):
         return (leaf,)
 
     def as_view(self):
+        category = None
+        category_name = self.request.GET.get('category_name')
+        if category_name:
+            category = Category.objects.filter(name__iexact=category_name).first()
+
         match_dict = self.match.groupdict()
         page = Page.objects.filter(is_active=True,
                                    webpath__site=self.website,
                                    webpath__fullpath=match_dict.get('webpath', '/')).first()
         if not page: # pragma: no cover
             raise Http404('Unknown Web Page')
+
         data = {'request': self.request,
                 'webpath': page.webpath,
                 'website': self.website,
@@ -96,6 +105,13 @@ class PublicationListHandler(BaseContentHandler):
                 'path': match_dict.get('webpath', '/'),
                 'handler': self,
                 }
+
+        base_url = reverse('unicms_api:api-news-by-contexts',
+                            kwargs = {'webpath_id': page.webpath.pk })
+        base_url = base_url + f'?page=1&page_size={PAGE_SIZE}'
+        if category:
+            base_url = base_url + f'&category={category.pk}'
+        data['url'] = base_url
 
         ext_template_sources = contextualize_template(self.template, page)
         template = Template(ext_template_sources)
