@@ -72,7 +72,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-
 }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100 * 100
@@ -380,12 +379,6 @@ if "unicms_calendar" in INSTALLED_APPS:
     CMS_APP_REGEXP_URLPATHS.update(CMS_CALENDAR_APP_REGEXP_URLPATHS)
 
     CMS_HOOKS.update(CMS_CALENDAR_HOOKS)
-    # CMS_HOOKS['Calendar'] = {
-        # 'PRESAVE': [],
-        # 'POSTSAVE': ['unicms_calendar.hooks.calendar_se_insert',],
-        # 'PREDELETE': ['unicms_calendar.hooks.searchengine_entry_remove',],
-        # 'POSTDELETE': []
-    # }
 # END UNICMS CALENDAR HANDLER
 
 # UNICAL STORAGE HANDLER
@@ -399,7 +392,7 @@ if "unicms_unical_storage_handler" in INSTALLED_APPS:
     ALLOWED_CDS_COURSETYPES = ['L','LM','LM5','LM6','M1-270','M2-270']
     ALLOWED_STRUCTURE_TYPES = ['ARE','DRZ', 'AMCEN', 'APL',
                                'DIP', 'MCRA','SET', 'SEV','SRZ',
-                               'CDS', 'CEN', 'CCS', 'UDS']
+                               'CDS', 'CEN', 'CCS', 'UDS', 'DIR']
     ALLOWED_ADDRESSBOOK_ROLES = ['PO', 'PA', 'RU', 'RD', 'ND', 'AR',
                                  'BS', 'CB', 'CC', 'DR', 'NM', 'DC']
     ALLOWED_TEACHER_ROLES = ['PO', 'PA', 'RU', 'RD']

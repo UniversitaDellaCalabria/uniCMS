@@ -91,8 +91,7 @@ class ApiSearchEngine(APIView):
 
         # get only what's really needed
         search_regexp = re.match(r'^[\w\+\-\s\(\)\[\]\=\"\'\.\_]*',
-                                 request.GET.get('search', ''),
-                                 re.UNICODE)
+                                 request.GET.get('search', ''))
         query = {}
         if search_regexp:
             search = search_regexp.group()
