@@ -72,6 +72,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+
 }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100 * 100
@@ -258,37 +259,6 @@ CMS_APP_REGEXP_URLPATHS = {
     'cms.publications.handlers.PublicationListHandler' : CMS_PUBLICATION_URL_LIST_REGEXP,
 }
 
-# UNICMS ITALIA TEMPLATE
-if "unicms_template_italia" in INSTALLED_APPS:
-    from unicms_template_italia.settings import *
-# END UNICMS ITALIA TEMPLATE
-
-# UNICMS CALENDAR HANDLER
-if "unicms_calendar" in INSTALLED_APPS:
-    from unicms_calendar.settings import *
-
-    CMS_HANDLERS_PATHS.extend(CMS_CALENDAR_HANDLERS_PATHS)
-    CMS_APP_REGEXP_URLPATHS.update(CMS_CALENDAR_APP_REGEXP_URLPATHS)
-# END UNICMS CALENDAR HANDLER
-
-# UNICAL STORAGE HANDLER
-if "unicms_unical_storage_handler" in INSTALLED_APPS:
-    from unicms_unical_storage_handler.settings import *
-
-    CMS_HANDLERS_PATHS.extend(CMS_STORAGE_HANDLERS_PATHS)
-    CMS_APP_REGEXP_URLPATHS.update(CMS_STORAGE_APP_REGEXP_URLPATHS)
-
-    ALLOWED_UNICMS_SITES = [2]
-    ALLOWED_CDS_COURSETYPES = ['L','LM','LM5','LM6','M1-270','M2-270']
-    ALLOWED_STRUCTURE_TYPES = ['ARE','DRZ', 'AMCEN', 'APL',
-                               'DIP', 'MCRA','SET', 'SEV','SRZ',
-                               'CDS', 'CEN', 'CCS', 'UDS']
-    ALLOWED_ADDRESSBOOK_ROLES = ['PO', 'PA', 'RU', 'RD', 'ND', 'AR',
-                                 'BS', 'CB', 'CC', 'DR', 'NM', 'DC']
-    ALLOWED_TEACHER_ROLES = ['PO', 'PA', 'RU', 'RD']
-    INITIAL_STRUCTURE_FATHER = "170005"
-# END UNICAL STORAGE HANDLER
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -396,6 +366,45 @@ CMS_HOOKS = {
         'POSTDELETE': []
     }
 }
+
+# UNICMS ITALIA TEMPLATE
+if "unicms_template_italia" in INSTALLED_APPS:
+    from unicms_template_italia.settings import *
+# END UNICMS ITALIA TEMPLATE
+
+# UNICMS CALENDAR HANDLER
+if "unicms_calendar" in INSTALLED_APPS:
+    from unicms_calendar.settings import *
+
+    CMS_HANDLERS_PATHS.extend(CMS_CALENDAR_HANDLERS_PATHS)
+    CMS_APP_REGEXP_URLPATHS.update(CMS_CALENDAR_APP_REGEXP_URLPATHS)
+
+    CMS_HOOKS.update(CMS_CALENDAR_HOOKS)
+    # CMS_HOOKS['Calendar'] = {
+        # 'PRESAVE': [],
+        # 'POSTSAVE': ['unicms_calendar.hooks.calendar_se_insert',],
+        # 'PREDELETE': ['unicms_calendar.hooks.searchengine_entry_remove',],
+        # 'POSTDELETE': []
+    # }
+# END UNICMS CALENDAR HANDLER
+
+# UNICAL STORAGE HANDLER
+if "unicms_unical_storage_handler" in INSTALLED_APPS:
+    from unicms_unical_storage_handler.settings import *
+
+    CMS_HANDLERS_PATHS.extend(CMS_STORAGE_HANDLERS_PATHS)
+    CMS_APP_REGEXP_URLPATHS.update(CMS_STORAGE_APP_REGEXP_URLPATHS)
+
+    ALLOWED_UNICMS_SITES = [2]
+    ALLOWED_CDS_COURSETYPES = ['L','LM','LM5','LM6','M1-270','M2-270']
+    ALLOWED_STRUCTURE_TYPES = ['ARE','DRZ', 'AMCEN', 'APL',
+                               'DIP', 'MCRA','SET', 'SEV','SRZ',
+                               'CDS', 'CEN', 'CCS', 'UDS']
+    ALLOWED_ADDRESSBOOK_ROLES = ['PO', 'PA', 'RU', 'RD', 'ND', 'AR',
+                                 'BS', 'CB', 'CC', 'DR', 'NM', 'DC']
+    ALLOWED_TEACHER_ROLES = ['PO', 'PA', 'RU', 'RD']
+    INITIAL_STRUCTURE_FATHER = "170005"
+# END UNICAL STORAGE HANDLER
 
 SEARCH_ELEMENTS_IN_PAGE = 4
 

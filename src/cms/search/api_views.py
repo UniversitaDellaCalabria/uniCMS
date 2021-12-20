@@ -10,7 +10,8 @@ from django.utils import timezone, dateparse
 from django.utils.decorators import method_decorator
 
 
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import APIException, NotFound
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -155,20 +156,25 @@ class ApiSearchEngine(APIView):
             logger.critical(e)
             raise ServiceUnavailable()
 
+
         # pagination
         elements_in_page = getattr(settings, 'SEARCH_ELEMENTS_IN_PAGE', 25)
-        total_elements = res.collection.count_documents({})
+        total_elements = res.collection.count_documents(query)
         if total_elements >= elements_in_page:
             total_pages = math.ceil(total_elements / elements_in_page)
         else:
             total_pages = 1
 
         try:
-            page = int(request.GET.get('page_number', 1)) or 1
+            page = int(request.GET.get('page', 1)) or 1
         except ValueError:
             page = 1
         if page > total_pages:
-            page = total_pages
+            msg = PageNumberPagination.invalid_page_message.format(
+                page=page
+            )
+            raise NotFound(msg)
+            # page = total_pages
 
         # get page
         end = elements_in_page * page
@@ -187,7 +193,7 @@ class ApiSearchEngine(APIView):
         result = {"results": data,
                   "count": total_elements,
                   "total_pages": total_pages,
-                  "max_per_page": elements_in_page,
-                  "page_number": page_number
+                  "per_page": elements_in_page,
+                  "page": page_number
         }
         return Response(result)

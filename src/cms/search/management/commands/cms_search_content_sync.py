@@ -41,7 +41,7 @@ class Command(BaseCommand):
         # purge
         if options['purge']:
             del_res = collection.find(query)
-            del_count = del_res.count()
+            del_count = del_res.collection.count_documents(query)
             to_be_deleted = [i['_id'] for i in del_res]
 
         # rebuild
@@ -56,7 +56,8 @@ class Command(BaseCommand):
                     entry = _func(obj)
                     if entry: data.append(entry)
             collection.insert_many(data, ordered=False)
-            count = collection.find(query).count()
+            ins_res = collection.find(query)
+            count = ins_res.collection.count_documents(query)
             print(f'-- Inserted {len(data)} elements. --')
 
         # purge
