@@ -70,7 +70,7 @@ class Command(BaseCommand):
         # show
         if options['show']:
             ins_show = collection.find(query)
-            count = ins_res.collection.count_documents(query)
+            count = ins_show.collection.count_documents(query)
             for i in collection.find(query):
                 print(i)
             print(f'-- {count} elements. --')
