@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'sass_processor',
 
     'unicms_template_unical',
-    'unicms_unical_storage_handler',
 
     'unicms_template_italia',
     'bootstrap_italia_template',
@@ -59,6 +58,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
 
+    # 'unicms_unical_storage_handler',
     # 'unicms_editorial_board',
     # 'unicms_calendar',
 
@@ -72,6 +72,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+
 }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100 * 100
