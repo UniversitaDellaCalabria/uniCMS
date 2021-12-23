@@ -370,7 +370,7 @@ class PublicationContext(TimeStampedModel, ActivableModel,
 
     class Meta:
         verbose_name_plural = _("Publication Contexts")
-        ordering = ['webpath__fullpath', 'order']
+        ordering = ['webpath__fullpath', 'order', '-date_start']
 
     @property
     def path_prefix(self):
