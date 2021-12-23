@@ -104,6 +104,7 @@ class PublicationListHandler(BaseContentHandler):
                 'page': page,
                 'path': match_dict.get('webpath', '/'),
                 'handler': self,
+                'category_name': category.name if category else ''
                 }
 
         base_url = reverse('unicms_api:api-news-by-contexts',

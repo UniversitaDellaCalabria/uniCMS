@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'sass_processor',
 
     'unicms_template_unical',
-
     'unicms_template_italia',
     'bootstrap_italia_template',
 
@@ -72,7 +71,18 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-
+    # 'default': {
+        # 'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_helpdesk',
+        # 'NAME': 'unicms',
+        # 'HOST': 'localhost',
+        # 'USER': 'root',
+        # 'PASSWORD': 'filicetti85',
+        # 'PORT': '',
+        # 'OPTIONS': {
+            # 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        # },
+    # }
 }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100 * 100
