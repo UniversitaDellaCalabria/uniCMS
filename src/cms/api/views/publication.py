@@ -16,7 +16,7 @@ from cms.publications.serializers import (PublicationSerializer,
                                           PublicationSelectOptionsSerializer)
 from cms.publications.utils import publication_context_base_filter
 
-from rest_framework import generics
+from rest_framework import filters, generics
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
@@ -56,6 +56,10 @@ class ApiPublicationsByContext(generics.ListAPIView):
     description = 'ApiPublicationsByContext'
     pagination_class = UniCmsApiPagination
     serializer_class = PublicationContextSerializer
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['publication__title',
+                     'publication__subheading',
+                     'publication__content']
     # authentication_classes = [authentication.TokenAuthentication]
     # permission_classes = [permissions.IsAdminUser]
 
