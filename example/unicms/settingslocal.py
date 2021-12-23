@@ -371,6 +371,11 @@ if "unicms_template_italia" in INSTALLED_APPS:
     from unicms_template_italia.settings import *
 # END UNICMS ITALIA TEMPLATE
 
+# UNICMS UNICAL TEMPLATE
+if "unicms_template_unical" in INSTALLED_APPS:
+    from unicms_template_unical.settings import *
+# END UNICMS UNICAL TEMPLATE
+
 # UNICMS CALENDAR HANDLER
 if "unicms_calendar" in INSTALLED_APPS:
     from unicms_calendar.settings import *
