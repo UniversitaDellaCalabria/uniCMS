@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     # 'unicms_unical_storage_handler',
     # 'unicms_editorial_board',
     # 'unicms_calendar',
-
 ]
 
 # Database
@@ -71,18 +70,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-    # 'default': {
-        # 'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_helpdesk',
-        # 'NAME': 'unicms',
-        # 'HOST': 'localhost',
-        # 'USER': 'root',
-        # 'PASSWORD': 'filicetti85',
-        # 'PORT': '',
-        # 'OPTIONS': {
-            # 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        # },
-    # }
 }
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 100 * 100
