@@ -78,7 +78,7 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
     menu = models.ForeignKey(NavigationBar,
                              on_delete=models.CASCADE,
                              related_name="related_menu")
-    name = models.CharField(max_length=60)
+    name = models.CharField(max_length=100)
     webpath = models.ForeignKey(WebPath,
                                 null=True, blank=True,
                                 on_delete=models.SET_NULL,
@@ -226,7 +226,7 @@ class NavigationBarItemLocalization(ActivableModel, TimeStampedModel,
     item = models.ForeignKey(NavigationBarItem,
                              on_delete=models.CASCADE)
     language = models.CharField(choices=settings.LANGUAGES, max_length=12, default='en')
-    name = models.CharField(max_length=60)
+    name = models.CharField(max_length=100)
 
     class Meta:
         verbose_name_plural = _("Context Navigation Menu Item Localizations")
