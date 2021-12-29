@@ -226,7 +226,7 @@ class NavigationBarItemLocalization(ActivableModel, TimeStampedModel,
     item = models.ForeignKey(NavigationBarItem,
                              on_delete=models.CASCADE)
     language = models.CharField(choices=settings.LANGUAGES, max_length=12, default='en')
-    name = models.CharField(max_length=33)
+    name = models.CharField(max_length=60)
 
     class Meta:
         verbose_name_plural = _("Context Navigation Menu Item Localizations")
