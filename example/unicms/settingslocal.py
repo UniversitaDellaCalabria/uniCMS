@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     # 'unicms_unical_storage_handler',
     # 'unicms_editorial_board',
     # 'unicms_calendar',
+
 ]
 
 # Database
@@ -401,6 +402,8 @@ if "unicms_unical_storage_handler" in INSTALLED_APPS:
                                  'BS', 'CB', 'CC', 'DR', 'NM', 'DC']
     ALLOWED_TEACHER_ROLES = ['PO', 'PA', 'RU', 'RD']
     INITIAL_STRUCTURE_FATHER = "170005"
+
+    CURRENT_YEAR = "2021"
 # END UNICAL STORAGE HANDLER
 
 SEARCH_ELEMENTS_IN_PAGE = 4
