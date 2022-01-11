@@ -31,6 +31,8 @@ WSGI_APPLICATION = 'unicms.wsgi.application'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 if not DEBUG:
     SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = True
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
