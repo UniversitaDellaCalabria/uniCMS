@@ -100,6 +100,7 @@ def load_publications_preview(context, template,
     for i in pub_in_context:
         i.publication.translate_as(lang=language)
 
-    data = {'publications': pub_in_context}
+    data = {'publications': pub_in_context,
+            'categories': categories_csv}
     return handle_faulty_templates(template, data,
                                    name='load_publications_preview')
