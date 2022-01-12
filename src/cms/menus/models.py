@@ -133,6 +133,10 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
         if i18n: # pragma: no cover
             self.name = i18n.name
             self.language = lang
+            if self.inherited_content:
+                self.inherited_content.translate_as(lang)
+            if self.publication:
+                self.publication.translate_as(lang)
         else:
             self.language = None
         return self
