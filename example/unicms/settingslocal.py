@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     # 'unicms_unical_storage_handler',
     # 'unicms_editorial_board',
     # 'unicms_calendar',
-
 ]
 
 # Database
