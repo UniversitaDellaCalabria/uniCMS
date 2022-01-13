@@ -46,19 +46,19 @@ if settings.DEBUG:
 # API schemas
 try:
     urlpatterns += re_path('^openapi$',
-                            get_schema_view(**settings.OAS3_CONFIG),
+                            get_schema_view(public=True, **settings.OAS3_CONFIG),
                             name='openapi-schema'),
     urlpatterns += re_path('^openapi.json$',
                            get_schema_view(renderer_classes = [JSONOpenAPIRenderer],
-                                        **settings.OAS3_CONFIG),
+                                           public=True, **settings.OAS3_CONFIG),
                            name='openapi-schema-json'),
 except:
     urlpatterns += re_path('^openapi$',
-                            get_schema_view(**{}),
+                            get_schema_view(public=True, **{}),
                             name='openapi-schema'),
     urlpatterns += re_path('^openapi.json$',
                            get_schema_view(renderer_classes = [JSONOpenAPIRenderer],
-                                        **{}),
+                                           public=True, **{}),
                            name='openapi-schema-json'),
 
 if 'cms.contexts' in settings.INSTALLED_APPS:
