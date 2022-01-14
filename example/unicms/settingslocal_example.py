@@ -57,14 +57,17 @@ INSTALLED_APPS = [
     'django_filters',
 
     # editorial board app
-    'unicms_editorial_board',
+    # 'unicms_editorial_board',
 
     # Unical storage API hanler
-    'unicms_unical_storage_handler',
+    # 'unicms_unical_storage_handler',
+
+    # uniCMS calendar
+    # 'unicms_calendar',
 
     # SAML2 SP
-    'djangosaml2',
-    'saml2_sp',
+    # 'djangosaml2',
+    # 'saml2_sp',
 
 ]
 
@@ -159,7 +162,7 @@ CMS_CACHE_MAX_ENTRIES = 0
 # request.get_raw_uri() that matches the following would be ignored by cache ...
 CMS_CACHE_EXCLUDED_MATCHES =  ['/search?']
 
-
+CMS_PATH_PREFIX = 'portale/'
 CMS_CACHE_EXCLUDED_MATCHES.append('/portale/search?')
 
 # Static files (CSS, JavaScript, Images)
@@ -246,8 +249,6 @@ LOGGING = {
     }
 }
 
-CMS_PATH_PREFIX = 'portale/'
-
 CMS_TEMPLATES_FOLDER = 'templates/unicms'
 
 CMS_PUBLICATION_VIEW_PREFIX_PATH = 'contents/news/view/'
@@ -262,24 +263,6 @@ CMS_APP_REGEXP_URLPATHS = {
     'cms.publications.handlers.PublicationViewHandler' : CMS_PUBLICATION_URL_VIEW_REGEXP,
     'cms.publications.handlers.PublicationListHandler' : CMS_PUBLICATION_URL_LIST_REGEXP,
 }
-
-# UNICAL STORAGE HANDLER
-if "unicms_unical_storage_handler" in INSTALLED_APPS:
-
-    from unicms_unical_storage_handler.settings import *
-
-    CMS_HANDLERS_PATHS.extend(CMS_STORAGE_HANDLERS_PATHS)
-    CMS_APP_REGEXP_URLPATHS.update(CMS_STORAGE_APP_REGEXP_URLPATHS)
-
-    ALLOWED_UNICMS_SITES = [2]
-    ALLOWED_CDS_COURSETYPES = ['L','LM','LM5','LM6','M1-270','M2-270']
-    ALLOWED_ADDRESSBOOK_ROLES = ['PO', 'PA', 'RU', 'RD', 'ND', 'AR',
-                                 'BS', 'CB', 'CC', 'DR', 'NM']
-    ALLOWED_TEACHER_ROLES = ['PO', 'PA', 'RU', 'RD']
-    INITIAL_STRUCTURE_FATHER = "170005"
-
-    ALLOWED_STRUCTURE_TYPES = ['AREAUOC', 'AMCEN', 'DIP', 'MCRA','SET']
-# END UNICAL STORAGE HANDLER
 
 TEMPLATES = [
     {
@@ -322,12 +305,15 @@ OAS3_CONFIG = {'title': "Portale dell'Università della Calabria",
                'version': "0.1.2"
 }
 
-MONGO_URL = 'mongodb://10.0.3.217:27017'
-MONGO_CONNECTION_PARAMS = dict(username='admin',
-                               password='thatpassword',
-                               connectTimeoutMS=5000,
-                               socketTimeoutMS=5000,
-                               serverSelectionTimeoutMS=5000)
+# MONGO_URL = 'mongodb://10.0.3.217:27017'
+# MONGO_CONNECTION_PARAMS = dict(username='username',
+                                 # password='password',
+                                 # connectTimeoutMS=5000,
+                                 # socketTimeoutMS=5000,
+                                 # serverSelectionTimeoutMS=5000)
+MONGO_URL = 'mongodb://localhost:27017'
+MONGO_CONNECTION_PARAMS = dict()
+
 MONGO_DB_NAME = 'unicms'
 MONGO_COLLECTION_NAME = 'search'
 MODEL_TO_MONGO_MAP = {
@@ -388,6 +374,47 @@ CMS_HOOKS = {
         'POSTDELETE': []
     }
 }
+
+# UNICMS ITALIA TEMPLATE
+if "unicms_template_italia" in INSTALLED_APPS:
+    from unicms_template_italia.settings import *
+# END UNICMS ITALIA TEMPLATE
+
+# UNICMS UNICAL TEMPLATE
+if "unicms_template_unical" in INSTALLED_APPS:
+    from unicms_template_unical.settings import *
+# END UNICMS UNICAL TEMPLATE
+
+# UNICMS CALENDAR HANDLER
+if "unicms_calendar" in INSTALLED_APPS:
+    from unicms_calendar.settings import *
+
+    CMS_HANDLERS_PATHS.extend(CMS_CALENDAR_HANDLERS_PATHS)
+    CMS_APP_REGEXP_URLPATHS.update(CMS_CALENDAR_APP_REGEXP_URLPATHS)
+
+    CMS_HOOKS.update(CMS_CALENDAR_HOOKS)
+    MODEL_TO_MONGO_MAP.update(CMS_CALENDAR_MONGO_MAP)
+# END UNICMS CALENDAR HANDLER
+
+# UNICAL STORAGE HANDLER
+if "unicms_unical_storage_handler" in INSTALLED_APPS:
+    from unicms_unical_storage_handler.settings import *
+
+    CMS_HANDLERS_PATHS.extend(CMS_STORAGE_HANDLERS_PATHS)
+    CMS_APP_REGEXP_URLPATHS.update(CMS_STORAGE_APP_REGEXP_URLPATHS)
+
+    ALLOWED_UNICMS_SITES = [2]
+    ALLOWED_CDS_COURSETYPES = ['L','LM','LM5','LM6','M1-270','M2-270']
+    ALLOWED_STRUCTURE_TYPES = ['ARE','DRZ', 'AMCEN', 'APL',
+                               'DIP', 'MCRA','SET', 'SEV','SRZ',
+                               'CDS', 'CEN', 'CCS', 'UDS', 'DIR']
+    ALLOWED_ADDRESSBOOK_ROLES = ['PO', 'PA', 'RU', 'RD', 'ND', 'AR',
+                                 'BS', 'CB', 'CC', 'DR', 'NM', 'DC']
+    ALLOWED_TEACHER_ROLES = ['PO', 'PA', 'RU', 'RD']
+    INITIAL_STRUCTURE_FATHER = "170005"
+
+    CURRENT_YEAR = "2021"
+# END UNICAL STORAGE HANDLER
 
 SEARCH_ELEMENTS_IN_PAGE = 4
 

@@ -61,14 +61,16 @@ jobs:
         sudo apt-get install -y mongodb-org
     - name: Start MongoDB
       run: sudo systemctl start mongod
-    
+
     - name: Install unicms-templates-unical
       run: pip install unicms_template_unical
-    
+
     - name: Test with Django tests
       working-directory: ./example
       run: |
-        DJANGO_SETTINGS_MODULE=unicms.settingslocal_test ./manage.py cms_search_create_mongo_index -y
+        DJANGO_SETTINGS_MODULE=unicms.settingslocal_test
+        cp unicms/settingslocal_example.py unicms/settingslocal.py
+        ./manage.py cms_search_create_mongo_index -y
         ./manage.py unicms_collect_templates -y
         # ./manage.py test --settings=unicms.settingslocal_test -v 2
         coverage erase
@@ -86,7 +88,7 @@ jobs:
         name: codecov-umbrella
         fail_ci_if_error: true
         path_to_write_report: ./codecov_report.txt
-        # verbose: true    
+        # verbose: true
     - name: Bandit Security Scan
       run: |
         bandit -r -x tests.py,src/cms/api/tests src/cms/*
