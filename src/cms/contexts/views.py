@@ -4,7 +4,7 @@ import re
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.sitemaps import GenericSitemap
-from django.contrib.sitemaps.views import sitemap
+# from django.contrib.sitemaps.views import sitemap
 from django.http import (Http404,
                          HttpResponse,
                          HttpResponseRedirect)
@@ -124,7 +124,7 @@ def pagePreview(request, page_id):
     return render(request, page.base_template.template_file, context)
 
 
-def unicms_sitemap(request):
+def base_unicms_sitemap(request):
     website = _get_site_from_host(request)
     protocol =  request.scheme
 
@@ -141,13 +141,16 @@ def unicms_sitemap(request):
         'date_field': 'modified',
     }
 
-    sitemap_dict = {'webpaths': GenericSitemap(webpaths_map,
-                                               priority=SITEMAP_WEBPATHS_PRIORITY,
-                                               protocol=protocol),
-                    'news': GenericSitemap(news_map,
-                                           priority=SITEMAP_NEWS_PRIORITY,
-                                           protocol=protocol)
-                    }
+    sitemap_dict = {
+        'webpaths': GenericSitemap(webpaths_map,
+                                   priority=SITEMAP_WEBPATHS_PRIORITY,
+                                   protocol=protocol),
+        'news': GenericSitemap(news_map,
+                               priority=SITEMAP_NEWS_PRIORITY,
+                               protocol=protocol)
+        }
 
-    sitemaps = sitemap(request, sitemaps=sitemap_dict)
-    return HttpResponse(sitemaps.render(), content_type='text/xml')
+    return sitemap_dict
+
+    # sitemaps = sitemap(request, sitemaps=sitemap_dict)
+    # return HttpResponse(sitemaps.render(), content_type='text/xml')

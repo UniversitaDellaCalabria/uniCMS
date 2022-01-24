@@ -682,7 +682,7 @@ class PageUnitTest(TestCase):
 
     def test_unicms_sitemap(self):
         obj = self.create_page(webpath_path='/')
-        url = reverse('unicms:unicms_sitemap')
+        url = reverse('unicms_sitemap')
         res = self.client.get(url)
         assert res.status_code == 200
 

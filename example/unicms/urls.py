@@ -23,6 +23,8 @@ from rest_framework import permissions #, routers
 from rest_framework.renderers import JSONOpenAPIRenderer
 from rest_framework.schemas import get_schema_view
 
+from . views import unicms_sitemap
+
 try:
     from rest_framework.schemas.agid_schema_views import get_schema_view
 except:
@@ -30,6 +32,7 @@ except:
 
 
 ADMIN_PATH = getattr(settings, 'ADMIN_PATH', 'admin')
+CMS_PATH_PREFIX = getattr(settings, 'CMS_PATH_PREFIX', '')
 
 urlpatterns = [
     path(f'{ADMIN_PATH}/', admin.site.urls),
@@ -60,6 +63,9 @@ except:
                            get_schema_view(renderer_classes = [JSONOpenAPIRenderer],
                                            public=True, **{}),
                            name='openapi-schema-json'),
+
+# sitemap
+urlpatterns += re_path(r'^' + CMS_PATH_PREFIX + 'sitemap.xml$', unicms_sitemap, name='unicms_sitemap'),
 
 if 'cms.contexts' in settings.INSTALLED_APPS:
     urlpatterns += path('',
