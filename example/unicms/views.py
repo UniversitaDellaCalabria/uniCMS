@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.sitemaps import GenericSitemap
 from django.contrib.sitemaps.views import sitemap
 from django.http import HttpResponse
 
