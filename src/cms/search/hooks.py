@@ -18,7 +18,7 @@ def page_se_insert(page_object):
     search_entry = page_to_entry(page_object)
     # check if it doesn't exists or remove it and recreate
     doc_query = {"content_type": page_object._meta.label,
-                 "content_id": search_entry['content_id']}
+                 "content_id": str(page_object.pk)}
     doc = collection.find_one(doc_query)
     if doc:
         collection.delete_many(doc_query)
@@ -31,32 +31,35 @@ def page_se_insert(page_object):
 
 
 def publication_se_insert(pub_object, *args, **kwargs):
-    if not pub_object.is_active: return
-
     collection = mongo_collection()
-
-    contexts = pub_object.publicationcontext_set\
-                         .filter(is_active=True)\
-                         .order_by('date_start')
-
-    search_entry = publication_to_entry(pub_object, contexts)
-    if search_entry: search_entry = search_entry
-    else: return
-
-    # check if it doesn't exists or remove it and recreate
     doc_query = {"content_type": pub_object._meta.label,
-                 "content_id": search_entry['content_id']}
+                 "content_id": str(pub_object.pk)}
+    # remove old if it exists
     doc = collection.find_one(doc_query)
     if doc:
         collection.delete_many(doc_query)
         logger.info(f'{pub_object} removed from search engine')
 
+    # if publication isn't active, return
+    if not pub_object.is_active: return
+
+    # check if publication has active and publicable contexts
     now = timezone.localtime()
-    publicable_context = contexts.filter(date_start__lte=now,
-                                         date_end__gt=now)
+    contexts = pub_object.publicationcontext_set\
+                         .filter(is_active=True,
+                                 date_start__lte=now,
+                                 date_end__gt=now)\
+                         .order_by('date_start')
+
+    if kwargs.get('exclude_context'):
+        contexts = contexts.exclude(pk=kwargs['exclude_context'])
+
+    # get data to entry
+    search_entry = publication_to_entry(pub_object, contexts)
+    if not search_entry: return
 
     # if pub_object.is_publicable:
-    if publicable_context:
+    if contexts:
         doc = collection.insert_one(search_entry)
 
     logger.info(f'{pub_object} succesfully indexed in search engine')
@@ -67,9 +70,16 @@ def publication_context_se_insert(pubctx_object, *args, **kwargs):
     publication_se_insert(pub_object, *args, **kwargs)
 
 
+def publication_context_se_delete(pubctx_object, *args, **kwargs):
+    pub_object = pubctx_object.publication
+    publication_se_insert(pub_object,
+                          exclude_context=pubctx_object.pk,
+                          *args, **kwargs)
+
+
 def searchengine_entry_remove(obj):
     collection = mongo_collection()
     doc_query = {"content_type": obj._meta.label,
-                 "content_id": obj.pk}
+                 "content_id": str(obj.pk)}
     collection.delete_many(doc_query)
     logger.info(f'{obj} removed from search engine')

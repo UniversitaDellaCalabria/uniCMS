@@ -329,6 +329,12 @@ CMS_HOOKS = {
         'PREDELETE': ['cms.search.hooks.searchengine_entry_remove',],
         'POSTDELETE': []
     },
+    'PublicationContext': {
+        'PRESAVE': [],
+        'POSTSAVE': ['cms.search.hooks.publication_context_se_insert',],
+        'PREDELETE': ['cms.search.hooks.publication_context_se_delete',],
+        'POSTDELETE': []
+    },
     'Page': {
         'PRESAVE': [],
         'POSTSAVE': ['cms.search.hooks.page_se_insert',
