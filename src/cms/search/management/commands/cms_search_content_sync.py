@@ -52,9 +52,18 @@ class Command(BaseCommand):
             model = apps.get_model(app_label=app_label, model_name=model_name)
             _func = import_string(settings.MODEL_TO_MONGO_MAP[content_type])
             for obj in model.objects.filter(is_active=True):
+
+                doc_query = {"content_type": content_type,
+                             "content_id": str(obj.pk)}
+                # remove old if it exists
+                doc = collection.find_one(doc_query)
+                if doc:
+                    collection.delete_many(doc_query)
+
                 if obj.is_publicable:
                     entry = _func(obj)
                     if entry: data.append(entry)
+
             collection.insert_many(data, ordered=False)
             ins_res = collection.find(query)
             count = ins_res.collection.count_documents(query)
