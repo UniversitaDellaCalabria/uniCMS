@@ -27,13 +27,12 @@ def _get_pub_qparams(context, webpath, section = None,
         query_params['section'] = section
 
     if categories_csv:
-        cats = [i.strip() for i in categories_csv.split(',')]
         if exclude_categories:
-            categories = Category.objects.exclude(name__in=cats).\
+            categories = Category.objects.exclude(name__in=categories_csv).\
                                           values_list('name', flat=True)
             query_params['publication__category__name__in'] = categories
         else:
-            query_params['publication__category__name__in'] = cats
+            query_params['publication__category__name__in'] = categories_csv
     if tags_csv:
         tags = [i.strip() for i in tags_csv.split(',')]
         query_params['publication__tags__name__in'] = tags
@@ -72,12 +71,17 @@ def load_publications_preview(context, template,
                               categories_csv=None,
                               exclude_categories=False,
                               tags_csv=None):
+
+    if categories_csv:
+        categories = [i.strip() for i in categories_csv.split(',')]
+    else: categories = []
+
     request = context['request']
     webpath = context['webpath']
     query_params = _get_pub_qparams(context=context ,
                                     webpath=webpath,
                                     section=section,
-                                    categories_csv=categories_csv,
+                                    categories_csv=categories,
                                     exclude_categories=exclude_categories,
                                     tags_csv=tags_csv)
     pub_in_context = PublicationContext.objects.\
@@ -101,7 +105,7 @@ def load_publications_preview(context, template,
         i.publication.translate_as(lang=language)
 
     data = {'publications': pub_in_context,
-            'categories': categories_csv,
+            'categories': categories,
             'request': request}
     return handle_faulty_templates(template, data,
                                    name='load_publications_preview')

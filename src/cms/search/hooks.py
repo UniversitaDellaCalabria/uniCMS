@@ -30,17 +30,19 @@ def page_se_insert(page_object):
     logger.info(f'{page_object} succesfully indexed in search engine')
 
 
-def publication_se_insert(pub_object):
+def publication_se_insert(pub_object, *args, **kwargs):
+    if not pub_object.is_active: return
+
     collection = mongo_collection()
 
-    contexts = pub_object.publicationcontext_set.filter(is_active=True).\
-        order_by('date_start')
+    contexts = pub_object.publicationcontext_set\
+                         .filter(is_active=True)\
+                         .order_by('date_start')
 
     search_entry = publication_to_entry(pub_object, contexts)
-    if search_entry:
-        search_entry = search_entry
-    else:
-        return
+    if search_entry: search_entry = search_entry
+    else: return
+
     # check if it doesn't exists or remove it and recreate
     doc_query = {"content_type": pub_object._meta.label,
                  "content_id": search_entry['content_id']}
@@ -58,6 +60,11 @@ def publication_se_insert(pub_object):
         doc = collection.insert_one(search_entry)
 
     logger.info(f'{pub_object} succesfully indexed in search engine')
+
+
+def publication_context_se_insert(pubctx_object, *args, **kwargs):
+    pub_object = pubctx_object.publication
+    publication_se_insert(pub_object, *args, **kwargs)
 
 
 def searchengine_entry_remove(obj):
