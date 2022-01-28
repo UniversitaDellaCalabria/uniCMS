@@ -186,6 +186,14 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         return self.publicationlink_set.all()
 
     @property
+    def related_embedded_links(self):
+        return self.publicationlink_set.all().filter(embedded=True)
+
+    @property
+    def related_plain_links(self):
+        return self.publicationlink_set.all().filter(embedded=False)
+
+    @property
     def related_media_collections(self):
         if getattr(self, '_related_media_collections', None):
             return self._related_media_collections
@@ -241,10 +249,19 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         self.content_save_switch()
         super(self.__class__, self).save(*args, **kwargs)
 
+    @property
     def get_attachments(self):
         return PublicationAttachment.objects.filter(publication=self,
                                                     is_active=True).\
                                              order_by('order')
+
+    @property
+    def get_embedded_attachments(self):
+        return self.get_attachments().filter(embedded=True)
+
+    @property
+    def get_plain_attachments(self):
+        return self.get_attachments().filter(embedded=False)
 
     def get_publication_contexts(self, webpath=None):
         qdict = dict(publication=self, is_active=True)
