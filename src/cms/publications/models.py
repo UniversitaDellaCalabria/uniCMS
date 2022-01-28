@@ -438,6 +438,7 @@ class PublicationLink(TimeStampedModel, CreatedModifiedBy,
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
     url = models.URLField(help_text=_("url"))
+    embedded = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = _("Publication Links")
@@ -503,6 +504,7 @@ class PublicationAttachment(TimeStampedModel, SortableModel, ActivableModel,
                             validators=[validate_file_extension,
                                         validate_file_size])
     description = models.TextField()
+    embedded = models.BooleanField(default=False)
 
     class Meta:
         verbose_name_plural = _("Publication Attachments")

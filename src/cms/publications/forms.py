@@ -54,7 +54,7 @@ class PublicationAttachmentForm(ModelForm):
     class Meta:
         model = PublicationAttachment
         fields = ['publication', 'name', 'file', 'description',
-                  'order', 'is_active']
+                  'embedded', 'order', 'is_active']
 
 
 class PublicationMediaCollectionForm(ModelForm):
@@ -83,7 +83,7 @@ class PublicationLinkForm(ModelForm):
 
     class Meta:
         model = PublicationLink
-        fields = ['publication', 'name', 'url']
+        fields = ['publication', 'name', 'url', 'embedded']
 
 
 class PublicationLocalizationForm(ModelForm):
