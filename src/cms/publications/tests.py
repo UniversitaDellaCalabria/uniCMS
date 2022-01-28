@@ -117,6 +117,8 @@ class PublicationUnitTest(TestCase):
                                                  url='https://example.org')
         publink.__str__()
         pub.related_links
+        pub.related_embedded_links
+        pub.related_plain_links
 
         # pub media collection
         media_col = MediaUnitTest.create_media_collection()
@@ -142,7 +144,9 @@ class PublicationUnitTest(TestCase):
         }
         pubatt = PublicationAttachment.objects.create(**data)
         pubatt.__str__()
-        pub.get_attachments()
+        pub.get_attachments
+        pub.get_embedded_attachments
+        pub.get_plain_attachments
 
         # pub context felix's
         pub.url(webpath=webpath)
