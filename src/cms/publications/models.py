@@ -257,11 +257,11 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
 
     @property
     def get_embedded_attachments(self):
-        return self.get_attachments().filter(embedded=True)
+        return self.get_attachments.filter(embedded=True)
 
     @property
     def get_plain_attachments(self):
-        return self.get_attachments().filter(embedded=False)
+        return self.get_attachments.filter(embedded=True)
 
     def get_publication_contexts(self, webpath=None):
         qdict = dict(publication=self, is_active=True)
