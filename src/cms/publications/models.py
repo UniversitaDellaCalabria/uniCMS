@@ -260,7 +260,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
 
     @property
     def get_plain_attachments(self):
-        return self.get_attachments.filter(embedded=True)
+        return self.get_attachments.filter(embedded=False)
 
     def get_publication_contexts(self, webpath=None):
         qdict = dict(publication=self, is_active=True)
