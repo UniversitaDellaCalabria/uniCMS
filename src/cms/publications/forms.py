@@ -26,7 +26,7 @@ class PublicationForm(ModelForm):
 
     class Meta:
         model = Publication
-        fields = ['name', 'title', 'subheading', 'content',
+        fields = ['name', 'title', 'slug', 'subheading', 'content',
                   'preview_image', 'presentation_image', 'category',
                   'note', 'tags', 'relevance', 'is_active']
 
@@ -38,7 +38,7 @@ class PublicationEditForm(PublicationForm):
 
     class Meta:
         model = Publication
-        fields = ['name', 'title', 'subheading', 'content',
+        fields = ['name', 'title', 'slug', 'subheading', 'content',
                   'preview_image', 'presentation_image', 'category',
                   'note', 'tags', 'relevance']
 

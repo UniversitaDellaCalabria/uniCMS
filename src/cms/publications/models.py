@@ -244,8 +244,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
                 self.content = markdown(self.content)
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = self.title2slug()
+        self.slug = self.title2slug()
         self.content_save_switch()
         super(self.__class__, self).save(*args, **kwargs)
 
