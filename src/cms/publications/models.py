@@ -256,17 +256,11 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
 
     @property
     def get_embedded_attachments(self):
-        return PublicationAttachment.objects.filter(publication=self,
-                                                    is_active=True,
-                                                    embedded=True).\
-                                             order_by('order')
+        return self.get_attachments.filter(embedded=True)
 
     @property
     def get_plain_attachments(self):
-        return PublicationAttachment.objects.filter(publication=self,
-                                                    is_active=True,
-                                                    embedded=False).\
-                                             order_by('order')
+        return self.get_attachments.filter(embedded=True)
 
     def get_publication_contexts(self, webpath=None):
         qdict = dict(publication=self, is_active=True)
