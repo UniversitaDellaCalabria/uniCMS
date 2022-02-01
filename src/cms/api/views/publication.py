@@ -49,6 +49,11 @@ class PublicationDetail(generics.RetrieveAPIView):
             return pub
 
 
+class ApiPublicationsByContextSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'retrievePublicPublicationContext'
+
+
 @method_decorator(detect_language, name='dispatch')
 class ApiPublicationsByContext(generics.ListAPIView):
     """
@@ -60,6 +65,7 @@ class ApiPublicationsByContext(generics.ListAPIView):
     search_fields = ['publication__title',
                      'publication__subheading',
                      'publication__content']
+    schema = ApiPublicationsByContextSchema()
     # authentication_classes = [authentication.TokenAuthentication]
     # permission_classes = [permissions.IsAdminUser]
 
@@ -73,9 +79,14 @@ class ApiPublicationsByContext(generics.ListAPIView):
         return pubcontx
 
 
+class ApiPublicationsByContextCategorySchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'retrievePublicPublicationContextCategory'
+
+
 @method_decorator(detect_language, name='dispatch')
 class ApiPublicationsByContextCategory(ApiPublicationsByContext):
-    pass
+    schema = ApiPublicationsByContextCategorySchema()
 
 
 @method_decorator(detect_language, name='dispatch')

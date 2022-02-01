@@ -22,7 +22,6 @@ from .. utils import check_user_permission_on_object
 class MediaCollectionItemList(UniCMSListCreateAPIView):
     """
     """
-    permission_classes = [UNICMSSafePermissions]
     description = ""
     serializer_class = MediaCollectionItemSerializer
     search_fields = ['media__title', 'media__file', 'media__description',
@@ -48,6 +47,28 @@ class MediaCollectionItemList(UniCMSListCreateAPIView):
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
             return super().post(request, *args, **kwargs)
+
+
+class MediaCollectionItemPublicListSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listPublicMediaCollections'
+
+
+class MediaCollectionItemPublicList(MediaCollectionItemList):
+    """
+    """
+    permission_classes = [UNICMSSafePermissions]
+    http_method_names = ['get', 'head']
+    schema = MediaCollectionItemPublicListSchema()
+
+    def get_queryset(self):
+        """
+        """
+        super_result = super().get_queryset()
+        if super_result:
+            super_result = super_result.filter(collection__is_active=True,
+                                               is_active=True)
+        return super_result
 
 
 class MediaCollectionItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):

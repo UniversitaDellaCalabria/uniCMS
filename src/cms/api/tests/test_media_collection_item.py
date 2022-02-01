@@ -32,13 +32,17 @@ class MediaCollectionItemAPIUnitTest(TestCase):
         # media list
         collection = MediaUnitTest.create_media_collection()
         media = MediaUnitTest.create_media()
+        # public api accessible to all in GET
+        url = reverse('unicms_api:media-collection-public-items',
+                      kwargs={'collection_id': collection.pk})
+        res = req.get(url)
+        assert res.status_code == 200
+
         url = reverse('unicms_api:media-collection-items',
                       kwargs={'collection_id': collection.pk})
-
-        # accessible to all in GET
         res = req.get(url)
-        # assert res.status_code == 403
-        assert res.status_code == 200
+        assert res.status_code == 403
+
         user.is_staff = True
         user.save()
         req.force_login(user)

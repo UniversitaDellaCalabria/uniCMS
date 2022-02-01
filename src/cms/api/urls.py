@@ -75,6 +75,8 @@ urlpatterns += path(f'{mci_prefix}/<int:pk>/', media_collection_item.MediaCollec
 urlpatterns += path(f'{mci_prefix}/<int:pk>/logs/', media_collection_item.MediaCollectionItemLogsView.as_view(), name='media-collection-item-logs'),
 urlpatterns += path(f'{mci_prefix}/form/', media_collection_item.MediaCollectionItemFormView.as_view(), name='media-collection-item-form'),
 
+urlpatterns += path('api/media-collections/<int:collection_id>/items/', media_collection_item.MediaCollectionItemPublicList.as_view(), name='media-collection-public-items'),
+
 # carousels
 c_prefix = f'{eb_prefix}/carousels'
 urlpatterns += path(f'{c_prefix}/', carousel.CarouselList.as_view(), name='carousels'),
