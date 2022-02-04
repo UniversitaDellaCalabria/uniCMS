@@ -36,7 +36,7 @@ def _get_pub_qparams(context, webpath, section = None,
             query_params['publication__category__name__in'] = categories_csv
 
     if exclude_negative_order:
-        query_params['order__gte=0']
+        query_params['order__gte'] = 0
 
     if tags_csv:
         tags = [i.strip() for i in tags_csv.split(',')]
