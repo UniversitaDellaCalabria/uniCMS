@@ -334,7 +334,9 @@ class PublicationUnitTest(TestCase):
         page = PageUnitTest.create_page(webpath=webpath)
         template_context = dict(request=req,
                                 page=page, webpath=page.webpath)
-        data = dict(context=template_context, template='that.html')
+        data = dict(context=template_context,
+                    template='that.html',
+                    exclude_negative_order=True)
 
         lm = load_publications_preview(**data)
         assert lm

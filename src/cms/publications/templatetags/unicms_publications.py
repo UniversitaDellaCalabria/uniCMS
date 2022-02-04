@@ -70,7 +70,8 @@ def load_publications_preview(context, template,
                               in_evidence=False,
                               categories_csv=None,
                               exclude_categories=False,
-                              tags_csv=None):
+                              tags_csv=None,
+                              exclude_negative_order=False):
 
     if categories_csv:
         categories = [i.strip() for i in categories_csv.split(',')]
@@ -94,6 +95,9 @@ def load_publications_preview(context, template,
         pub_in_context = pub_in_context.filter(Q(in_evidence_end__gt=now) |
                                                Q(in_evidence_end__isnull=True),
                                                in_evidence_start__lt=now)
+    if exclude_negative_order:
+        pub_in_context = pub_in_context.filter(order__gte=0)
+
     if number > 0:
         pub_in_context = pub_in_context[0:number]
 
