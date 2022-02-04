@@ -37,22 +37,24 @@ class Command(BaseCommand):
             # if options['renew'] and os.path.isdir(CMS_TEMPLATES_FOLDER):
             if not os.path.isdir(CMS_TEMPLATES_FOLDER):
                 os.makedirs(f'{CMS_TEMPLATES_FOLDER}')
-            for target in 'blocks', 'pages':
+            for target in 'admin','blocks', 'pages':
                 if os.path.isdir(f'{CMS_TEMPLATES_FOLDER}/{target}'):
                     shutil.rmtree(f'{CMS_TEMPLATES_FOLDER}/{target}')
                 os.makedirs(f'{CMS_TEMPLATES_FOLDER}/{target}')
 
             # admin templates
-            if not os.path.isdir('templates/admin'):
-                os.makedirs('templates/admin')
+            # if not os.path.isdir('templates/admin'):
+                # os.makedirs('templates/admin')
 
             for i in get_unicms_templates():
-                if i[1] == 'admin/':
-                    dest = f"templates/{''.join(i[1:])}"
-                else:
-                    dest = f"{CMS_TEMPLATES_FOLDER}/{''.join(i[1:])}"
+                # if i[1] == 'admin/':
+                    # dest = f"templates/{''.join(i[1:])}"
+                # else:
+                    # dest = f"{CMS_TEMPLATES_FOLDER}/{''.join(i[1:])}"
+                dest = f"{CMS_TEMPLATES_FOLDER}/{''.join(i[1:])}"
                 src = ''.join(i)
                 print(f'Copying {src} -> {dest}')
+                print("aaaaaaaaaa", dest)
                 if os.path.exists(f"{dest}"):
                     os.remove(f"{dest}")
                 try:

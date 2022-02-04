@@ -269,6 +269,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': ['templates',
                  f'{CMS_TEMPLATES_FOLDER}',
+                 f'{CMS_TEMPLATES_FOLDER}/admin',
                  f'{CMS_TEMPLATES_FOLDER}/pages',
                  f'{CMS_TEMPLATES_FOLDER}/blocks'],
         'APP_DIRS': True,
