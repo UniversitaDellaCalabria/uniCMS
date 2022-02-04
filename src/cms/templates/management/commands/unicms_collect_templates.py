@@ -54,7 +54,6 @@ class Command(BaseCommand):
                 dest = f"{CMS_TEMPLATES_FOLDER}/{''.join(i[1:])}"
                 src = ''.join(i)
                 print(f'Copying {src} -> {dest}')
-                print("aaaaaaaaaa", dest)
                 if os.path.exists(f"{dest}"):
                     os.remove(f"{dest}")
                 try:
