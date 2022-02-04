@@ -16,7 +16,8 @@ register = template.Library()
 def _get_pub_qparams(context, webpath, section = None,
                      categories_csv=None,
                      exclude_categories=False,
-                     tags_csv=None):
+                     tags_csv=None,
+                     exclude_negative_order=False):
     now = timezone.localtime()
     query_params = dict(webpath=context['webpath'],
                         is_active=True,
@@ -33,6 +34,10 @@ def _get_pub_qparams(context, webpath, section = None,
             query_params['publication__category__name__in'] = categories
         else:
             query_params['publication__category__name__in'] = categories_csv
+
+    if exclude_negative_order:
+        query_params['order__gte=0']
+
     if tags_csv:
         tags = [i.strip() for i in tags_csv.split(',')]
         query_params['publication__tags__name__in'] = tags
@@ -84,7 +89,8 @@ def load_publications_preview(context, template,
                                     section=section,
                                     categories_csv=categories,
                                     exclude_categories=exclude_categories,
-                                    tags_csv=tags_csv)
+                                    tags_csv=tags_csv,
+                                    exclude_negative_order=exclude_negative_order)
     pub_in_context = PublicationContext.objects.\
         filter(**query_params).\
         distinct().\
@@ -95,8 +101,6 @@ def load_publications_preview(context, template,
         pub_in_context = pub_in_context.filter(Q(in_evidence_end__gt=now) |
                                                Q(in_evidence_end__isnull=True),
                                                in_evidence_start__lt=now)
-    if exclude_negative_order:
-        pub_in_context = pub_in_context.filter(order__gte=0)
 
     if number > 0:
         pub_in_context = pub_in_context[0:number]
