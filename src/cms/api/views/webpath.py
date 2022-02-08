@@ -368,8 +368,8 @@ class WebpathCloneView(APIView):
 
         # check permissions on parent
         parent = get_object_or_404(WebPath, pk=parent_id)
-        has_permission = parent.is_publicable_by(user=request.user,
-                                                 parent=True)
+        has_permission = parent.is_publicable_by(user=request.user)
+                                                 # parent=True)
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)

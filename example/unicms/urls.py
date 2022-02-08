@@ -126,6 +126,3 @@ else:
     urlpatterns += path('{}/logout/'.format(settings.LOCAL_URL_PREFIX),
                         auth_views.LogoutView.as_view(template_name='logout.html', next_page='/'),
                         name='logout'),
-
-# if 'newsletter' in settings.INSTALLED_APPS:
-    # urlpatterns += path('newsletter/', include('newsletter.urls')),
