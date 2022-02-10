@@ -69,7 +69,7 @@ class MediaCollection(ActivableModel, TimeStampedModel,
 
 class Media(TimeStampedModel, AbstractMedia,
             AbstractLockable, CreatedModifiedBy):
-    title = models.CharField(max_length=60,
+    title = models.CharField(max_length=256,
                              help_text=_("Media file title"))
     file = models.FileField(upload_to=context_media_path,
                             validators=[validate_file_extension,
