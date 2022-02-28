@@ -126,3 +126,7 @@ else:
     urlpatterns += path('{}/logout/'.format(settings.LOCAL_URL_PREFIX),
                         auth_views.LogoutView.as_view(template_name='logout.html', next_page='/'),
                         name='logout'),
+
+if 'unicms_newsletter' in settings.INSTALLED_APPS:
+    import unicms_newsletter.urls
+    urlpatterns += path('', include((unicms_newsletter.urls, 'unicms_newsletter',))),
