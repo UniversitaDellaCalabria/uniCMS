@@ -114,6 +114,7 @@ def load_publications_preview(context, template,
 
     data = {'publications': pub_in_context,
             'categories': categories,
+            'exclude_categories': exclude_categories,
             'request': request}
     return handle_faulty_templates(template, data,
                                    name='load_publications_preview')
