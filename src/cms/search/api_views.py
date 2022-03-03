@@ -19,9 +19,15 @@ from cms.api.filters import GenericApiFilter
 from cms.contexts.decorators import detect_language
 
 from . import MongoClientFactory
+from . settings import ALLOW_SEARCH_IN_SITES
 
 
 logger = logging.getLogger(__name__)
+
+
+ALLOW_SEARCH_IN_SITES = getattr(settings,
+                                'ALLOW_SEARCH_IN_SITES',
+                                ALLOW_SEARCH_IN_SITES)
 
 
 class ServiceUnavailable(APIException): # pragma: no cover
@@ -125,11 +131,17 @@ class ApiSearchEngine(APIView):
                 logger.debug(f'API Search: Bad tags: {tags}')
 
         # web site
+
+        # allowed sites
+        query['sites'] = {}
+        if '*' in ALLOW_SEARCH_IN_SITES: pass
+        else: query['sites']['$elemMatch'] = {'$in': ALLOW_SEARCH_IN_SITES}
+
         sites = request.GET.get('sites')
         if sites:
             try:
                 sites = [i.strip() for i in sites.split(',')]
-                query['sites'] = {'$all': sites}
+                query['sites']['$all'] = sites
             except ValueError: # pragma: no cover
                 logger.debug(f'API Search: Bad sites: {sites}')
 
