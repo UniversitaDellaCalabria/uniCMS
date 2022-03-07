@@ -67,23 +67,6 @@ except:
 # sitemap
 urlpatterns += re_path(r'^' + CMS_PATH_PREFIX + 'sitemap.xml$', unicms_sitemap, name='unicms_sitemap'),
 
-if 'cms.contexts' in settings.INSTALLED_APPS:
-    urlpatterns += path('',
-                        include(('cms.contexts.urls', 'cms'), namespace="unicms"),
-                        name="unicms"),
-
-if 'cms.api' in settings.INSTALLED_APPS:
-    urlpatterns += path('',
-                        include(('cms.api.urls', 'cms'), namespace="unicms_api"),
-                        name="unicms_api"),
-
-
-if 'cms.search' in settings.INSTALLED_APPS:
-    urlpatterns += path('',
-                        include(('cms.search.urls', 'cms_search'), namespace="unicms_search"),
-                        name="unicms_search"),
-
-
 if 'unicms_editorial_board' in settings.INSTALLED_APPS:
     urlpatterns += path('',
                         include(('unicms_editorial_board.urls',
@@ -91,6 +74,10 @@ if 'unicms_editorial_board' in settings.INSTALLED_APPS:
                                  namespace="unicms_editorial_board"),
                         name="unicms_editorial_board"),
 
+if 'cms.api' in settings.INSTALLED_APPS:
+    urlpatterns += path('',
+                        include(('cms.api.urls', 'cms'), namespace="unicms_api"),
+                        name="unicms_api"),
 
 if 'unicms_calendar' in settings.INSTALLED_APPS:
     urlpatterns += path('',
@@ -99,6 +86,9 @@ if 'unicms_calendar' in settings.INSTALLED_APPS:
                                  namespace="unicms_calendar"),
                         name="unicms_calendar"),
 
+if 'unicms_newsletter' in settings.INSTALLED_APPS:
+    import unicms_newsletter.urls
+    urlpatterns += path('', include((unicms_newsletter.urls, 'unicms_newsletter',))),
 
 if 'saml2_sp' in settings.INSTALLED_APPS:
     from djangosaml2 import saml2_views
@@ -127,6 +117,14 @@ else:
                         auth_views.LogoutView.as_view(template_name='logout.html', next_page='/'),
                         name='logout'),
 
-if 'unicms_newsletter' in settings.INSTALLED_APPS:
-    import unicms_newsletter.urls
-    urlpatterns += path('', include((unicms_newsletter.urls, 'unicms_newsletter',))),
+if 'cms.search' in settings.INSTALLED_APPS:
+    urlpatterns += path('',
+                        include(('cms.search.urls', 'cms_search'), namespace="unicms_search"),
+                        name="unicms_search"),
+
+if 'cms.contexts' in settings.INSTALLED_APPS:
+    urlpatterns += path('',
+                        include(('cms.contexts.urls', 'cms'), namespace="unicms"),
+                        name="unicms"),
+
+
