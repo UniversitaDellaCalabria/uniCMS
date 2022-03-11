@@ -76,8 +76,7 @@ def load_publications_preview(context, template,
                               categories_csv=None,
                               exclude_categories=False,
                               tags_csv=None,
-                              exclude_negative_order=False,
-                              exclude_single_category_label=False):
+                              exclude_negative_order=False):
 
     if categories_csv:
         categories = [i.strip() for i in categories_csv.split(',')]
@@ -116,7 +115,6 @@ def load_publications_preview(context, template,
     data = {'publications': pub_in_context,
             'categories': categories,
             'exclude_categories': exclude_categories,
-            'request': request,
-            'exclude_single_category_label': exclude_single_category_label}
+            'request': request}
     return handle_faulty_templates(template, data,
                                    name='load_publications_preview')
