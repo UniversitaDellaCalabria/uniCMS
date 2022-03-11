@@ -133,13 +133,15 @@ class ApiSearchEngine(APIView):
         # web site
 
         # allowed sites
-        query['sites'] = {}
         if '*' in ALLOW_SEARCH_IN_SITES: pass
-        else: query['sites']['$elemMatch'] = {'$in': ALLOW_SEARCH_IN_SITES}
+        else:
+            query['sites'] = {}
+            query['sites']['$elemMatch'] = {'$in': ALLOW_SEARCH_IN_SITES}
 
         sites = request.GET.get('sites')
         if sites:
             try:
+                if not 'sites' in query: query['sites'] = {}
                 sites = [i.strip() for i in sites.split(',')]
                 query['sites']['$all'] = sites
             except ValueError: # pragma: no cover
