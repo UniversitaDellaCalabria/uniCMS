@@ -155,7 +155,7 @@ class PublicationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         # edit is_active params (only for owner or publisher)
-        if item.is_active != request.data['is_active']:
+        if item.is_active != request.data.get('is_active', item.is_active):
             if not item.is_publicable_by(request.user):
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
@@ -169,7 +169,7 @@ class PublicationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         # edit is_active params (only for owner or publisher)
-        if item.is_active != request.data['is_active']:
+        if item.is_active != request.data.get('is_active', item.is_active):
             if not item.is_publicable_by(request.user):
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
