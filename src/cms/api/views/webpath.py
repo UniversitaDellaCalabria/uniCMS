@@ -65,7 +65,8 @@ class WebpathList(UniCMSListCreateAPIView):
             publisher_perms = is_publisher(permission)
             parent_locks_ok = EditorialBoardLockUser.check_for_locks(parent,
                                                                      request.user)
-            if not publisher_perms or not parent_locks_ok:
+            has_permissions = request.user.is_superuser or (publisher_perms and parent_locks_ok)
+            if not has_permissions:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
             try:
@@ -75,7 +76,7 @@ class WebpathList(UniCMSListCreateAPIView):
                                                 resource=request.method,
                                                 detail=e)
             # add permission to webpath
-            if not publisher_perms['allow_descendant']:
+            if not publisher_perms.get('allow_descendant',False) and not request.user.is_superuser:
                 EditorialBoardEditors.objects.create(user=request.user,
                                                      webpath=webpath,
                                                      permission=permission,
