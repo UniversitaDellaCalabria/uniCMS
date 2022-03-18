@@ -57,3 +57,9 @@ def call(obj, method, **kwargs):
 @register.simple_tag
 def cms_sites():
     return WebSite.objects.filter(is_active=True).values_list('name', 'domain')
+
+
+@register.simple_tag(takes_context=True)
+def get_site_path(context, webpath):
+    request = context['request']
+    return webpath.get_site_path(request)
