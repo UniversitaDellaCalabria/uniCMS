@@ -132,7 +132,7 @@ def base_unicms_sitemap(request):
         'queryset': WebPath.objects.filter(site=website,
                                            is_active=True,
                                            alias__isnull=True,
-                                           alias_url__isnull=True),
+                                           alias_url=""),
         'date_field': 'modified',
     }
     # news_map = {
