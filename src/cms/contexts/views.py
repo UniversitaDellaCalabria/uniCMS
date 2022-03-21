@@ -145,9 +145,9 @@ def base_unicms_sitemap(request):
         'webpaths': GenericSitemap(webpaths_map,
                                    priority=SITEMAP_WEBPATHS_PRIORITY,
                                    protocol=protocol),
-        'news': GenericSitemap(news_map,
-                               priority=SITEMAP_NEWS_PRIORITY,
-                               protocol=protocol)
+        # 'news': GenericSitemap(news_map,
+                               # priority=SITEMAP_NEWS_PRIORITY,
+                               # protocol=protocol)
         }
 
     return sitemap_dict
