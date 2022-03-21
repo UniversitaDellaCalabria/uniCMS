@@ -129,17 +129,20 @@ def base_unicms_sitemap(request):
     protocol =  request.scheme
 
     webpaths_map = {
-        'queryset': WebPath.objects.filter(site=website, is_active=True),
+        'queryset': WebPath.objects.filter(site=website,
+                                           is_active=True,
+                                           alias__isnull=True,
+                                           alias_url__isnull=True),
         'date_field': 'modified',
     }
-    news_map = {
-        'queryset': PublicationContext.objects.filter(webpath__site=website,
-                                                      webpath__is_active=True,
-                                                      date_start__lte=timezone.localtime(),
-                                                      date_end__gte=timezone.localtime(),
-                                                      publication__is_active=True),
-        'date_field': 'modified',
-    }
+    # news_map = {
+        # 'queryset': PublicationContext.objects.filter(webpath__site=website,
+                                                      # webpath__is_active=True,
+                                                      # date_start__lte=timezone.localtime(),
+                                                      # date_end__gte=timezone.localtime(),
+                                                      # publication__is_active=True),
+        # 'date_field': 'modified',
+    # }
 
     sitemap_dict = {
         'webpaths': GenericSitemap(webpaths_map,
