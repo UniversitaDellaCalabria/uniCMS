@@ -74,10 +74,12 @@ def cms_dispatch(request):
 
     # go further with webpath matching
     path = append_slash(path)
-    webpath = get_object_or_404(WebPath,
-                                site=website,
-                                fullpath=path,
-                                is_active=True)
+    webpath = WebPath.objects.filter(site=website,
+                                     fullpath=path,
+                                     is_active=True).first()
+    if not webpath:
+        raise Http404(_("CMS Webpath not found"))
+
     if webpath.is_alias:
         return HttpResponseRedirect(webpath.redirect_url)
 
