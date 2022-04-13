@@ -19,6 +19,7 @@ AUTH_USER_MODEL = 'accounts.User'
 # multisite preferences (comment these options if unnecessary)
 SESSION_COOKIE_DOMAIN=".unical.it"
 MAIN_WEBSITE = 2
+MAIN_DOMAIN = "www.unical.it"
 
 # Application definition
 
@@ -451,3 +452,15 @@ LOGOUT_REDIRECT_URL=f'/{CMS_PATH_PREFIX}'
 
 FILETYPE_IMAGE_YX_RATIO_MIN = 0.25
 FILETYPE_IMAGE_YX_RATIO_MAX = 2
+
+# EDITORIAL BOARD FRONTEND URLs
+EDITORIAL_BOARD_BASE_URL = f'//{MAIN_DOMAIN}/editorial-board/#/'
+EDITORIAL_BOARD_NEWS_ADD_URL = EDITORIAL_BOARD_BASE_URL + 'websites/{website}/webpaths/{webpath}/news/new/'
+EDITORIAL_BOARD_NEWS_EDIT_URL = EDITORIAL_BOARD_BASE_URL + 'websites/{website}/webpaths/{webpath}/news/{news}/edit/'
+# path for Vue.js API based templates
+EDITORIAL_BOARD_NEWS_EDIT_URL_JS = "'" + EDITORIAL_BOARD_BASE_URL + "websites/'+item.webpath.site+'/webpaths/'+item.webpath.id+'/news/'+item.id+'/edit/'"
+
+EDITORIAL_BOARD_EVENT_EDIT_URL = EDITORIAL_BOARD_BASE_URL + 'events/{event}/edit/'
+# path for Vue.js API based templates
+EDITORIAL_BOARD_EVENT_EDIT_URL_JS = "'" + EDITORIAL_BOARD_BASE_URL + "events/'+event.event.id+'/edit/'"
+# end EDITORIAL BOARD FRONTEND URLs
