@@ -191,6 +191,7 @@ class PublicationPlaceHolder(AbstractPlaceholder):
         data = super().build_data_dict()
         data['publication'] = self.entry
         data['webpath'] = self.webpath
+        data['page'] = self.page
         return data
 
 
