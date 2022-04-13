@@ -55,10 +55,12 @@ class CarouselItemSerializer(UniCMSCreateUpdateSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        image = MediaSerializer(instance.image)
-        mobile_image = MediaSerializer(instance.mobile_image)
-        data['image'] = image.data
-        data['mobile_image'] = mobile_image.data
+        if instance.image:
+            image = MediaSerializer(instance.image)
+            data['image'] = image.data
+        if instance.mobile_image:
+            mobile_image = MediaSerializer(instance.mobile_image)
+            data['mobile_image'] = mobile_image.data
         return data
 
     class Meta:

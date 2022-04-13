@@ -41,12 +41,15 @@ class MenuItemSerializer(UniCMSCreateUpdateSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        webpath = WebPathSerializer(instance.webpath)
-        data['webpath'] = webpath.data
-        inherited_content = PublicationSerializer(instance.inherited_content)
-        data['inherited_content'] = inherited_content.data
-        publication = PublicationSerializer(instance.publication)
-        data['publication'] = publication.data
+        if instance.webpath:
+            webpath = WebPathSerializer(instance.webpath)
+            data['webpath'] = webpath.data
+        if instance.inherited_content:
+            inherited_content = PublicationSerializer(instance.inherited_content)
+            data['inherited_content'] = inherited_content.data
+        if instance.publication:
+            publication = PublicationSerializer(instance.publication)
+            data['publication'] = publication.data
         return data
 
     class Meta:

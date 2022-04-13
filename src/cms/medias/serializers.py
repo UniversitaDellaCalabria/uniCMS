@@ -62,8 +62,9 @@ class MediaCollectionItemSerializer(UniCMSCreateUpdateSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        media = MediaSerializer(instance.media)
-        data['media'] = media.data
+        if instance.media:
+            media = MediaSerializer(instance.media)
+            data['media'] = media.data
         return data
 
     class Meta:

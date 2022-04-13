@@ -32,8 +32,9 @@ class ContactSerializer(UniCMSCreateUpdateSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        image = MediaSerializer(instance.image)
-        data['image'] = image.data
+        if instance.image:
+            image = MediaSerializer(instance.image)
+            data['image'] = image.data
         return data
 
     class Meta:

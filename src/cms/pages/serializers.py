@@ -56,12 +56,14 @@ class PageSerializer(TaggitSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        base_template = PageTemplateSerializer(instance.base_template)
-        webpath = WebPathSerializer(instance.webpath)
+        if instance.base_template:
+            base_template = PageTemplateSerializer(instance.base_template)
+            data['base_template'] = base_template.data
+        if instance.webpath:
+            webpath = WebPathSerializer(instance.webpath)
+            data['webpath'] = webpath.data
         preview_url = reverse('unicms:page-preview',
                               kwargs={'page_id': data['id']})
-        data['base_template'] = base_template.data
-        data['webpath'] = webpath.data
         data['preview_url'] = preview_url
         return data
 
@@ -77,8 +79,9 @@ class PageBlockSerializer(UniCMSContentTypeClass):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        block = TemplatesBlockSerializer(instance.block)
-        data['block'] = block.data
+        if instance.block:
+            block = TemplatesBlockSerializer(instance.block)
+            data['block'] = block.data
         return data
 
     class Meta:
@@ -91,8 +94,9 @@ class PageCarouselSerializer(UniCMSContentTypeClass):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        carousel = CarouselSerializer(instance.carousel)
-        data['carousel'] = carousel.data
+        if instance.carousel:
+            carousel = CarouselSerializer(instance.carousel)
+            data['carousel'] = carousel.data
         return data
 
     class Meta:
@@ -105,8 +109,9 @@ class PageContactSerializer(UniCMSContentTypeClass):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        contact = ContactSerializer(instance.contact)
-        data['contact'] = contact.data
+        if instance.contact:
+            contact = ContactSerializer(instance.contact)
+            data['contact'] = contact.data
         return data
 
     class Meta:
@@ -138,8 +143,9 @@ class PageMenuSerializer(UniCMSCreateUpdateSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        menu = MenuSerializer(instance.menu)
-        data['menu'] = menu.data
+        if instance.menu:
+            menu = MenuSerializer(instance.menu)
+            data['menu'] = menu.data
         return data
 
     class Meta:
@@ -153,8 +159,9 @@ class PageMediaCollectionSerializer(UniCMSCreateUpdateSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        collection = MediaCollectionSerializer(instance.collection)
-        data['collection'] = collection.data
+        if instance.collection:
+            collection = MediaCollectionSerializer(instance.collection)
+            data['collection'] = collection.data
         return data
 
     class Meta:
@@ -168,8 +175,9 @@ class PageMediaSerializer(UniCMSCreateUpdateSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        media = MediaSerializer(instance.media)
-        data['media'] = media.data
+        if instance.media:
+            media = MediaSerializer(instance.media)
+            data['media'] = media.data
         return data
 
     class Meta:
@@ -183,8 +191,9 @@ class PagePublicationSerializer(UniCMSCreateUpdateSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        publication = PublicationSerializer(instance.publication)
-        data['publication'] = publication.data
+        if instance.publication:
+            publication = PublicationSerializer(instance.publication)
+            data['publication'] = publication.data
         return data
 
     class Meta:
@@ -198,8 +207,9 @@ class PageRelatedSerializer(UniCMSCreateUpdateSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        related_page = PageSerializer(instance.related_page)
-        data['related_page'] = related_page.data
+        if instance.related_page:
+            related_page = PageSerializer(instance.related_page)
+            data['related_page'] = related_page.data
         return data
 
     class Meta:

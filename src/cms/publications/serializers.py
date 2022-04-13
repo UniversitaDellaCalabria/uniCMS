@@ -49,10 +49,12 @@ class PublicationSerializer(TaggitSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        preview_image = MediaSerializer(instance.preview_image)
-        data['preview_image'] = preview_image.data
-        presentation_image = MediaSerializer(instance.presentation_image)
-        data['presentation_image'] = presentation_image.data
+        if instance.preview_image:
+            preview_image = MediaSerializer(instance.preview_image)
+            data['preview_image'] = preview_image.data
+        if instance.presentation_image:
+            presentation_image = MediaSerializer(instance.presentation_image)
+            data['presentation_image'] = presentation_image.data
         data['image'] = instance.image_url()
         categories = []
         for category in instance.category.all():
@@ -93,10 +95,12 @@ class PublicationContextSerializer(UniCMSCreateUpdateSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        publication = PublicationSerializer(instance.publication)
-        data['publication'] = publication.data
-        webpath = WebPathSerializer(instance.webpath)
-        data['webpath'] = webpath.data
+        if instance.publication:
+            publication = PublicationSerializer(instance.publication)
+            data['publication'] = publication.data
+        if instance.webpath:
+            webpath = WebPathSerializer(instance.webpath)
+            data['webpath'] = webpath.data
         data['path'] = instance.url
         return data
 
@@ -131,8 +135,9 @@ class PublicationMediaCollectionSerializer(UniCMSCreateUpdateSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        collection = MediaCollectionSerializer(instance.collection)
-        data['collection'] = collection.data
+        if instance.collection:
+            collection = MediaCollectionSerializer(instance.collection)
+            data['collection'] = collection.data
         return data
 
     class Meta:
@@ -164,8 +169,9 @@ class PublicationRelatedSerializer(UniCMSCreateUpdateSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        related = PublicationSerializer(instance.related)
-        data['related'] = related.data
+        if instance.related:
+            related = PublicationSerializer(instance.related)
+            data['related'] = related.data
         return data
 
     class Meta:
