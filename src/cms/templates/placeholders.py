@@ -34,7 +34,8 @@ class AbstractPlaceholder(object):
         return f'Template Tag {self.iam}'
 
     def build_data_dict(self):
-        data = {'uid': f'id_{self.entry.pk}'}
+        data = {'uid': f'id_{self.entry.pk}',
+                'request': self.request}
         return {**self.content,**data}
 
     def get_entry(self, entry):
@@ -125,7 +126,6 @@ class LinkPlaceHolder(AbstractPlaceholder):
         data = super().build_data_dict()
         data['name'] = self.entry.name
         data['url'] = self.entry.url
-        data['request'] = self.request
         return data
 
 
@@ -170,7 +170,6 @@ class MenuPlaceHolder(AbstractPlaceholder):
         data = super().build_data_dict()
         data['items'] = self.entry.menu.get_items(lang=self.language,
                                                   parent__isnull=True)
-        data['request'] = self.request
         data['page'] = self.page
         return data
 
@@ -184,14 +183,16 @@ class PublicationPlaceHolder(AbstractPlaceholder):
         self.publications = self.page.get_publications()
 
     def get_entry(self, entry):
+        # to pass PagePublication to template
+        self.item_entry = entry[1]
         return entry[1].publication
 
     def build_data_dict(self):
         self.entry.translate_as(lang=self.language)
         data = super().build_data_dict()
+        data['page_publication'] = self.item_entry
         data['publication'] = self.entry
         data['webpath'] = self.webpath
-        data['page'] = self.page
         return data
 
 
