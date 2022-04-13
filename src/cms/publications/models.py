@@ -130,12 +130,12 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
                 if category.image:
                     return sanitize_path(f'{settings.MEDIA_URL}/{category.image}')
 
-    def image_title(self):
+    def image_title(self): # pragma: no cover
         if self.preview_image: return self.preview_image.title
         if self.presentation_image: return self.presentation_image.title
         return self.title
 
-    def image_description(self):
+    def image_description(self): # pragma: no cover
         if self.preview_image: return self.preview_image.description
         if self.presentation_image: return self.presentation_image.description
         return self.subheading
