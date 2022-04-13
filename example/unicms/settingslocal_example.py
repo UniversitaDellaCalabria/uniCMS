@@ -455,12 +455,18 @@ FILETYPE_IMAGE_YX_RATIO_MAX = 2
 
 # EDITORIAL BOARD FRONTEND URLs
 EDITORIAL_BOARD_BASE_URL = f'//{MAIN_DOMAIN}/editorial-board/#/'
+
+## NEWS
 EDITORIAL_BOARD_NEWS_ADD_URL = EDITORIAL_BOARD_BASE_URL + 'websites/{website}/webpaths/{webpath}/news/new/'
 EDITORIAL_BOARD_NEWS_EDIT_URL = EDITORIAL_BOARD_BASE_URL + 'websites/{website}/webpaths/{webpath}/news/{news}/edit/'
-# path for Vue.js API based templates
+### path for Vue.js API based templates
 EDITORIAL_BOARD_NEWS_EDIT_URL_JS = "'" + EDITORIAL_BOARD_BASE_URL + "websites/'+item.webpath.site+'/webpaths/'+item.webpath.id+'/news/'+item.id+'/edit/'"
 
+## PAGE PUBLICATIONS
+EDITORIAL_BOARD_PAGE_PUBLICATION_EDIT_URL = EDITORIAL_BOARD_BASE_URL + 'websites/{website}/webpaths/{webpath}/pages/{page}/publications/{publication}/edit/'
+
+## EVENTS
 EDITORIAL_BOARD_EVENT_EDIT_URL = EDITORIAL_BOARD_BASE_URL + 'events/{event}/edit/'
-# path for Vue.js API based templates
+## path for Vue.js API based templates
 EDITORIAL_BOARD_EVENT_EDIT_URL_JS = "'" + EDITORIAL_BOARD_BASE_URL + "events/'+event.event.id+'/edit/'"
 # end EDITORIAL BOARD FRONTEND URLs
