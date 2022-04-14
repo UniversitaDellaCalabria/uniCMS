@@ -208,7 +208,7 @@ CMS_PUBLICATION_VIEW_PREFIX_PATH = 'contents/news/view/'
 CMS_PUBLICATION_LIST_PREFIX_PATH = 'contents/news/list'
 
 CMS_PUBLICATION_URL_LIST_REGEXP = f'^(?P<context>[\/a-zA-Z0-9\.\-\_]*)({CMS_PUBLICATION_LIST_PREFIX_PATH})/?$'
-CMS_PUBLICATION_URL_VIEW_REGEXP = f'^(?P<context>[\/a-zA-Z0-9\.\-\_]*)({CMS_PUBLICATION_VIEW_PREFIX_PATH})(?P<slug>[a-z0-9\-]*)'
+CMS_PUBLICATION_URL_VIEW_REGEXP = f'^(?P<context>[\/a-zA-Z0-9\.\-\_]*)({CMS_PUBLICATION_VIEW_PREFIX_PATH})(?P<id>[0-9]*)-(?P<slug>[a-z0-9\-]*)'
 
 CMS_APP_REGEXP_URLPATHS = {
     'cms.publications.handlers.PublicationViewHandler' : CMS_PUBLICATION_URL_VIEW_REGEXP,

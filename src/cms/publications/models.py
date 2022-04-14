@@ -403,7 +403,7 @@ class PublicationContext(TimeStampedModel, ActivableModel,
 
     @property
     def url(self):
-        url = f'{self.webpath.get_full_path()}{self.path_prefix}/{self.publication.slug}'
+        url = f'{self.webpath.get_full_path()}{self.path_prefix}/{self.publication.pk}-{self.publication.slug}/'
         return sanitize_path(url)
 
     def get_absolute_url(self):

@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 CMS_PUBLICATION_VIEW_PREFIX_PATH = 'contents/news/view/'
 CMS_PUBLICATION_LIST_PREFIX_PATH = 'contents/news/list'
 CMS_PUBLICATION_URL_LIST_REGEXP = f'^(?P<webpath>[\/a-zA-Z0-9\.\-\_]*)({CMS_PUBLICATION_LIST_PREFIX_PATH})/?$' # noqa
-CMS_PUBLICATION_URL_VIEW_REGEXP = f'^(?P<webpath>[\/a-zA-Z0-9\.\-\_]*)({CMS_PUBLICATION_VIEW_PREFIX_PATH})(?P<slug>[a-zA-Z0-9\-\_]*)' # noqa
+CMS_PUBLICATION_URL_VIEW_REGEXP = f'^(?P<webpath>[\/a-zA-Z0-9\.\-\_]*)({CMS_PUBLICATION_VIEW_PREFIX_PATH})(?P<id>[0-9]*)-(?P<slug>[a-zA-Z0-9\-\_]*)' # noqa
 
 CMS_HANDLERS_PATHS = [CMS_PUBLICATION_VIEW_PREFIX_PATH,
                       CMS_PUBLICATION_LIST_PREFIX_PATH]

@@ -26,7 +26,8 @@ class PublicationViewHandler(BaseContentHandler):
         query = publication_context_base_filter()
         query.update(dict(webpath__site=self.website,
                           webpath__fullpath=self.match_dict.get('webpath', '/'),
-                          publication__slug=self.match_dict.get('slug', '')
+                          publication__pk=self.match_dict.get('id', ''),
+                          publication__slug=self.match_dict.get('slug', ''),
                     )
         )
         self.pub_context = PublicationContext.objects.filter(**query).first()
