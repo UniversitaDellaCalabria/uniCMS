@@ -23,9 +23,8 @@ class Carousel(ActivableModel, TimeStampedModel, CreatedModifiedBy,
 
     def get_items(self, lang=settings.LANGUAGE):
         items = []
-        for i in self.carouselitem_set.filter(carousel=self,
-                                              is_active=True)\
-                .order_by('order'):
+        for i in self.carouselitem_set.filter(is_active=True).order_by('order'):
+            i.links = i.get_links(lang)
             items.append(i.localized(lang=lang))
         return items
 
@@ -57,8 +56,11 @@ class CarouselItem(ActivableModel, TimeStampedModel,
     class Meta:
         verbose_name_plural = _("Carousel Items")
 
-    def get_links(self):
-        return self.carouselitemlink_set.filter(is_active=True)
+    def get_links(self, lang=settings.LANGUAGE):
+        links = []
+        for i in self.carouselitemlink_set.filter(is_active=True).order_by('order'):
+            links.append(i.localized(lang=lang))
+        return links
 
     def localized(self, lang=settings.LANGUAGE):
         i18n = CarouselItemLocalization.objects.filter(carousel_item=self,
@@ -125,6 +127,16 @@ class CarouselItemLink(ActivableModel, TimeStampedModel, SortableModel,
         labels_dict = dict(CMS_LINKS_LABELS)
         return self.title if self.title_preset == 'custom' else labels_dict[self.title_preset]
 
+    def localized(self, lang=settings.LANGUAGE):
+        i18n = CarouselItemLinkLocalization.objects.filter(carousel_item_link=self,
+                                                           language=lang,
+                                                           is_active=True)\
+                                                    .first()
+        if i18n:
+            self.title = i18n.title
+            self.url = i18n.url
+        return self
+
     def is_lockable_by(self, user):
         item = self.carousel_item.carousel
         permission = check_user_permission_on_object(user=user, obj=item)
@@ -140,6 +152,7 @@ class CarouselItemLinkLocalization(ActivableModel, TimeStampedModel,
                                            on_delete=models.CASCADE)
     language = models.CharField(choices=settings.LANGUAGES, max_length=12, default='en')
     title = models.CharField(max_length=120, blank=True, default='', help_text=_('Title'))
+    url = models.CharField(max_length=2048)
 
     class Meta:
         verbose_name_plural = _("Carousel Item Links")

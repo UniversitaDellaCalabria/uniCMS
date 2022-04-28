@@ -70,7 +70,7 @@ class CarouselUnitTest(TestCase):
                                   carousel_data_item={},
                                   **kwargs):
         carousel_item = cls.create_carousel_item(carousel_data=carousel_data,
-                                        **carousel_data_item)
+                                                 **carousel_data_item)
         data = {'carousel_item': carousel_item,
                 'title': 'pre heading',
                 'url': '/that/url',
@@ -93,6 +93,7 @@ class CarouselUnitTest(TestCase):
         data = {'carousel_item_link': carousel_item_link,
                 'language': 'en',
                 'title': 'title',
+                'url': 'https://url.url',
                 'is_active': 1}
         for k,v in kwargs.items():
             data[k] = v
@@ -107,6 +108,16 @@ class CarouselUnitTest(TestCase):
         carousel_item = carousel_item_localization.carousel_item
         carousel = carousel_item.carousel
         carousel.__str__()
+
+        carousel_item_link = CarouselItemLink.objects.create(**{'carousel_item': carousel_item,
+                                                              'title': 'pre heading',
+                                                              'url': '/that/url',
+                                                              'is_active': 1})
+        CarouselItemLinkLocalization.objects.create(**{'carousel_item_link': carousel_item_link,
+                                                     'language': 'en',
+                                                     'title': 'title',
+                                                     'url': 'https://url.url',
+                                                     'is_active': 1})
         carousel.get_items()
 
         carousel_item.__str__()

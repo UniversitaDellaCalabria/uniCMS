@@ -57,6 +57,7 @@ class CarouselItemLinkLocalizationAPIUnitTest(TestCase):
         data = {'carousel_item_link': carousel_item_link.id,
                 'language': 'en',
                 'title': 'posted title',
+                'url': 'https://url.url',
                 'is_active': 1}
         # user hasn't permission
         req.force_login(user2)
@@ -150,6 +151,7 @@ class CarouselItemLinkLocalizationAPIUnitTest(TestCase):
         data = {'carousel_item_link': carousel_item_link.id,
                 'language': 'en',
                 'title': 'putted title',
+                'url': 'https://url.url',
                 'is_active': 0}
         # user hasn't permission
         req.force_login(user2)

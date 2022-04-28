@@ -81,5 +81,5 @@ class CarouselItemLinkLocalizationForm(ModelForm):
 
     class Meta:
         model = CarouselItemLinkLocalization
-        fields = ['carousel_item_link', 'language', 'title',
+        fields = ['carousel_item_link', 'language', 'title', 'url',
                   'order', 'is_active']
