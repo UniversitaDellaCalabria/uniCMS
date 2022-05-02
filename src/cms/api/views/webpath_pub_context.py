@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -11,9 +12,9 @@ from cms.contexts.forms import EditorialBoardLockUserForm, PublicationContextFor
 from cms.contexts.models import WebPath, WebSite
 
 from cms.publications.models import PublicationContext
-from cms.publications.serializers import PublicationContextSerializer
+from cms.publications.serializers import PublicationContextSerializer, PublicationContextSelectOptionsSerializer
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
@@ -53,6 +54,51 @@ class PublicationContextList(UniCMSListCreateAPIView):
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
             return super().post(request, *args, **kwargs)
+
+
+class AllPublicationContextList(UniCMSListCreateAPIView):
+    """
+    """
+    description = ""
+    search_fields = ['publication__name', 'publication__title']
+    serializer_class = PublicationContextSerializer
+    http_method_names = ['get', 'head']
+
+    def get_queryset(self):
+        """
+        """
+        now = timezone.localtime()
+        return PublicationContext.objects.filter(is_active=True,
+                                                 date_start__lte=now,
+                                                 date_end__gte=now,
+                                                 publication__is_active=True,
+                                                 webpath__site__is_active=True,
+                                                 webpath__is_active=True)
+
+
+class AllPublicationContextOptionListSchema(AutoSchema):
+    def get_operation_id(self, path, method):# pragma: no cover
+        return 'listAllPublicationContextSelectOptions'
+
+
+class AllPublicationContextOptionList(UniCMSListSelectOptionsAPIView):
+    """
+    """
+    description = ""
+    search_fields = ['publication__name', 'publication__title']
+    serializer_class = PublicationContextSelectOptionsSerializer
+    schema = AllPublicationContextOptionListSchema()
+
+    def get_queryset(self):
+        """
+        """
+        now = timezone.localtime()
+        return PublicationContext.objects.filter(is_active=True,
+                                                 date_start__lte=now,
+                                                 date_end__gte=now,
+                                                 publication__is_active=True,
+                                                 webpath__site__is_active=True,
+                                                 webpath__is_active=True)
 
 
 class PublicationContextView(UniCMSCachedRetrieveUpdateDestroyAPIView):

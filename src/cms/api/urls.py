@@ -295,6 +295,10 @@ urlpatterns += path(f'{par_prefix}/form/', page_related.PageRelatedFormView.as_v
 
 # publication-contexts
 pc_prefix = f'{w_prefix}/<int:webpath_id>/publication-contexts'
+urlpatterns += path(f'{eb_prefix}/publication-contexts/', webpath_pub_context.AllPublicationContextList.as_view(),
+                    name='editorial-board-all-publication-contexts'),
+urlpatterns += path(f'{eb_prefix}/publication-contexts/options/', webpath_pub_context.AllPublicationContextOptionList.as_view(),
+                    name='editorial-board-all-publication-contexts-options'),
 urlpatterns += path(f'{pc_prefix}/', webpath_pub_context.PublicationContextList.as_view(),
                     name='editorial-board-site-webpath-publication-contexts'),
 urlpatterns += path(f'{pc_prefix}/<int:pk>/', webpath_pub_context.PublicationContextView.as_view(),

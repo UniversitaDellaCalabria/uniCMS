@@ -34,6 +34,30 @@ class WebpathPubContextAPIUnitTest(TestCase):
         site = webpath.site
         # webpath pubs list
 
+        url = reverse('unicms_api:editorial-board-all-publication-contexts')
+        # accessible to staff users only
+        res = req.get(url)
+        assert res.status_code == 403
+        user.is_staff = True
+        user.save()
+        req.force_login(user)
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+
+        user.is_staff = False
+        user.save()
+        url = reverse('unicms_api:editorial-board-all-publication-contexts-options')
+        # accessible to staff users only
+        res = req.get(url)
+        assert res.status_code == 403
+        user.is_staff = True
+        user.save()
+        req.force_login(user)
+        res = req.get(url)
+        assert isinstance(res.json(), dict)
+        user.is_staff = False
+        user.save()
+
         url = reverse('unicms_api:editorial-board-site-webpath-publication-contexts',
                       kwargs={'site_id': site.pk,
                               'webpath_id': webpath.pk})
