@@ -17,6 +17,7 @@ class EditorWebsiteList(APIView, UniCmsApiPagination):
     name = "Websites"
     description = "Get user editorial boards websites"
     permission_classes = [IsAdminUser]
+    page_size = 100
 
     def get(self, request):
         result_list = []
