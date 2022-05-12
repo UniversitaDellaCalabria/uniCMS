@@ -17,7 +17,7 @@ class PageRelatedList(PageRelatedObjectList):
     """
     """
     description = ""
-    search_fields = ['related__name', 'related__title']
+    search_fields = ['related_page__name', 'related_page__title']
     serializer_class = PageRelatedSerializer
 
     def get_queryset(self):
