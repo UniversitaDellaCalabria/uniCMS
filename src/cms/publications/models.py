@@ -392,7 +392,7 @@ class PublicationContext(TimeStampedModel, ActivableModel,
                               CMS_PUBLICATION_LIST_PREFIX_PATH)
         url = sanitize_path(f'{self.webpath.get_full_path()}/{list_prefix}')
         if category_name:
-            url += f'/?category_name={category_name}'
+            url += f'/?category_name={category_name.replace(" ", "%20")}'
         return sanitize_path(url)
 
     # @property
