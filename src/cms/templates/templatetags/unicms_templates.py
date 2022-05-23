@@ -42,8 +42,9 @@ def blocks_in_position(context, section):
 
 @register.simple_tag
 def settings_value(name, **kwargs):
-    value = getattr(settings, name, None)
-    if value and kwargs: return value.format(**kwargs)
+    value = getattr(settings, name, '')
+    if not value: return ''
+    if isinstance(value, str) and kwargs: return value.format(**kwargs)
     return value
 
 
