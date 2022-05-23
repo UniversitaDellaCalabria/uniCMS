@@ -31,7 +31,7 @@ def language_menu(context, template=None):
     get_params.pop('lang', False)
     current_args = urllib.parse.urlencode(get_params)
     char = '&' if current_args else ''
-    data = {v:f'?{current_args}{ char }lang={k}' for k,v in languages.items()}
+    data = {k:(v, f'?{current_args}{ char }lang={k}') for k,v in languages.items()}
     if template: # pragma: no cover
         return handle_faulty_templates(template, data, name='language_menu')
     return data

@@ -108,14 +108,14 @@ calls any object method and also pass to it whatever `**kwargs`.<br>
 *example*: `{% call obj=publication method="get_url_list" category_name=cat %}`
 
 * **language_menu**<br>
-builds a data dict with {url:language} pairs.
+builds a data dict with {lang_cod:(lang_label, url)} pairs.
 If a template is present, passes it data.<br>
 *arguments*: teamplate (opt)<br>
 *example*:
 ````
    {% language_menu as language_urls %}
-   {% for lang,url in language_urls.items %}
-   <li><a class="list-item" href="{{ url }}"><span>{{ lang }}</span></a></li>
+   {% for cod,params in language_urls.items %}
+   <li><a class="list-item" href="{{ params.1 }}"><span>{{ params.0 }}</span></a></li>
    {% endfor %}
 ````
 
