@@ -36,7 +36,8 @@ class WebPathForm(ModelForm):
     class Meta:
         model = WebPath
         fields = ['site', 'name', 'parent',
-                  'alias', 'alias_url', 'path', 'is_active']
+                  'alias', 'alias_url', 'path',
+                  'robots', 'is_active']
 
 
 class PublicationContextForm(ModelForm):

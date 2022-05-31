@@ -17,9 +17,19 @@ from . utils import (append_slash, is_editor,
 
 
 logger = logging.getLogger(__name__)
+
 CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
                                   app_settings.CMS_CONTEXT_PERMISSIONS)
+
 CMS_PATH_PREFIX = getattr(settings, 'CMS_PATH_PREFIX', '')
+
+ROBOTS_TAGS = (
+                ('index, follow', 'index, follow'),
+                ('noindex, follow', 'noindex, follow'),
+                ('index, nofollow','index, nofollow'),
+                ('noindex, nofollow', 'noindex, nofollow'),
+              )
+
 
 
 class WebSite(ActivableModel):
@@ -79,6 +89,9 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         blank=True,
         help_text=_('final path prefixed with the parent path'),
     )
+    robots = models.CharField(choices=ROBOTS_TAGS,
+                              default='index, follow',
+                              max_length=20)
 
     class Meta:
         verbose_name_plural = _("Site Contexts (WebPaths)")

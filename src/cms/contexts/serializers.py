@@ -70,6 +70,7 @@ class WebPathSerializer(UniCMSCreateUpdateSerializer, UniCMSContentTypeClass):
                   'alias_url',
                   'path',
                   'get_full_path',
+                  'robots',
                   'is_active']
 
     def to_representation(self, instance):
