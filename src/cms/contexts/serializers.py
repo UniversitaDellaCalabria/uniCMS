@@ -70,6 +70,8 @@ class WebPathSerializer(UniCMSCreateUpdateSerializer, UniCMSContentTypeClass):
                   'alias_url',
                   'path',
                   'get_full_path',
+                  'meta_description',
+                  'meta_keywords',
                   'robots',
                   'is_active']
 

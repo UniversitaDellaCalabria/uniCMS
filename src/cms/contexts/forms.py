@@ -37,6 +37,7 @@ class WebPathForm(ModelForm):
         model = WebPath
         fields = ['site', 'name', 'parent',
                   'alias', 'alias_url', 'path',
+                  'meta_description', 'meta_keywords',
                   'robots', 'is_active']
 
 

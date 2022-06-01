@@ -31,7 +31,6 @@ ROBOTS_TAGS = (
               )
 
 
-
 class WebSite(ActivableModel):
     name = models.CharField(max_length=254, unique=True)
     domain = models.CharField(max_length=254, unique=True)
@@ -89,6 +88,8 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         blank=True,
         help_text=_('final path prefixed with the parent path'),
     )
+    meta_description = models.TextField(max_length=500, default='', blank=True)
+    meta_keywords = models.TextField(max_length=100, default='', blank=True)
     robots = models.CharField(choices=ROBOTS_TAGS,
                               default='index, follow',
                               max_length=20)
