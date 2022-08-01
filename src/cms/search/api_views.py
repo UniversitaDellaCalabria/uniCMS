@@ -203,7 +203,6 @@ class ApiSearchEngine(APIView):
         # dumped = dumps(result)
         data = [{k:v for k,v in entry.items() if k != '_id'}
                 for entry in entries]
-
         result = {"results": data,
                   "count": total_elements,
                   "total_pages": total_pages,

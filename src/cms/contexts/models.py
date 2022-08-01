@@ -172,8 +172,8 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
             self.site = self.parent.site
             # update fullpath
             fullpath = sanitize_path(f'{self.parent.fullpath}/{self.path}')
-        elif self.is_alias:
-            fullpath = self.redirect_url
+        # elif self.is_alias:
+            # fullpath = self.redirect_url
         else:
             fullpath = self.path
 
