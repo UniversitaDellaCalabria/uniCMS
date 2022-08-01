@@ -1,6 +1,7 @@
 from cms.api.serializers import (UniCMSCreateUpdateSerializer,
                                  UniCMSContentTypeClass,
                                  UniCMSTagsValidator)
+from cms.templates.utils import secure_url
 
 from rest_framework import serializers
 
@@ -25,6 +26,7 @@ class MediaSerializer(UniCMSCreateUpdateSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
+        data['file'] = secure_url(data['file'])
         data['file_size'] = instance.file_size_kb
         try:
             size = get_image_width_height(instance.file)

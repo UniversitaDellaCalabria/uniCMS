@@ -46,3 +46,7 @@ def import_string_block(block, request, page, webpath):
                                     webpath=webpath,
                                     block=block)
     return obj
+
+
+def secure_url(url):
+    return url if settings.DEBUG else url.replace('http://','https://')

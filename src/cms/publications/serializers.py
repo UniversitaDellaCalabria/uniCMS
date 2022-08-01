@@ -4,6 +4,7 @@ from cms.api.serializers import (UniCMSContentTypeClass,
 from cms.contexts.models import WebPath
 from cms.contexts.serializers import WebPathSerializer
 from cms.medias.serializers import MediaSerializer, MediaCollectionSerializer
+from cms.templates.utils import secure_url
 
 from rest_framework import serializers
 
@@ -126,6 +127,11 @@ class PublicationContextSelectOptionsSerializer(serializers.ModelSerializer):
 class PublicationAttachmentSerializer(UniCMSCreateUpdateSerializer,
                                       UniCMSContentTypeClass):
     publication = PublicationForeignKey()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['file'] = secure_url(data['file'])
+        return data
 
     class Meta:
         model = PublicationAttachment
