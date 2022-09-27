@@ -6,4 +6,4 @@ from . views import *
 
 urlpatterns = []
 
-urlpatterns += path(f'media-uuid/<str:unique_code>/', get_media_file, name='media-file'),
+urlpatterns += path(f'uuid-media/<str:unique_code>/', get_media_file, name='media-file'),
