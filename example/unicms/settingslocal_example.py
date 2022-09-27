@@ -404,6 +404,13 @@ if "unicms_calendar" in INSTALLED_APPS:
     MODEL_TO_MONGO_MAP.update(CMS_CALENDAR_MONGO_MAP)
 # END UNICMS CALENDAR HANDLER
 
+# UNICMS MEDIA HANDLER (uuid static URL)
+if "cms.medias" in INSTALLED_APPS:
+    from cms.medias.settings import CMS_MEDIA_HANDLER_PATH
+
+    CMS_HANDLERS_PATHS.append(CMS_MEDIA_HANDLER_PATH)
+# END MEDIA HANDLER
+
 # UNICAL STORAGE HANDLER
 if "unicms_unical_storage_handler" in INSTALLED_APPS:
     from unicms_unical_storage_handler.settings import *
