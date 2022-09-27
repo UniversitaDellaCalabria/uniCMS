@@ -23,15 +23,15 @@ class MediaCollectionItemInline(admin.TabularInline):
 
 @admin.register(Media)
 class MediaAdmin(AbstractCreatedModifiedBy):
-    search_fields = ('title',)
-    list_display = ('title', 'file_size', 'file_type', 'preview_image')
+    search_fields = ('title', 'uuid')
+    list_display = ('title', 'file_size', 'file_type', 'preview_image', 'uuid')
     list_filter = ('file_type',
                    'created', 'modified')
     inlines = (MediaCollectionItemInline,) # MediaLinkInline)
 
     readonly_fields = ("headshot_image", "preview_image",
                        "file_type", "file_size",
-                       'created_by', 'modified_by')
+                       'created_by', 'modified_by', 'uuid')
 
     def headshot_image(self, obj):
         width = "55"

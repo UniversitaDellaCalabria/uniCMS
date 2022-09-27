@@ -15,4 +15,3 @@ if CMS_PATH_PREFIX:
 urlpatterns += path('pages/<int:page_id>/preview/', pagePreview, name='page-preview'),
 
 urlpatterns += re_path(f'{CMS_PATH_PREFIX}.*', cms_dispatch, name='cms_dispatch'),
-

@@ -1,4 +1,5 @@
 import logging
+import uuid
 
 from django.conf import settings
 from django.db import models
@@ -76,6 +77,10 @@ class Media(TimeStampedModel, AbstractMedia,
                                         validate_file_size,
                                         validate_image_size_ratio])
     description = models.TextField()
+    uuid = models.UUIDField(default=uuid.uuid4,
+                            editable=False,
+                            unique=True,
+                            db_index=True)
 
     class Meta:
         verbose_name_plural = _("Media")

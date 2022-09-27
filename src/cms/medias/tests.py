@@ -2,7 +2,8 @@ import logging
 import os
 
 from django.conf import settings
-from django.test import TestCase
+from django.test import Client, TestCase
+from django.urls import reverse
 from django.utils import timezone
 from glob import glob
 from shutil import copyfile
@@ -100,6 +101,12 @@ class MediaUnitTest(TestCase):
             validate_image_size_ratio(media.file)
         except Exception as e:
             assert isinstance(e, ValidationError)
+
+    def test_uuid_url(self):
+        media = MediaUnitTest.create_media()
+        response = self.client.get(reverse('unicms_medias:media-file',
+                                   kwargs={'unique_code': media.uuid}))
+        self.assertEqual(response.status_code, 200)
 
     def tearDown(self):
         match = f'{settings.MEDIA_ROOT}/medias/{timezone.now().year}/eventi_*.*'

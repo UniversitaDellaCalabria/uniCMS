@@ -10,6 +10,7 @@ from cms.medias import settings as media_settings
 from cms.medias.forms import MediaForm
 from cms.medias.models import Media
 from cms.medias.serializers import MediaSerializer, MediaSelectOptionsSerializer
+from cms.templates.utils import secure_url
 
 from rest_framework import generics
 from rest_framework.permissions import IsAdminUser
@@ -35,7 +36,7 @@ class MediaList(UniCMSListCreateAPIView):
     """
     """
     description = ""
-    search_fields = ['title', 'file', 'description', 'file_type']
+    search_fields = ['title', 'file', 'description', 'file_type', 'unique_code']
     permission_classes = [MediaGetCreatePermissions]
     filterset_fields = ['created', 'modified', 'created_by', 'file_type']
     serializer_class = MediaSerializer

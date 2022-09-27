@@ -1,3 +1,5 @@
+from django.urls import reverse
+
 from cms.api.serializers import (UniCMSCreateUpdateSerializer,
                                  UniCMSContentTypeClass,
                                  UniCMSTagsValidator)
@@ -28,6 +30,7 @@ class MediaSerializer(UniCMSCreateUpdateSerializer,
         data = super().to_representation(instance)
         data['file'] = secure_url(data['file'])
         data['file_size'] = instance.file_size_kb
+        data['static_path'] = reverse('unicms_medias:media-file', kwargs={'unique_code': instance.uuid})
         try:
             size = get_image_width_height(instance.file)
             if size:
@@ -42,6 +45,7 @@ class MediaSerializer(UniCMSCreateUpdateSerializer,
     class Meta:
         model = Media
         fields = '__all__'
+        hidden_fields = ('uuid',)
         read_only_fields = ('created_by', 'modified_by',
                             'file_size', 'file_type')
 

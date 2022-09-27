@@ -38,10 +38,6 @@ urlpatterns = [
     path(f'{ADMIN_PATH}/', admin.site.urls),
 ]
 
-if settings.DEBUG:
-    # static files (images, css, javascript, etc.)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
 # API
 # router = routers.DefaultRouter()
 # urlpatterns += re_path('^api/', include(router.urls)),
@@ -122,11 +118,17 @@ if 'cms.search' in settings.INSTALLED_APPS:
                         include(('cms.search.urls', 'cms_search'), namespace="unicms_search"),
                         name="unicms_search"),
 
+if 'cms.medias' in settings.INSTALLED_APPS:
+    urlpatterns += path('',
+                        include(('cms.medias.urls', 'unicms_medias'), namespace="unicms_medias"),
+                        name="unicms_medias"),
+
+# static files (images, css, javascript, etc.)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# last
 if 'cms.contexts' in settings.INSTALLED_APPS:
     urlpatterns += path('',
                         include(('cms.contexts.urls', 'cms'), namespace="unicms"),
                         name="unicms"),
-
-
-
-
