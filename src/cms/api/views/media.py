@@ -18,6 +18,8 @@ from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
+from cms.medias.utils import _remove_file
+
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
@@ -65,6 +67,8 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         if not permission['granted']:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
+        if 'file' in request.data:
+            _remove_file(item)
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -75,6 +79,7 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         if not permission['granted']:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
+        _remove_file(item)
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -85,13 +90,8 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         if not permission['granted']:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
-        media = self.get_queryset().first()
-        response = super().delete(request, *args, **kwargs)
-        try:
-            os.remove(media.file.path)
-        except Exception: # pragma: no cover
-            logger.warning(f'File {media.file.path} not found')
-        return response
+        _remove_file(item)
+        return super().delete(request, *args, **kwargs)
 
 
 class MediaFormView(APIView):
