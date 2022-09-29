@@ -35,12 +35,11 @@ class PageRelatedView(PageRelatedObject):
     description = ""
     serializer_class = PageRelatedSerializer
 
-    def get_queryset(self):
+    def get_object(self):
         """
         """
         super().get_data()
-        items = PageRelated.objects.filter(pk=self.pk, page=self.page)
-        return items
+        return get_object_or_404(PageRelated, pk=self.pk, page=self.page)
 
 
 class PageRelatedFormView(APIView):

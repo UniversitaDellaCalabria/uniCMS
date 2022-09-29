@@ -66,7 +66,7 @@ def check_locks(item, user):
 class UniCMSCachedRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
+        item = self.get_object()
         # check for locks
         check_locks(item, request.user)
         ok_response = super().patch(request, *args, **kwargs)
@@ -75,7 +75,7 @@ class UniCMSCachedRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPI
         return ok_response
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
+        item = self.get_object()
         # check for locks
         check_locks(item, request.user)
         ok_response = super().put(request, *args, **kwargs)
@@ -84,7 +84,7 @@ class UniCMSCachedRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPI
         return ok_response
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
+        item = self.get_object()
         check_locks(item, request.user)
         try:
             return super().delete(request, *args, **kwargs)

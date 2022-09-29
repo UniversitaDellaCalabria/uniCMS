@@ -38,12 +38,11 @@ class PageContactView(PageRelatedObject):
     description = ""
     serializer_class = PageContactSerializer
 
-    def get_queryset(self):
+    def get_object(self):
         """
         """
         super().get_data()
-        items = PageContact.objects.filter(pk=self.pk, page=self.page)
-        return items
+        return get_object_or_404(PageContact, pk=self.pk, page=self.page)
 
 
 class PageContactFormView(APIView):

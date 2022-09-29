@@ -56,19 +56,15 @@ class ContactInfoView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = ContactInfoSerializer
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         contact_id = self.kwargs['contact_id']
         item_id = self.kwargs['pk']
-        items = ContactInfo.objects\
-                           .select_related('contact')\
-                           .filter(pk=item_id, contact__pk=contact_id)
-        return items
+        return get_object_or_404(ContactInfo.objects.select_related('contact'),
+                                 pk=item_id,
+                                 contact__pk=contact_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         contact = item.contact
         serializer = self.get_serializer(instance=item,
                                          data=request.data,
@@ -86,8 +82,7 @@ class ContactInfoView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         serializer = self.get_serializer(instance=item,
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -102,8 +97,7 @@ class ContactInfoView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         # get contact
         contact = item.contact
         # check permissions on contact

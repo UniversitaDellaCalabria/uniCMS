@@ -57,22 +57,17 @@ class ContactInfoLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = ContactInfoLocalizationSerializer
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         contact_id = self.kwargs['contact_id']
         contact_info_id = self.kwargs['contact_info_id']
         item_id = self.kwargs['pk']
-        items = ContactInfoLocalization.objects\
-                                       .select_related('contact_info')\
-                                       .filter(pk=item_id,
-                                               contact_info__contact__pk=contact_id,
-                                               contact_info__pk=contact_info_id)
-        return items
+        return get_object_or_404(ContactInfoLocalization.objects.select_related('contact_info'),
+                                 pk=item_id,
+                                 contact_info__contact__pk=contact_id,
+                                 contact_info__pk=contact_info_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         contact_info = item.contact_info
         # check permissions on contact
         permission = check_user_permission_on_object(request.user,
@@ -83,8 +78,7 @@ class ContactInfoLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         contact_info = item.contact_info
         # check permissions on contact
         permission = check_user_permission_on_object(request.user,
@@ -95,8 +89,7 @@ class ContactInfoLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         contact_info = item.contact_info
         # check permissions on contact
         permission = check_user_permission_on_object(request.user,

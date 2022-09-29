@@ -98,12 +98,9 @@ class MenuView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = MenuSerializer
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         menu_id = self.kwargs['pk']
-        menus = NavigationBar.objects.filter(pk=menu_id)
-        return menus
+        return get_object_or_404(NavigationBar, pk=menu_id)
 
     # def get(self, request, pk):
         # """
@@ -118,8 +115,7 @@ class MenuView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         # return Response(res)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         permission = check_user_permission_on_object(request.user,
                                                      item)
         if not permission['granted']:
@@ -128,8 +124,7 @@ class MenuView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         permission = check_user_permission_on_object(request.user,
                                                      item)
         if not permission['granted']:
@@ -138,8 +133,7 @@ class MenuView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         permission = check_user_permission_on_object(request.user,
                                                      item, 'delete')
         if not permission['granted']:

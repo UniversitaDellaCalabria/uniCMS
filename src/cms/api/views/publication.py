@@ -140,16 +140,12 @@ class PublicationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     serializer_class = PublicationSerializer
     schema = EditorialBoardPublicationSchema()
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         pub_id = self.kwargs['pk']
-        publications = Publication.objects.filter(pk=pub_id)
-        return publications
+        return get_object_or_404(Publication, pk=pub_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         has_permission = item.is_editable_by(request.user)
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
@@ -162,8 +158,7 @@ class PublicationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         has_permission = item.is_editable_by(request.user)
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
@@ -176,8 +171,7 @@ class PublicationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         permission = check_user_permission_on_object(request.user,
                                                      item, 'delete')
         if not permission['granted']:
@@ -199,16 +193,12 @@ class PublicationChangeStateView(APIView):
     serializer_class = PublicationSerializer
     schema = EditorialBoardPublicationChangeStatusSchema()
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         pub_id = self.kwargs['pk']
-        publications = Publication.objects.filter(pk=pub_id)
-        return publications
+        return get_object_or_404(Publication, pk=pub_id)
 
     def get(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         has_permission = item.is_publicable_by(request.user)
         if has_permission:
             check_locks(item, request.user)
@@ -261,8 +251,7 @@ class PublicationRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
         self.publication = get_object_or_404(Publication, pk=pub_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         # serializer = self.get_serializer(instance=item,
         # data=request.data,
         # partial=True)
@@ -276,8 +265,7 @@ class PublicationRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         publication = item.publication
         # check permissions on publication
         has_permission = publication.is_editable_by(request.user)
@@ -287,8 +275,7 @@ class PublicationRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         publication = item.publication
         # check permissions on publication
         has_permission = publication.is_editable_by(request.user)

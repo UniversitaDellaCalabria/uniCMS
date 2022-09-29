@@ -35,12 +35,13 @@ class PublicationRelatedView(PublicationRelatedObject):
     description = ""
     serializer_class = PublicationRelatedSerializer
 
-    def get_queryset(self):
+    def get_object(self):
         """
         """
         super().get_data()
-        return PublicationRelated.objects.filter(pk=self.pk,
-                                                 publication=self.publication)
+        return get_object_or_404(PublicationRelated,
+                                 pk=self.pk,
+                                 publication=self.publication)
 
 
 class PublicationRelatedFormView(APIView):

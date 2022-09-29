@@ -64,7 +64,7 @@ class PageLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     serializer_class = PageLocalizationSerializer
     permission_classes = [IsAdminUser]
 
-    def get_queryset(self):
+    def get_object(self):
         """
         """
         site_id = self.kwargs['site_id']
@@ -79,12 +79,10 @@ class PageLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
                                  pk=page_id,
                                  webpath__pk=webpath_id,
                                  webpath__site__pk=site_id)
-        items = PageLocalization.objects.filter(pk=pk, page=page)
-        return items
+        return get_object_or_404(PageLocalization, pk=pk, page=page)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         serializer = self.get_serializer(instance=item,
                                          data=request.data,
                                          partial=True)
@@ -98,8 +96,7 @@ class PageLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         serializer = self.get_serializer(instance=item,
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -112,8 +109,7 @@ class PageLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         page = item.page
         # check permissions on page
         has_permission = page.is_localizable_by(request.user)

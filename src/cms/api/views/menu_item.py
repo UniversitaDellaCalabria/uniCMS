@@ -70,20 +70,15 @@ class MenuItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = MenuItemSerializer
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         menu_id = self.kwargs['menu_id']
         item_id = self.kwargs['pk']
-        items = NavigationBarItem.objects\
-                                 .select_related('menu')\
-                                 .filter(pk=item_id,
-                                         menu__pk=menu_id)
-        return items
+        return get_object_or_404(NavigationBarItem.objects.select_related('menu'),
+                                 pk=item_id,
+                                 menu__pk=menu_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         menu = item.menu
         permission = check_user_permission_on_object(request.user,
                                                      menu)
@@ -108,8 +103,7 @@ class MenuItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
                 raise ValidationError(e)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         menu = item.menu
         permission = check_user_permission_on_object(request.user,
                                                      menu)
@@ -133,8 +127,7 @@ class MenuItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
                 raise ValidationError(e)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         # get menu
         menu = item.menu
         # check permissions on menu

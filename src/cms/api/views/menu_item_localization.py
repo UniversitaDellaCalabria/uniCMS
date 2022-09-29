@@ -57,22 +57,17 @@ class MenuItemLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = MenuItemLocalizationSerializer
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         menu_id = self.kwargs['menu_id']
         menu_item_id = self.kwargs['menu_item_id']
         item_id = self.kwargs['pk']
-        items = NavigationBarItemLocalization.objects\
-            .select_related('item')\
-            .filter(pk=item_id,
-                    item__menu__pk=menu_id,
-                    item__pk=menu_item_id)
-        return items
+        return get_object_or_404(NavigationBarItemLocalization.objects.select_related('item'),
+                                 pk=item_id,
+                                 item__menu__pk=menu_id,
+                                 item__pk=menu_item_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         menu_item = item.item
         # check permissions on menu
         permission = check_user_permission_on_object(request.user,
@@ -83,8 +78,7 @@ class MenuItemLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         menu_item = item.item
         # check permissions on menu
         permission = check_user_permission_on_object(request.user,
@@ -95,8 +89,7 @@ class MenuItemLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         menu_item = item.item
         # check permissions on menu
         permission = check_user_permission_on_object(request.user,

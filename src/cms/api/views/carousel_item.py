@@ -55,19 +55,15 @@ class CarouselItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = CarouselItemSerializer
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         carousel_id = self.kwargs['carousel_id']
         item_id = self.kwargs['pk']
-        items = CarouselItem.objects\
-                            .select_related('carousel')\
-                            .filter(pk=item_id, carousel__pk=carousel_id)
-        return items
+        return get_object_or_404(CarouselItem.objects.select_related('carousel'),
+                                 pk=item_id,
+                                 carousel__pk=carousel_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         carousel = item.carousel
         serializer = self.get_serializer(instance=item,
                                          data=request.data,
@@ -85,8 +81,7 @@ class CarouselItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         serializer = self.get_serializer(instance=item,
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -101,8 +96,7 @@ class CarouselItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         # get carousel
         carousel = item.carousel
         # check permissions on carousel

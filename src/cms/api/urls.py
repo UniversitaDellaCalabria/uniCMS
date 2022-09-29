@@ -433,5 +433,5 @@ urlpatterns += path(f'{eb_prefix}/redis-lock/set/',
 # users
 u_prefix = f'{eb_prefix}/users'
 # urlpatterns += path(f'{u_prefix}/form/', webpath_pub_context.EditorialBoardLockUserFormView.as_view(), name='users-form'),
-urlpatterns += path(f'{u_prefix}/<int:user_id>/', users.UserDetail.as_view(), name='user-detail'),
 urlpatterns += path(f'{u_prefix}/current/', users.CurrentUserIDView.as_view(), name='users-current'),
+urlpatterns += path(f'{u_prefix}/<int:user_id>/', users.UserDetail.as_view(), name='user-detail'),

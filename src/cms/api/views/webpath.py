@@ -96,21 +96,17 @@ class WebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = WebPathSerializer
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         site_id = self.kwargs['site_id']
         pk = self.kwargs['pk']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=site)
-        return WebPath.objects.filter(pk=pk, site=site)
+        return get_object_or_404(WebPath, pk=pk, site=site)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
-
+        item = self.get_object()
         serializer = self.get_serializer(instance=item,
                                          data=request.data,
                                          partial=True)
@@ -137,9 +133,7 @@ class WebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
                                                 detail=e)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
-
+        item = self.get_object()
         serializer = self.get_serializer(instance=item,
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -165,8 +159,7 @@ class WebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
                                                 detail=e)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         has_permission = item.is_publicable_by(user=request.user,
                                                parent=True)
         if not has_permission:
@@ -346,17 +339,14 @@ class WebpathCloneView(APIView):
     description = ""
     permission_classes = [IsAdminUser]
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         site_id = self.kwargs['site_id']
         pk = self.kwargs['pk']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
-        return WebPath.objects.filter(pk=pk, site=site)
+        return get_object_or_404(WebPath, pk=pk, site=site)
 
     def post(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
 
         # get POST data
         parent_id = request.data.get('parent', None)

@@ -39,12 +39,11 @@ class PageBlockView(PageRelatedObject):
     description = ""
     serializer_class = PageBlockSerializer
 
-    def get_queryset(self):
+    def get_object(self):
         """
         """
         super().get_data()
-        items = PageBlock.objects.filter(pk=self.pk, page=self.page)
-        return items
+        return get_object_or_404(PageBlock, pk=self.pk, page=self.page)
 
 
 class PageBlockFormView(APIView):

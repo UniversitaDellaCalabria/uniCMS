@@ -69,27 +69,23 @@ class PageView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = PageSerializer
 
-    def get_queryset(self):
-        """
-        """
-        site_id = self.kwargs.get('site_id')
-        webpath_id = self.kwargs.get('webpath_id')
-        pk = self.kwargs.get('pk')
+    def get_object(self):
+        site_id = self.kwargs['site_id']
+        webpath_id = self.kwargs['webpath_id']
+        pk = self.kwargs['pk']
 
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=site)
-        pages = Page.objects\
-                    .select_related('webpath')\
-                    .filter(pk=pk,
-                            webpath__pk=webpath_id,
-                            webpath__site__pk=site_id)
-        return pages
+
+        return get_object_or_404(Page.objects.select_related('webpath'),
+                                 pk=pk,
+                                 webpath__pk=webpath_id,
+                                 webpath__site__pk=site_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         serializer = self.get_serializer(instance=item,
                                          data=request.data,
                                          partial=True)
@@ -112,8 +108,7 @@ class PageView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
 
         serializer = self.get_serializer(instance=item,
                                          data=request.data)
@@ -135,8 +130,7 @@ class PageView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         # check permissions on page
         if item.state == 'published':
             has_permission = item.is_publicable_by(request.user)
@@ -161,9 +155,7 @@ class PageChangeStateView(APIView):
     serializer_class = PageSerializer
     schema = PageChangeStateSchema()
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         site_id = self.kwargs['site_id']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
@@ -171,14 +163,13 @@ class PageChangeStateView(APIView):
                                          resource=site)
         webpath_id = self.kwargs['webpath_id']
         pk = self.kwargs['pk']
-        pages = Page.objects.filter(pk=pk,
-                                    webpath__pk=webpath_id,
-                                    webpath__site__pk=site_id)
-        return pages
+        return get_object_or_404(Page,
+                                 pk=pk,
+                                 webpath__pk=webpath_id,
+                                 webpath__site__pk=site_id)
 
     def get(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         has_permission = item.is_publicable_by(request.user)
         if has_permission:
             check_locks(item, request.user)
@@ -203,9 +194,7 @@ class PageChangePublicationStatusView(APIView):
     serializer_class = PageSerializer
     schema = PageChangePublicationStatusSchema()
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         site_id = self.kwargs['site_id']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
@@ -213,14 +202,13 @@ class PageChangePublicationStatusView(APIView):
                                          resource=site)
         webpath_id = self.kwargs['webpath_id']
         pk = self.kwargs['pk']
-        pages = Page.objects.filter(pk=pk,
-                                    webpath__pk=webpath_id,
-                                    webpath__site__pk=site_id)
-        return pages
+        return get_object_or_404(Page,
+                                 pk=pk,
+                                 webpath__pk=webpath_id,
+                                 webpath__site__pk=site_id)
 
     def get(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         has_permission = item.is_publicable_by(request.user)
         if has_permission:
             check_locks(item, request.user)
@@ -288,8 +276,7 @@ class PageRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
                                       webpath__site__pk=site_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         page = item.page
         # check permissions on page
         has_permission = page.is_editable_by(request.user)
@@ -299,8 +286,7 @@ class PageRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         page = item.page
         # check permissions on page
         has_permission = page.is_editable_by(request.user)
@@ -310,8 +296,7 @@ class PageRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         page = item.page
         # check permissions on page
         has_permission = page.is_editable_by(request.user)
@@ -354,7 +339,7 @@ class PageCopyAsDraftView(APIView):
     serializer_class = PageSerializer
     schema = PageCopyAsDraftSchema()
 
-    def get_queryset(self):
+    def get_object(self):
         """
         """
         site_id = self.kwargs['site_id']
@@ -364,14 +349,13 @@ class PageCopyAsDraftView(APIView):
                                          resource=site)
         webpath_id = self.kwargs['webpath_id']
         pk = self.kwargs['pk']
-        pages = Page.objects.filter(pk=pk,
-                                    webpath__pk=webpath_id,
-                                    webpath__site__pk=site_id)
-        return pages
+        return get_object_or_404(Page,
+                                 pk=pk,
+                                 webpath__pk=webpath_id,
+                                 webpath__site__pk=site_id)
 
     def get(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         has_permission = item.is_publicable_by(request.user)
         if has_permission:
             new_page = copy_page_as_draft(item, request.user)

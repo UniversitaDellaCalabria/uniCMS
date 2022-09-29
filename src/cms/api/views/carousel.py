@@ -36,16 +36,11 @@ class CarouselView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = CarouselSerializer
 
-    def get_queryset(self):
-        """
-        """
-        carousel_id = self.kwargs['pk']
-        carousels = Carousel.objects.filter(pk=carousel_id)
-        return carousels
+    def get_object(self):
+        return get_object_or_404(Carousel, pk=self.kwargs['pk'])
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         permission = check_user_permission_on_object(request.user,
                                                      item)
         if not permission['granted']:
@@ -54,8 +49,7 @@ class CarouselView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         permission = check_user_permission_on_object(request.user,
                                                      item)
         if not permission['granted']:
@@ -64,8 +58,7 @@ class CarouselView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         permission = check_user_permission_on_object(request.user,
                                                      item, 'delete')
         if not permission['granted']:

@@ -59,24 +59,19 @@ class CarouselItemLinkLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView)
     permission_classes = [IsAdminUser]
     serializer_class = CarouselItemLinkLocalizationSerializer
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         carousel_id = self.kwargs['carousel_id']
         carousel_item_id = self.kwargs['carousel_item_id']
         carousel_item_link_id = self.kwargs['carousel_item_link_id']
         item_id = self.kwargs['pk']
-        items = CarouselItemLinkLocalization.objects\
-                                            .select_related('carousel_item_link')\
-                                            .filter(pk=item_id,
-                                                    carousel_item_link__pk=carousel_item_link_id,
-                                                    carousel_item_link__carousel_item__pk=carousel_item_id,
-                                                    carousel_item_link__carousel_item__carousel__pk=carousel_id)
-        return items
+        return get_object_or_404(CarouselItemLinkLocalization.objects.select_related('carousel_item_link'),
+                                 pk=item_id,
+                                 carousel_item_link__pk=carousel_item_link_id,
+                                 carousel_item_link__carousel_item__pk=carousel_item_id,
+                                 carousel_item_link__carousel_item__carousel__pk=carousel_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         carousel_item_link = item.carousel_item_link
         # check permissions on carousel
         carousel = carousel_item_link.carousel_item.carousel
@@ -88,8 +83,7 @@ class CarouselItemLinkLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView)
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         carousel_item_link = item.carousel_item_link
         # check permissions on carousel
         carousel = carousel_item_link.carousel_item.carousel
@@ -101,8 +95,7 @@ class CarouselItemLinkLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView)
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         carousel_item_link = item.carousel_item_link
         # check permissions on carousel
         carousel = carousel_item_link.carousel_item.carousel

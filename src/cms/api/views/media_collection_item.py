@@ -78,20 +78,15 @@ class MediaCollectionItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = MediaCollectionItemSerializer
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         collection_id = self.kwargs['collection_id']
         item_id = self.kwargs['pk']
-        items = MediaCollectionItem.objects\
-            .select_related('collection')\
-            .filter(pk=item_id,
-                    collection__pk=collection_id)
-        return items
+        return get_object_or_404(MediaCollectionItem.objects.select_related('collection'),
+                                 pk=item_id,
+                                 collection__pk=collection_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         collection = item.collection
         # check permissions on collection
         permission = check_user_permission_on_object(request.user,
@@ -102,8 +97,7 @@ class MediaCollectionItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         collection = item.collection
         # check permissions on collection
         permission = check_user_permission_on_object(request.user,
@@ -114,8 +108,7 @@ class MediaCollectionItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         collection = item.collection
         # check permissions on carousel
         permission = check_user_permission_on_object(request.user,

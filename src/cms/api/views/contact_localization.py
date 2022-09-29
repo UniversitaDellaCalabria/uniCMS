@@ -55,20 +55,15 @@ class ContactLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = ContactLocalizationSerializer
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         contact_id = self.kwargs['contact_id']
         item_id = self.kwargs['pk']
-        items = ContactLocalization.objects\
-                                   .select_related('contact')\
-                                   .filter(pk=item_id,
-                                           contact__pk=contact_id)
-        return items
+        return get_object_or_404(ContactLocalization.objects.select_related('contact'),
+                                 pk=item_id,
+                                 contact__pk=contact_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         contact = item.contact
         # check permissions on contact
         permission = check_user_permission_on_object(request.user,
@@ -79,8 +74,7 @@ class ContactLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         contact = item.contact
         # check permissions on contact
         permission = check_user_permission_on_object(request.user,
@@ -91,8 +85,7 @@ class ContactLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         contact = item.contact
         # check permissions on contact
         permission = check_user_permission_on_object(request.user,

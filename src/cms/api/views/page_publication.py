@@ -38,12 +38,13 @@ class PagePublicationView(PageRelatedObject):
     description = ""
     serializer_class = PagePublicationSerializer
 
-    def get_queryset(self):
+    def get_object(self):
         """
         """
         super().get_data()
-        items = PagePublication.objects.filter(pk=self.pk, page=self.page)
-        return items
+        return get_object_or_404(PagePublication,
+                                 pk=self.pk,
+                                 page=self.page)
 
 
 class PagePublicationFormView(APIView):

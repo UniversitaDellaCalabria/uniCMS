@@ -64,7 +64,7 @@ class PageHeadingLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     serializer_class = PageHeadingLocalizationSerializer
     permission_classes = [IsAdminUser]
 
-    def get_queryset(self):
+    def get_object(self):
         """
         """
         site_id = self.kwargs.get('site_id')
@@ -82,12 +82,12 @@ class PageHeadingLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
                                  webpath__pk=webpath_id,
                                  webpath__site__pk=site_id)
         heading = get_object_or_404(PageHeading, page=page, pk=heading_id)
-        items = PageHeadingLocalization.objects.filter(pk=pk, heading=heading)
-        return items
+        return get_object_or_404(PageHeadingLocalization,
+                                 pk=pk,
+                                 heading=heading)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         page = item.heading.page
         # check permissions on page
         has_permission = page.is_localizable_by(request.user)
@@ -97,8 +97,7 @@ class PageHeadingLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         page = item.heading.page
         # check permissions on page
         has_permission = page.is_localizable_by(request.user)
@@ -108,8 +107,7 @@ class PageHeadingLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         page = item.heading.page
         # check permissions on page
         has_permission = page.is_localizable_by(request.user)

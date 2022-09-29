@@ -54,20 +54,16 @@ class PublicationLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     serializer_class = PublicationLocalizationSerializer
     permission_classes = [IsAdminUser]
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         pub_id = self.kwargs['publication_id']
         pk = self.kwargs['pk']
         publication = get_object_or_404(Publication, pk=pub_id)
-        return PublicationLocalization.objects\
-                                      .select_related('publication')\
-                                      .filter(pk=pk,
-                                              publication=publication)
+        return get_object_or_404(PublicationLocalization.objects.select_related('publication'),
+                                 pk=pk,
+                                 publication=publication)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         serializer = self.get_serializer(instance=item,
                                          data=request.data,
                                          partial=True)
@@ -81,8 +77,7 @@ class PublicationLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         serializer = self.get_serializer(instance=item,
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -95,8 +90,7 @@ class PublicationLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         publication = item.publication
         # check permissions on publication
         has_permission = publication.is_localizable_by(request.user)

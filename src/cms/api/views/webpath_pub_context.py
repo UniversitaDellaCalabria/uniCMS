@@ -108,9 +108,7 @@ class PublicationContextView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = PublicationContextSerializer
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         site_id = self.kwargs['site_id']
         site = get_object_or_404(WebSite, pk=site_id, is_active=True)
         if not site.is_managed_by(self.request.user):
@@ -118,16 +116,13 @@ class PublicationContextView(UniCMSCachedRetrieveUpdateDestroyAPIView):
                                          resource=site)
         webpath_id = self.kwargs['webpath_id']
         pk = self.kwargs['pk']
-        contexts = PublicationContext.objects\
-                                     .select_related('webpath')\
-                                     .filter(pk=pk,
-                                             webpath__pk=webpath_id,
-                                             webpath__site__pk=site_id)
-        return contexts
+        return get_object_or_404(PublicationContext.objects.select_related('webpath'),
+                                 pk=pk,
+                                 webpath__pk=webpath_id,
+                                 webpath__site__pk=site_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         webpath = item.webpath
         perms = webpath.is_publicable_by(user=request.user)
         if not perms:
@@ -147,8 +142,7 @@ class PublicationContextView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         webpath = item.webpath
         perms = webpath.is_publicable_by(user=request.user)
         if not perms:
@@ -168,8 +162,7 @@ class PublicationContextView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         webpath = item.webpath
         perms = webpath.is_publicable_by(user=request.user)
         if not perms:

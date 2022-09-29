@@ -37,12 +37,13 @@ class PageMediaCollectionView(PageRelatedObject):
     description = ""
     serializer_class = PageMediaCollectionSerializer
 
-    def get_queryset(self):
+    def get_object(self):
         """
         """
         super().get_data()
-        items = PageMediaCollection.objects.filter(pk=self.pk, page=self.page)
-        return items
+        return get_object_or_404(PageMediaCollection,
+                                 pk=self.pk,
+                                 page=self.page)
 
 
 class PageMediaCollectionFormView(APIView):

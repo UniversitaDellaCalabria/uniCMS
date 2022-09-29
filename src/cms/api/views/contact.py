@@ -37,16 +37,12 @@ class ContactView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = ContactSerializer
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         contact_id = self.kwargs['pk']
-        contacts = Contact.objects.filter(pk=contact_id)
-        return contacts
+        return get_object_or_404(Contact, pk=contact_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         permission = check_user_permission_on_object(request.user,
                                                      item)
         if not permission['granted']:
@@ -55,8 +51,7 @@ class ContactView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         permission = check_user_permission_on_object(request.user,
                                                      item)
         if not permission['granted']:
@@ -65,8 +60,7 @@ class ContactView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         permission = check_user_permission_on_object(request.user,
                                                      item, 'delete')
         if not permission['granted']:

@@ -37,16 +37,12 @@ class MediaCollectionView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdminUser]
     serializer_class = MediaCollectionSerializer
 
-    def get_queryset(self):
-        """
-        """
+    def get_object(self):
         media_collection_id = self.kwargs['pk']
-        items = MediaCollection.objects.filter(pk=media_collection_id)
-        return items
+        return get_object_or_404(MediaCollection, pk=media_collection_id)
 
     def patch(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         permission = check_user_permission_on_object(request.user,
                                                      item)
         if not permission['granted']:
@@ -55,8 +51,7 @@ class MediaCollectionView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         permission = check_user_permission_on_object(request.user,
                                                      item)
         if not permission['granted']:
@@ -65,8 +60,7 @@ class MediaCollectionView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        item = self.get_queryset().first()
-        if not item: raise Http404
+        item = self.get_object()
         permission = check_user_permission_on_object(request.user,
                                                      item, 'delete')
         if not permission['granted']:
