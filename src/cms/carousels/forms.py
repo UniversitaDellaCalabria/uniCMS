@@ -32,7 +32,8 @@ class CarouselItemForm(ModelForm):
     class Meta:
         model = CarouselItem
         fields = ['carousel', 'image', 'mobile_image', 'pre_heading',
-                  'heading', 'description', 'order', 'is_active']
+                  'heading', 'description', 'date_start', 'date_end',
+                  'order', 'is_active']
 
 
 class CarouselItemLocalizationForm(ModelForm):

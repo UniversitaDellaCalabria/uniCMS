@@ -424,7 +424,7 @@ class PublicationContext(TimeStampedModel, ActivableModel,
     @property
     def is_published(self) -> bool:
         now = timezone.localtime()
-        return self.date_start <= now and self.date_end >= now
+        return self.date_start <= now and self.date_end > now
 
     def is_lockable_by(self, user):
         return self.webpath.is_publicable_by(user)

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from cms.api.utils import check_user_permission_on_object
@@ -24,6 +25,7 @@ class Carousel(ActivableModel, TimeStampedModel, CreatedModifiedBy,
     def get_items(self, lang=settings.LANGUAGE):
         items = []
         for i in self.carouselitem_set.filter(is_active=True).order_by('order'):
+            if not i.is_published: continue
             i.links = i.get_links(lang)
             items.append(i.localized(lang=lang))
         return items
@@ -52,6 +54,8 @@ class CarouselItem(ActivableModel, TimeStampedModel,
 
     # hopefully markdown here!
     description = models.TextField(default='', blank=True)
+    date_start = models.DateTimeField(blank=True, null=True)
+    date_end = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = _("Carousel Items")
@@ -77,6 +81,13 @@ class CarouselItem(ActivableModel, TimeStampedModel,
         item = self.carousel
         permission = check_user_permission_on_object(user=user, obj=item)
         return permission['granted']
+
+    @property
+    def is_published(self) -> bool:
+        now = timezone.localtime()
+        if self.date_start and self.date_start > now: return False
+        if self.date_end and self.date_end <= now: return False
+        return True
 
     def __str__(self):
         return '[{}] {}'.format(self.carousel, self.heading)
