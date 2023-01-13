@@ -686,6 +686,12 @@ class PageUnitTest(TestCase):
         res = self.client.get(url)
         assert res.status_code == 200
 
+    def test_unicms_robots(self):
+        obj = self.create_page(webpath_path='/')
+        url = reverse('unicms_robots')
+        res = self.client.get(url)
+        assert res.status_code == 200
+
 
     # templatetag
     # @classmethod
