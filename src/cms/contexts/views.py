@@ -4,7 +4,7 @@ import re
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.sitemaps import GenericSitemap
-# from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps.views import sitemap
 from django.http import (Http404,
                          HttpResponse,
                          HttpResponseRedirect)
@@ -22,6 +22,7 @@ from . import settings as app_settings
 from . decorators import unicms_cache
 from . models import EditorialBoardEditors, WebSite, WebPath
 from . utils import append_slash, is_editor
+
 
 logger = logging.getLogger(__name__)
 
@@ -153,7 +154,5 @@ def base_unicms_sitemap(request):
                                # protocol=protocol)
         }
 
-    return sitemap_dict
-
-    # sitemaps = sitemap(request, sitemaps=sitemap_dict)
-    # return HttpResponse(sitemaps.render(), content_type='text/xml')
+    sitemaps = sitemap(request, sitemaps=sitemap_dict)
+    return HttpResponse(sitemaps.render(), content_type='text/xml')
