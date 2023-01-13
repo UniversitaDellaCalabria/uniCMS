@@ -23,7 +23,7 @@ from rest_framework import permissions #, routers
 from rest_framework.renderers import JSONOpenAPIRenderer
 from rest_framework.schemas import get_schema_view
 
-from cms.contexts.views import base_unicms_sitemap
+from cms.contexts.views import base_unicms_sitemap, unicms_robots
 
 try:
     from rest_framework.schemas.agid_schema_views import get_schema_view
@@ -60,8 +60,11 @@ except:
                                            public=True, **{}),
                            name='openapi-schema-json'),
 
-# sitemap
+# sitemap.xml
 urlpatterns += re_path(r'^' + CMS_PATH_PREFIX + 'sitemap.xml$', base_unicms_sitemap, name='unicms_sitemap'),
+
+# robots.txt
+urlpatterns += re_path(r'^' + CMS_PATH_PREFIX + 'robots.txt$', unicms_robots, name='unicms_robots'),
 
 if 'unicms_editorial_board' in settings.INSTALLED_APPS:
     urlpatterns += path('',

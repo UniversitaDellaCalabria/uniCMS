@@ -9,6 +9,7 @@ from django.http import (Http404,
                          HttpResponse,
                          HttpResponseRedirect)
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
@@ -33,6 +34,7 @@ SITEMAP_NEWS_PRIORITY = getattr(settings, 'SITEMAP_NEWS_PRIORITY',
                                 app_settings.SITEMAP_NEWS_PRIORITY)
 SITEMAP_WEBPATHS_PRIORITY = getattr(settings, 'SITEMAP_WEBPATHS_PRIORITY',
                                     app_settings.SITEMAP_WEBPATHS_PRIORITY)
+ROBOTS_SETTINGS = getattr(settings, 'ROBOTS_SETTINGS', app_settings.ROBOTS_SETTINGS)
 
 def _get_site_from_host(request):
     requested_site = re.match(r'^[a-zA-Z0-9\.\-\_]*',
@@ -156,3 +158,23 @@ def base_unicms_sitemap(request):
 
     sitemaps = sitemap(request, sitemaps=sitemap_dict)
     return HttpResponse(sitemaps.render(), content_type='text/xml')
+
+
+def unicms_robots(request):
+    website = _get_site_from_host(request)
+    protocol =  request.scheme
+    sitemap_url = reverse('unicms_sitemap')
+    content = ''
+    settings = ROBOTS_SETTINGS.get(website.domain, ROBOTS_SETTINGS['*'])
+    for setting in settings:
+        for user_agent in setting['User-agent']:
+            content += f'User-agent: {user_agent}\n'
+        for allow in setting['Allow']:
+            content += f'Allow: {allow}\n'
+        for disallow in setting['Disallow']:
+            content += f'Disallow: {disallow}\n'
+
+        content += '\n'
+
+    content += f'Sitemap: {request.scheme}://{website.domain}{sitemap_url}'
+    return HttpResponse(content, content_type='text/plain')

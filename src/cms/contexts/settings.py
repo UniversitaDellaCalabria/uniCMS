@@ -27,3 +27,22 @@ CMS_CACHE_EXCLUDED_MATCHES = ['/search?',]
 # SITEMAPS PRIORITIES
 SITEMAP_WEBPATHS_PRIORITY = 0.6
 SITEMAP_NEWS_PRIORITY = 0.6
+
+# ROBOTS.TXT
+ROBOTS_SETTINGS = {'*': # all website domains. Specify one if you want
+                    [
+                        {
+                            'User-agent': ['*'],
+                            'Allow': ['/'],
+                            'Disallow': []
+                        }
+                    ],
+                    # 'www.test.domain.com':
+                    # [
+                    #   {
+                    #        'User-agent': ['test1', 'test2'],
+                    #        'Allow': ['/test3', /'test4'],
+                    #        'Disallow': ['/test5']
+                    #    }
+                    #],
+                }
