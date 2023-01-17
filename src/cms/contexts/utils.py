@@ -38,10 +38,12 @@ def detect_user_language(request):
 
     # get website language
     # if website language exists overwrite browser language
-    current_domain = request.META['HTTP_HOST'].split(':')[0]
-    WebSite = apps.get_model('cmscontexts.WebSite')
-    website = WebSite.objects.filter(domain=current_domain).first()
-    website_lang = website.lang if website else None
+    current_domain = request.META.get('HTTP_HOST', '').split(':')[0]
+    website_lang = ''
+    if current_domain:
+        WebSite = apps.get_model('cmscontexts.WebSite')
+        website = WebSite.objects.filter(domain=current_domain).first()
+        if website: website_lang = website.lang
 
     # get from session
     if website_lang:
