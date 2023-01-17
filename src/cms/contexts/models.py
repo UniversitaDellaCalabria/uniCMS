@@ -11,6 +11,7 @@ from cms.templates.models import ActivableModel, TimeStampedModel, CreatedModifi
 
 from . import settings as app_settings
 from . exceptions import ReservedWordException
+from . languages import LANGUAGES_ISO_639_1
 from . utils import (append_slash, is_editor,
                      is_publisher, is_translator,
                      sanitize_path)
@@ -34,6 +35,11 @@ ROBOTS_TAGS = (
 class WebSite(ActivableModel):
     name = models.CharField(max_length=254, unique=True)
     domain = models.CharField(max_length=254, unique=True)
+    lang = models.CharField(_('Language'),
+                            max_length=2,
+                            choices=(lambda: LANGUAGES_ISO_639_1)(),
+                            blank=True, default='',
+                            help_text=_('Do not choose anything to use the browser language'))
 
     class Meta:
         verbose_name_plural = _("Sites")
