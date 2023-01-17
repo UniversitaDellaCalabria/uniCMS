@@ -1,6 +1,7 @@
 import logging
 import re
 
+from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.models import LogEntry, CHANGE
@@ -15,7 +16,11 @@ from django.template.exceptions import (TemplateDoesNotExist,
 
 from copy import deepcopy
 
-from django_auto_serializer.auto_serializer import ImportableSerializedInstance, SerializableInstance
+from django_auto_serializer.auto_serializer import (ImportableSerializedInstance,
+                                                    SerializableInstance)
+
+# from . models import WebSite
+
 
 
 logger = logging.getLogger(__name__)
@@ -24,16 +29,41 @@ CMS_PATH_PREFIX = getattr(settings, 'CMS_PATH_PREFIX', '')
 
 def get_CMS_HOOKS():
     return {k:{kk:[import_string(i) for i in vv] for kk,vv in v.items()}
-            for k,v in getattr(settings, 'CMS_HOOKS', {}).items()}
+        for k,v in getattr(settings, 'CMS_HOOKS', {}).items()}
 
 
 def detect_user_language(request):
-    req_lang = translation.get_language_from_request(request) # is browser language
-    current = request.session.get(translation.LANGUAGE_SESSION_KEY, req_lang)
+    # get browser language
+    req_lang = translation.get_language_from_request(request)
+
+    # get website language
+    # if website language exists overwrite browser language
+    current_domain = request.META['HTTP_HOST'].split(':')[0]
+    WebSite = apps.get_model('cmscontexts.WebSite')
+    website = WebSite.objects.filter(domain=current_domain).first()
+    website_lang = website.lang if website else None
+
+    # get from session
+    if website_lang:
+        current = request.session.get(f'_unicms_website_{website.pk}_lang', website_lang) # current session website language
+    else:
+        # if there is a choosen language in session, overwrite current
+        current = request.session.get(translation.LANGUAGE_SESSION_KEY, req_lang) # current session language
+
+    # if user changes language in URL overwrite current
     lang = request.GET.get('lang', current)
+
+    # set language
     translation.activate(lang)
     request.LANGUAGE_CODE = lang
-    request.session[translation.LANGUAGE_SESSION_KEY] = lang
+
+    # set in session
+    if website_lang:
+        request.session[f'_unicms_website_{website.pk}_lang'] = lang
+    else:
+        request.session[translation.LANGUAGE_SESSION_KEY] = lang
+
+    # return
     return lang
 
 
