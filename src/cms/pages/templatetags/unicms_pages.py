@@ -15,14 +15,18 @@ register = template.Library()
 
 @register.simple_tag(takes_context=True)
 def load_blocks(context, section=None):
-    request = context['request']
-    page = context['page']
-    webpath = context['webpath']
+    result = SafeString('')
+
+    request = context.get('request', None)
+    page = context.get('page', None)
+    webpath = context.get('webpath', None)
+
+    if not all((request, page, webpath)): return result
+
     blocks = page.get_blocks(section=section)
 
     logger.debug(f'load_blocks section: {section}')
 
-    result = SafeString('')
     if request.user.is_staff and request.session.get('show_template_blocks_sections'):
         result += render_to_string('load_blocks_head.html', {'section': section})
 
