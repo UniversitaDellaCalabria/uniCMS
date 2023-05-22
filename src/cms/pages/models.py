@@ -200,6 +200,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         self._pubs = PagePublication.objects.filter(page=self,
                                                     is_active=True,
                                                     publication__is_active=True).\
+            select_related('publication').\
             order_by('order')
         return self._pubs
 
@@ -209,6 +210,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         self._carousels = PageCarousel.objects.filter(page=self,
                                                       is_active=True,
                                                       carousel__is_active=True).\
+            select_related('carousel').\
             order_by('order')
         return self._carousels
 
@@ -218,6 +220,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         self._contacts = PageContact.objects.filter(page=self,
                                                     is_active=True,
                                                     contact__is_active=True).\
+            select_related('contact').\
             order_by('order')
         return self._contacts
 
@@ -226,6 +229,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             return self._medias
         self._medias = PageMedia.objects.filter(page=self,
                                                 is_active=True).\
+            select_related('media').\
             order_by('order')
         return self._medias
 
@@ -235,6 +239,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         self._media_collections = PageMediaCollection.objects.filter(page=self,
                                                                      is_active=True,
                                                                      collection__is_active=True).\
+            select_related('collection').\
             order_by('order')
         return self._media_collections
 
@@ -244,6 +249,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         self._menus = PageMenu.objects.filter(page=self,
                                               is_active=True,
                                               menu__is_active=True).\
+            select_related('menu').\
             order_by('order')
         return self._menus
 

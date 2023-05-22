@@ -88,7 +88,7 @@ def cms_dispatch(request):
     published_page = page.filter(state = 'published').first()
 
     if request.session.get('draft_view_mode'):
-        page = page.filter(state = 'draft').last() or published_page
+        page = page.filter(state='draft').last() or published_page
     else:
         page = published_page
 
@@ -100,6 +100,7 @@ def cms_dispatch(request):
         'webpath': webpath,
         'page': page,
         'page_blocks': page.get_blocks(),
+        'menus': page.get_menus()
     }
     return render(request, page.base_template.template_file, context)
 

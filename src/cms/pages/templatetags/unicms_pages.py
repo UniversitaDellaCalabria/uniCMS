@@ -14,15 +14,19 @@ register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
-def load_blocks(context, section=None, blocks=[]):
+def load_blocks(context, section=None):
     result = SafeString('')
 
     if not section: return result
-    if not blocks: return result
 
     request = context.get('request', None)
     page = context.get('page', None)
     webpath = context.get('webpath', None)
+
+    blocks = context.get('page_blocks', [])
+    menus = context.get('menus', None)
+
+    if not blocks: return result
 
     if not all((request, page, webpath)): return result
 
@@ -38,7 +42,9 @@ def load_blocks(context, section=None, blocks=[]):
             obj = import_string_block(block=block,
                                       request=request,
                                       page=page,
-                                      webpath=webpath)
+                                      webpath=webpath,
+                                      blocks=blocks,
+                                      menus=menus)
             try:
                 result += obj.render() or SafeString('')
             except Exception as e: # pragma: no cover

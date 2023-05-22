@@ -267,7 +267,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         qdict = dict(publication=self, is_active=True)
         if webpath:
             qdict['webpath'] = webpath
-        pub_context = PublicationContext.objects.filter(**qdict)
+        pub_context = PublicationContext.objects.filter(**qdict).select_related('publication')
         return pub_context
 
     def get_publication_context(self, webpath=None):

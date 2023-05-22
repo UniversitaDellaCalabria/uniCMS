@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from cms.api.utils import check_user_permission_on_object
@@ -166,11 +167,15 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
                    only_active=True,
                    exclude=None):
         if self.pk:
-            items = NavigationBarItem.objects.filter(parent=self,
-                                                     menu=self.menu).\
-                                              order_by('order')
-            if only_active:
-                items = items.filter(is_active=True)
+            q_base = Q(parent=self, menu=self.menu)
+            q_active = Q(is_active=True) if only_active else Q()
+
+            items = NavigationBarItem.objects.filter(q_base, q_active)\
+                                             .select_related('parent')\
+                                             .select_related('menu')\
+                                             .order_by('order')
+            # if only_active:
+                # items = items.filter(is_active=True)
             if exclude:
                 items = items.exclude(pk=exclude.pk)
             # if getattr(self, 'language', lang):
