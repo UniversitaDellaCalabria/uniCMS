@@ -182,7 +182,7 @@ class PublicationPlaceHolder(AbstractPlaceholder):
     ph_name = 'cms.templates.blocks.PublicationContentPlaceholderBlock'
 
     def __init__(self, context:dict, content:dict):
-        super().__init__(context, content, **kwargs)
+        super().__init__(context, content)
         self.publications = self.page.get_publications()
 
     def get_entry(self, entry):
