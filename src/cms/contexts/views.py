@@ -100,7 +100,7 @@ def cms_dispatch(request):
         'webpath': webpath,
         'page': page,
         'page_blocks': page.get_blocks(),
-        'menus': page.get_menus()
+        # 'menus': page.get_menus()
     }
     return render(request, page.base_template.template_file, context)
 

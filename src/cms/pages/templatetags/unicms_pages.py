@@ -23,8 +23,8 @@ def load_blocks(context, section=None):
     page = context.get('page', None)
     webpath = context.get('webpath', None)
 
-    blocks = context.get('page_blocks', [])
-    menus = context.get('menus', None)
+    blocks = context.get('page_blocks', page.get_blocks())
+    # menus = context.get('menus', None)
 
     if not blocks: return result
 
@@ -43,8 +43,8 @@ def load_blocks(context, section=None):
                                       request=request,
                                       page=page,
                                       webpath=webpath,
-                                      blocks=blocks,
-                                      menus=menus)
+                                      blocks=blocks,)
+                                      # menus=menus)
             try:
                 result += obj.render() or SafeString('')
             except Exception as e: # pragma: no cover

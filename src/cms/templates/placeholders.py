@@ -20,7 +20,7 @@ class AbstractPlaceholder(object):
         self.content = content
         self.blocks = context['blocks']
 
-        self.menus = context['menus']
+        # self.menus = context['menus']
         # i18n
         self.language = getattr(self.request, 'LANGUAGE_CODE', '')
 
@@ -167,7 +167,7 @@ class MenuPlaceHolder(AbstractPlaceholder):
 
     def __init__(self, context:dict, content:dict):
         super().__init__(context, content)
-        # self.menus = self.page.get_menus()
+        self.menus = self.page.get_menus()
 
     def build_data_dict(self):
         data = super().build_data_dict()
@@ -181,7 +181,7 @@ class PublicationPlaceHolder(AbstractPlaceholder):
     collection_name = 'publications'
     ph_name = 'cms.templates.blocks.PublicationContentPlaceholderBlock'
 
-    def __init__(self, context:dict, content:dict, **kwargs):
+    def __init__(self, context:dict, content:dict):
         super().__init__(context, content, **kwargs)
         self.publications = self.page.get_publications()
 

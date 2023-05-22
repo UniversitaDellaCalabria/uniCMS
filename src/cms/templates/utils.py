@@ -39,14 +39,14 @@ def get_unicms_templates():
     return sorted(templates)
 
 
-def import_string_block(block, request, page, webpath, blocks, menus):
+def import_string_block(block, request, page, webpath, blocks): #menus)
     obj = import_string(block.type)(content=block.content,
                                     request=request,
                                     page=page,
                                     webpath=webpath,
                                     block=block,
-                                    blocks=blocks,
-                                    menus=menus)
+                                    blocks=blocks,)
+                                    # menus=menus)
     return obj
 
 

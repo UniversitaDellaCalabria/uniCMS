@@ -27,8 +27,8 @@ class AbstractBlock(object):
                            'webpath': self.webpath,
                            'page': self.page,
                            'blocks': self.blocks,
-                           'block': self,
-                           'menus': self.menus})
+                           'block': self,})
+                           # 'menus': self.menus})
         return context
 
     def render(self): # pragma: no cover
