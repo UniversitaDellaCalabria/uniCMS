@@ -99,6 +99,7 @@ def cms_dispatch(request):
         'path': path,
         'webpath': webpath,
         'page': page,
+        'page_blocks': page.get_blocks(),
     }
     return render(request, page.base_template.template_file, context)
 
@@ -123,6 +124,7 @@ def pagePreview(request, page_id):
         'preview_mode': True,
         'webpath': webpath,
         'page': page,
+        'page_blocks': page.get_blocks(),
     }
     return render(request, page.base_template.template_file, context)
 

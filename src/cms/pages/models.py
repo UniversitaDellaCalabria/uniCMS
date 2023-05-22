@@ -154,7 +154,6 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             filter(is_active=True).\
             order_by('section', 'order').\
             values_list('order', 'block__pk', 'section')
-
         # populate a list with block params and enumerate value
         # for every section order position
         template_blocks_list = []

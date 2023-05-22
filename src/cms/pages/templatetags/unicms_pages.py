@@ -14,8 +14,11 @@ register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
-def load_blocks(context, section=None):
+def load_blocks(context, section=None, blocks=[]):
     result = SafeString('')
+
+    if not section: return result
+    if not blocks: return result
 
     request = context.get('request', None)
     page = context.get('page', None)
@@ -23,7 +26,7 @@ def load_blocks(context, section=None):
 
     if not all((request, page, webpath)): return result
 
-    blocks = page.get_blocks(section=section)
+    #blocks = page.get_blocks()
 
     logger.debug(f'load_blocks section: {section}')
 
@@ -31,15 +34,16 @@ def load_blocks(context, section=None):
         result += render_to_string('load_blocks_head.html', {'section': section})
 
     for block in blocks:
-        obj = import_string_block(block=block,
-                                  request=request,
-                                  page=page,
-                                  webpath=webpath)
-        try:
-            result += obj.render() or SafeString('')
-        except Exception as e: # pragma: no cover
-            logger.exception(('Block {} failed rendering '
-                              '({}): {}').format(block, obj, e))
+        if block.section == section:
+            obj = import_string_block(block=block,
+                                      request=request,
+                                      page=page,
+                                      webpath=webpath)
+            try:
+                result += obj.render() or SafeString('')
+            except Exception as e: # pragma: no cover
+                logger.exception(('Block {} failed rendering '
+                                  '({}): {}').format(block, obj, e))
     return result
 
 

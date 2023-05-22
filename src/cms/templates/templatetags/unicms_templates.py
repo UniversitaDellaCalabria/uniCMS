@@ -21,10 +21,9 @@ def supported_languages(): # pragma: no cover
 
 
 @register.simple_tag(takes_context=True)
-def blocks_in_position(context, section):
-    context['request']
+def blocks_in_position(context, blocks=[], section=None):
     page = context['page']
-    context['webpath']
+    if not blocks or not section: return False
 
     sections_dict = dict(CMS_TEMPLATE_BLOCK_SECTIONS)
     if isinstance(sections_dict.get(section), tuple):
@@ -33,11 +32,18 @@ def blocks_in_position(context, section):
             logger.warning(f"Section {section} hasn't sub-sections")
             return False
         for sub_section in sub_sections:
-            page_blocks = page.get_blocks(section=sub_section[0])
-            if page_blocks: return True
+            for block in blocks:
+                if block.section == sub_section[0]:
+                    return True
+            # page_blocks = page.get_blocks(section=sub_section[0])
+            # if page_blocks: return True
         logger.warning(f'No blocks in {section} sub-sections')
         return False
-    return True if page.get_blocks(section=section) else False
+    for block in blocks:
+        if block.section == section:
+            return True
+    return False
+    # return True if page.get_blocks(section=section) else False
 
 
 @register.simple_tag
