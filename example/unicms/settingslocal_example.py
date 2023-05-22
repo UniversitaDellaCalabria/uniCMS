@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'cms.api',
     'cms.search',
 
-    'sass_processor',
     'unicms_template_unical',
     'unicms_template_italia',
     'bootstrap_italia_template',

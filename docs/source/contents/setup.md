@@ -27,7 +27,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # templates - you can load your own templates
-    'sass_processor',
     'bootstrap_italia_template',
     'unicms_template_italia', # for example
     'unicms_template_unical', # for example
