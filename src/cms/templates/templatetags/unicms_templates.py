@@ -21,8 +21,13 @@ def supported_languages(): # pragma: no cover
 
 
 @register.simple_tag(takes_context=True)
-def blocks_in_position(context, blocks=[], section=None):
-    page = context['page']
+def blocks_in_position(context, section=None):
+    page = context.get('page', None)
+
+    if not page: return False
+
+    blocks = context.get('page_blocks', page.get_blocks())
+
     if not blocks or not section: return False
 
     sections_dict = dict(CMS_TEMPLATE_BLOCK_SECTIONS)
