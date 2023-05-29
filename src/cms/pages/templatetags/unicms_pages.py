@@ -23,12 +23,12 @@ def load_blocks(context, section=None):
     page = context.get('page', None)
     webpath = context.get('webpath', None)
 
+    if not all((request, page, webpath)): return result
+
     blocks = context.get('page_blocks', page.get_blocks())
     # menus = context.get('menus', None)
 
     if not blocks: return result
-
-    if not all((request, page, webpath)): return result
 
     #blocks = page.get_blocks()
 
