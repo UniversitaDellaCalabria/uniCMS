@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'bootstrap_italia_template',
 
     'rest_framework',
+    'rest_framework.authtoken',
     'django_filters',
 
     # editorial board app
