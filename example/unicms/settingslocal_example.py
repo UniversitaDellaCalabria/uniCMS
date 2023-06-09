@@ -480,6 +480,8 @@ EDITORIAL_BOARD_EVENT_EDIT_URL_JS = "'" + EDITORIAL_BOARD_BASE_URL + "events/'+e
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
