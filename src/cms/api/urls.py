@@ -43,6 +43,7 @@ urlpatterns += path('api/news/view/<str:slug>', publication.PublicationDetail.as
 
 urlpatterns += path('api/menu/<int:menu_id>', menu.ApiMenuId.as_view(), name='api-menu'),
 urlpatterns += path('api/menu', menu.ApiMenu.as_view(), name='api-menu-post'),
+urlpatterns += path('api/publications/<int:pk>/', publication.PublicationReadOnlyView.as_view(), name='api-publication-detail'),
 
 # --------------EDITORIAL BOARD URLs------------------------ #
 

@@ -17,7 +17,7 @@ from cms.publications.serializers import (PublicationSerializer,
 from cms.publications.utils import publication_context_base_filter
 
 from rest_framework import filters, generics
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
@@ -361,3 +361,20 @@ class PublicationRelatedObjectLogsView(ObjectLogEntriesList):
 
     def get_queryset(self, object_id, content_type_id):
         return super().get_queryset(object_id, content_type_id)
+
+
+@method_decorator(detect_language, name='dispatch')
+class PublicationReadOnlyView(APIView):
+    """
+    """
+    description = 'Get active publication'
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        pub_id = self.kwargs['pk']
+        return get_object_or_404(Publication, pk=pub_id, is_active=True)
+
+    def get(self, request, *args, **kwargs):
+        item = self.get_object()
+        serializer = PublicationSerializer(item)
+        return Response(serializer.data)

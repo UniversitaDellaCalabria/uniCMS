@@ -32,6 +32,13 @@ class PublicationAPIUnitTest(TestCase):
         user2 = ContextUnitTest.create_user(username='staff',
                                             is_staff=True)
         pub = PublicationUnitTest.create_pub()
+
+        # publication detail (only get), accessible only if authenticated
+        url_detail = reverse('unicms_api:api-publication-detail',
+                             kwargs={'pk': pub.pk})
+        res = req.get(url_detail)
+        assert res.status_code == 403
+
         # pulication list
         url = reverse('unicms_api:editorial-board-publications')
 
@@ -43,6 +50,10 @@ class PublicationAPIUnitTest(TestCase):
         user.save()
         req.force_login(user)
         res = req.get(url)
+        assert isinstance(res.json(), dict)
+
+        # publication detail (only get), accessible only if authenticated
+        res = req.get(url_detail)
         assert isinstance(res.json(), dict)
 
         category = PageUnitTest.create_category()
