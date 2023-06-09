@@ -477,3 +477,9 @@ EDITORIAL_BOARD_EVENT_EDIT_URL = EDITORIAL_BOARD_BASE_URL + 'events/{event}/edit
 ## path for Vue.js API based templates
 EDITORIAL_BOARD_EVENT_EDIT_URL_JS = "'" + EDITORIAL_BOARD_BASE_URL + "events/'+event.event.id+'/edit/'"
 # end EDITORIAL BOARD FRONTEND URLs
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
