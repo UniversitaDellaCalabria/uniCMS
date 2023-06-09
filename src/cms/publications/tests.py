@@ -270,7 +270,7 @@ class PublicationUnitTest(TestCase):
         menu = MenuUnitTest.create_menu_item().menu
 
         req = Client()
-        url = reverse('unicms_api:api-menu', kwargs={'menu_id': 1})
+        url = reverse('unicms_api:api-menu', kwargs={'menu_id': menu.pk})
         res = req.get(url, content_type='application/json')
         assert isinstance(res.json(), dict)
 

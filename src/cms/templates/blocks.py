@@ -26,7 +26,8 @@ class AbstractBlock(object):
         context = Context({'request': self.request,
                            'webpath': self.webpath,
                            'page': self.page,
-                           'blocks': self.blocks,
+                           # 'blocks': getattr(self, 'blocks', []),
+                           'blocks': getattr(self, 'blocks', self.page.get_blocks()),
                            'block': self,})
                            # 'menus': self.menus})
         return context
