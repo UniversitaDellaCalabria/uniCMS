@@ -400,3 +400,19 @@ class WebpathCloneView(APIView):
                                                 resource=request.method,
                                                 detail=e)
         return Response(_("Cloning done with success!"))
+
+
+class WebpathReadOnlyView(APIView):
+    """
+    """
+    description = 'Get single active webpath'
+    # permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        pk = self.kwargs['pk']
+        return get_object_or_404(WebPath, pk=pk, is_active=True)
+
+    def get(self, request, *args, **kwargs):
+        item = self.get_object()
+        serializer = WebPathSerializer(item)
+        return Response(serializer.data)
