@@ -134,7 +134,8 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         return sanitize_path(url)
 
     def get_absolute_url(self):
-        return self.get_full_path()
+        # return self.get_full_path()
+        return self.get_site_path()
 
     def get_site_path(self, request=None): # pragma: no cover
         """
