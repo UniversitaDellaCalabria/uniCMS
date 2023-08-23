@@ -1,4 +1,5 @@
 import logging
+import sys
 import uuid
 
 from django.conf import settings
@@ -19,8 +20,11 @@ from . settings import *
 from . validators import *
 
 logger = logging.getLogger(__name__)
-FILETYPE_ALLOWED = getattr(settings, 'FILETYPE_ALLOWED',
-                           FILETYPE_ALLOWED)
+
+
+FILETYPE_ALLOWED = getattr(settings, 'FILETYPE_ALLOWED', FILETYPE_ALLOWED)
+if 'makemigrations' in sys.argv or 'migrate' in sys.argv:
+    FILETYPE_ALLOWED = ['']
 
 
 def context_media_path(instance, filename): # pragma: no cover

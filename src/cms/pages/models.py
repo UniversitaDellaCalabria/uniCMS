@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from django.db import models
 from django.utils import timezone
@@ -17,7 +18,8 @@ from cms.medias.validators import *
 
 from cms.menus.models import NavigationBar
 
-from cms.templates.models import (TemplateBlock,
+from cms.templates.models import (_lang_choices,
+                                  TemplateBlock,
                                   ActivableModel,
                                   PageTemplate,
                                   SectionAbstractModel,
@@ -374,7 +376,7 @@ class PageLocalization(TimeStampedModel, ActivableModel,
     title = models.CharField(max_length=256)
     page = models.ForeignKey(Page,
                              on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES,
+    language = models.CharField(choices=_lang_choices,
                                 max_length=12, default='en')
 
     class Meta:
@@ -525,7 +527,7 @@ class PageHeadingLocalization(ActivableModel,
                               CreatedModifiedBy,
                               AbstractLockablePageElement):
     heading = models.ForeignKey(PageHeading, on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES,
+    language = models.CharField(choices=_lang_choices,
                                 max_length=12,
                                 default='en')
     title = models.CharField(max_length=256)

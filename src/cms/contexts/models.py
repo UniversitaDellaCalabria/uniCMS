@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from django.db import models
 from django.conf import settings
@@ -24,12 +25,19 @@ CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
 
 CMS_PATH_PREFIX = getattr(settings, 'CMS_PATH_PREFIX', '')
 
-ROBOTS_TAGS = (
-                ('index, follow', 'index, follow'),
-                ('noindex, follow', 'noindex, follow'),
-                ('index, nofollow','index, nofollow'),
-                ('noindex, nofollow', 'noindex, nofollow'),
-              )
+ROBOTS_TAGS = getattr(settings, 'ROBOTS_TAGS',
+                (
+                    ('index, follow', 'index, follow'),
+                    ('noindex, follow', 'noindex, follow'),
+                    ('index, nofollow', 'index, nofollow'),
+                    ('noindex, nofollow', 'noindex, nofollow'),
+                )
+            )
+
+
+if 'makemigrations' in sys.argv or 'migrate' in sys.argv:
+    ROBOTS_TAGS = [('','-')]
+    CMS_CONTEXT_PERMISSIONS = [(0,'-')]
 
 
 class WebSite(ActivableModel):
@@ -263,7 +271,8 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy, ActivableModel)
     """
     user = models.ForeignKey(get_user_model(),
                              on_delete=models.CASCADE)
-    permission = models.IntegerField(choices=CMS_CONTEXT_PERMISSIONS, default=0)
+    permission = models.IntegerField(choices=CMS_CONTEXT_PERMISSIONS,
+                                     default=0)
     webpath = models.ForeignKey(WebPath,
                                 on_delete=models.CASCADE,
                                 null=True, blank=True)

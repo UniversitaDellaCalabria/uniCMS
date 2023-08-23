@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -10,16 +11,19 @@ from . import settings as app_settings
 
 logger = logging.getLogger(__name__)
 
-CMS_BLOCK_TYPES = getattr(settings, 'CMS_BLOCK_TYPES',
-                          app_settings.CMS_BLOCK_TYPES)
-CMS_BLOCK_TEMPLATES = getattr(settings, 'CMS_BLOCK_TEMPLATES',
-                              app_settings.CMS_BLOCK_TEMPLATES)
-CMS_PAGE_TEMPLATES = getattr(settings, 'CMS_PAGE_TEMPLATES',
-                             app_settings.CMS_PAGE_TEMPLATES)
-CMS_LINKS_LABELS = getattr(settings, 'CMS_LINKS_LABELS',
-                           app_settings.CMS_LINKS_LABELS)
+CMS_BLOCK_TYPES = getattr(settings, 'CMS_BLOCK_TYPES', app_settings.CMS_BLOCK_TYPES)
+CMS_BLOCK_TEMPLATES = getattr(settings, 'CMS_BLOCK_TEMPLATES', app_settings.CMS_BLOCK_TEMPLATES)
+CMS_PAGE_TEMPLATES = getattr(settings, 'CMS_PAGE_TEMPLATES', app_settings.CMS_PAGE_TEMPLATES)
+CMS_LINKS_LABELS = getattr(settings, 'CMS_LINKS_LABELS', app_settings.CMS_LINKS_LABELS)
+CMS_TEMPLATE_BLOCK_SECTIONS = getattr(settings, 'CMS_TEMPLATE_BLOCK_SECTIONS', [])
 
-CMS_TEMPLATE_BLOCK_SECTIONS = getattr(settings, 'CMS_TEMPLATE_BLOCK_SECTIONS')
+_lang_choices = settings.LANGUAGES
+if 'makemigrations' in sys.argv or 'migrate' in sys.argv:
+    _lang_choices = [('', '-')]
+    CMS_TEMPLATE_BLOCK_SECTIONS = [('','-')]
+    CMS_PAGE_TEMPLATES = [('', '-')]
+    CMS_BLOCK_TYPES = [('','-')]
+    CMS_LINKS_LABELS = [('','-')]
 
 
 class CreatedModifiedBy(models.Model):
@@ -107,7 +111,7 @@ class PageTemplate(TimeStampedModel, ActivableModel, AbstractTemplate,
                    CreatedModifiedBy):
     name = models.CharField(max_length=160, blank=True, default="")
     template_file = models.CharField(max_length=1024,
-                                     choices=CMS_PAGE_TEMPLATES or (('', 'No templates found'),))
+                                     choices=CMS_PAGE_TEMPLATES)
     image = models.ImageField(upload_to="images/page_templates_previews",
                               null=True, blank=True, max_length=512)
     note = models.TextField(

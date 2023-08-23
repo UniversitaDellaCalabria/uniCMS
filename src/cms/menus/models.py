@@ -1,3 +1,5 @@
+import sys
+
 from copy import deepcopy
 
 from django.db.models import Q
@@ -6,7 +8,8 @@ from django.utils.translation import gettext_lazy as _
 from cms.api.utils import check_user_permission_on_object
 from cms.contexts.models import WebPath, models, settings
 from cms.contexts.models_abstract import AbstractLockable
-from cms.templates.models import (ActivableModel,
+from cms.templates.models import (_lang_choices,
+                                  ActivableModel,
                                   CreatedModifiedBy,
                                   SortableModel,
                                   TimeStampedModel)
@@ -230,7 +233,8 @@ class NavigationBarItemLocalization(ActivableModel, TimeStampedModel,
                                     CreatedModifiedBy):
     item = models.ForeignKey(NavigationBarItem,
                              on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES, max_length=12, default='en')
+    language = models.CharField(choices=_lang_choices,
+                                max_length=12, default='en')
     name = models.CharField(max_length=100)
 
     class Meta:
