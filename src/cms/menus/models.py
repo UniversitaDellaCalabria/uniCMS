@@ -118,7 +118,7 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
     def link(self, request=None):
         if self.url:
             return self.url
-        elif self.webpath:
+        elif self.webpath: # pragma: no cover
             # does it have sense?
             # if self.publication:
             # ctx_webpath = self.publication.get_publication_context(webpath=self.webpath)

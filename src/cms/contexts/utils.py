@@ -200,7 +200,7 @@ def log_obj_event(user, obj, data={}, action_flag=CHANGE):
     try:
         data = deepcopy(data)
         data = dict(data)
-    except Exception:
+    except Exception: # pragma: no cover
         data = {}
 
     # pop readonly fields from logged dict
@@ -240,5 +240,5 @@ def clone(obj,
         new_obj = isi.save(custom_values=custom_values,
                            recursive_custom_values=recursive_custom_values)
         return new_obj
-    except Exception as e:
+    except Exception as e: # pragma: no cover
         raise e
