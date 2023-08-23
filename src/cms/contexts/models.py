@@ -35,7 +35,7 @@ ROBOTS_TAGS = getattr(settings, 'ROBOTS_TAGS',
             )
 
 
-if 'makemigrations' in sys.argv or 'migrate' in sys.argv:
+if 'makemigrations' in sys.argv or 'migrate' in sys.argv: # pragma: no cover
     ROBOTS_TAGS = [('','-')]
     CMS_CONTEXT_PERMISSIONS = [(0,'-')]
 

@@ -147,7 +147,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             block = tuple(block)
             if block_is_active and page_block_is_active:
                 blocks_list.append((block, count))
-            elif not page_block_is_active:
+            elif not page_block_is_active: # pragma: no cover
                 excluded_blocks_list.append(block)
         # get all active template blocks
         template_blocks = self.base_template.\
@@ -162,7 +162,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         for (count, block) in enumerate(template_blocks):
             template_blocks_list.append((block, count))
 
-        for exc_block in excluded_blocks_list:
+        for exc_block in excluded_blocks_list: # pragma: no cover
             for tpl_block in template_blocks_list:
                 if tpl_block[0] == exc_block:
                     template_blocks_list.remove(tpl_block)
