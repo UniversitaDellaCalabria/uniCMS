@@ -11,25 +11,25 @@ DEFAULT_LANGUAGE = dict(settings.LANGUAGES)[settings.LANGUAGE].lower()
 class SearchTranslationEntry(BaseModel):
     language : str
     title : str
-    subheading : Optional[str]
-    content : Optional[str]
+    subheading : Optional[str] = ''
+    content : Optional[str] = ''
 
 
 class SearchEntry(BaseModel):
     title : str
-    heading : Optional[str]
+    heading : Optional[str] = None
     content_type : str
     content_id : str
-    image : Optional[str]
-    content : Optional[str]
+    image : Optional[str] = None
+    content : Optional[str] = None
     sites : List[str]
     urls : List[str]
-    tags : Optional[list]
+    tags : Optional[list] = []
     categories : Optional[list] = []
     indexed : datetime
     published : datetime
-    viewed : Optional[int]
-    relevance : Optional[int]
+    viewed : Optional[int] = 0
+    relevance : Optional[int] = 0
     language : str
     translations : List[SearchTranslationEntry] = None
     day : int
@@ -54,7 +54,7 @@ def page_to_entry(page_object):
         "indexed": timezone.localtime(),
         "published": page_object.date_start,
         "viewed": 0,
-        "relevance": 0,
+        # "relevance": 0,
         "language": DEFAULT_LANGUAGE,
         "day": page_object.date_start.day,
         "month": page_object.date_start.month,
@@ -98,7 +98,7 @@ def publication_to_entry(pub_object, contexts=None):
         "indexed": timezone.localtime(),
         "published": first_context.date_start,
         "viewed": 0,
-        "relevance": 0,
+        # "relevance": 0,
         "language": DEFAULT_LANGUAGE,
         "day": first_context.date_start.day,
         "month": first_context.date_start.month,
