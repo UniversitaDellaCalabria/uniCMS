@@ -8,7 +8,7 @@ from cms.templates.utils import secure_url
 
 from rest_framework import serializers
 
-from taggit_serializer.serializers import (TagListSerializerField,
+from taggit.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
 from . models import *

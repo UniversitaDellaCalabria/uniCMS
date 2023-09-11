@@ -50,7 +50,7 @@ def detect_user_language(request):
         current = request.session.get(f'_unicms_website_{website.pk}_lang', website_lang) # current session website language
     else:
         # if there is a choosen language in session, overwrite current
-        current = request.session.get(translation.LANGUAGE_SESSION_KEY, req_lang) # current session language
+        current = request.session.get('_unicms_lang', req_lang) # current session language
 
     # if user changes language in URL overwrite current
     lang = request.GET.get('lang', current)
@@ -63,7 +63,7 @@ def detect_user_language(request):
     if website_lang:
         request.session[f'_unicms_website_{website.pk}_lang'] = lang
     else:
-        request.session[translation.LANGUAGE_SESSION_KEY] = lang
+        request.session['_unicms_lang'] = lang
 
     # return
     return lang
