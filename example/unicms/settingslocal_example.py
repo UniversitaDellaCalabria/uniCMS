@@ -20,6 +20,7 @@ AUTH_USER_MODEL = 'accounts.User'
 SESSION_COOKIE_DOMAIN=".unical.it"
 MAIN_WEBSITE = 2
 MAIN_DOMAIN = "www.unical.it"
+CSRF_TRUSTED_ORIGINS = [f'https://{MAIN_DOMAIN}']
 
 # Application definition
 
