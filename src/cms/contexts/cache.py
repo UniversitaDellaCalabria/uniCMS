@@ -31,7 +31,7 @@ CMS_CACHE_ENABLED = getattr(settings,
 
 
 def make_cache_key(request):
-    v = request.get_raw_uri()
+    v = request.build_absolute_uri()
     up = urllib.parse.urlparse(v)
     q = urllib.parse.parse_qs(up.query)
     qs = OrderedDict(sorted(q.items()))
@@ -64,7 +64,7 @@ def set_to_cache(request, value):
 
 def is_request_cacheable(request):
     for excluded in CMS_CACHE_EXCLUDED_MATCHES:
-        if re.findall(excluded, request.get_raw_uri(), re.I):
+        if re.findall(excluded, request.build_absolute_uri(), re.I):
             return False
     return True
 
