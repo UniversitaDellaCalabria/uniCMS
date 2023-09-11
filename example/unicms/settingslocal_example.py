@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'taggit',
-    'taggit_serializer',
+    # 'taggit_serializer',
     'nested_admin',
 
     'cms.templates',
