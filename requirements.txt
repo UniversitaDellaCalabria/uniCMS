@@ -1,4 +1,4 @@
-django>=4.2.5,<5.0
+django>=4.2.7,<5.0
 git+https://github.com/UniversitaDellaCalabria/django-auto-serializer
 django-filter
 django-nested-admin>=3.3.2
@@ -11,7 +11,7 @@ uritemplate
 pyyaml
 pydantic
 django-htmlmin>=0.11.0
-django-redis>=4.12.1
 unicms-template-italia
 markdown
 markdownify
+redis

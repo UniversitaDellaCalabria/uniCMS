@@ -140,19 +140,10 @@ if os.environ.get('CI'):
 else:
     CACHES = {
         "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
             "LOCATION": "redis://10.0.3.89:6379/unicms",
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-                "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
-                # improve resilience
-                "IGNORE_EXCEPTIONS": True,
-                "SOCKET_CONNECT_TIMEOUT": 2,  # seconds
-                "SOCKET_TIMEOUT": 2,  # seconds
-            }
         }
     }
-    DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
 
 CMS_CACHE_ENABLED = True
 

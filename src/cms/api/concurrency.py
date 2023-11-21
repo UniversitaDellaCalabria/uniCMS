@@ -21,8 +21,8 @@ def get_lock_from_cache(content_type_id, object_id):
     res = cache.get(key)
     if res: # pragma: no cover
         logger.debug(f'uniCMS locks timed cache - {key} succesfully taken from cache')
-        return (res, cache.ttl(key))
-    return (0, 0)
+        return res
+    return 0
 
 
 def set_lock_to_cache(user_id, content_type_id, object_id):
