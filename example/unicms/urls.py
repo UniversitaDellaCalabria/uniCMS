@@ -78,12 +78,13 @@ if 'cms.api' in settings.INSTALLED_APPS:
                         include(('cms.api.urls', 'cms'), namespace="unicms_api"),
                         name="unicms_api"),
 
+if 'unicms_unical_storage_handler' in settings.INSTALLED_APPS:
+    import unicms_unical_storage_handler.urls
+    urlpatterns += path('', include((unicms_unical_storage_handler.urls, 'unicms_unical_storage_handler',))),
+
 if 'unicms_calendar' in settings.INSTALLED_APPS:
-    urlpatterns += path('',
-                        include(('unicms_calendar.urls',
-                                 'unicms_calendar'),
-                                 namespace="unicms_calendar"),
-                        name="unicms_calendar"),
+    import unicms_calendar.urls
+    urlpatterns += path('', include((unicms_calendar.urls, 'unicms_calendar'),)),
 
 if 'unicms_newsletter' in settings.INSTALLED_APPS:
     import unicms_newsletter.urls
