@@ -101,6 +101,7 @@ def sanitize_path(path):
 
 
 def append_slash(path):
+    if not path: return '/'
     return f'{path}/' if path[-1] != '/' else path
 
 
