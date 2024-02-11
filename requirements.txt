@@ -16,3 +16,4 @@ django-redis>=4.12.1
 unicms-template-italia>=0.4.6
 markdown
 markdownify
+dnspython>=2.6.0rc1 # not directly required, pinned by Snyk to avoid a vulnerability
