@@ -8,7 +8,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.http import (Http404,
                          HttpResponse,
                          HttpResponseRedirect)
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.module_loading import import_string
@@ -94,6 +94,7 @@ def cms_dispatch(request):
 
     if not page:
         raise Http404(_("CMS Page not found"))
+
     context = {
         'website': website,
         'path': path,
@@ -102,7 +103,22 @@ def cms_dispatch(request):
         'page_blocks': page.get_blocks(),
         # 'menus': page.get_menus()
     }
-    return render(request, page.base_template.template_file, context)
+
+    # access level
+    access_level = webpath.get_access_level()
+    if access_level == '0':
+        allow = True
+    elif not request.user:
+        allow = False
+    elif request.user.is_superuser:
+        allow = True
+    elif getattr(request.user, access_level, None):
+        allow = True
+    else:
+        allow = False
+    if allow:
+        return render(request, page.base_template.template_file, context)
+    return redirect(f"{settings.LOGIN_URL}?next=//{website.domain}{webpath.get_full_path()}")
 
 
 @staff_member_required

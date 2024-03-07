@@ -34,10 +34,13 @@ ROBOTS_TAGS = getattr(settings, 'ROBOTS_TAGS',
                 )
             )
 
+AUTH_USER_GROUPS = app_settings.AUTH_USER_GROUPS + getattr(settings, 'AUTH_USER_GROUPS', ())
+
 
 if 'makemigrations' in sys.argv or 'migrate' in sys.argv: # pragma: no cover
     ROBOTS_TAGS = [('','-')]
     CMS_CONTEXT_PERMISSIONS = [(0,'-')]
+    AUTH_USER_GROUPS = [('','-')]
 
 
 class WebSite(ActivableModel):
@@ -107,6 +110,9 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
     robots = models.CharField(choices=ROBOTS_TAGS,
                               default='index, follow',
                               max_length=20)
+    access = models.CharField(choices=AUTH_USER_GROUPS,
+                              default='1',
+                              max_length=50)
 
     class Meta:
         verbose_name_plural = _("Site Contexts (WebPaths)")
@@ -258,6 +264,14 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
 
     def is_lockable_by(self, user):
         return self.is_publicable_by(user, parent=True)
+
+    def get_access_level(self):
+        for t in getattr(settings, 'AUTH_USER_GROUPS', ()):
+            if self.access == t[0]:
+                return self.access
+        if self.parent and self.access == '1':
+            return self.parent.get_access_level()
+        return '0'
 
     def __str__(self):
         return '{} @ {}{}'.format(self.name, self.site, self.get_full_path())
