@@ -7,6 +7,7 @@ from django.contrib.sitemaps import GenericSitemap
 from django.contrib.sitemaps.views import sitemap
 from django.http import (Http404,
                          HttpResponse,
+                         HttpResponseForbidden,
                          HttpResponseRedirect)
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
@@ -107,18 +108,14 @@ def cms_dispatch(request):
     # access level
     access_level = webpath.get_access_level()
     if access_level == '0':
-        allow = True
-    elif not request.user:
-        allow = False
-    elif request.user.is_superuser:
-        allow = True
-    elif getattr(request.user, access_level, None):
-        allow = True
-    else:
-        allow = False
-    if allow:
         return render(request, page.base_template.template_file, context)
-    return redirect(f"{settings.LOGIN_URL}?next=//{website.domain}{webpath.get_full_path()}")
+    elif not request.user.is_authenticated:
+        return redirect(f"{settings.LOGIN_URL}?next=//{website.domain}{webpath.get_full_path()}")
+    elif request.user.is_superuser:
+        return render(request, page.base_template.template_file, context)
+    elif getattr(request.user, access_level, None):
+        return render(request, page.base_template.template_file, context)
+    return HttpResponseForbidden(_("User unauthorized"))
 
 
 @staff_member_required
