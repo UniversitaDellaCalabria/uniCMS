@@ -9,11 +9,13 @@ from cms.contexts.models import EditorialBoardEditors
 
 from rest_framework import serializers
 
+from . import settings as app_settings
 from . models import *
 
 
 CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
                                   contexts_settings.CMS_CONTEXT_PERMISSIONS)
+AUTH_USER_GROUPS = app_settings.AUTH_USER_GROUPS + getattr(settings, 'AUTH_USER_GROUPS', ())
 
 
 class EditorialBoardLockSerializer(serializers.ModelSerializer):
@@ -74,6 +76,7 @@ class WebPathSerializer(UniCMSCreateUpdateSerializer, UniCMSContentTypeClass):
                   'meta_description',
                   'meta_keywords',
                   'robots',
+                  'access',
                   'is_active']
 
     def to_representation(self, instance):
@@ -85,6 +88,11 @@ class WebPathSerializer(UniCMSCreateUpdateSerializer, UniCMSContentTypeClass):
             alias = WebPathSerializer(instance.alias)
             data['alias'] = alias.data
         data['full_name'] = instance.__str__()
+        data['access'] = '1'
+        for t in AUTH_USER_GROUPS:
+            if t[0] == instance.access:
+                data['access'] = t[1]
+                break;
         request = self.context.get('request', None)
         if request and request.user:
             context_permissions = dict(CMS_CONTEXT_PERMISSIONS)

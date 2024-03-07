@@ -48,8 +48,8 @@ ROBOTS_SETTINGS = {'*': # all website domains. Specify one if you want
                 }
 
 AUTH_USER_GROUPS = (
-    ('0', 'public'),
-    ('1', 'parent'),
+    ('0', _('Pulic')),
+    ('1', _('Inherit')),
     # ('user_attribute_1', 'level_1'),
     # ('user_attribute_2', 'level_2',),
 )
