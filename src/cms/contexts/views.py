@@ -5,9 +5,9 @@ from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.sitemaps import GenericSitemap
 from django.contrib.sitemaps.views import sitemap
+from django.core.exceptions import PermissionDenied
 from django.http import (Http404,
                          HttpResponse,
-                         HttpResponseForbidden,
                          HttpResponseRedirect)
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
@@ -115,7 +115,7 @@ def cms_dispatch(request):
         return render(request, page.base_template.template_file, context)
     elif getattr(request.user, access_level, None):
         return render(request, page.base_template.template_file, context)
-    return HttpResponseForbidden(_("User unauthorized"))
+    raise PermissionDenied
 
 
 @staff_member_required
