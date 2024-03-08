@@ -111,7 +111,7 @@ def cms_dispatch(request):
         return render(request, page.base_template.template_file, context)
     elif not request.user.is_authenticated:
         return redirect(f"{settings.LOGIN_URL}?next=//{website.domain}{webpath.get_full_path()}")
-    elif request.user.is_superuser:
+    elif access_level == '2' or request.user.is_superuser:
         return render(request, page.base_template.template_file, context)
     elif getattr(request.user, access_level, None):
         return render(request, page.base_template.template_file, context)
