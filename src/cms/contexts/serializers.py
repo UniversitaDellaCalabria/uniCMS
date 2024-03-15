@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.admin.models import LogEntry
 from django.utils.text import slugify
 
 from cms.api.serializers import UniCMSCreateUpdateSerializer, UniCMSContentTypeClass
@@ -131,15 +130,3 @@ class WebPathSelectOptionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = WebPath
         fields = ()
-
-
-class LogEntrySerializer(serializers.ModelSerializer):
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data['user'] = instance.user.__str__()
-        return data
-
-    class Meta:
-        model = LogEntry
-        fields = '__all__'

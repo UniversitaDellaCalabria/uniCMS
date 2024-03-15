@@ -2,8 +2,16 @@ import logging
 import sys
 
 from django.conf import settings
+from django.contrib.admin.models import (ACTION_FLAG_CHOICES,
+                                         ADDITION,
+                                         CHANGE,
+                                         DELETION,
+                                         LogEntryManager,
+                                         LogEntry)
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
@@ -24,6 +32,19 @@ if 'makemigrations' in sys.argv or 'migrate' in sys.argv: # pragma: no cover
     CMS_PAGE_TEMPLATES = [('', '-')]
     CMS_BLOCK_TYPES = [('','-')]
     CMS_LINKS_LABELS = [('','-')]
+
+
+### Custom Logs ###
+# like django.contrib.admin.models.LogEntry
+# but object_id as PositiveIntegerField
+# and with index_together = ["content_type", "object_id"])
+import inspect
+exec(inspect.getsource(LogEntry).replace('db_table = "django_admin_log"',
+                                         'index_together = ["content_type", "object_id"]')\
+                                .replace('class LogEntry','class Log')\
+                                .replace('models.TextField(_("object id"), blank=True, null=True)',
+                                         'models.PositiveIntegerField(_("object id"), blank=True, null=True)'))
+### END Custom Logs ###
 
 
 class CreatedModifiedBy(models.Model):
