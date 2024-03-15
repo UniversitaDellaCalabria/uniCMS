@@ -43,7 +43,7 @@ exec(inspect.getsource(LogEntry).replace('db_table = "django_admin_log"',
                                          'index_together = ["content_type", "object_id"]')\
                                 .replace('class LogEntry','class Log')\
                                 .replace('models.TextField(_("object id"), blank=True, null=True)',
-                                         'models.PositiveIntegerField(_("object id"), blank=True, null=True)'))
+                                         'models.PositiveIntegerField(_("object id"), blank=True, null=True)')) #nosec
 ### END Custom Logs ###
 
 
