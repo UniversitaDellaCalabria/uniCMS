@@ -139,9 +139,8 @@ class RedisLockView(APIView):
         user_lock = get_lock_from_cache(content_type_id, object_id)
         if user_lock and not user_lock == request.user.pk: # pragma: no cover
             owner_user = get_user_model().objects.filter(pk=user_lock).first()
-            # return Response({'lock': lock,
-                             # 'message': LOCK_MESSAGE.format(user=owner_user)})
-            raise PermissionDenied(LOCK_MESSAGE.format(user=owner_user), 403)
+            return Response({'message': LOCK_MESSAGE.format(user=owner_user)})
+            # raise PermissionDenied(LOCK_MESSAGE.format(user=owner_user), 403)
         return Response({})
 
 
@@ -191,8 +190,7 @@ class RedisLockSetView(APIView):
         user_lock = get_lock_from_cache(content_type_id, object_id)
         if user_lock and not user_lock == request.user.pk: # pragma: no cover
             owner_user = get_user_model().objects.filter(pk=user_lock).first()
-            # return Response({'lock': lock,
-                             # 'message': LOCK_MESSAGE.format(user=owner_user)})
+            # return Response({'message': LOCK_MESSAGE.format(user=owner_user)})
             raise PermissionDenied(LOCK_MESSAGE.format(user=owner_user), 403)
         if obj.is_lockable_by(request.user):
             set_lock_to_cache(user_id=request.user.pk,
