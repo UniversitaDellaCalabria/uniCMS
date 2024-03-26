@@ -87,11 +87,6 @@ class WebPathSerializer(UniCMSCreateUpdateSerializer, UniCMSContentTypeClass):
             alias = WebPathSerializer(instance.alias)
             data['alias'] = alias.data
         data['full_name'] = instance.__str__()
-        data['access'] = '1'
-        for t in AUTH_USER_GROUPS:
-            if t[0] == instance.access:
-                data['access'] = t[1]
-                break;
         request = self.context.get('request', None)
         if request and request.user:
             context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
