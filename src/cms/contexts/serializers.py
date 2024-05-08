@@ -20,7 +20,7 @@ AUTH_USER_GROUPS = app_settings.AUTH_USER_GROUPS + getattr(settings, 'AUTH_USER_
 class EditorialBoardLockSerializer(serializers.ModelSerializer):
     class Meta:
         model = EditorialBoardLock
-        fields = ['pk', 'object_id', 'content_type']
+        fields = '__all__'
 
 
 class EditorialBoardLockUserSerializer(serializers.ModelSerializer):
