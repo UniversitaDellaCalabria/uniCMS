@@ -370,6 +370,7 @@ class EditorialBoardLock(models.Model):
 class EditorialBoardLockUser(models.Model):
     lock = models.ForeignKey(EditorialBoardLock, on_delete=models.CASCADE)
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = _("Editorial Board Locks Owners")
