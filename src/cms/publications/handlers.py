@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.syndication.views import Feed
 from django.http import (HttpResponse,
                          Http404)
 from django.template import Template, Context
@@ -119,3 +120,34 @@ class PublicationListHandler(BaseContentHandler):
         template = Template(ext_template_sources)
         context = Context(data)
         return HttpResponse(template.render(context), status=200)
+
+
+class PublicationRssHandler(BaseContentHandler, Feed):
+    def items(self):
+        query_params = publication_context_base_filter()
+        # category = self.request.GET.get('category')
+        # if category:
+            # query_params['publication__category__pk'] = category
+        return PublicationContext.objects.filter(webpath=self.page.webpath,
+                                                 **query_params)[:10]
+
+    def item_title(self, item):
+        return item.publication.title
+
+    def item_description(self, item):
+        return item.publication.subheading
+
+    def as_view(self):
+        match_dict = self.match.groupdict()
+        self.page = Page.objects.filter(is_active=True,
+                                   webpath__site=self.website,
+                                   webpath__fullpath=match_dict.get('webpath', '/')).first()
+        if not self.page:
+            raise Http404('Unknown Web Page')
+
+        self.title = self.page.webpath.name
+        self.link = f"{self.page.webpath.fullpath}{CMS_PUBLICATION_LIST_PREFIX_PATH}"
+        self.description = f"{self.page.webpath.name} RSS feed"
+
+        response = self.__call__(request=self.request)
+        return response
