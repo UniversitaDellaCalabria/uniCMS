@@ -4,6 +4,7 @@ from django.http import (HttpResponse,
                          Http404)
 from django.template import Template, Context
 from django.urls import reverse
+from django.utils.feedgenerator import Rss201rev2Feed
 from django.utils.translation import gettext_lazy as _
 
 from cms.contexts.handlers import BaseContentHandler
@@ -122,14 +123,45 @@ class PublicationListHandler(BaseContentHandler):
         return HttpResponse(template.render(context), status=200)
 
 
+class ExtendedRSSFeed(Rss201rev2Feed):
+    """
+    Create a type of RSS feed that has content:encoded elements.
+    """
+    def root_attributes(self):
+        attrs = super(ExtendedRSSFeed, self).root_attributes()
+        # Because I'm adding a <content:encoded> field, I first need to declare
+        # the content namespace. For more information on how this works, check
+        # out: http://validator.w3.org/feed/docs/howto/declare_namespaces.html
+        attrs['xmlns:content'] = 'http://purl.org/rss/1.0/modules/content/'
+        return attrs
+
+    def add_item_elements(self, handler, item):
+        super(ExtendedRSSFeed, self).add_item_elements(handler, item)
+
+        if item['content_encoded']:
+            content = f"<content:encoded><![CDATA[{item['content_encoded']}]]></content:encoded>"
+        else:
+            content = "<content:encoded/>"
+        handler._write(content)
+
+
 class PublicationRssHandler(BaseContentHandler, Feed):
+    feed_type = ExtendedRSSFeed
+    # description_template = 'feeds/list_detail_content_encoded.html'
+
+
     def items(self):
         query_params = publication_context_base_filter()
-        # category = self.request.GET.get('category')
-        # if category:
-            # query_params['publication__category__pk'] = category
-        return PublicationContext.objects.filter(webpath=self.page.webpath,
-                                                 **query_params)[:10]
+        items = PublicationContext.objects\
+                                 .filter(webpath=self.page.webpath,
+                                         **query_params)\
+                                 .select_related('publication')[:10]
+        # i18n
+        lang = getattr(self.request, 'LANGUAGE_CODE', None)
+        if lang:
+            for item in items:
+                item.publication.translate_as(lang=lang)
+        return items
 
     def item_title(self, item):
         return item.publication.title
@@ -137,15 +169,35 @@ class PublicationRssHandler(BaseContentHandler, Feed):
     def item_description(self, item):
         return item.publication.subheading
 
+    # def item_author_name(self, item):
+        # if (item.author.get_full_name()):
+            # return item.author.get_full_name()
+        # else:
+            # return item.author
+
+    def item_pubdate(self, item):
+        return item.date_start
+
+    def item_categories(self, item):
+        return item.publication.categories.values_list('name', flat=True)
+
+    def item_content_encoded(self, item):
+        return item.publication.content
+
+    def item_extra_kwargs(self, item):
+        return {'content_encoded': self.item_content_encoded(item)}
+
     def as_view(self):
         match_dict = self.match.groupdict()
         self.page = Page.objects.filter(is_active=True,
                                    webpath__site=self.website,
-                                   webpath__fullpath=match_dict.get('webpath', '/')).first()
-        if not self.page:
-            raise Http404('Unknown Web Page')
+                                   webpath__fullpath=match_dict.get('webpath', '/'))\
+                                .select_related('webpath','webpath__site').first()
 
-        self.title = self.page.webpath.name
+        if not self.page:
+            raise Http404()
+
+        self.title = f'{self.page.webpath.name} - {self.page.webpath.site.name}'
         self.link = f"{self.page.webpath.fullpath}{CMS_PUBLICATION_LIST_PREFIX_PATH}"
         self.description = f"{self.page.webpath.name} RSS feed"
 
