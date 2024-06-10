@@ -2,7 +2,7 @@
 # metadata file that makes public software easily discoverable.
 # More info at https://github.com/italia/publiccode.yml
 
-publiccodeYmlVersion: '0.2'
+publiccodeYmlVersion: '0.3'
 categories:
   - content-management
   - website-builder
@@ -53,7 +53,6 @@ description:
       - >-
         Plugin model and rich interoperability with multiple frameworks
         and technologies
-    genericName: applicazione web
     longDescription: >
       uniCMS is designed for both end users and developers where the
       developers can create their own customzied web applications (CMS)
