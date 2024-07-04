@@ -75,6 +75,8 @@ class CarouselItem(ActivableModel, TimeStampedModel,
                                                        is_active=True)\
                                                 .first()
         if i18n:
+            self.image = i18n.image or self.image
+            self.mobile_image = i18n.mobile_image or self.mobile_image
             self.heading = i18n.heading
             self.pre_heading = i18n.pre_heading
             self.description = i18n.description
