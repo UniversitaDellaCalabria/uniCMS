@@ -26,6 +26,7 @@ class CarouselItemLocalizationInline(nested_admin.NestedStackedInline):
     extra = 0
     sortable_field_name = "order"
     classes = ['collapse']
+    raw_id_fields = ('image', 'mobile_image')
 
 
 class CarouselItemInline(nested_admin.NestedStackedInline):

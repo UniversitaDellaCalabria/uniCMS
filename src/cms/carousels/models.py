@@ -102,6 +102,14 @@ class CarouselItemLocalization(ActivableModel,
     carousel_item = models.ForeignKey(CarouselItem,
                                       on_delete=models.CASCADE)
     language = models.CharField(choices=_lang_choices, max_length=12, default='en')
+    image = models.ForeignKey(Media,
+                              on_delete=models.PROTECT,
+                              blank=True, null=True,
+                              related_name="localization_image")
+    mobile_image = models.ForeignKey(Media,
+                                     on_delete=models.PROTECT,
+                                     blank=True, null=True,
+                                     related_name="localization_mobile_image")
     pre_heading = models.CharField(
         max_length=120, blank=True, default='', help_text=_('Pre Heading')
     )
