@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.syndication.views import Feed
 from django.http import (HttpResponse,
                          Http404)
+from django.db.models import Q
 from django.template import Template, Context
 from django.urls import reverse
 from django.utils.feedgenerator import Rss201rev2Feed
@@ -149,13 +150,18 @@ class PublicationRssHandler(BaseContentHandler, Feed):
     feed_type = ExtendedRSSFeed
     # description_template = 'feeds/list_detail_content_encoded.html'
 
-
     def items(self):
         query_params = publication_context_base_filter()
+        query_categories = Q()
+        category_name = self.request.GET.get('category_name')
+        if category_name:
+            query_category = Q(publication__category__name__iexact=category_name)
         items = PublicationContext.objects\
-                                 .filter(webpath=self.page.webpath,
-                                         **query_params)\
-                                 .select_related('publication')[:10]
+                                  .filter(query_category,
+                                          webpath=self.page.webpath,
+                                          **query_params)\
+                                  .select_related('publication')[:10]
+
         # i18n
         lang = getattr(self.request, 'LANGUAGE_CODE', None)
         if lang:
