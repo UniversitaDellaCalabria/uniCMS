@@ -152,7 +152,7 @@ class PublicationRssHandler(BaseContentHandler, Feed):
 
     def items(self):
         query_params = publication_context_base_filter()
-        query_categories = Q()
+        query_category = Q()
         category_name = self.request.GET.get('category_name')
         if category_name:
             query_category = Q(publication__category__name__iexact=category_name)
