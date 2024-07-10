@@ -5,3 +5,4 @@ black
 flake8
 isort
 bandit
+zipp>=3.19.1 # not directly required, pinned by Snyk to avoid a vulnerability
