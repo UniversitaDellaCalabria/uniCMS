@@ -16,12 +16,12 @@ def _build_breadcrumbs(webpath: WebPath):
     crumbs = []
     if webpath.parent:
         crumbs = _build_breadcrumbs(webpath.parent)
-        crumbs.append((webpath.get_full_path, webpath.name))
+    crumbs.append((webpath.get_full_path, webpath.name))
     # else:
         # root_prefixed = f'/{settings.CMS_PATH_PREFIX}'
         # crumbs.append((root_prefixed, _('Home')))
-    else:
-        crumbs.append((webpath.get_full_path, webpath.name))
+    # else:
+        # crumbs.append((webpath.get_full_path, webpath.name))
     return crumbs
 
 
