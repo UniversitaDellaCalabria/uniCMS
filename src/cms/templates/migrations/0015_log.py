@@ -79,7 +79,7 @@ class Migration(migrations.Migration):
                 "verbose_name": "log entry",
                 "verbose_name_plural": "log entries",
                 "ordering": ["-action_time"],
-                "index_together": {("content_type", "object_id")},
+                'indexes': [models.Index(fields=['content_type', 'object_id'], name='cms_templates_log_ctype_objid_idx')],
             },
             managers=[
                 ("objects", django.contrib.admin.models.LogEntryManager()),
