@@ -31,7 +31,7 @@ def blocks_in_position(context, section=None):
     if not blocks or not section: return False
 
     sections_dict = dict(CMS_TEMPLATE_BLOCK_SECTIONS)
-    if isinstance(sections_dict.get(section), tuple):
+    if type(sections_dict.get(section)) in [list, tuple]:
         sub_sections = sections_dict.get(section)
         if not sub_sections: # pragma: no cover
             logger.warning(f"Section {section} hasn't sub-sections")
