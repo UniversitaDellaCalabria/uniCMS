@@ -223,7 +223,7 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
     def is_localizable_by(self, user=None, obj=None, parent=False):
         if not user: return False
         if user.is_superuser: return True
-        self if not obj else obj
+        item = self if not obj else obj
         parent = self.parent if parent else self
         eb_permission = EditorialBoardEditors.get_permission(parent, user)
         perms = is_translator(eb_permission)
