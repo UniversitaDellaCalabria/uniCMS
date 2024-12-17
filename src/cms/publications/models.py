@@ -328,7 +328,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
             pub_ctxs = self.get_publication_contexts()
             for pub_ctx in pub_ctxs:
                 webpath = pub_ctx.webpath
-                webpath_perms = webpath.is_editable_by(user=user, obj=self)
+                webpath_perms = webpath.is_editable_by(user=user)
                 if webpath_perms: return True
         # if no permissions
         return False
@@ -351,7 +351,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
             pub_ctxs = self.get_publication_contexts()
             for pub_ctx in pub_ctxs:
                 webpath = pub_ctx.webpath
-                webpath_perms = webpath.is_publicable_by(user=user, obj=self)
+                webpath_perms = webpath.is_publicable_by(user=user)
                 if webpath_perms: return True
         # if no permissions
         return False

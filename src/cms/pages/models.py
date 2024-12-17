@@ -302,7 +302,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         # and check for locks on webpath
         webpath = self.webpath
         webpath_perms = webpath.is_localizable_by(user=user)
-        if not webpath_perms: return False
+        if webpath_perms: return True
         # check for locks on object
         return EditorialBoardLockUser.check_for_locks(self, user)
 
@@ -312,8 +312,8 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         # check if user has EditorialBoard editor permissions on object
         # and check for locks on webpath
         webpath = self.webpath
-        webpath_perms = webpath.is_editable_by(user=user, obj=self)
-        if not webpath_perms: return False
+        webpath_perms = webpath.is_editable_by(user=user)
+        if webpath_perms: return True
         # check for locks on object
         return EditorialBoardLockUser.check_for_locks(self, user)
 
@@ -323,8 +323,8 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         # check if user has EditorialBoard editor permissions on object
         # and check for locks on webpath
         webpath = self.webpath
-        webpath_perms = webpath.is_publicable_by(user=user, obj=self)
-        if not webpath_perms: return False
+        webpath_perms = webpath.is_publicable_by(user=user) #, obj=self)
+        if webpath_perms: return True
         # check for locks on object
         return EditorialBoardLockUser.check_for_locks(self, user)
 

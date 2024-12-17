@@ -220,50 +220,60 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
     def get_parent_fullpath(self):
         return self.parent.get_full_path() if self.parent else ''
 
-    def is_localizable_by(self, user=None, obj=None, parent=False):
+    def is_localizable_by(self, user=None): #,obj=None, parent=False):
         if not user: return False
         if user.is_superuser: return True
-        item = self if not obj else obj
-        parent = self.parent if parent else self
-        eb_permission = EditorialBoardEditors.get_permission(parent, user)
+        # item = self if not obj else obj
+        # parent = self.parent if parent else self
+        # eb_permission = EditorialBoardEditors.get_permission(parent, user)
+        eb_permission = EditorialBoardEditors.get_permission(self, user)
         perms = is_translator(eb_permission)
-        # if user has not editor permissions
-        if not perms: return False
+        # if user has translator permissions
+        if perms: return True
+        # if user has not permissions, check locks
         webpath_lock_ok = EditorialBoardLockUser.check_for_locks(self, user)
         return webpath_lock_ok
 
-    def is_editable_by(self, user=None, obj=None, parent=False):
+    def is_editable_by(self, user=None): #, obj=None, parent=False):
         if not user: return False
         if user.is_superuser: return True
-        item = self if not obj else obj
-        parent = self.parent if parent else self
-        eb_permission = EditorialBoardEditors.get_permission(parent, user)
+        # item = self if not obj else obj
+        # parent = self.parent if parent else self
+        eb_permission = EditorialBoardEditors.get_permission(self, user)
         perms = is_editor(eb_permission)
-        # if user has not editor permissions
-        if not perms: return False
-        # if user can edit only created by him pages
-        if perms['only_created_by'] and item.created_by != user:
-            return False
+        # if user has editor permissions
+        if perms:
+            # check if permission is only for the owner
+            if perms['only_created_by'] and self.created_by != user:
+                return False
+            # permission granted
+            return True
+        # if user has not permissions, check locks
         webpath_lock_ok = EditorialBoardLockUser.check_for_locks(self, user)
         return webpath_lock_ok
 
-    def is_publicable_by(self, user=None, obj=None, parent=False):
+    def is_publicable_by(self, user=None): #, obj=None, parent=False):
         if not user: return False
         if user.is_superuser: return True
-        item = self if not obj else obj
-        parent = self.parent if parent else self
-        eb_permission = EditorialBoardEditors.get_permission(parent, user)
+        # item = self if not obj else obj
+        # parent = self.parent if parent else self
+        # eb_permission = EditorialBoardEditors.get_permission(parent, user)
+        eb_permission = EditorialBoardEditors.get_permission(self, user)
         perms = is_publisher(eb_permission)
-        # if user has not editor permissions
-        if not perms: return False
-        # if user can edit only created by him pages
-        if perms['only_created_by'] and item.created_by != user:
-            return False
+        # if user has publisher permissions
+        if perms:
+            # check if permission is only for the owner
+            if perms['only_created_by'] and self.created_by != user:
+                return False
+            # permission granted
+            return True
+        # if user has not permissions, check locks
         webpath_lock_ok = EditorialBoardLockUser.check_for_locks(self, user)
         return webpath_lock_ok
+
 
     def is_lockable_by(self, user):
-        return self.is_publicable_by(user, parent=True)
+        return self.is_publicable_by(user) #, parent=True)
 
     def get_access_level(self):
         for t in getattr(settings, 'AUTH_USER_GROUPS', ()):
@@ -391,12 +401,9 @@ class EditorialBoardLockUser(models.Model):
         content_type = ContentType.objects.get_for_model(obj)
         locks = cls.get_object_locks(content_type=content_type,
                                      object_id=obj.pk)
-        # if there is not lock, ok
-        if not locks: return True
         # if user is in lock user list, has permissions
-        if locks.filter(user=user).exists():
-            return True
-        # else no permissions but obj is locked
+        if locks.filter(user=user).exists(): return True
+        # if there is not lock, return False
         return False # pragma: no cover
 
     def __str__(self): # pragma: no cover

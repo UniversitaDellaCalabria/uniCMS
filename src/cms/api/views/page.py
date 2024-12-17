@@ -100,8 +100,7 @@ class PageView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             new_webpath = serializer.validated_data.get('webpath')
             if new_webpath and new_webpath != item.webpath:
                 # check permissions and locks on webpath
-                webpath_perms = new_webpath.is_editable_by(obj=item,
-                                                           user=request.user)
+                webpath_perms = new_webpath.is_editable_by(user=request.user)
                 if not webpath_perms:
                     raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                                  resource=request.method)
@@ -122,8 +121,7 @@ class PageView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             new_webpath = serializer.validated_data.get('webpath')
             # check permissions on webpath
             if new_webpath != item.webpath:
-                webpath_perms = new_webpath.is_editable_by(obj=item,
-                                                           user=request.user)
+                webpath_perms = new_webpath.is_editable_by(user=request.user)
                 if not webpath_perms:
                     raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                                  resource=request.method)

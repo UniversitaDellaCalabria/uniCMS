@@ -65,7 +65,7 @@ class WebpathList(UniCMSListCreateAPIView):
             publisher_perms = is_publisher(permission)
             parent_locks_ok = EditorialBoardLockUser.check_for_locks(parent,
                                                                      request.user)
-            has_permissions = request.user.is_superuser or (publisher_perms and parent_locks_ok)
+            has_permissions = request.user.is_superuser or publisher_perms or parent_locks_ok
             if not has_permissions:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
@@ -111,17 +111,17 @@ class WebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
                                          data=request.data,
                                          partial=True)
         if serializer.is_valid(raise_exception=True):
-            has_permission = item.is_publicable_by(user=request.user,
-                                                   parent=True)
+            has_permission = item.is_publicable_by(user=request.user)
+                                                   # parent=True)
             if not has_permission:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
-            # if parent in request data, check permission on parent
+            # if parent in request data, check permission on (new) parent
             parent = serializer.validated_data.get('parent')
+            # check permissions on parent if different from actual
             if parent and parent != item.parent:
-                # check permissions on parent
-                has_permission = parent.is_publicable_by(user=request.user,
-                                                         parent=True)
+                has_permission = parent.is_publicable_by(user=request.user)
+                                                         # parent=True)
                 if not has_permission:
                     raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                                  resource=request.method)
@@ -137,17 +137,17 @@ class WebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance=item,
                                          data=request.data)
         if serializer.is_valid(raise_exception=True):
-            has_permission = item.is_publicable_by(user=request.user,
-                                                   parent=True)
+            has_permission = item.is_publicable_by(user=request.user)
+                                                   # parent=True)
             if not has_permission:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
-
+            # if parent in request data, check permission on (new) parent
             parent = serializer.validated_data.get('parent')
             # check permissions on parent if different from actual
             if parent != item.parent:
-                has_permission = parent.is_publicable_by(user=request.user,
-                                                         parent=True)
+                has_permission = parent.is_publicable_by(user=request.user)
+                                                         # parent=True)
                 if not has_permission:
                     raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                                  resource=request.method)
@@ -160,8 +160,8 @@ class WebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         item = self.get_object()
-        has_permission = item.is_publicable_by(user=request.user,
-                                               parent=True)
+        has_permission = item.is_publicable_by(user=request.user)
+                                               # parent=True)
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
