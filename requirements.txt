@@ -1,5 +1,5 @@
 django>=4.2.16,<6.0
-git+https://github.com/UniversitaDellaCalabria/django-auto-serializer
+git+https://github.com/UniversitaDellaCalabria/django-auto-serializer.git
 django-filter
 django-nested-admin>=3.3.2
 django-taggit
