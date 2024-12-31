@@ -37,6 +37,7 @@ SITEMAP_WEBPATHS_PRIORITY = getattr(settings, 'SITEMAP_WEBPATHS_PRIORITY',
                                     app_settings.SITEMAP_WEBPATHS_PRIORITY)
 ROBOTS_SETTINGS = getattr(settings, 'ROBOTS_SETTINGS', app_settings.ROBOTS_SETTINGS)
 
+
 def _get_site_from_host(request):
     requested_site = re.match(r'^[a-zA-Z0-9\.\-\_]*',
                               request.get_host()).group()
@@ -45,6 +46,20 @@ def _get_site_from_host(request):
                                 domain=requested_site,
                                 is_active=True)
     return website
+
+
+def _access_level_redirect(request, webpath):
+    # access level
+    access_level = webpath.get_access_level()
+    if access_level == '0':
+        return False
+    elif not request.user.is_authenticated:
+        return f"//{settings.MAIN_DOMAIN}{settings.LOGIN_URL}?next={request.build_absolute_uri()}"
+    elif access_level == '2' or request.user.is_superuser:
+        return False
+    elif getattr(request.user, access_level, None):
+        return False
+    raise PermissionDenied
 
 
 @unicms_cache
@@ -62,6 +77,16 @@ def cms_dispatch(request):
         if not match:
             logger.debug(f'{_msg_head} - {cls}: {v} -> UNMATCH with {path}')
             continue
+
+        base_path = append_slash(match.groupdict().get('webpath', '/'))
+        webpath = get_object_or_404(WebPath,
+                                    site=website,
+                                    fullpath=base_path,
+                                    is_active=True)
+
+        redirect_url = _access_level_redirect(request, webpath)
+        if redirect_url:
+            return redirect(redirect_url)
 
         query = match.groupdict()
         params = {'request': request,
@@ -105,17 +130,11 @@ def cms_dispatch(request):
         # 'menus': page.get_menus()
     }
 
-    # access level
-    access_level = webpath.get_access_level()
-    if access_level == '0':
-        return render(request, page.base_template.template_file, context)
-    elif not request.user.is_authenticated:
-        return redirect(f"//{settings.MAIN_DOMAIN}{settings.LOGIN_URL}?next=//{website.domain}{webpath.get_full_path()}")
-    elif access_level == '2' or request.user.is_superuser:
-        return render(request, page.base_template.template_file, context)
-    elif getattr(request.user, access_level, None):
-        return render(request, page.base_template.template_file, context)
-    raise PermissionDenied
+    redirect_url = _access_level_redirect(request, webpath)
+    if redirect_url:
+        return redirect(redirect_url)
+
+    return render(request, page.base_template.template_file, context)
 
 
 @staff_member_required
