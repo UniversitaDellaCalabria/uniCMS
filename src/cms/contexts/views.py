@@ -54,7 +54,7 @@ def _access_level_redirect(request, webpath):
     if access_level == '0':
         return False
     elif not request.user.is_authenticated:
-        return f"//{settings.MAIN_DOMAIN}{settings.LOGIN_URL}?next={request.build_absolute_uri()}"
+        return f"{settings.LOGIN_URL}?next={request.build_absolute_uri()}"
     elif access_level == '2' or request.user.is_superuser:
         return False
     elif getattr(request.user, access_level, None):
