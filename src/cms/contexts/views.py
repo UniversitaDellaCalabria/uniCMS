@@ -142,17 +142,20 @@ def pagePreview(request, page_id):
     page = get_object_or_404(Page.objects.select_related('webpath'),
                              pk=page_id)
     webpath = page.webpath
-    website = webpath.site
-    if not website.is_managed_by(request.user):
-        return HttpResponse(_("Permission Denied on this website"))
-    permission = EditorialBoardEditors.get_permission(webpath=webpath,
-                                                      user=request.user)
-    editor_perms = is_editor(permission)
-    if not editor_perms:
+    if not webpath.is_localizable_by(request.user):
         return HttpResponse(_("Permission Denied on this webpath"))
 
+    # website = webpath.site
+    # if not website.is_managed_by(request.user):
+        # return HttpResponse(_("Permission Denied on this website"))
+    # permission = EditorialBoardEditors.get_permission(webpath=webpath,
+                                                      # user=request.user)
+    # editor_perms = is_editor(permission)
+    # if not editor_perms:
+        # return HttpResponse(_("Permission Denied on this webpath"))
+
     context = {
-        'website': website,
+        'website': webpath.site,
         # 'path': webpath.get_full_path(),
         'preview_mode': True,
         'webpath': webpath,
