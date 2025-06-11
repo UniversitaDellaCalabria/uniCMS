@@ -57,6 +57,9 @@ def detect_user_language(request):
 
     # if user changes language in URL overwrite current
     lang = request.GET.get('lang', current)
+    # prevent XSS
+    if lang != current and not lang in dict(settings.LANGUAGES).keys():
+        lang = current
 
     # set language
     translation.activate(lang)
