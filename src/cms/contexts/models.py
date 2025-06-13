@@ -206,7 +206,7 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         if fullpath != self.fullpath:
             self.fullpath = fullpath
         existent = WebPath.objects.filter(site=self.site,
-                                          fullpath=self.fullpath)\
+                                          fullpath=fullpath)\
             .exclude(pk=self.pk)\
             .first()
         if existent:
