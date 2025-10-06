@@ -3,7 +3,7 @@ import re
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.sitemaps import GenericSitemap
+from django.contrib.sitemaps import GenericSitemap, Sitemap
 from django.contrib.sitemaps.views import sitemap
 from django.core.exceptions import PermissionDenied
 from django.http import (Http404,
@@ -165,17 +165,53 @@ def pagePreview(request, page_id):
     return render(request, page.base_template.template_file, context)
 
 
+class uniCMSSiteMap(Sitemap):
+    changefreq = "weekly"
+
+    def __init__(self, **kwargs):
+        self.website = kwargs.pop('website', None)
+        self.protocol = kwargs.pop('protocol', 'http')
+        super().__init__(**kwargs)
+
+    def items(self):
+        return WebPath.objects.filter(site=self.website,
+                                      is_active=True,
+                                      alias__isnull=True,
+                                      alias_url="")
+
+    def location(self, obj):
+        return obj.fullpath
+
+    def lastmod(self, obj):
+        return obj.modified
+
+    def priority(self, obj):
+        return SITEMAP_WEBPATHS_PRIORITY
+
+
 def base_unicms_sitemap(request):
     website = _get_site_from_host(request)
-    protocol =  request.scheme
 
-    webpaths_map = {
-        'queryset': WebPath.objects.filter(site=website,
-                                           is_active=True,
-                                           alias__isnull=True,
-                                           alias_url=""),
-        'date_field': 'modified',
+    sitemap_dict = {
+        'webpath': uniCMSSiteMap(
+            website=website,
+            protocol=request.scheme
+        )
     }
+
+    sitemaps = sitemap(request, sitemaps=sitemap_dict)
+    return HttpResponse(sitemaps.render(), content_type='text/xml')
+
+    # ~ website = _get_site_from_host(request)
+    # ~ protocol =  request.scheme
+
+    # ~ webpaths_map = {
+        # ~ 'queryset': WebPath.objects.filter(site=website,
+                                           # ~ is_active=True,
+                                           # ~ alias__isnull=True,
+                                           # ~ alias_url=""),
+        # ~ 'date_field': 'modified',
+    # ~ }
     # news_map = {
         # 'queryset': PublicationContext.objects.filter(webpath__site=website,
                                                       # webpath__is_active=True,
@@ -185,17 +221,17 @@ def base_unicms_sitemap(request):
         # 'date_field': 'modified',
     # }
 
-    sitemap_dict = {
-        'webpaths': GenericSitemap(webpaths_map,
-                                   priority=SITEMAP_WEBPATHS_PRIORITY,
-                                   protocol=protocol),
+    # ~ sitemap_dict = {
+        # ~ 'webpaths': GenericSitemap(webpaths_map,
+                                   # ~ priority=SITEMAP_WEBPATHS_PRIORITY,
+                                   # ~ protocol=protocol),
         # 'news': GenericSitemap(news_map,
                                # priority=SITEMAP_NEWS_PRIORITY,
                                # protocol=protocol)
-        }
+        # ~ }
 
-    sitemaps = sitemap(request, sitemaps=sitemap_dict)
-    return HttpResponse(sitemaps.render(), content_type='text/xml')
+    # ~ sitemaps = sitemap(request, sitemaps=sitemap_dict)
+    # ~ return HttpResponse(sitemaps.render(), content_type='text/xml')
 
 
 def unicms_robots(request):
