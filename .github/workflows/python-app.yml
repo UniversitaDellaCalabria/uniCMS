@@ -26,10 +26,29 @@ jobs:
           - '4.2'
           - 'master'
 
+    services:
+      mongodb:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7.2
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -44,28 +63,8 @@ jobs:
         flake8 ./src/cms --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 ./src/cms --count --exit-zero --statistics
-
-    - name: Install Redis
-      run: |
-        sudo apt-get install -y redis-server
-    - name: Start Redis
-      run: sudo systemctl start redis
-
-    - name: Install MongoDB
-      run: |
-        sudo apt-get install -y gnupg wget
-        sudo wget -qO - https://pgp.mongodb.com/server-7.0.asc | sudo gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg
-        echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
-        sudo apt-get update
-        sudo apt-get install -y mongodb-org
-        sudo systemctl start mongod
-        mongo --version
-    - name: Start MongoDB
-      run: sudo systemctl start mongod
-
     - name: Install unicms-templates-unical
       run: pip install unicms_template_unical
-
     - name: Test with Django tests
       working-directory: ./example
       run: |
