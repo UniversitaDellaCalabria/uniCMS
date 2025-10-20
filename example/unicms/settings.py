@@ -14,14 +14,13 @@ from . settingslocal import *
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'sass_processor.finders.CssFinder',
 ]
 
 # SASS processor settings
 # can include files not starting with "_"
-SASS_PROCESSOR_INCLUDE_FILE_PATTERN = r'^.+\.scss$'
+# SASS_PROCESSOR_INCLUDE_FILE_PATTERN = r'^.+\.scss$'
 # css output compact style
-SASS_OUTPUT_STYLE = 'compact'
+# SASS_OUTPUT_STYLE = 'compact'
 
 ROOT_URLCONF = 'unicms.urls'
 

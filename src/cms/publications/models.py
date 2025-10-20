@@ -1,3 +1,5 @@
+import sys
+
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
@@ -16,7 +18,8 @@ from cms.medias.validators import *
 
 from cms.pages.models import AbstractPublicable
 
-from cms.templates.models import (TemplateBlock,
+from cms.templates.models import (_lang_choices,
+                                  TemplateBlock,
                                   ActivableModel,
                                   SectionAbstractModel,
                                   SortableModel,
@@ -267,7 +270,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         qdict = dict(publication=self, is_active=True)
         if webpath:
             qdict['webpath'] = webpath
-        pub_context = PublicationContext.objects.filter(**qdict)
+        pub_context = PublicationContext.objects.filter(**qdict).select_related('publication')
         return pub_context
 
     def get_publication_context(self, webpath=None):
@@ -325,7 +328,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
             pub_ctxs = self.get_publication_contexts()
             for pub_ctx in pub_ctxs:
                 webpath = pub_ctx.webpath
-                webpath_perms = webpath.is_editable_by(user=user, obj=self)
+                webpath_perms = webpath.is_editable_by(user=user)
                 if webpath_perms: return True
         # if no permissions
         return False
@@ -348,7 +351,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
             pub_ctxs = self.get_publication_contexts()
             for pub_ctx in pub_ctxs:
                 webpath = pub_ctx.webpath
-                webpath_perms = webpath.is_publicable_by(user=user, obj=self)
+                webpath_perms = webpath.is_publicable_by(user=user)
                 if webpath_perms: return True
         # if no permissions
         return False
@@ -535,7 +538,9 @@ class PublicationLocalization(TimeStampedModel, ActivableModel,
                               CreatedModifiedBy, AbstractLockablePublicationElement):
     title = models.CharField(max_length=256, help_text=_('Heading, Headline'))
     publication = models.ForeignKey(Publication, on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES, max_length=12, default='en')
+    language = models.CharField(choices=_lang_choices,
+                                max_length=12,
+                                default='en')
     subheading = models.TextField(
         max_length=1024, default='', blank=True, help_text=_('Strap line (press)')
     )

@@ -1,6 +1,9 @@
 from django.conf import settings
+# from django.contrib.admin.models import LogEntry
 
 from cms.api.serializers import UniCMSCreateUpdateSerializer
+
+from rest_framework import serializers
 
 from . models import *
 from . import settings as app_settings
@@ -39,4 +42,18 @@ class TemplateBlockSerializer(UniCMSCreateUpdateSerializer):
 
     class Meta:
         model = PageTemplateBlock
+        fields = '__all__'
+
+
+# class LogEntrySerializer(serializers.ModelSerializer):
+class LogSerializer(serializers.ModelSerializer):
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['user'] = instance.user.__str__()
+        return data
+
+    class Meta:
+        # model = LogEntry
+        model = Log
         fields = '__all__'

@@ -1,19 +1,17 @@
-django>=2.0,<4.0
-git+https://github.com/UniversitaDellaCalabria/django-auto-serializer@dev
+django>=4.2.16,<6.0
+git+https://github.com/UniversitaDellaCalabria/django-auto-serializer.git
 django-filter
 django-nested-admin>=3.3.2
-django-taggit<=1.5.1
-django-taggit-serializer
-pillow>=10.3.0
+django-taggit
+pillow>=7.2.0
 python-magic>=0.4.18
 pymongo>=4.0
-django-rest-framework
+djangorestframework
 uritemplate
 pyyaml
 pydantic
 django-htmlmin>=0.11.0
-django-redis>=4.12.1
-unicms-template-italia>=0.4.6
+unicms-template-italia
 markdown
 markdownify
-sqlparse>=0.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
+redis

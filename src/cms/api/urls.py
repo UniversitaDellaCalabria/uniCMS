@@ -44,6 +44,7 @@ urlpatterns += path('api/news/view/<str:slug>', publication.PublicationDetail.as
 urlpatterns += path('api/menu/<int:menu_id>', menu.ApiMenuId.as_view(), name='api-menu'),
 urlpatterns += path('api/menu', menu.ApiMenu.as_view(), name='api-menu-post'),
 
+
 # --------------EDITORIAL BOARD URLs------------------------ #
 
 # editorial board prefix
@@ -175,6 +176,7 @@ urlpatterns += path(f'{w_prefix}/options/', webpath.WebpathOptionList.as_view(),
 urlpatterns += path(f'{w_prefix}/options/<int:pk>/', webpath.WebpathOptionView.as_view(), name='webpath-option'),
 urlpatterns += path(f'{w_prefix}/<int:pk>/clone/', webpath.WebpathCloneView.as_view(), name='editorial-board-site-webpath-clone'),
 urlpatterns += path(f'{w_prefix}/<int:pk>/clone/form/', webpath.WebpathCloneFormView.as_view(), name='editorial-board-site-webpath-clone-form'),
+urlpatterns += path('api/webpaths/<int:pk>/', webpath.WebpathReadOnlyView.as_view(), name='api-webpath-detail'),
 
 # pages
 pa_prefix = f'{w_prefix}/<int:webpath_id>/pages'
@@ -278,12 +280,10 @@ urlpatterns += path(f'{pamen_prefix}/form/', page_menu.PageMenuFormView.as_view(
 # page publications
 pap_prefix = f'{pa_prefix}/<int:page_id>/publications'
 urlpatterns += path(f'{pap_prefix}/', page_publication.PagePublicationList.as_view(), name='editorial-board-site-webpath-page-publications'),
-urlpatterns += path(f'{pap_prefix}/<int:pk>/', page_publication.PagePublicationView.as_view(),
-                    name='editorial-board-site-webpath-page-publication'),
-urlpatterns += path(f'{pap_prefix}/<int:pk>/logs/', page_publication.PagePublicationLogsView.as_view(),
-                    name='editorial-board-site-webpath-page-publication-logs'),
-urlpatterns += path(f'{pap_prefix}/form/', page_publication.PagePublicationFormView.as_view(),
-                    name='editorial-board-site-webpath-page-publication-form'),
+urlpatterns += path(f'{pap_prefix}/<int:pk>/', page_publication.PagePublicationView.as_view(), name='editorial-board-site-webpath-page-publication'),
+urlpatterns += path(f'{pap_prefix}/<int:pk>/logs/', page_publication.PagePublicationLogsView.as_view(), name='editorial-board-site-webpath-page-publication-logs'),
+urlpatterns += path(f'{pap_prefix}/form/', page_publication.PagePublicationFormView.as_view(), name='editorial-board-site-webpath-page-publication-form'),
+urlpatterns += path('api/publications/<int:pk>/', publication.PublicationReadOnlyView.as_view(), name='api-publication-detail'),
 
 # page related
 par_prefix = f'{pa_prefix}/<int:page_id>/related'

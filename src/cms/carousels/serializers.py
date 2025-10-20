@@ -80,6 +80,16 @@ class CarouselItemLocalizationSerializer(UniCMSCreateUpdateSerializer,
                                          UniCMSContentTypeClass):
     carousel_item = CarouselItemForeignKey()
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if instance.image:
+            image = MediaSerializer(instance.image)
+            data['image'] = image.data
+        if instance.mobile_image:
+            mobile_image = MediaSerializer(instance.mobile_image)
+            data['mobile_image'] = mobile_image.data
+        return data
+
     class Meta:
         model = CarouselItemLocalization
         fields = '__all__'

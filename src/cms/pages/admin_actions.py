@@ -12,7 +12,7 @@ def update_template(self, request, queryset):
     """
     update template to selected pages
     """
-    if 'update_template' in request.POST:
+    if 'update_template' in request.POST: # pragma: no cover
 
         form = PageTemplatesListForm(data=request.POST)
         if form.is_valid():

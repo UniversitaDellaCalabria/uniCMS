@@ -6,7 +6,7 @@ class BaseContentHandler(object):
     template = "default_template.html"
 
     def __init__(self, path:str,
-                 webpath:WebPath = None,
+                 webpath:str = None,
                  template_fname:str = None,
                  **kwargs
             ): # pragma: no cover

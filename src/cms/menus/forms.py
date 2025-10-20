@@ -33,7 +33,8 @@ class MenuItemForm(ModelForm):
 
     class Meta:
         model = NavigationBarItem
-        fields = ['menu', 'name', 'webpath', 'parent', 'url',
+        fields = ['menu', 'name', 'parent',
+                  'webpath', 'url',
                   'publication',
                   'inherited_content',
                   'order', 'is_active']
@@ -51,4 +52,5 @@ class MenuItemLocalizationForm(ModelForm):
 
     class Meta:
         model = NavigationBarItemLocalization
-        fields = ['item', 'language', 'name', 'is_active']
+        fields = ['item', 'language', 'name',
+                  'url', 'is_active']

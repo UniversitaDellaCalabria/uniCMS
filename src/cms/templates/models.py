@@ -1,8 +1,17 @@
 import logging
+import sys
 
 from django.conf import settings
+from django.contrib.admin.models import (ACTION_FLAG_CHOICES,
+                                         ADDITION,
+                                         CHANGE,
+                                         DELETION,
+                                         LogEntryManager,
+                                         LogEntry)
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
@@ -10,16 +19,32 @@ from . import settings as app_settings
 
 logger = logging.getLogger(__name__)
 
-CMS_BLOCK_TYPES = getattr(settings, 'CMS_BLOCK_TYPES',
-                          app_settings.CMS_BLOCK_TYPES)
-CMS_BLOCK_TEMPLATES = getattr(settings, 'CMS_BLOCK_TEMPLATES',
-                              app_settings.CMS_BLOCK_TEMPLATES)
-CMS_PAGE_TEMPLATES = getattr(settings, 'CMS_PAGE_TEMPLATES',
-                             app_settings.CMS_PAGE_TEMPLATES)
-CMS_LINKS_LABELS = getattr(settings, 'CMS_LINKS_LABELS',
-                           app_settings.CMS_LINKS_LABELS)
+CMS_BLOCK_TYPES = getattr(settings, 'CMS_BLOCK_TYPES', app_settings.CMS_BLOCK_TYPES)
+CMS_BLOCK_TEMPLATES = getattr(settings, 'CMS_BLOCK_TEMPLATES', app_settings.CMS_BLOCK_TEMPLATES)
+CMS_PAGE_TEMPLATES = getattr(settings, 'CMS_PAGE_TEMPLATES', app_settings.CMS_PAGE_TEMPLATES)
+CMS_LINKS_LABELS = getattr(settings, 'CMS_LINKS_LABELS', app_settings.CMS_LINKS_LABELS)
+CMS_TEMPLATE_BLOCK_SECTIONS = getattr(settings, 'CMS_TEMPLATE_BLOCK_SECTIONS', [])
 
-CMS_TEMPLATE_BLOCK_SECTIONS = getattr(settings, 'CMS_TEMPLATE_BLOCK_SECTIONS')
+_lang_choices = settings.LANGUAGES
+if 'makemigrations' in sys.argv or 'migrate' in sys.argv: # pragma: no cover
+    _lang_choices = [('', '-')]
+    CMS_TEMPLATE_BLOCK_SECTIONS = [('','-')]
+    CMS_PAGE_TEMPLATES = [('', '-')]
+    CMS_BLOCK_TYPES = [('','-')]
+    CMS_LINKS_LABELS = [('','-')]
+
+
+### Custom Logs ###
+# like django.contrib.admin.models.LogEntry
+# but object_id as PositiveIntegerField
+# and with index_together = ["content_type", "object_id"])
+import inspect
+exec(inspect.getsource(LogEntry).replace('db_table = "django_admin_log"',
+                                         'indexes = [models.Index(fields=["content_type", "object_id"])]')\
+                                .replace('class LogEntry','class Log')\
+                                .replace('models.TextField(_("object id"), blank=True, null=True)',
+                                         'models.PositiveIntegerField(_("object id"), blank=True, null=True)')) #nosec
+### END Custom Logs ###
 
 
 class CreatedModifiedBy(models.Model):
@@ -107,7 +132,7 @@ class PageTemplate(TimeStampedModel, ActivableModel, AbstractTemplate,
                    CreatedModifiedBy):
     name = models.CharField(max_length=160, blank=True, default="")
     template_file = models.CharField(max_length=1024,
-                                     choices=CMS_PAGE_TEMPLATES or (('', 'No templates found'),))
+                                     choices=CMS_PAGE_TEMPLATES)
     image = models.ImageField(upload_to="images/page_templates_previews",
                               null=True, blank=True, max_length=512)
     note = models.TextField(

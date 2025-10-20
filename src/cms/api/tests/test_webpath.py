@@ -53,6 +53,12 @@ class WebpathAPIUnitTest(TestCase):
         ebu = ContextUnitTest.create_editorialboard_user()
         webpath = ebu.webpath
 
+        # webpath detail read only
+        url_detail = reverse('unicms_api:api-webpath-detail',
+                             kwargs={'pk': webpath.pk})
+        res = req.get(url_detail)
+        assert isinstance(res.json(), dict)
+
         url = reverse('unicms_api:editorial-board-site-webpath',
                       kwargs={'site_id': webpath.site.pk,
                               'pk': webpath.pk})

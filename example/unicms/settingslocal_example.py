@@ -20,6 +20,7 @@ AUTH_USER_MODEL = 'accounts.User'
 SESSION_COOKIE_DOMAIN=".unical.it"
 MAIN_WEBSITE = 2
 MAIN_DOMAIN = "www.unical.it"
+CSRF_TRUSTED_ORIGINS = [f'https://{MAIN_DOMAIN}']
 
 # Application definition
 
@@ -35,7 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'taggit',
-    'taggit_serializer',
+    # 'taggit_serializer',
     'nested_admin',
 
     'cms.templates',
@@ -49,12 +50,12 @@ INSTALLED_APPS = [
     'cms.api',
     'cms.search',
 
-    'sass_processor',
     'unicms_template_unical',
     'unicms_template_italia',
     'bootstrap_italia_template',
 
     'rest_framework',
+    'rest_framework.authtoken',
     'django_filters',
 
     # editorial board app
@@ -139,19 +140,10 @@ if os.environ.get('CI'):
 else:
     CACHES = {
         "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
             "LOCATION": "redis://10.0.3.89:6379/unicms",
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-                "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
-                # improve resilience
-                "IGNORE_EXCEPTIONS": True,
-                "SOCKET_CONNECT_TIMEOUT": 2,  # seconds
-                "SOCKET_TIMEOUT": 2,  # seconds
-            }
         }
     }
-    DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
 
 CMS_CACHE_ENABLED = True
 
@@ -160,7 +152,7 @@ CMS_CACHE_KEY_PREFIX = 'unicms_'
 CMS_CACHE_TTL = 25
 # set to 0 means infinite
 CMS_CACHE_MAX_ENTRIES = 0
-# request.get_raw_uri() that matches the following would be ignored by cache ...
+# request.build_absolute_uri() that matches the following would be ignored by cache ...
 CMS_CACHE_EXCLUDED_MATCHES =  ['/search?']
 
 CMS_PATH_PREFIX = 'portale/'
@@ -477,3 +469,11 @@ EDITORIAL_BOARD_EVENT_EDIT_URL = EDITORIAL_BOARD_BASE_URL + 'events/{event}/edit
 ## path for Vue.js API based templates
 EDITORIAL_BOARD_EVENT_EDIT_URL_JS = "'" + EDITORIAL_BOARD_BASE_URL + "events/'+event.event.id+'/edit/'"
 # end EDITORIAL BOARD FRONTEND URLs
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}

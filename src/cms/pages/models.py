@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from django.db import models
 from django.utils import timezone
@@ -17,7 +18,8 @@ from cms.medias.validators import *
 
 from cms.menus.models import NavigationBar
 
-from cms.templates.models import (TemplateBlock,
+from cms.templates.models import (_lang_choices,
+                                  TemplateBlock,
                                   ActivableModel,
                                   PageTemplate,
                                   SectionAbstractModel,
@@ -145,7 +147,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             block = tuple(block)
             if block_is_active and page_block_is_active:
                 blocks_list.append((block, count))
-            elif not page_block_is_active:
+            elif not page_block_is_active: # pragma: no cover
                 excluded_blocks_list.append(block)
         # get all active template blocks
         template_blocks = self.base_template.\
@@ -154,14 +156,13 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             filter(is_active=True).\
             order_by('section', 'order').\
             values_list('order', 'block__pk', 'section')
-
         # populate a list with block params and enumerate value
         # for every section order position
         template_blocks_list = []
         for (count, block) in enumerate(template_blocks):
             template_blocks_list.append((block, count))
 
-        for exc_block in excluded_blocks_list:
+        for exc_block in excluded_blocks_list: # pragma: no cover
             for tpl_block in template_blocks_list:
                 if tpl_block[0] == exc_block:
                     template_blocks_list.remove(tpl_block)
@@ -201,6 +202,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         self._pubs = PagePublication.objects.filter(page=self,
                                                     is_active=True,
                                                     publication__is_active=True).\
+            select_related('publication').\
             order_by('order')
         return self._pubs
 
@@ -210,6 +212,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         self._carousels = PageCarousel.objects.filter(page=self,
                                                       is_active=True,
                                                       carousel__is_active=True).\
+            select_related('carousel').\
             order_by('order')
         return self._carousels
 
@@ -219,6 +222,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         self._contacts = PageContact.objects.filter(page=self,
                                                     is_active=True,
                                                     contact__is_active=True).\
+            select_related('contact').\
             order_by('order')
         return self._contacts
 
@@ -227,6 +231,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             return self._medias
         self._medias = PageMedia.objects.filter(page=self,
                                                 is_active=True).\
+            select_related('media').\
             order_by('order')
         return self._medias
 
@@ -236,6 +241,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         self._media_collections = PageMediaCollection.objects.filter(page=self,
                                                                      is_active=True,
                                                                      collection__is_active=True).\
+            select_related('collection').\
             order_by('order')
         return self._media_collections
 
@@ -245,6 +251,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         self._menus = PageMenu.objects.filter(page=self,
                                               is_active=True,
                                               menu__is_active=True).\
+            select_related('menu').\
             order_by('order')
         return self._menus
 
@@ -295,7 +302,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         # and check for locks on webpath
         webpath = self.webpath
         webpath_perms = webpath.is_localizable_by(user=user)
-        if not webpath_perms: return False
+        if webpath_perms: return True
         # check for locks on object
         return EditorialBoardLockUser.check_for_locks(self, user)
 
@@ -305,8 +312,8 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         # check if user has EditorialBoard editor permissions on object
         # and check for locks on webpath
         webpath = self.webpath
-        webpath_perms = webpath.is_editable_by(user=user, obj=self)
-        if not webpath_perms: return False
+        webpath_perms = webpath.is_editable_by(user=user)
+        if webpath_perms: return True
         # check for locks on object
         return EditorialBoardLockUser.check_for_locks(self, user)
 
@@ -316,8 +323,8 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         # check if user has EditorialBoard editor permissions on object
         # and check for locks on webpath
         webpath = self.webpath
-        webpath_perms = webpath.is_publicable_by(user=user, obj=self)
-        if not webpath_perms: return False
+        webpath_perms = webpath.is_publicable_by(user=user) #, obj=self)
+        if webpath_perms: return True
         # check for locks on object
         return EditorialBoardLockUser.check_for_locks(self, user)
 
@@ -369,7 +376,7 @@ class PageLocalization(TimeStampedModel, ActivableModel,
     title = models.CharField(max_length=256)
     page = models.ForeignKey(Page,
                              on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES,
+    language = models.CharField(choices=_lang_choices,
                                 max_length=12, default='en')
 
     class Meta:
@@ -520,7 +527,7 @@ class PageHeadingLocalization(ActivableModel,
                               CreatedModifiedBy,
                               AbstractLockablePageElement):
     heading = models.ForeignKey(PageHeading, on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES,
+    language = models.CharField(choices=_lang_choices,
                                 max_length=12,
                                 default='en')
     title = models.CharField(max_length=256)

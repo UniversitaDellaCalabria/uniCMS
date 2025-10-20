@@ -94,6 +94,7 @@ def load_publications_preview(context, template,
     pub_in_context = PublicationContext.objects.\
         filter(**query_params).\
         distinct().\
+        select_related('publication').\
         order_by('order','-date_start')
 
     if in_evidence:

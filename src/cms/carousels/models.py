@@ -1,3 +1,5 @@
+import sys
+
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
@@ -6,7 +8,8 @@ from django.utils.translation import gettext_lazy as _
 from cms.api.utils import check_user_permission_on_object
 from cms.contexts.models_abstract import AbstractLockable
 from cms.medias.models import Media
-from cms.templates.models import (CMS_LINKS_LABELS,
+from cms.templates.models import (_lang_choices,
+                                  CMS_LINKS_LABELS,
                                   ActivableModel,
                                   CreatedModifiedBy,
                                   SortableModel,
@@ -72,6 +75,8 @@ class CarouselItem(ActivableModel, TimeStampedModel,
                                                        is_active=True)\
                                                 .first()
         if i18n:
+            self.image = i18n.image or self.image
+            self.mobile_image = i18n.mobile_image or self.mobile_image
             self.heading = i18n.heading
             self.pre_heading = i18n.pre_heading
             self.description = i18n.description
@@ -98,7 +103,15 @@ class CarouselItemLocalization(ActivableModel,
                                CreatedModifiedBy):
     carousel_item = models.ForeignKey(CarouselItem,
                                       on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES, max_length=12, default='en')
+    language = models.CharField(choices=_lang_choices, max_length=12, default='en')
+    image = models.ForeignKey(Media,
+                              on_delete=models.PROTECT,
+                              blank=True, null=True,
+                              related_name="localization_image")
+    mobile_image = models.ForeignKey(Media,
+                                     on_delete=models.PROTECT,
+                                     blank=True, null=True,
+                                     related_name="localization_mobile_image")
     pre_heading = models.CharField(
         max_length=120, blank=True, default='', help_text=_('Pre Heading')
     )
@@ -161,7 +174,7 @@ class CarouselItemLinkLocalization(ActivableModel, TimeStampedModel,
                                    SortableModel, CreatedModifiedBy):
     carousel_item_link = models.ForeignKey(CarouselItemLink,
                                            on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES, max_length=12, default='en')
+    language = models.CharField(choices=_lang_choices, max_length=12, default='en')
     title = models.CharField(max_length=120, blank=True, default='', help_text=_('Title'))
     url = models.CharField(max_length=2048)
 

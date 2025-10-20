@@ -32,7 +32,7 @@ class UniCMSFormSerializer():
         def _get_choices(choices):
             elements = []
             for choice in choices:
-                if (type(choice[1]) == tuple):
+                if (type(choice[1]) in [list, tuple]):
                     elements.extend(_get_choices(choice[1]))
                 else:
                     elements.append({"text": choice[1],

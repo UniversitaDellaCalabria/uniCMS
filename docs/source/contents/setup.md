@@ -27,7 +27,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # templates - you can load your own templates
-    'sass_processor',
     'bootstrap_italia_template',
     'unicms_template_italia', # for example
     'unicms_template_unical', # for example
@@ -278,7 +277,7 @@ CMS_CACHE_KEY_PREFIX = 'unicms_'
 CMS_CACHE_TTL = 25
 # set to 0 means infinite
 CMS_CACHE_MAX_ENTRIES = 0
-# request.get_raw_uri() that matches the following would be ignored by cache ...
+# request.build_absolute_uri() that matches the following would be ignored by cache ...
 CMS_CACHE_EXCLUDED_MATCHES =  ['/search?',]
 ````
 

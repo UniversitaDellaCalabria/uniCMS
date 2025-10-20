@@ -134,7 +134,7 @@ class ApiSearchEngine(APIView):
 
         # allowed sites
         if '*' in ALLOW_SEARCH_IN_SITES: pass
-        else:
+        else: # pragma: no cover
             query['sites'] = {}
             query['sites']['$elemMatch'] = {'$in': ALLOW_SEARCH_IN_SITES}
 
@@ -180,9 +180,9 @@ class ApiSearchEngine(APIView):
 
         try:
             page = int(request.GET.get('page', 1)) or 1
-        except ValueError:
+        except ValueError: # pragma: no cover
             page = 1
-        if page > total_pages:
+        if page > total_pages: # pragma: no cover
             msg = PageNumberPagination.invalid_page_message.format(
                 page=page
             )

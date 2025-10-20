@@ -18,7 +18,9 @@ class AbstractPlaceholder(object):
         self.webpath = context['webpath']
         self.template = content['template']
         self.content = content
+        self.blocks = context['blocks']
 
+        # self.menus = context['menus']
         # i18n
         self.language = getattr(self.request, 'LANGUAGE_CODE', '')
 
@@ -58,7 +60,8 @@ class AbstractPlaceholder(object):
         return True
 
     def get_placeholders(self):
-        blocks = self.page.get_blocks()
+        # blocks = self.page.get_blocks()
+        blocks = self.blocks
         self.ph = [i for i in blocks
                    if i.type == self.ph_name]
         return self.have_valid_placeholders()

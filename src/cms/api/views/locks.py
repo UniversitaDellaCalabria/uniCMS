@@ -8,7 +8,7 @@ from cms.contexts.models import EditorialBoardLock, EditorialBoardLockUser
 from cms.contexts.serializers import EditorialBoardLockUserSerializer
 
 from rest_framework import generics
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
@@ -136,12 +136,11 @@ class RedisLockView(APIView):
     def get(self, request, *args, **kwargs):
         content_type_id = self.kwargs['content_type_id']
         object_id = self.kwargs['object_id']
-        lock = get_lock_from_cache(content_type_id, object_id)
-        if lock[0] and not lock[0] == request.user.pk: # pragma: no cover
-            owner_user = get_user_model().objects.filter(pk=lock[0]).first()
-            return Response({'lock': lock,
-                             'message': LOCK_MESSAGE.format(user=owner_user,
-                                                            ttl=lock[1])})
+        user_lock = get_lock_from_cache(content_type_id, object_id)
+        if user_lock and not user_lock == request.user.pk: # pragma: no cover
+            owner_user = get_user_model().objects.filter(pk=user_lock).first()
+            return Response({'message': LOCK_MESSAGE.format(user=owner_user)})
+            # raise PermissionDenied(LOCK_MESSAGE.format(user=owner_user), 403)
         return Response({})
 
 
@@ -188,12 +187,11 @@ class RedisLockSetView(APIView):
 
         ct = get_object_or_404(ContentType, pk=content_type_id)
         obj = get_object_or_404(ct.model_class(), pk=object_id)
-        lock = get_lock_from_cache(content_type_id, object_id)
-        if lock[0] and not lock[0] == request.user.pk: # pragma: no cover
-            owner_user = get_user_model().objects.filter(pk=lock[0]).first()
-            return Response({'lock': lock,
-                             'message': LOCK_MESSAGE.format(user=owner_user,
-                                                            ttl=lock[1])})
+        user_lock = get_lock_from_cache(content_type_id, object_id)
+        if user_lock and not user_lock == request.user.pk: # pragma: no cover
+            owner_user = get_user_model().objects.filter(pk=user_lock).first()
+            # return Response({'message': LOCK_MESSAGE.format(user=owner_user)})
+            raise PermissionDenied(LOCK_MESSAGE.format(user=owner_user), 403)
         if obj.is_lockable_by(request.user):
             set_lock_to_cache(user_id=request.user.pk,
                               content_type_id=content_type_id,

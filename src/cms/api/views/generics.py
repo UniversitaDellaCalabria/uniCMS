@@ -52,14 +52,11 @@ def check_locks(item, user):
     content_type_id = ContentType.objects.get_for_model(item).pk
     object_id = item.pk
     user_id = user.pk
-    lock = get_lock_from_cache(content_type_id, object_id)
-    user_lock = lock[0]
+    user_lock = get_lock_from_cache(content_type_id, object_id)
     owner_user = get_user_model().objects.filter(pk=user_lock).first()
     if user_lock and not user_lock == user_id:
         logger.debug(f'{user} tried to access to {owner_user} actually used by {item}')
-        raise PermissionDenied(LOCK_MESSAGE.format(user=owner_user,
-                                                   ttl=lock[1]),
-                               403)
+        raise PermissionDenied(LOCK_MESSAGE.format(user=owner_user), 403)
     # set_lock_to_cache(user_id, content_type_id, object_id)
 
 

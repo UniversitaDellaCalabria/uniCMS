@@ -45,10 +45,18 @@ class CarouselItemLocalizationForm(ModelForm):
         if carousel_id and carousel_item_id:
             self.fields['carousel_item'].queryset = CarouselItem.objects.filter(pk=carousel_item_id,
                                                                                 carousel__pk=carousel_id)
+        setattr(self.fields['image'],
+                FORM_SOURCE_LABEL,
+                # only images
+                reverse('unicms_api:media-options') + '?file_type=image%2Fwebp')
+        setattr(self.fields['mobile_image'],
+                FORM_SOURCE_LABEL,
+                # only images
+                reverse('unicms_api:media-options') + '?file_type=image%2Fwebp')
 
     class Meta:
         model = CarouselItemLocalization
-        fields = ['carousel_item', 'language', 'pre_heading',
+        fields = ['carousel_item', 'image', 'mobile_image', 'language', 'pre_heading',
                   'heading', 'description', 'order', 'is_active']
 
 

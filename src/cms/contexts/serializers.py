@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.contrib.admin.models import LogEntry
 from django.utils.text import slugify
 
 from cms.api.serializers import UniCMSCreateUpdateSerializer, UniCMSContentTypeClass
@@ -9,11 +8,13 @@ from cms.contexts.models import EditorialBoardEditors
 
 from rest_framework import serializers
 
+from . import settings as app_settings
 from . models import *
 
 
 CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
                                   contexts_settings.CMS_CONTEXT_PERMISSIONS)
+AUTH_USER_GROUPS = app_settings.AUTH_USER_GROUPS + getattr(settings, 'AUTH_USER_GROUPS', ())
 
 
 class EditorialBoardLockSerializer(serializers.ModelSerializer):
@@ -70,9 +71,11 @@ class WebPathSerializer(UniCMSCreateUpdateSerializer, UniCMSContentTypeClass):
                   'alias_url',
                   'path',
                   'get_full_path',
+                  'get_absolute_url',
                   'meta_description',
                   'meta_keywords',
                   'robots',
+                  'access',
                   'is_active']
 
     def to_representation(self, instance):
@@ -122,15 +125,3 @@ class WebPathSelectOptionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = WebPath
         fields = ()
-
-
-class LogEntrySerializer(serializers.ModelSerializer):
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data['user'] = instance.user.__str__()
-        return data
-
-    class Meta:
-        model = LogEntry
-        fields = '__all__'

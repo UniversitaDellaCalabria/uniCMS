@@ -8,7 +8,7 @@ from cms.templates.utils import secure_url
 
 from rest_framework import serializers
 
-from taggit_serializer.serializers import (TagListSerializerField,
+from taggit.serializers import (TagListSerializerField,
                                            TaggitSerializer)
 
 from . models import *
@@ -50,7 +50,7 @@ class PublicationSerializer(TaggitSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        if instance.preview_image:
+        if instance.preview_image: # pragma: no cover
             preview_image = MediaSerializer(instance.preview_image)
             data['preview_image'] = preview_image.data
         if instance.presentation_image:

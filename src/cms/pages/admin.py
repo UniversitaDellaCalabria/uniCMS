@@ -76,8 +76,8 @@ class PageAdmin(AbstractPreviewableAdmin, nested_admin.NestedModelAdmin):
                PageMediaCollectionInline,
                PageLinkInline,
                PageHeadingInline)
-    actions = AbstractPreviewableAdmin.actions + [make_page_draft,
-                                                  update_template]
+    actions = AbstractPreviewableAdmin.actions + (make_page_draft,
+                                                  update_template)
 
     raw_id_fields = ['webpath', 'base_template']
 

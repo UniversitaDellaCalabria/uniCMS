@@ -3,6 +3,7 @@ import os
 
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
@@ -64,6 +65,7 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
         if 'file' in request.data:
+            cache.delete(f'media-{item.uuid}')
             _remove_file(item)
         return super().patch(request, *args, **kwargs)
 
@@ -74,6 +76,7 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         if not permission['granted']:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
+        cache.delete(f'media-{item.uuid}')
         _remove_file(item)
         return super().put(request, *args, **kwargs)
 
@@ -84,6 +87,7 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         if not permission['granted']:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
+        cache.delete(f'media-{item.uuid}')
         _remove_file(item)
         return super().delete(request, *args, **kwargs)
 

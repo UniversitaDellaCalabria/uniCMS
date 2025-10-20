@@ -1,11 +1,15 @@
+import sys
+
 from copy import deepcopy
 
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from cms.api.utils import check_user_permission_on_object
 from cms.contexts.models import WebPath, models, settings
 from cms.contexts.models_abstract import AbstractLockable
-from cms.templates.models import (ActivableModel,
+from cms.templates.models import (_lang_choices,
+                                  ActivableModel,
                                   CreatedModifiedBy,
                                   SortableModel,
                                   TimeStampedModel)
@@ -79,14 +83,14 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
                              on_delete=models.CASCADE,
                              related_name="related_menu")
     name = models.CharField(max_length=100)
-    webpath = models.ForeignKey(WebPath,
-                                null=True, blank=True,
-                                on_delete=models.SET_NULL,
-                                related_name="linked_page")
     parent = models.ForeignKey('NavigationBarItem',
                                null=True, blank=True,
                                on_delete=models.CASCADE,
                                related_name="related_parent")
+    webpath = models.ForeignKey(WebPath,
+                                null=True, blank=True,
+                                on_delete=models.SET_NULL,
+                                related_name="linked_page")
     url = models.CharField(help_text=_("url"),
                            default='', blank=True, max_length=2048)
     publication = models.ForeignKey('cmspublications.Publication',
@@ -114,7 +118,7 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
     def link(self, request=None):
         if self.url:
             return self.url
-        elif self.webpath:
+        elif self.webpath: # pragma: no cover
             # does it have sense?
             # if self.publication:
             # ctx_webpath = self.publication.get_publication_context(webpath=self.webpath)
@@ -132,6 +136,7 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
                                                     .first()
         if i18n: # pragma: no cover
             self.name = i18n.name
+            self.url = i18n.url or self.url
             self.language = lang
         else:
             self.language = None
@@ -166,11 +171,15 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
                    only_active=True,
                    exclude=None):
         if self.pk:
-            items = NavigationBarItem.objects.filter(parent=self,
-                                                     menu=self.menu).\
-                                              order_by('order')
-            if only_active:
-                items = items.filter(is_active=True)
+            q_base = Q(parent=self, menu=self.menu)
+            q_active = Q(is_active=True) if only_active else Q()
+
+            items = NavigationBarItem.objects.filter(q_base, q_active)\
+                                             .select_related('parent')\
+                                             .select_related('menu')\
+                                             .order_by('order')
+            # if only_active:
+                # items = items.filter(is_active=True)
             if exclude:
                 items = items.exclude(pk=exclude.pk)
             # if getattr(self, 'language', lang):
@@ -225,8 +234,11 @@ class NavigationBarItemLocalization(ActivableModel, TimeStampedModel,
                                     CreatedModifiedBy):
     item = models.ForeignKey(NavigationBarItem,
                              on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES, max_length=12, default='en')
+    language = models.CharField(choices=_lang_choices,
+                                max_length=12, default='en')
     name = models.CharField(max_length=100)
+    url = models.CharField(help_text=_("url"),
+                           default='', blank=True, max_length=2048)
 
     class Meta:
         verbose_name_plural = _("Context Navigation Menu Item Localizations")

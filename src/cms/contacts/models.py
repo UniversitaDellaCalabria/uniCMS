@@ -1,3 +1,5 @@
+import sys
+
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -5,7 +7,8 @@ from django.utils.translation import gettext_lazy as _
 from cms.api.utils import check_user_permission_on_object
 from cms.contexts.models_abstract import AbstractLockable
 from cms.medias.models import Media
-from cms.templates.models import (ActivableModel,
+from cms.templates.models import (_lang_choices,
+                                  ActivableModel,
                                   CreatedModifiedBy,
                                   SortableModel,
                                   TimeStampedModel)
@@ -62,7 +65,7 @@ class ContactLocalization(ActivableModel,
                           TimeStampedModel, SortableModel,
                           CreatedModifiedBy):
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES,
+    language = models.CharField(choices=_lang_choices,
                                 max_length=12,
                                 default='en')
     name = models.CharField(max_length=160,
@@ -121,7 +124,7 @@ class ContactInfoLocalization(ActivableModel,
                               CreatedModifiedBy):
     contact_info = models.ForeignKey(ContactInfo,
                                      on_delete=models.CASCADE)
-    language = models.CharField(choices=settings.LANGUAGES,
+    language = models.CharField(choices=_lang_choices,
                                 max_length=12,
                                 default='en')
     label = models.CharField(max_length=160, blank=True, default='')

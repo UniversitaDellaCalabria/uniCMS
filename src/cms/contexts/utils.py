@@ -4,7 +4,8 @@ import re
 from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.admin.models import LogEntry, CHANGE
+# from django.contrib.admin.models import LogEntry, CHANGE
+from django.contrib.admin.models import CHANGE
 from django.contrib.contenttypes.models import ContentType
 from django.utils import translation
 from django.utils.module_loading import import_string
@@ -13,6 +14,8 @@ from django.utils.safestring import mark_safe
 from django.template.loader import get_template, render_to_string
 from django.template.exceptions import (TemplateDoesNotExist,
                                         TemplateSyntaxError)
+
+from cms.templates.models import Log
 
 from copy import deepcopy
 
@@ -50,10 +53,13 @@ def detect_user_language(request):
         current = request.session.get(f'_unicms_website_{website.pk}_lang', website_lang) # current session website language
     else:
         # if there is a choosen language in session, overwrite current
-        current = request.session.get(translation.LANGUAGE_SESSION_KEY, req_lang) # current session language
+        current = request.session.get('_unicms_lang', req_lang) # current session language
 
     # if user changes language in URL overwrite current
     lang = request.GET.get('lang', current)
+    # prevent XSS
+    if lang != current and not lang in dict(settings.LANGUAGES).keys():
+        lang = current
 
     # set language
     translation.activate(lang)
@@ -63,7 +69,7 @@ def detect_user_language(request):
     if website_lang:
         request.session[f'_unicms_website_{website.pk}_lang'] = lang
     else:
-        request.session[translation.LANGUAGE_SESSION_KEY] = lang
+        request.session['_unicms_lang'] = lang
 
     # return
     return lang
@@ -101,6 +107,7 @@ def sanitize_path(path):
 
 
 def append_slash(path):
+    if not path: return '/'
     return f'{path}/' if path[-1] != '/' else path
 
 
@@ -191,7 +198,7 @@ def is_publisher(permission):
 
 def log_obj_event(user, obj, data={}, action_flag=CHANGE):
     """
-    new LogEntry to log change action on object
+    new Log to log change action on object
     """
     msg = _("changed") if action_flag == CHANGE else _("added")
 
@@ -200,7 +207,7 @@ def log_obj_event(user, obj, data={}, action_flag=CHANGE):
     try:
         data = deepcopy(data)
         data = dict(data)
-    except Exception:
+    except Exception: # pragma: no cover
         data = {}
 
     # pop readonly fields from logged dict
@@ -211,12 +218,13 @@ def log_obj_event(user, obj, data={}, action_flag=CHANGE):
     data.pop('modified_by', None)
     data.pop('object_content_type', None)
 
-    LogEntry.objects.log_action(user_id = user.pk,
-                                content_type_id = ContentType.objects.get_for_model(obj).pk,
-                                object_id = obj.pk,
-                                object_repr = obj.__str__(),
-                                action_flag = action_flag,
-                                change_message = f'{msg}: {data}' if data else msg)
+    # LogEntry.objects.log_action(user_id = user.pk,
+    Log.objects.log_action(user_id = user.pk,
+                           content_type_id = ContentType.objects.get_for_model(obj).pk,
+                           object_id = obj.pk,
+                           object_repr = obj.__str__(),
+                           action_flag = action_flag,
+                           change_message = f'{msg}: {data}' if data else msg)
 
 
 def clone(obj,
@@ -240,5 +248,5 @@ def clone(obj,
         new_obj = isi.save(custom_values=custom_values,
                            recursive_custom_values=recursive_custom_values)
         return new_obj
-    except Exception as e:
+    except Exception as e: # pragma: no cover
         raise e
