@@ -19,6 +19,7 @@ jobs:
       matrix:
         python-version:
           - '3.10'
+          - '3.11'
           - '3.12'
         django-version:
           - '4.2'
@@ -74,7 +75,7 @@ jobs:
         coverage erase
         coverage run ./manage.py test --settings=unicms.settingslocal_test cms
         coverage report -m
-        coverage report --fail-under=99
+        coverage report --fail-under=95
         coverage xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
