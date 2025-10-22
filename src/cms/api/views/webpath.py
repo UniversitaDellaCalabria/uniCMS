@@ -68,9 +68,6 @@ class WebpathList(UniCMSListCreateAPIView):
                                                                   user=request.user)
                 publisher_perms = is_publisher(permission)
                 if publisher_perms: has_permissions = True
-                elif publisher_perms is None:
-                    has_permissions = EditorialBoardLockUser.check_for_locks(parent,
-                                                                             request.user)
             if not has_permissions:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
