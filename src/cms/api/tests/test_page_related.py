@@ -104,11 +104,9 @@ class PageRelatedAPIUnitTest(TestCase):
                         follow=1)
         assert res.status_code == 403
         # user has permission on page
-        page.created_by = user2
-        page.save()
         ebu3 = ContextUnitTest.create_editorialboard_user(user=user2,
                                                           webpath=webpath,
-                                                          permission=3)
+                                                          permission=7)
         user2.refresh_from_db()
         req.force_login(user2)
         res = req.patch(url, data,
@@ -118,14 +116,13 @@ class PageRelatedAPIUnitTest(TestCase):
         assert not page_related.is_active
 
         # PUT
-        page.created_by = None
-        page.save()
         data = {'page': page.pk,
                 'related_page': related.pk,
                 'is_active': False
         }
         # user hasn't permission
-        req.force_login(user2)
+        ebu3.permission = 3
+        ebu3.save()
         res = req.put(url, data, follow=1,
                       content_type='application/json')
         assert res.status_code == 403

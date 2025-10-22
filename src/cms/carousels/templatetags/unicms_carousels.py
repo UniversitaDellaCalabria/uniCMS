@@ -35,7 +35,6 @@ def load_carousel(context, section, template, carousel_id=None):
     request = context['request']
     page = context['page']
     language = getattr(request, 'LANGUAGE_CODE', '')
-
     if carousel_id:
         return _load_carousel_by_id(carousel_id=carousel_id,
                                     template=template,
@@ -44,7 +43,6 @@ def load_carousel(context, section, template, carousel_id=None):
                                     func_name=_func_name)
     else:
         if not section: return SafeString('')
-
         page_carousel = page.get_carousels().first()
 
         # page_carousel = PageCarousel.objects.filter(section=section,

@@ -60,31 +60,36 @@ class WebpathList(UniCMSListCreateAPIView):
             # get parent
             parent = serializer.validated_data.get('parent')
             # check permissions on parent
-            permission = EditorialBoardEditors.get_permission(webpath=parent,
-                                                              user=request.user)
-            publisher_perms = is_publisher(permission)
-            parent_locks_ok = EditorialBoardLockUser.check_for_locks(parent,
-                                                                     request.user)
-            has_permissions = request.user.is_superuser or publisher_perms or parent_locks_ok
+            has_permissions = False
+            if request.user.is_superuser:
+                has_permissions = True
+            else:
+                permission = EditorialBoardEditors.get_permission(webpath=parent,
+                                                                  user=request.user)
+                publisher_perms = is_publisher(permission)
+                if publisher_perms: has_permissions = True
+                elif publisher_perms is None:
+                    has_permissions = EditorialBoardLockUser.check_for_locks(parent,
+                                                                             request.user)
             if not has_permissions:
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=request.method)
             try:
                 webpath = serializer.save()
+                # add permission to webpath
+                if not request.user.is_superuser and not publisher_perms.get('allow_descendant',False):
+                    EditorialBoardEditors.objects.create(user=request.user,
+                                                         webpath=webpath,
+                                                         permission=permission,
+                                                         is_active=True)
+                url = reverse('unicms_api:editorial-board-site-webpath',
+                              kwargs={'site_id': webpath.site.pk,
+                                      'pk': webpath.pk})
+                return HttpResponseRedirect(url)
             except Exception as e:
                 raise LoggedValidationException(classname=self.__class__.__name__,
                                                 resource=request.method,
                                                 detail=e)
-            # add permission to webpath
-            if not publisher_perms.get('allow_descendant',False) and not request.user.is_superuser:
-                EditorialBoardEditors.objects.create(user=request.user,
-                                                     webpath=webpath,
-                                                     permission=permission,
-                                                     is_active=True)
-            url = reverse('unicms_api:editorial-board-site-webpath',
-                          kwargs={'site_id': webpath.site.pk,
-                                  'pk': webpath.pk})
-            return HttpResponseRedirect(url)
 
 
 class WebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):

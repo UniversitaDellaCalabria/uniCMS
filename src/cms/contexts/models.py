@@ -231,8 +231,9 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         # if user has translator permissions
         if perms: return True
         # if user has not permissions, check locks
-        webpath_lock_ok = EditorialBoardLockUser.check_for_locks(self, user)
-        return webpath_lock_ok
+        elif perms is None:
+            return EditorialBoardLockUser.check_for_locks(self, user)
+        return False
 
     def is_editable_by(self, user=None): #, obj=None, parent=False):
         if not user: return False
@@ -249,8 +250,9 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
             # permission granted
             return True
         # if user has not permissions, check locks
-        webpath_lock_ok = EditorialBoardLockUser.check_for_locks(self, user)
-        return webpath_lock_ok
+        elif perms is None:
+            return EditorialBoardLockUser.check_for_locks(self, user)
+        return False
 
     def is_publicable_by(self, user=None): #, obj=None, parent=False):
         if not user: return False
@@ -268,8 +270,9 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
             # permission granted
             return True
         # if user has not permissions, check locks
-        webpath_lock_ok = EditorialBoardLockUser.check_for_locks(self, user)
-        return webpath_lock_ok
+        elif perms is None:
+            return EditorialBoardLockUser.check_for_locks(self, user)
+        return False
 
 
     def is_lockable_by(self, user):
@@ -310,10 +313,9 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy, ActivableModel)
 
     @classmethod
     def get_permission(cls, webpath, user, check_all=True, consider_zero=True):
-
         # webpath and user must be true
         if not all((webpath, user)):
-            return 0
+            return -1
 
         # return max value
         if user.is_superuser: return 7
@@ -349,7 +351,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy, ActivableModel)
                     result = entry.permission
             return result
 
-        return 0
+        return -1
 
     def __str__(self):
         if self.webpath:

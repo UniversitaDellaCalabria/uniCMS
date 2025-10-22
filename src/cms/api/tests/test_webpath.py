@@ -138,15 +138,25 @@ class WebpathAPIUnitTest(TestCase):
                         data=data,
                         content_type='application/json',
                         follow=1)
-        # ...no publisher permissions on parent
+        # ...no publisher permissions
         assert res.status_code == 403
 
-        # if publisher permissions on actual parent
-        # (user can edit webpath!)
+        # now publisher permissions on actual parent
         ebu_parent.permission = 7
         ebu_parent.save()
 
+        # but no publisher permission on webpath!
+        res = req.patch(url,
+                        data=data,
+                        content_type='application/json',
+                        follow=1)
+        assert res.status_code == 403
+
+        # remove permissions on webpath
+        ebu.delete()
+        
         # change parent
+        # no permissions on new parent
         new_parent = ContextUnitTest.create_webpath(site=ebu.webpath.site)
         child_json = {'site': new_parent.site.pk,
                       'parent': new_parent.pk,
@@ -159,6 +169,7 @@ class WebpathAPIUnitTest(TestCase):
                         follow=1)
         assert res.status_code == 403
 
+        # valid data and valid parent
         res = req.patch(url,
                         data=data,
                         content_type='application/json',
@@ -166,14 +177,8 @@ class WebpathAPIUnitTest(TestCase):
         ebu.webpath.refresh_from_db()
         assert ebu.webpath.name == 'patched name'
         assert not ebu.webpath.is_active
-        # valid parent
-        data = {'parent': ebu_parent.webpath.pk}
-        res = req.patch(url,
-                        data=data,
-                        content_type='application/json',
-                        follow=1)
         assert res.status_code == 200
-
+        
     def test_put(self):
         req = Client()
         site = ContextUnitTest.create_website()
@@ -244,11 +249,12 @@ class WebpathAPIUnitTest(TestCase):
         parent_json['parent'] = root_webpath.pk
 
         # edit child parent
-        ebu_child = ContextUnitTest.create_editorialboard_user(user=user,
-                                                               webpath=ContextUnitTest.create_webpath(path=datetime.datetime.now().strftime("%f")),
-                                                               permission=3,
-                                                               is_active=True)
-        child = ebu_child.webpath
+        # ~ ebu_child = ContextUnitTest.create_editorialboard_user(user=user,
+                                                               # ~ webpath=ContextUnitTest.create_webpath(path=datetime.datetime.now().strftime("%f")),
+                                                               # ~ permission=3,
+                                                               # ~ is_active=True)
+        # ~ child = ebu_child.webpath
+        child = ContextUnitTest.create_webpath(site=site, path=datetime.datetime.now().strftime("%f"))
         child.parent = ebu_parent.webpath
         child.save()
         child_url = reverse('unicms_api:editorial-board-site-webpath',
@@ -319,6 +325,22 @@ class WebpathAPIUnitTest(TestCase):
                       'alias': parent.pk,
                       'path': 'test',
                       'is_active': 1}
+
+        # but lower permissions on webpath
+        ebu_child = ContextUnitTest.create_editorialboard_user(user=user,
+                                                               webpath=child,
+                                                               permission=3,
+                                                               is_active=True)
+                                                               
+        res = req.put(child_url,
+                      data=child_json,
+                      content_type='application/json',
+                      follow=1)
+        assert res.status_code == 403
+
+        # ok without child permissins
+        ebu_child.delete()
+
         res = req.put(child_url,
                       data=child_json,
                       content_type='application/json',

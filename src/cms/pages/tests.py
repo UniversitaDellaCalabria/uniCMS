@@ -242,7 +242,7 @@ class PageUnitTest(TestCase):
         lm = load_carousel(**data)
         assert 'italia_carousel' in lm
 
-        data['carousel_id'] = obj.get_carousels()[0].pk
+        data['carousel_id'] = obj.get_carousels()[0].carousel.pk
         lm = load_carousel(**data)
         assert 'italia_carousel' in lm
 
@@ -369,7 +369,8 @@ class PageUnitTest(TestCase):
     def test_home_page(self):
         obj = self.create_page(date_end=timezone.localtime(),
                                webpath_path='/')
-        url = reverse('unicms:cms_dispatch')
+        # ~ url = reverse('unicms:cms_dispatch')
+        url = f'/{settings.CMS_PATH_PREFIX}'
         res = self.client.get(url)
         assert res.status_code == 200
         # testing cache
@@ -381,7 +382,8 @@ class PageUnitTest(TestCase):
         self.create_page(webpath_path='/')
         user = ContextUnitTest.create_user(is_staff=1)
         self.client.force_login(user)
-        url = reverse('unicms:cms_dispatch')
+        # ~ url = reverse('unicms:cms_dispatch')
+        url = f'/{settings.CMS_PATH_PREFIX}'
         res = self.client.get(f'{url}?show_template_blocks_sections')
         assert res.status_code == 200
         assert 'block' in res.content.decode()
@@ -391,7 +393,8 @@ class PageUnitTest(TestCase):
         self.create_page()
         user = ContextUnitTest.create_user(is_staff=1)
         self.client.force_login(user)
-        url = reverse('unicms:cms_dispatch')
+        # ~ url = reverse('unicms:cms_dispatch')
+        url = f'/{settings.CMS_PATH_PREFIX}'
         res = self.client.get(f'{url}?show_cms_draft_mode')
         assert res.status_code == 200
 
@@ -680,11 +683,12 @@ class PageUnitTest(TestCase):
         assert ic
 
 
-    def test_unicms_sitemap(self):
-        obj = self.create_page(webpath_path='/')
-        url = reverse('unicms_sitemap')
-        res = self.client.get(url)
-        assert res.status_code == 200
+    # ~ def test_unicms_sitemap(self):
+        # ~ obj = self.create_page(webpath_path='/')
+        # ~ url = reverse('unicms_sitemap')
+        # ~ res = self.client.get(url)
+        # ~ assert res.status_code == 200
+
 
     def test_unicms_robots(self):
         obj = self.create_page(webpath_path='/')

@@ -165,6 +165,7 @@ def is_translator(permission):
     given a permission code (int)
     returns a dict{} with translator permission info
     """
+    if permission == -1: return None
     if not permission > 0: return {}
     allow_descendant = True if permission > 1 else False
     return {'only_created_by': False,
@@ -177,6 +178,7 @@ def is_editor(permission):
     given a permission code (int)
     returns a dict{} with editor permission info
     """
+    if permission == -1: return None
     if not permission > 2: return {}
     allow_descendant = True if permission > 4 else False
     only_created_by = True if permission == 3 else False
@@ -190,6 +192,7 @@ def is_publisher(permission):
     given a permission code (int)
     returns a dict{} with publiser permission info
     """
+    if permission == -1: return None
     if not permission > 5: return {}
     allow_descendant = True if permission == 7 else False
     return {'only_created_by': False,

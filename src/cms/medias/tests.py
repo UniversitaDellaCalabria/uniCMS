@@ -106,7 +106,8 @@ class MediaUnitTest(TestCase):
         media = MediaUnitTest.create_media()
         response = self.client.get(reverse('unicms_medias:media-file',
                                    kwargs={'unique_code': media.uuid}))
-        self.assertEqual(response.status_code, 200)
+        # redirect to media file
+        self.assertEqual(response.status_code, 302)
 
     def tearDown(self):
         match = f'{settings.MEDIA_ROOT}/medias/{timezone.now().year}/eventi_*.*'

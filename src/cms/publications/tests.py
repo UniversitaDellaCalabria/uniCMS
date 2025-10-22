@@ -259,7 +259,7 @@ class PublicationUnitTest(TestCase):
         user = ContextUnitTest.create_user(is_staff=1)
         req.force_login(user)
         url = reverse('unicms:cms_dispatch')
-        lurl = f'{url}{settings.CMS_PUBLICATION_LIST_PREFIX_PATH}'
+        lurl = f'{url}{settings.CMS_PUBLICATION_LIST_PREFIX_PATH}/'
         res = req.get(lurl)
         assert res.status_code == 200
 
@@ -268,7 +268,7 @@ class PublicationUnitTest(TestCase):
         pub = self.enrich_pub()
         webpath = pub.related_contexts[0].webpath
         menu = MenuUnitTest.create_menu_item().menu
-
+    
         req = Client()
         url = reverse('unicms_api:api-menu', kwargs={'menu_id': menu.pk})
         res = req.get(url, content_type='application/json')
@@ -295,11 +295,11 @@ class PublicationUnitTest(TestCase):
         url = reverse('unicms_api:api-menu-post')
         res = req.post(url, data=menu_json,
                        content_type='application/json', follow=1)
-
+        menu_json = res.json()
         menu_item = {'parent_id': None,
                      'name': 'Other',
                      'url': '',
-                     'publication_id': 1,
+                     'publication_id': pub.pk,
                      'webpath_id': webpath.pk,
                      'is_active': True,
                      'order': 10,
@@ -317,7 +317,7 @@ class PublicationUnitTest(TestCase):
         assert res.status_code == 404
 
         # update a menu
-        url = reverse('unicms_api:api-menu', kwargs={'menu_id': 2})
+        url = reverse('unicms_api:api-menu', kwargs={'menu_id': menu_json['childs'][0]['menu_id']})
         res = req.post(url, data=menu_json,
                        content_type='application/json', follow=1)
         # verify

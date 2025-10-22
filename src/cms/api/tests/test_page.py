@@ -211,9 +211,8 @@ class PageAPIUnitTest(TestCase):
         assert res.status_code == 403
 
         # user has permission
-        page.created_by = user2
-        page.save()
-        req.force_login(user2)
+        ebu2.permission = 7
+        ebu2.save()
         res = req.patch(url, data,
                         content_type='application/json',
                         follow=1)
@@ -221,9 +220,9 @@ class PageAPIUnitTest(TestCase):
         assert page.title == 'patched'
 
         # new webpath not managed
-        ebu4 = ContextUnitTest.create_editorialboard_user(user=user2,
+        ebu3 = ContextUnitTest.create_editorialboard_user(user=user2,
                                                           permission=1)
-        new_webpath = ebu4.webpath
+        new_webpath = ebu3.webpath
         data = {'webpath': new_webpath.pk}
         res = req.patch(url, data,
                         content_type='application/json',
@@ -231,8 +230,6 @@ class PageAPIUnitTest(TestCase):
         assert res.status_code == 403
 
         # PUT
-        page.created_by = None
-        page.save()
         data = {'name': 'test api putted',
                 'title': 'test api putted',
                 'description': 'desc',
@@ -248,8 +245,6 @@ class PageAPIUnitTest(TestCase):
                       content_type='application/json')
         assert res.status_code == 403
         # user hasn't permission on new webpath
-        page.created_by = user2
-        page.save()
         res = req.put(url, data, follow=1,
                       content_type='application/json')
         assert res.status_code == 403
@@ -264,9 +259,10 @@ class PageAPIUnitTest(TestCase):
         page.webpath = webpath
         page.save()
         # user hasn't permission
+        ebu2.permission = 1
+        ebu2.save()
         req.force_login(user2)
         res = req.delete(url)
-
         assert res.status_code == 403
         # user has permission
         req.force_login(user)

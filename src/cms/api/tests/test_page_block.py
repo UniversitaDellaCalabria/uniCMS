@@ -133,10 +133,8 @@ class PageBlockAPIUnitTest(TestCase):
                         follow=1)
         assert res.status_code == 403
         # user has permission
-        ebu3.permission = 3
+        ebu3.permission = 7
         ebu3.save()
-        page.created_by = user2
-        page.save()
         user2.refresh_from_db()
         req.force_login(user2)
         res = req.patch(url, data,
@@ -146,13 +144,13 @@ class PageBlockAPIUnitTest(TestCase):
         assert not page_block.is_active
 
         # PUT
-        page.created_by = None
-        page.save()
         data = {'page': page.pk,
                 'block': block.pk,
                 'is_active': True
         }
         # user hasn't permission
+        ebu3.permission = 3
+        ebu3.save()
         req.force_login(user2)
         res = req.put(url, data, follow=1,
                       content_type='application/json')
