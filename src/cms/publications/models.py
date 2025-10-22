@@ -304,13 +304,13 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         if permission['granted']: return True
 
         # if no permissions and no locks
-        if not permission.get('locked', False):
+        # ~ if not permission.get('locked', False):
             # check if user has EditorialBoard translator permissions on object
-            pub_ctxs = self.get_publication_contexts()
-            for pub_ctx in pub_ctxs:
-                webpath = pub_ctx.webpath
-                webpath_perms = webpath.is_localizable_by(user=user)
-                if webpath_perms: return True
+            # ~ pub_ctxs = self.get_publication_contexts()
+            # ~ for pub_ctx in pub_ctxs:
+                # ~ webpath = pub_ctx.webpath
+                # ~ webpath_perms = webpath.is_localizable_by(user=user)
+                # ~ if webpath_perms: return True
         # if no permissions
         return False
 
@@ -323,13 +323,13 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         if permission['granted']: return True
 
         # if no permissions and no locks
-        if not permission.get('locked', False):
+        # ~ if not permission.get('locked', False):
             # check if user has EditorialBoard editor permissions on object
-            pub_ctxs = self.get_publication_contexts()
-            for pub_ctx in pub_ctxs:
-                webpath = pub_ctx.webpath
-                webpath_perms = webpath.is_editable_by(user=user)
-                if webpath_perms: return True
+            # ~ pub_ctxs = self.get_publication_contexts()
+            # ~ for pub_ctx in pub_ctxs:
+                # ~ webpath = pub_ctx.webpath
+                # ~ webpath_perms = webpath.is_editable_by(user=user)
+                # ~ if webpath_perms: return True
         # if no permissions
         return False
 
@@ -346,13 +346,13 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         if permission['granted']: return True
 
         # if no permissions and no locks
-        if not permission.get('locked', False):
+        # ~ if not permission.get('locked', False):
             # check if user has EditorialBoard editor permissions on object
-            pub_ctxs = self.get_publication_contexts()
-            for pub_ctx in pub_ctxs:
-                webpath = pub_ctx.webpath
-                webpath_perms = webpath.is_publicable_by(user=user)
-                if webpath_perms: return True
+            # ~ pub_ctxs = self.get_publication_contexts()
+            # ~ for pub_ctx in pub_ctxs:
+                # ~ webpath = pub_ctx.webpath
+                # ~ webpath_perms = webpath.is_publicable_by(user=user)
+                # ~ if webpath_perms: return True
         # if no permissions
         return False
 
