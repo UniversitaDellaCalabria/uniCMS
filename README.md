@@ -1,9 +1,9 @@
 # uniCMS
 
 ![CI build](https://github.com/UniversitadellaCalabria/uniCMS/workflows/uniCMS/badge.svg)
-![Python version](https://img.shields.io/badge/license-Apache%202-blue.svg)
+![License](https://img.shields.io/badge/license-AGPL%20v3.0%20or%20later-blue.svg)
 [![codecov](https://codecov.io/gh/UniversitadellaCalabria/uniCMS/branch/main/graph/badge.svg)](https://codecov.io/gh/UniversitadellaCalabria/uniCMS)
-![License](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8%20%7C%203.9-blue.svg)
+![Python version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)
 
 uniCMS is a Web Application Content Management System developed using  **Django Framework**. 
 The project is created by a group of passionate developers who introduces bespoke 
@@ -69,7 +69,7 @@ having a strong in-house competitive and highly skilled technical team it was de
 to opt for the development of a brand new CMS solution based on Django framework. 
 
 The entire uniCMS project code is open sourced and therefore licensed under 
-the [Apache 2.0](https://en.wikipedia.org/wiki/Apache_License).
+the [AGPL-3.0 or later](https://www.gnu.org/licenses/agpl-3.0.html).
 
 
 For any other information please consult the 
