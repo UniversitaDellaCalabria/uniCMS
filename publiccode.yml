@@ -2,7 +2,7 @@
 # metadata file that makes public software easily discoverable.
 # More info at https://github.com/italia/publiccode.yml
 
-publiccodeYmlVersion: '0.3'
+publiccodeYmlVersion: '0.4'
 categories:
   - content-management
   - website-builder
@@ -68,7 +68,7 @@ description:
       Django framework.
 
       The entire uniCMS project code is open sourced and therefore
-      licensed under the Apache 2.0.
+      licensed under the AGPL-3.0-or-later.
     screenshots:
       - >-
         https://raw.githubusercontent.com/UniversitaDellaCalabria/uniCMS/main/docs/source/images/home_portale.png
@@ -107,7 +107,7 @@ landingURL: 'https://github.com/UniversitaDellaCalabria/uniCMS'
 legal:
   authorsFile: >-
     https://github.com/UniversitaDellaCalabria/uniCMS/blob/main/AUTHORS
-  license: Apache-2.0
+  license: AGPL-3.0-or-later
   mainCopyrightOwner: Università della Calabria
 localisation:
   availableLanguages:
@@ -126,10 +126,10 @@ name: uniCMS
 platforms:
   - linux
   - web
-releaseDate: '2021-12-17'
+releaseDate: '2025-10-23'
 roadmap: 'https://github.com/UniversitaDellaCalabria/uniCMS/issues'
 softwareType: standalone/web
-softwareVersion: v0.30.2
+softwareVersion: v1.0.0
 url: 'https://github.com/UniversitaDellaCalabria/uniCMS'
 usedBy:
   - Università della Calabria - https://www.unical.it

@@ -28,13 +28,13 @@ def get_requirements(fname='requirements.txt'):
 
 setup(
     name="unicms",
-    version='0.30.2',
+    version='1.0.0',
     description="uniCMS is a Django Web Content Management System",
     long_description=README,
     long_description_content_type='text/markdown',
     author='Giuseppe De Marco, Francesco Filicetti',
     author_email='giuseppe.demarco@unical.it, francesco.filicetti@unical.it',
-    license="Apache 2.0",
+    license="AGPL-3.0-or-later",
     url='https://github.com/UniversitaDellaCalabria/uniCMS',
 
     packages=[f"{_pkg_name}"],
@@ -46,11 +46,12 @@ setup(
     },
 
     classifiers=[
-        "Development Status :: 4 - Beta",
-        "License :: OSI Approved :: Apache Software License",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
+        "Development Status :: 5 - Production/Stable",
+        "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Software Development :: Libraries :: Python Modules"],
     install_requires=get_requirements()[0],
     dependency_links=get_requirements()[1],
