@@ -157,6 +157,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
     @property
     def related_contexts(self, unique_webpath=True, published=True):
         contexts = PublicationContext.objects.select_related('webpath')\
+                                             .select_related('webpath__site')\
                                              .filter(publication=self,
                                                      is_active=True,
                                                      webpath__is_active=True)
