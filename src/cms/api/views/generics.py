@@ -11,7 +11,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from cms.contexts.utils import log_obj_event
 
 from rest_framework import filters, generics
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import APIException, PermissionDenied
 from rest_framework.permissions import IsAdminUser
 
 from .. concurrency import (get_lock_from_cache,
@@ -35,7 +35,10 @@ class UniCMSListCreateAPIView(generics.ListCreateAPIView):
     pagination_class = UniCmsApiPagination
 
     def post(self, request, *args, **kwargs):
-        post_request = super().post(request, *args, **kwargs)
+        try:
+            post_request = super().post(request, *args, **kwargs)
+        except Exception as e:
+            raise APIException(str(e))
         model_class = self.serializer_class.Meta.model
         item = model_class.objects.filter(pk=post_request.data['id']).first()
         log_obj_event(user=request.user,
@@ -66,7 +69,10 @@ class UniCMSCachedRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPI
         item = self.get_object()
         # check for locks
         check_locks(item, request.user)
-        ok_response = super().patch(request, *args, **kwargs)
+        try:
+            ok_response = super().patch(request, *args, **kwargs)
+        except Exception as e:
+            raise APIException(str(e))
         # log action in item history
         log_obj_event(user=request.user, obj=item, data=request.data)
         return ok_response
@@ -75,7 +81,10 @@ class UniCMSCachedRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPI
         item = self.get_object()
         # check for locks
         check_locks(item, request.user)
-        ok_response = super().put(request, *args, **kwargs)
+        try:
+            ok_response = super().put(request, *args, **kwargs)
+        except Exception as e:
+            raise APIException(str(e))
         # log action in item history
         log_obj_event(user=request.user, obj=item, data=request.data)
         return ok_response
