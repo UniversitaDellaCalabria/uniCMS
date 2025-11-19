@@ -72,7 +72,7 @@ class UniCMSCachedRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPI
         try:
             ok_response = super().patch(request, *args, **kwargs)
         except Exception as e:
-            raise UniCMSAPIException(original_exception=e)
+            raise ValidationError(e)
         # log action in item history
         log_obj_event(user=request.user, obj=item, data=request.data)
         return ok_response
@@ -84,7 +84,7 @@ class UniCMSCachedRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPI
         try:
             ok_response = super().put(request, *args, **kwargs)
         except Exception as e:
-            raise UniCMSAPIException(original_exception=e)
+            raise ValidationError(e)
         # log action in item history
         log_obj_event(user=request.user, obj=item, data=request.data)
         return ok_response
