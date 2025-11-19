@@ -11,13 +11,13 @@ from django_filters.rest_framework import DjangoFilterBackend
 from cms.contexts.utils import log_obj_event
 
 from rest_framework import filters, generics
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.permissions import IsAdminUser
 
 from .. concurrency import (get_lock_from_cache,
                             # set_lock_to_cache,
                             LOCK_MESSAGE)
-from .. exceptions import UniCMSAPIException, LoggedPermissionDenied
+from .. exceptions import LoggedPermissionDenied
 from .. ordering import StableOrderingFilter
 from .. pagination import UniCmsApiPagination, UniCmsSelectOptionsApiPagination
 
@@ -38,7 +38,7 @@ class UniCMSListCreateAPIView(generics.ListCreateAPIView):
         try:
             post_request = super().post(request, *args, **kwargs)
         except Exception as e:
-            raise UniCMSAPIException(original_exception=e)
+            raise ValidationError(e)
         model_class = self.serializer_class.Meta.model
         item = model_class.objects.filter(pk=post_request.data['id']).first()
         log_obj_event(user=request.user,
