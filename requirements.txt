@@ -1,4 +1,4 @@
-django>=4.2.16,<6.0
+django>=4.2.27
 git+https://github.com/UniversitaDellaCalabria/django-auto-serializer.git
 django-filter
 django-nested-admin>=3.3.2
@@ -15,3 +15,4 @@ unicms-template-italia
 markdown
 markdownify
 redis
+sqlparse>=0.5.4 # not directly required, pinned by Snyk to avoid a vulnerability
