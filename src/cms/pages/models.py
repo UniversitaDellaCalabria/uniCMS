@@ -153,7 +153,10 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         template_blocks = self.base_template.\
             pagetemplateblock_set.\
             filter(**query_params).\
-            filter(is_active=True).\
+            filter(
+                is_active=True,
+                block__is_active=True
+            ).\
             order_by('section', 'order').\
             values_list('order', 'block__pk', 'section')
         # populate a list with block params and enumerate value
