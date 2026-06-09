@@ -2,7 +2,7 @@
 # metadata file that makes public software easily discoverable.
 # More info at https://github.com/italia/publiccode.yml
 
-publiccodeYmlVersion: '0.4'
+publiccodeYmlVersion: '0.5'
 categories:
   - content-management
   - website-builder
@@ -89,24 +89,17 @@ intendedAudience:
     - society
     - sport
     - tourism
-it:
-  conforme:
-    gdpr: true
-    lineeGuidaDesign: true
-    misureMinimeSicurezza: true
-    modelloInteroperabilita: true
+IT:
   countryExtensionVersion: '0.2'
   piattaforme:
     anpr: false
     cie: false
     pagopa: false
     spid: false
-  riuso:
-    codiceIPA: unical
+organisation:
+  uri: 'urn:x-italian-pa:unical'
 landingURL: 'https://github.com/UniversitaDellaCalabria/uniCMS'
 legal:
-  authorsFile: >-
-    https://github.com/UniversitaDellaCalabria/uniCMS/blob/main/AUTHORS
   license: AGPL-3.0-or-later
   mainCopyrightOwner: Università della Calabria
 localisation:
