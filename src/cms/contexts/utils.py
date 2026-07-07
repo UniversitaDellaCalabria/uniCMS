@@ -37,41 +37,32 @@ def get_CMS_HOOKS():
 
 def detect_user_language(request):
     # get browser language
-    req_lang = translation.get_language_from_request(request)
+    browser_lang = translation.get_language_from_request(request)
 
     # get website language
-    # if website language exists overwrite browser language
     current_domain = request.META.get('HTTP_HOST', '').split(':')[0]
-    website_lang = ''
-    if current_domain:
+    website_lang = request.session.get(f'_unicms_{current_domain}_lang', None)
+    if website_lang is None:
         WebSite = apps.get_model('cmscontexts.WebSite')
         website = WebSite.objects.filter(domain=current_domain).first()
-        if website: website_lang = website.lang
-
-    # get from session
-    if website_lang:
-        current = request.session.get(f'_unicms_website_{website.pk}_lang', website_lang) # current session website language
-    else:
-        # if there is a choosen language in session, overwrite current
-        current = request.session.get('_unicms_lang', req_lang) # current session language
+        if website:
+            website_lang = website.lang
+            request.session[f'_unicms_{current_domain}_lang'] = website_lang
+            
+    # if website language exists overwrite browser language
+    current = website_lang or browser_lang
 
     # if user changes language in URL overwrite current
     lang = request.GET.get('lang', current)
+
     # prevent XSS
-    if lang != current and not lang in dict(settings.LANGUAGES).keys():
+    if not lang in dict(settings.LANGUAGES).keys():
         lang = current
 
     # set language
     translation.activate(lang)
     request.LANGUAGE_CODE = lang
 
-    # set in session
-    if website_lang:
-        request.session[f'_unicms_website_{website.pk}_lang'] = lang
-    else:
-        request.session['_unicms_lang'] = lang
-
-    # return
     return lang
 
 
