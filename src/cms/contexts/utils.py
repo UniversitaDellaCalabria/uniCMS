@@ -67,8 +67,6 @@ def detect_user_language(request):
     translation.activate(lang)
     request.LANGUAGE_CODE = lang
 
-    current = request.session.get('_unicms_lang', req_lang) # current session language
-    
     return lang
 
 
