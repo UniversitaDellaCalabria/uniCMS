@@ -4,7 +4,7 @@ from django.utils.text import slugify
 from cms.api.serializers import UniCMSCreateUpdateSerializer, UniCMSContentTypeClass
 
 from cms.contexts import settings as contexts_settings
-from cms.contexts.models import EditorialBoardEditors
+# ~ from cms.contexts.models import EditorialBoardEditors
 
 from rest_framework import serializers
 
@@ -12,9 +12,9 @@ from . import settings as app_settings
 from . models import *
 
 
-CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
-                                  contexts_settings.CMS_CONTEXT_PERMISSIONS)
-AUTH_USER_GROUPS = app_settings.AUTH_USER_GROUPS + getattr(settings, 'AUTH_USER_GROUPS', ())
+# ~ CMS_CONTEXT_PERMISSIONS = getattr(settings, 'CMS_CONTEXT_PERMISSIONS',
+                                  # ~ contexts_settings.CMS_CONTEXT_PERMISSIONS)
+# ~ AUTH_USER_GROUPS = app_settings.AUTH_USER_GROUPS + getattr(settings, 'AUTH_USER_GROUPS', ())
 
 
 class EditorialBoardLockSerializer(serializers.ModelSerializer):
@@ -87,12 +87,12 @@ class WebPathSerializer(UniCMSCreateUpdateSerializer, UniCMSContentTypeClass):
             alias = WebPathSerializer(instance.alias)
             data['alias'] = alias.data
         data['full_name'] = instance.__str__()
-        request = self.context.get('request', None)
-        if request and request.user:
-            context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
-            permission = EditorialBoardEditors.get_permission(instance, request.user)
-            data['permission_id'] = permission
-            data['permission_label'] = context_permissions[permission]
+        # ~ request = self.context.get('request', None)
+        # ~ if request and request.user:
+            # ~ context_permissions = dict(CMS_CONTEXT_PERMISSIONS)
+            # ~ permission = EditorialBoardEditors.get_permission(instance, request.user)
+            # ~ data['permission_id'] = permission
+            # ~ data['permission_label'] = context_permissions[permission]
         return data
 
     def validate_path(self, value):
