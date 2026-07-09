@@ -347,9 +347,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy, ActivableModel)
         if check_all:
             all_permissions = permissions.filter(webpath=None)
             for entry in all_permissions:
-                if result is None:
-                    result = entry.permission
-                elif entry.permission > result:
+                if result is None or entry.permission > result:
                     result = entry.permission
             if result is not None:
                 return result
