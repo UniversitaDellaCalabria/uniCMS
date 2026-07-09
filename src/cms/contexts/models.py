@@ -343,13 +343,13 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy, ActivableModel)
             return parent_permission
 
         # search for global permissions
-        # ~ result = 0
+        result = None
         if check_all:
             all_permissions = permissions.filter(webpath=None)
             for entry in all_permissions:
                 if entry.permission > result:
                     result = entry.permission
-            return result
+            if result is not None: return result
 
         return -1
 
