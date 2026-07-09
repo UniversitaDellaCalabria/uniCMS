@@ -41,6 +41,7 @@ def detect_user_language(request):
 
     # get website language
     current_domain = request.META.get('HTTP_HOST', '').split(':')[0]
+    # avoid query
     website_lang = request.session.get(f'_unicms_{current_domain}_lang', None)
     if website_lang is None:
         WebSite = apps.get_model('cmscontexts.WebSite')
@@ -49,20 +50,25 @@ def detect_user_language(request):
             website_lang = website.lang
             request.session[f'_unicms_{current_domain}_lang'] = website_lang
             
-    # if website language exists overwrite browser language
-    current = website_lang or browser_lang
-
-    # if user changes language in URL overwrite current
-    lang = request.GET.get('lang', current)
+    # session language
+    session_language = request.session.get('_unicms_lang', None)
+    
+    # if user changes language in URL overwrite all!
+    url_lang = request.GET.get('lang', session_language)
 
     # prevent XSS
-    if not lang in dict(settings.LANGUAGES).keys():
-        lang = current
+    if url_lang in dict(settings.LANGUAGES).keys() and url_lang != session_language:
+        request.session['_unicms_lang'] = url_lang
 
+    # overwriting rule (url > website > broser)
+    lang = url_lang or website_lang or browser_lang
+    
     # set language
     translation.activate(lang)
     request.LANGUAGE_CODE = lang
 
+    current = request.session.get('_unicms_lang', req_lang) # current session language
+    
     return lang
 
 
