@@ -275,9 +275,8 @@ class PageRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
 
     def patch(self, request, *args, **kwargs):
         item = self.get_object()
-        page = item.page
         # check permissions on page
-        has_permission = page.is_editable_by(request.user)
+        has_permission = self.page.is_editable_by(request.user)
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
@@ -285,9 +284,8 @@ class PageRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
 
     def put(self, request, *args, **kwargs):
         item = self.get_object()
-        page = item.page
         # check permissions on page
-        has_permission = page.is_editable_by(request.user)
+        has_permission = self.page.is_editable_by(request.user)
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
@@ -295,9 +293,8 @@ class PageRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         item = self.get_object()
-        page = item.page
         # check permissions on page
-        has_permission = page.is_editable_by(request.user)
+        has_permission = self.page.is_editable_by(request.user)
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)

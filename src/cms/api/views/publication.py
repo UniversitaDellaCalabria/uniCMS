@@ -252,13 +252,8 @@ class PublicationRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
 
     def patch(self, request, *args, **kwargs):
         item = self.get_object()
-        # serializer = self.get_serializer(instance=item,
-        # data=request.data,
-        # partial=True)
-        # if serializer.is_valid(raise_exception=True):
-        publication = item.publication
         # check permissions on publication
-        has_permission = publication.is_editable_by(request.user)
+        has_permission = self.publication.is_editable_by(request.user)
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
@@ -266,9 +261,8 @@ class PublicationRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
 
     def put(self, request, *args, **kwargs):
         item = self.get_object()
-        publication = item.publication
         # check permissions on publication
-        has_permission = publication.is_editable_by(request.user)
+        has_permission = self.publication.is_editable_by(request.user)
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
@@ -276,9 +270,8 @@ class PublicationRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         item = self.get_object()
-        publication = item.publication
         # check permissions on publication
-        has_permission = publication.is_editable_by(request.user)
+        has_permission = self.publication.is_editable_by(request.user)
         if not has_permission:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)

@@ -1,16 +1,26 @@
+import logging
+import os
+
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
 
 from cms.publications.forms import PublicationAttachmentForm
-from cms.publications.models import PublicationAttachment
+from cms.publications.models import Publication, PublicationAttachment
 from cms.publications.serializers import PublicationAttachmentSerializer
 
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView
+
+from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
 from .. views.publication import PublicationRelatedObject, PublicationRelatedObjectList, PublicationRelatedObjectLogsView
+
+
+logger = logging.getLogger(__name__)
 
 
 class PublicationAttachmentList(PublicationRelatedObjectList):
@@ -29,19 +39,69 @@ class PublicationAttachmentList(PublicationRelatedObjectList):
         return PublicationAttachment.objects.none() # pragma: no cover
 
 
-class PublicationAttachmentView(PublicationRelatedObject):
+class PublicationAttachmentView(UniCMSCachedRetrieveUpdateDestroyAPIView):
     """
     """
     description = ""
     serializer_class = PublicationAttachmentSerializer
+    permission_classes = [IsAdminUser]
 
     def get_object(self):
         """
         """
-        super().get_data()
+        pub_id = self.kwargs['publication_id']
+        self.pk = self.kwargs['pk']
+        self.publication = get_object_or_404(Publication, pk=pub_id)
         return get_object_or_404(PublicationAttachment,
                                  pk=self.pk,
                                  publication=self.publication)
+    
+    def patch(self, request, *args, **kwargs):
+        item = self.get_object()
+        has_permission = self.publication.is_editable_by(request.user)
+        
+        if not has_permission:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+
+        if 'file' in request.data:
+            try:
+                os.remove(item.file.path)
+            except Exception: # pragma: no cover
+                logger.warning(f'Publication attachment {item.file.path} not found')
+            
+        return super().patch(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        item = self.get_object()
+        has_permission = self.publication.is_editable_by(request.user)
+        
+        if not has_permission:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+
+        if 'file' in request.data:
+            try:
+                os.remove(item.file.path)
+            except Exception: # pragma: no cover
+                logger.warning(f'Publication attachment {item.file.path} not found')
+            
+        return super().put(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        item = self.get_object()
+        has_permission = self.publication.is_editable_by(request.user)
+        
+        if not has_permission:
+            raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                         resource=request.method)
+
+        try:
+            os.remove(item.file.path)
+        except Exception: # pragma: no cover
+            logger.warning(f'Publication attachment {item.file.path} not found')
+            
+        return super().delete(request, *args, **kwargs)
 
 
 class PublicationAttachmentFormView(APIView):
