@@ -42,8 +42,6 @@ urlpatterns += path('api/news/by-context/<int:webpath_id>/<int:category>',
 urlpatterns += path('api/news/view/<str:slug>', publication.PublicationDetail.as_view(), name='publication-detail'),
 
 urlpatterns += path('api/menu/<int:menu_id>', menu.ApiMenuId.as_view(), name='api-menu'),
-urlpatterns += path('api/menu', menu.ApiMenu.as_view(), name='api-menu-post'),
-
 
 # --------------EDITORIAL BOARD URLs------------------------ #
 
