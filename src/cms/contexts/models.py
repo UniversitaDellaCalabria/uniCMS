@@ -279,11 +279,11 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         return self.is_publicable_by(user) #, parent=True)
 
     def get_access_level(self):
-        for t in getattr(settings, 'AUTH_USER_GROUPS', ()):
+        if self.access == '1':
+            return self.parent.get_access_level() if self.parent else '0'
+        for t in AUTH_USER_GROUPS:
             if self.access == t[0]:
                 return self.access
-        if self.parent and self.access == '1':
-            return self.parent.get_access_level()
         return '0'
 
     def __str__(self):
