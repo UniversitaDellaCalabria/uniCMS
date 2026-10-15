@@ -16,7 +16,7 @@ from cms.menus.forms import MenuForm
 from cms.menus.models import NavigationBar
 from cms.menus.serializers import MenuSelectOptionsSerializer, MenuSerializer
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView, generics
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView, generics, UniCMSFormView
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied, LoggedValidationException
 from .. permissions import MenuGetCreatePermissions, UNICMSSafePermissions
@@ -115,7 +115,7 @@ class MenuView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
-class MenuFormView(APIView):
+class MenuFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = MenuForm()

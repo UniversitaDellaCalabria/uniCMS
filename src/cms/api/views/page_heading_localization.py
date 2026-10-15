@@ -8,9 +8,8 @@ from cms.pages.serializers import *
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
-from rest_framework.views import APIView
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSFormView
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
@@ -117,7 +116,7 @@ class PageHeadingLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
-class PageHeadingLocalizationFormView(APIView):
+class PageHeadingLocalizationFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = PageHeadingLocalizationForm(page_id=kwargs.get('page_id'),

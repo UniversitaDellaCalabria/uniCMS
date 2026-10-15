@@ -22,7 +22,7 @@ from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView, check_locks
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView, check_locks, UniCMSFormView
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. pagination import UniCmsApiPagination
@@ -281,7 +281,7 @@ class PublicationRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
         abstract = True
 
 
-class PublicationFormView(APIView):
+class PublicationFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = PublicationForm()
@@ -289,7 +289,7 @@ class PublicationFormView(APIView):
         return Response(form_fields)
 
 
-class PublicationEditFormView(APIView):
+class PublicationEditFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = PublicationEditForm()

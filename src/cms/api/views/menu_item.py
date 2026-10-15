@@ -10,7 +10,6 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
-from rest_framework.views import APIView
 
 from . generics import *
 from . logs import ObjectLogEntriesList
@@ -139,7 +138,7 @@ class MenuItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
-class MenuItemFormView(APIView):
+class MenuItemFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = MenuItemForm(menu_id=kwargs.get('menu_id'))

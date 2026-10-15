@@ -9,7 +9,6 @@ from cms.carousels.serializers import *
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
-from rest_framework.views import APIView
 
 from . generics import *
 from . logs import ObjectLogEntriesList
@@ -107,7 +106,7 @@ class CarouselItemLinkLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView)
         return super().delete(request, *args, **kwargs)
 
 
-class CarouselItemLinkLocalizationFormView(APIView):
+class CarouselItemLinkLocalizationFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = CarouselItemLinkLocalizationForm(carousel_item_link_id=kwargs.get('carousel_item_link_id'),

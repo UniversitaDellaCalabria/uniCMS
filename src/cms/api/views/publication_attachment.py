@@ -11,9 +11,8 @@ from cms.publications.serializers import PublicationAttachmentSerializer
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
-from rest_framework.views import APIView
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSFormView
 
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
@@ -104,7 +103,7 @@ class PublicationAttachmentView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
-class PublicationAttachmentFormView(APIView):
+class PublicationAttachmentFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = PublicationAttachmentForm(publication_id=kwargs.get('publication_id'))

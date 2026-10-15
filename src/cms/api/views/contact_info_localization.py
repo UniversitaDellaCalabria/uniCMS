@@ -9,7 +9,6 @@ from cms.contacts.serializers import *
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
-from rest_framework.views import APIView
 
 from . generics import *
 from . logs import ObjectLogEntriesList
@@ -100,7 +99,7 @@ class ContactInfoLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
-class ContactInfoLocalizationFormView(APIView):
+class ContactInfoLocalizationFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = ContactInfoLocalizationForm(contact_info_id=kwargs.get('contact_info_id'),

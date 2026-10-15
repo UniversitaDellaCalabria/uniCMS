@@ -21,7 +21,7 @@ from rest_framework.views import APIView
 
 from cms.medias.utils import _remove_file
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView, UniCMSFormView
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import MediaGetCreatePermissions
@@ -92,7 +92,7 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
-class MediaFormView(APIView):
+class MediaFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = MediaForm()

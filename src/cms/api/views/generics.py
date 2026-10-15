@@ -13,6 +13,7 @@ from cms.contexts.utils import log_obj_event
 from rest_framework import filters, generics
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.permissions import IsAdminUser
+from rest_framework.views import APIView
 
 from .. concurrency import (get_lock_from_cache,
                             # set_lock_to_cache,
@@ -115,3 +116,7 @@ class UniCMSListSelectOptionsAPIView(generics.ListAPIView):
 
     class Meta:
         abstract = True
+
+
+class UniCMSFormView(APIView):
+    permission_classes = [IsAdminUser]

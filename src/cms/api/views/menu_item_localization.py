@@ -9,7 +9,6 @@ from cms.menus.serializers import *
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
-from rest_framework.views import APIView
 
 from . generics import *
 from . logs import ObjectLogEntriesList
@@ -100,7 +99,7 @@ class MenuItemLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
-class MenuItemLocalizationFormView(APIView):
+class MenuItemLocalizationFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = MenuItemLocalizationForm(menu_item_id=kwargs.get('menu_item_id'),

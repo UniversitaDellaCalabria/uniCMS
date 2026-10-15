@@ -9,7 +9,6 @@ from cms.carousels.serializers import *
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
-from rest_framework.views import APIView
 
 from . generics import *
 from . logs import ObjectLogEntriesList
@@ -108,7 +107,7 @@ class CarouselItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
-class CarouselItemFormView(APIView):
+class CarouselItemFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = CarouselItemForm(carousel_id=kwargs.get('carousel_id'))
@@ -116,7 +115,7 @@ class CarouselItemFormView(APIView):
         return Response(form_fields)
 
 
-class CarouselItemGenericFormView(APIView):
+class CarouselItemGenericFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = CarouselItemForm()

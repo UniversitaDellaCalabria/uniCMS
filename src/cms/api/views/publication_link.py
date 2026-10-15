@@ -7,8 +7,8 @@ from cms.publications.serializers import *
 
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
-from rest_framework.views import APIView
 
+from . generics import UniCMSFormView
 from .. serializers import UniCMSFormSerializer
 from .. views.publication import PublicationRelatedObject, PublicationRelatedObjectList, PublicationRelatedObjectLogsView
 
@@ -45,7 +45,7 @@ class PublicationLinkView(PublicationRelatedObject):
                                  publication=self.publication)
 
 
-class PublicationLinkFormView(APIView):
+class PublicationLinkFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = PublicationLinkForm(publication_id=kwargs.get('publication_id'))

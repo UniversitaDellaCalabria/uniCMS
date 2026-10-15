@@ -7,8 +7,8 @@ from cms.pages.serializers import *
 
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
-from rest_framework.views import APIView
 
+from . generics import UniCMSFormView
 from .. serializers import UniCMSFormSerializer
 from .. views.page import PageRelatedObject, PageRelatedObjectList, PageRelatedObjectLogsView
 
@@ -42,7 +42,7 @@ class PageRelatedView(PageRelatedObject):
         return get_object_or_404(PageRelated, pk=self.pk, page=self.page)
 
 
-class PageRelatedFormView(APIView):
+class PageRelatedFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = PageRelatedForm(page_id=kwargs.get('page_id'))

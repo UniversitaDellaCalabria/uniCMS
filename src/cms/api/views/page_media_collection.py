@@ -7,8 +7,8 @@ from cms.pages.serializers import *
 
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
-from rest_framework.views import APIView
 
+from . generics import UniCMSFormView
 from .. serializers import UniCMSFormSerializer
 from .. views.page import PageRelatedObject, PageRelatedObjectList, PageRelatedObjectLogsView
 
@@ -46,7 +46,7 @@ class PageMediaCollectionView(PageRelatedObject):
                                  page=self.page)
 
 
-class PageMediaCollectionFormView(APIView):
+class PageMediaCollectionFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = PageMediaCollectionForm(page_id=kwargs.get('page_id'))

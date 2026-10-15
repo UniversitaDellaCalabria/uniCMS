@@ -17,7 +17,7 @@ from cms.pages.models import Page
 from cms.pages.serializers import PageSerializer
 from cms.pages.utils import copy_page_as_draft
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, check_locks
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, check_locks, UniCMSFormView
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. ordering import StableOrderingFilter
@@ -304,7 +304,7 @@ class PageRelatedObject(UniCMSCachedRetrieveUpdateDestroyAPIView):
         abstract = True
 
 
-class PageFormView(APIView):
+class PageFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = PageForm(site_id=kwargs.get('site_id'),
@@ -313,7 +313,7 @@ class PageFormView(APIView):
         return Response(form_fields)
 
 
-class PageGenericFormView(APIView):
+class PageGenericFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = PageForm(site_id=kwargs.get('site_id'))

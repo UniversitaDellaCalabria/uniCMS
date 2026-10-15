@@ -6,7 +6,6 @@ from django.utils import timezone
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
-from rest_framework.views import APIView
 
 from cms.contexts.forms import EditorialBoardLockUserForm, PublicationContextForm
 from cms.contexts.models import WebPath, WebSite
@@ -14,7 +13,7 @@ from cms.contexts.models import WebPath, WebSite
 from cms.publications.models import PublicationContext
 from cms.publications.serializers import PublicationContextSerializer, PublicationContextSelectOptionsSerializer
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView, UniCMSFormView
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. serializers import UniCMSFormSerializer
@@ -171,7 +170,7 @@ class PublicationContextView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
-class PublicationContextFormView(APIView):
+class PublicationContextFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = PublicationContextForm(site_id=kwargs.get('site_id'),
@@ -180,7 +179,7 @@ class PublicationContextFormView(APIView):
         return Response(form_fields)
 
 
-class PublicationContextGenericFormView(APIView):
+class PublicationContextGenericFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = PublicationContextForm(site_id=kwargs.get('site_id'))
@@ -188,7 +187,7 @@ class PublicationContextGenericFormView(APIView):
         return Response(form_fields)
 
 
-class EditorialBoardLockUserFormView(APIView):
+class EditorialBoardLockUserFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = EditorialBoardLockUserForm()

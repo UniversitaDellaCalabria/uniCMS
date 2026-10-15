@@ -9,7 +9,6 @@ from cms.publications.serializers import *
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
-from rest_framework.views import APIView
 
 from . generics import *
 from . logs import ObjectLogEntriesList
@@ -100,7 +99,7 @@ class PublicationLocalizationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
-class PublicationLocalizationFormView(APIView):
+class PublicationLocalizationFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = PublicationLocalizationForm(publication_id=kwargs.get('publication_id'))

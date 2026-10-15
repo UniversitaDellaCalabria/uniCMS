@@ -21,7 +21,7 @@ from cms.contexts.utils import clone, is_publisher
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView, UniCMSFormView
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied, LoggedValidationException
 from .. ordering import StableOrderingFilter
@@ -170,7 +170,7 @@ class WebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
-class WebpathFormView(APIView):
+class WebpathFormView(UniCMSFormView):
     def get(self, *args, **kwargs):
         form = WebPathForm(site_id=kwargs.get('site_id'))
         form_fields = UniCMSFormSerializer.serialize(form)
@@ -283,7 +283,7 @@ class WebpathAllList(generics.ListAPIView):
     pagination_class = UniCmsApiPagination
 
 
-class WebpathCloneFormView(APIView):
+class WebpathCloneFormView(UniCMSFormView):
     def get(self, *args, **kwargs):
         form = WebPathCloneForm()
         form_fields = UniCMSFormSerializer.serialize(form)

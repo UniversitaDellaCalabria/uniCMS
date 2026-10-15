@@ -9,9 +9,8 @@ from cms.medias.serializers import MediaCollectionItemSerializer
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
-from rest_framework.views import APIView
 
-from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView
+from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSFormView
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
 from .. permissions import UNICMSSafePermissions
@@ -119,7 +118,7 @@ class MediaCollectionItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         return super().delete(request, *args, **kwargs)
 
 
-class MediaCollectionItemFormView(APIView):
+class MediaCollectionItemFormView(UniCMSFormView):
 
     def get(self, *args, **kwargs):
         form = MediaCollectionItemForm(collection_id=kwargs.get('collection_id'))
