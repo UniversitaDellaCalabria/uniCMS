@@ -300,23 +300,9 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         return content
 
     def is_localizable_by(self, user=None):
-        if not user: return False
-
-        # check if user has Django permissions to change object
-        permission = check_user_permission_on_object(user, self)
-        # if permission
-        if permission['granted']: return True
-
-        # if no permissions and no locks
-        # ~ if not permission.get('locked', False):
-            # check if user has EditorialBoard translator permissions on object
-            # ~ pub_ctxs = self.get_publication_contexts()
-            # ~ for pub_ctx in pub_ctxs:
-                # ~ webpath = pub_ctx.webpath
-                # ~ webpath_perms = webpath.is_localizable_by(user=user)
-                # ~ if webpath_perms: return True
-        # if no permissions
-        return False
+        # a single management permission on publications:
+        # who can edit can also localize
+        return self.is_editable_by(user)
 
     def is_editable_by(self, user=None):
         if not user: return False
@@ -342,23 +328,9 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         return self.is_active
 
     def is_publicable_by(self, user=None):
-        if not user: return False
-
-        # check if user has Django permissions to change object
-        permission = check_user_permission_on_object(user, self)
-        # if permission
-        if permission['granted']: return True
-
-        # if no permissions and no locks
-        # ~ if not permission.get('locked', False):
-            # check if user has EditorialBoard editor permissions on object
-            # ~ pub_ctxs = self.get_publication_contexts()
-            # ~ for pub_ctx in pub_ctxs:
-                # ~ webpath = pub_ctx.webpath
-                # ~ webpath_perms = webpath.is_publicable_by(user=user)
-                # ~ if webpath_perms: return True
-        # if no permissions
-        return False
+        # a single management permission on publications:
+        # who can edit can also publish
+        return self.is_editable_by(user)
 
     def is_lockable_by(self, user):
         return True if self.is_editable_by(user) else False
