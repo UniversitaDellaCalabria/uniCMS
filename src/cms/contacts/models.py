@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from cms.api.utils import check_user_permission_on_object
 from cms.contexts.models_abstract import AbstractLockable
+from cms.contexts.validators import validate_safe_url
 from cms.medias.models import Media
 from cms.templates.models import (_lang_choices,
                                   ActivableModel,
@@ -98,6 +99,10 @@ class ContactInfo(ActivableModel, TimeStampedModel,
     class Meta:
         verbose_name_plural = _("Contact extra infos")
 
+    def clean(self):
+        if self.info_type == 'website':
+            validate_safe_url(self.value)
+
     def localized(self, lang=settings.LANGUAGE):
         i18n = ContactInfoLocalization.objects.filter(contact_info=self,
                                                       language=lang,
@@ -132,6 +137,10 @@ class ContactInfoLocalization(ActivableModel,
 
     class Meta:
         verbose_name_plural = _("Contact Info Localizations")
+
+    def clean(self):
+        if self.contact_info_id and self.contact_info.info_type == 'website':
+            validate_safe_url(self.value)
 
     def is_lockable_by(self, user):
         item = self.contact_info.contact

@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from cms.api.utils import check_user_permission_on_object
 from cms.contexts.models import WebPath, models, settings
 from cms.contexts.models_abstract import AbstractLockable
+from cms.contexts.validators import validate_safe_url
 from cms.templates.models import (_lang_choices,
                                   ActivableModel,
                                   CreatedModifiedBy,
@@ -92,7 +93,8 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
                                 on_delete=models.SET_NULL,
                                 related_name="linked_page")
     url = models.CharField(help_text=_("url"),
-                           default='', blank=True, max_length=2048)
+                           default='', blank=True, max_length=2048,
+                           validators=[validate_safe_url])
     publication = models.ForeignKey('cmspublications.Publication',
                                     null=True, blank=True,
                                     related_name='pub',
@@ -238,7 +240,8 @@ class NavigationBarItemLocalization(ActivableModel, TimeStampedModel,
                                 max_length=12, default='en')
     name = models.CharField(max_length=100)
     url = models.CharField(help_text=_("url"),
-                           default='', blank=True, max_length=2048)
+                           default='', blank=True, max_length=2048,
+                           validators=[validate_safe_url])
 
     class Meta:
         verbose_name_plural = _("Context Navigation Menu Item Localizations")

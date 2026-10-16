@@ -15,6 +15,9 @@ CMS_CONTEXT_PERMISSIONS = (
                            (7, _('can publish content in their own context and descendants')),
                           )
 
+# schemes allowed in links (menu items, carousels, aliases, contacts)
+CMS_URL_ALLOWED_SCHEMES = ('http', 'https', 'mailto', 'tel')
+
 CMS_CACHE_ENABLED = True
 CMS_CACHE_KEY_PREFIX = 'unicms_'
 # in seconds

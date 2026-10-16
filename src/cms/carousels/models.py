@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from cms.api.utils import check_user_permission_on_object
 from cms.contexts.models_abstract import AbstractLockable
+from cms.contexts.validators import validate_safe_url
 from cms.medias.models import Media
 from cms.templates.models import (_lang_choices,
                                   CMS_LINKS_LABELS,
@@ -142,7 +143,7 @@ class CarouselItemLink(ActivableModel, TimeStampedModel, SortableModel,
                                     default='custom',
                                     max_length=33)
     title = models.CharField(max_length=120, blank=True, default='', help_text=_('Title'))
-    url = models.CharField(max_length=2048)
+    url = models.CharField(max_length=2048, validators=[validate_safe_url])
 
     class Meta:
         verbose_name_plural = _("Carousel Item Links")
@@ -176,7 +177,7 @@ class CarouselItemLinkLocalization(ActivableModel, TimeStampedModel,
                                            on_delete=models.CASCADE)
     language = models.CharField(choices=_lang_choices, max_length=12, default='en')
     title = models.CharField(max_length=120, blank=True, default='', help_text=_('Title'))
-    url = models.CharField(max_length=2048)
+    url = models.CharField(max_length=2048, validators=[validate_safe_url])
 
     class Meta:
         verbose_name_plural = _("Carousel Item Links")

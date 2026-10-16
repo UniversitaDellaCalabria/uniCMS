@@ -11,6 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from cms.templates.models import ActivableModel, TimeStampedModel, CreatedModifiedBy
 
 from . import settings as app_settings
+from . validators import validate_safe_url
 from . exceptions import ReservedWordException
 from . languages import LANGUAGES_ISO_639_1
 from . utils import (append_slash, is_editor,
@@ -97,7 +98,8 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
                               related_name="alias_path",
                               help_text=_('Alias that would be '
                                           'redirected to ...'))
-    alias_url = models.TextField(max_length=2048, default='', blank=True)
+    alias_url = models.TextField(max_length=2048, default='', blank=True,
+                                 validators=[validate_safe_url])
     path = models.TextField(max_length=2048)
     fullpath = models.TextField(
         max_length=2048,

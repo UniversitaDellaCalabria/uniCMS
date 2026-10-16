@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from cms.api.serializers import UniCMSContentTypeClass, UniCMSCreateUpdateSerializer
 
+from cms.contexts.validators import validate_safe_url
 from cms.medias.serializers import MediaSerializer
 
 from . models import *
@@ -47,6 +48,13 @@ class ContactInfoSerializer(UniCMSCreateUpdateSerializer,
                             UniCMSContentTypeClass):
     contact = ContactForeignKey()
 
+    def validate(self, attrs):
+        info_type = attrs.get('info_type', getattr(self.instance, 'info_type', None))
+        value = attrs.get('value', getattr(self.instance, 'value', ''))
+        if info_type == 'website':
+            validate_safe_url(value)
+        return super().validate(attrs)
+
     class Meta:
         model = ContactInfo
         fields = '__all__'
@@ -66,6 +74,13 @@ class ContactLocalizationSerializer(UniCMSCreateUpdateSerializer,
 class ContactInfoLocalizationSerializer(UniCMSCreateUpdateSerializer,
                                         UniCMSContentTypeClass):
     contact_info = ContactInfoForeignKey()
+
+    def validate(self, attrs):
+        contact_info = attrs.get('contact_info', getattr(self.instance, 'contact_info', None))
+        value = attrs.get('value', getattr(self.instance, 'value', ''))
+        if contact_info and contact_info.info_type == 'website':
+            validate_safe_url(value)
+        return super().validate(attrs)
 
     class Meta:
         model = ContactInfoLocalization
