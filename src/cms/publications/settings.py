@@ -30,3 +30,26 @@ CMS_APP_REGEXP_URLPATHS = {
 
 
 CMS_PAGE_SIZE = 3
+
+# HTML sanitization of publication content (nh3)
+# allowed elements cover the HTML produced by CKEditor 5 plugins
+# (images with caption/resize, code blocks, todo lists, tables, list styles)
+# and by markdown conversion
+CMS_PUBLICATION_ALLOWED_TAGS = {
+    'a', 'b', 'blockquote', 'br', 'caption', 'code', 'div', 'em',
+    'figcaption', 'figure', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr',
+    'i', 'img', 'input', 'label', 'li', 'ol', 'p', 'pre', 's', 'span',
+    'strong', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'tr',
+    'u', 'ul',
+}
+CMS_PUBLICATION_ALLOWED_ATTRIBUTES = {
+    '*': {'class', 'style'},
+    'a': {'href', 'title', 'target'},
+    'img': {'src', 'alt', 'title', 'width', 'height'},
+    'input': {'type', 'checked', 'disabled'},
+    'td': {'colspan', 'rowspan'},
+    'th': {'colspan', 'rowspan'},
+}
+CMS_PUBLICATION_ALLOWED_STYLE_PROPERTIES = {'list-style-type', 'margin-left',
+                                            'text-align', 'width'}
+CMS_PUBLICATION_ALLOWED_URL_SCHEMES = {'http', 'https', 'mailto', 'tel'}

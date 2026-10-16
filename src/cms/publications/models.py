@@ -29,6 +29,7 @@ from markdownify import markdownify
 from taggit.managers import TaggableManager
 
 from . settings import *
+from . utils import sanitize_html
 
 
 CMS_IMAGE_CATEGORY_SIZE = getattr(settings, 'CMS_IMAGE_CATEGORY_SIZE',
@@ -251,6 +252,8 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
         if not self.slug:
             self.slug = self.title2slug()
         self.content_save_switch()
+        if self.content_type == 'html':
+            self.content = sanitize_html(self.content)
         super(self.__class__, self).save(*args, **kwargs)
 
     @property
@@ -291,7 +294,7 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
     def html_content(self):
         content = ''
         if self.content_type == 'markdown':
-            content = markdown(self.content)
+            content = sanitize_html(markdown(self.content))
         elif self.content_type == 'html':
             content = self.content
         return content
@@ -552,6 +555,11 @@ class PublicationLocalization(TimeStampedModel, ActivableModel,
 
     def is_lockable_by(self, user):
         return self.publication.is_localizable_by(user)
+
+    def save(self, *args, **kwargs):
+        if self.publication.content_type == 'html':
+            self.content = sanitize_html(self.content)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return '{} {}'.format(self.publication, self.language)

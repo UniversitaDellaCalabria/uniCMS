@@ -13,5 +13,6 @@ pydantic
 django-htmlmin>=0.11.0
 unicms-template-italia
 markdown
+nh3>=0.2.15
 markdownify
 redis
