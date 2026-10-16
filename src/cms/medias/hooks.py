@@ -56,10 +56,51 @@ def webp_image_optimizer(media_object):
         return True
 
 
-def remove_file(media_object):
-    fpath = media_object.file.path
+def _get_file_field(media_object):
+    for field_name in ('file', 'image'):
+        if hasattr(media_object, field_name):
+            return field_name, getattr(media_object, field_name)
+    return None, None # pragma: no cover
+
+
+def _delete_stored_file(field, name):
+    if not name: return
     try:
-        os.remove(fpath)
+        if field.storage.exists(name):
+            field.storage.delete(name)
     except Exception as e: # pragma: no cover
-        _msg = 'Media Hook remove_file: {} cannot be removed: {}'
-        logger.error(_msg.format(fpath, e))
+        _msg = 'Media Hook: {} cannot be removed: {}'
+        logger.error(_msg.format(name, e))
+
+
+def remove_file(media_object):
+    """
+    POSTDELETE: removes the file of a deleted object
+    """
+    field_name, field = _get_file_field(media_object)
+    if field is not None:
+        _delete_stored_file(field, field.name)
+
+
+def store_previous_file(media_object):
+    """
+    PRESAVE: stores the name of the file actually saved,
+    to be compared with the new one after save
+    """
+    field_name, field = _get_file_field(media_object)
+    if not field_name or not media_object.pk: return
+    media_object._previous_file = media_object.__class__.objects\
+                                              .filter(pk=media_object.pk)\
+                                              .values_list(field_name, flat=True)\
+                                              .first()
+
+
+def remove_replaced_file(media_object):
+    """
+    POSTSAVE: removes the previous file if it has been replaced by a new one
+    """
+    previous = getattr(media_object, '_previous_file', None)
+    field_name, field = _get_file_field(media_object)
+    if field is not None and previous and previous != field.name:
+        _delete_stored_file(field, previous)
+    media_object._previous_file = None

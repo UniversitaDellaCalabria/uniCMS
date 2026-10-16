@@ -49,25 +49,36 @@ CMS_HOOKS = {
     },
     'Media': {
         'PRESAVE': ['cms.medias.hooks.set_file_meta',
-                    'cms.medias.hooks.webp_image_optimizer'],
-        'POSTSAVE': [],
+                    'cms.medias.hooks.webp_image_optimizer',
+                    'cms.medias.hooks.store_previous_file'],
+        'POSTSAVE': ['cms.medias.hooks.remove_replaced_file'],
         'PREDELETE': [],
         'POSTDELETE': ['cms.medias.hooks.remove_file']
     },
     'Category': {
-        'PRESAVE': ['cms.medias.hooks.webp_image_optimizer'],
-        'POSTSAVE': [],
+        'PRESAVE': ['cms.medias.hooks.webp_image_optimizer',
+                    'cms.medias.hooks.store_previous_file'],
+        'POSTSAVE': ['cms.medias.hooks.remove_replaced_file'],
         'PREDELETE': [],
         'POSTDELETE': ['cms.medias.hooks.remove_file']
     },
     'PublicationAttachment': {
-        'PRESAVE': ['cms.medias.hooks.set_file_meta',],
-        'POSTSAVE': [],
+        'PRESAVE': ['cms.medias.hooks.set_file_meta',
+                    'cms.medias.hooks.store_previous_file'],
+        'POSTSAVE': ['cms.medias.hooks.remove_replaced_file'],
         'PREDELETE': [],
-        'POSTDELETE': []
+        'POSTDELETE': ['cms.medias.hooks.remove_file']
     }
 }
 ````
+
+Files of Media, Category and PublicationAttachment are removed from disk only by hooks,
+whatever is the source of the change (API, admin, scripts, cascade deletions):
+
+- `store_previous_file` (PRESAVE) and `remove_replaced_file` (POSTSAVE): when a file is replaced, the previous one is removed after a successful save;
+- `remove_file` (POSTDELETE): the file is removed after a successful delete (eg: protected objects are not deleted, so their file is preserved).
+
+Without these hooks files are never removed from disk.
 
 
 #### Template tags

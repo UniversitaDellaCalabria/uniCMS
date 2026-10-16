@@ -1,5 +1,4 @@
 import logging
-import os
 
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
@@ -63,12 +62,6 @@ class PublicationAttachmentView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
 
-        if 'file' in request.data:
-            try:
-                os.remove(item.file.path)
-            except Exception: # pragma: no cover
-                logger.warning(f'Publication attachment {item.file.path} not found')
-            
         return super().patch(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
@@ -79,12 +72,6 @@ class PublicationAttachmentView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
 
-        if 'file' in request.data:
-            try:
-                os.remove(item.file.path)
-            except Exception: # pragma: no cover
-                logger.warning(f'Publication attachment {item.file.path} not found')
-            
         return super().put(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
@@ -95,11 +82,6 @@ class PublicationAttachmentView(UniCMSCachedRetrieveUpdateDestroyAPIView):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
 
-        try:
-            os.remove(item.file.path)
-        except Exception: # pragma: no cover
-            logger.warning(f'Publication attachment {item.file.path} not found')
-            
         return super().delete(request, *args, **kwargs)
 
 

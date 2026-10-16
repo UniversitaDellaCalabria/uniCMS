@@ -338,8 +338,10 @@ CMS_HOOKS = {
     },
     'Media': {
         'PRESAVE': ['cms.medias.hooks.set_file_meta',
-                    'cms.medias.hooks.webp_image_optimizer'],
-        'POSTSAVE': ['cms.contexts.hooks.used_by'],
+                    'cms.medias.hooks.webp_image_optimizer',
+                    'cms.medias.hooks.store_previous_file'],
+        'POSTSAVE': ['cms.contexts.hooks.used_by',
+                     'cms.medias.hooks.remove_replaced_file'],
         'PREDELETE': [],
         'POSTDELETE': ['cms.medias.hooks.remove_file']
     },
@@ -356,8 +358,9 @@ CMS_HOOKS = {
         'POSTDELETE': []
     },
     'Category': {
-        'PRESAVE': ['cms.medias.hooks.webp_image_optimizer'],
-        'POSTSAVE': [],
+        'PRESAVE': ['cms.medias.hooks.webp_image_optimizer',
+                    'cms.medias.hooks.store_previous_file'],
+        'POSTSAVE': ['cms.medias.hooks.remove_replaced_file'],
         'PREDELETE': [],
         'POSTDELETE': ['cms.medias.hooks.remove_file']
     },
@@ -368,10 +371,11 @@ CMS_HOOKS = {
         'POSTSAVE': ['cms.contexts.hooks.used_by'],
     },
     'PublicationAttachment': {
-        'PRESAVE': ['cms.medias.hooks.set_file_meta',],
-        'POSTSAVE': [],
+        'PRESAVE': ['cms.medias.hooks.set_file_meta',
+                    'cms.medias.hooks.store_previous_file'],
+        'POSTSAVE': ['cms.medias.hooks.remove_replaced_file'],
         'PREDELETE': [],
-        'POSTDELETE': []
+        'POSTDELETE': ['cms.medias.hooks.remove_file']
     }
 }
 

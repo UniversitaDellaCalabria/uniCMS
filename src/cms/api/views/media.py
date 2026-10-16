@@ -18,8 +18,6 @@ from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
 from rest_framework.views import APIView
 
-from cms.medias.utils import _remove_file
-
 from . generics import UniCMSCachedRetrieveUpdateDestroyAPIView, UniCMSListCreateAPIView, UniCMSListSelectOptionsAPIView, UniCMSFormView
 from . logs import ObjectLogEntriesList
 from .. exceptions import LoggedPermissionDenied
@@ -60,10 +58,9 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         if not permission['granted']:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
-        if 'file' in request.data:
-            cache.delete(f'media-{item.uuid}')
-            _remove_file(item)
-        return super().patch(request, *args, **kwargs)
+        response = super().patch(request, *args, **kwargs)
+        cache.delete(f'media-{item.uuid}')
+        return response
 
     def put(self, request, *args, **kwargs):
         item = self.get_object()
@@ -72,9 +69,9 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         if not permission['granted']:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
+        response = super().put(request, *args, **kwargs)
         cache.delete(f'media-{item.uuid}')
-        _remove_file(item)
-        return super().put(request, *args, **kwargs)
+        return response
 
     def delete(self, request, *args, **kwargs):
         item = self.get_object()
@@ -83,9 +80,9 @@ class MediaView(UniCMSCachedRetrieveUpdateDestroyAPIView):
         if not permission['granted']:
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=request.method)
+        response = super().delete(request, *args, **kwargs)
         cache.delete(f'media-{item.uuid}')
-        _remove_file(item)
-        return super().delete(request, *args, **kwargs)
+        return response
 
 
 class MediaFormView(UniCMSFormView):

@@ -45,9 +45,3 @@ def to_webp(fobj):
     byte_io.seek(0)
     return byte_io
 
-
-def _remove_file(media):
-    try:
-        os.remove(media.file.path)
-    except Exception: # pragma: no cover
-        logger.warning(f'File {media.file.path} not found')
