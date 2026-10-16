@@ -62,6 +62,10 @@ class PublicationSerializer(TaggitSerializer,
             categories.append(CategorySerializer(category).data)
         data['category_data'] = categories
         data['full_name'] = instance.__str__()
+        # editorial board notes only for staff users
+        request = self.context.get('request')
+        if not (request and request.user.is_staff):
+            data.pop('note', None)
         return data
 
     class Meta:
