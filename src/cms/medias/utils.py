@@ -2,18 +2,12 @@ import logging
 import magic
 import os
 
-from django.conf import settings
-
 from io import BytesIO
 from PIL import Image
 
-from . import settings as app_settings
+from . filetypes import FILETYPE_IMAGE
 
 logger = logging.getLogger(__name__)
-
-
-FILETYPE_IMAGE = getattr(settings, 'FILETYPE_IMAGE',
-                         app_settings.FILETYPE_IMAGE)
 
 
 def get_file_type_size(media_obj) -> dict:

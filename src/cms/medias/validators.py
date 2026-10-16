@@ -1,18 +1,17 @@
 import magic
+import os
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
 
 from . import settings as app_settings
+from . filetypes import (FILETYPE_ALLOWED,
+                         FILETYPE_ALLOWED_EXTENSIONS,
+                         FILETYPE_IMAGE,
+                         FILETYPE_MEDIA)
 from . utils import get_image_width_height
 
 
-FILETYPE_IMAGE = getattr(settings, 'FILETYPE_IMAGE',
-                         app_settings.FILETYPE_IMAGE)
-FILETYPE_MEDIA = getattr(settings, 'FILETYPE_MEDIA',
-                         app_settings.FILETYPE_MEDIA)
-FILETYPE_ALLOWED = getattr(settings, 'FILETYPE_ALLOWED',
-                           app_settings.FILETYPE_ALLOWED)
 FILE_MAX_SIZE = getattr(settings, 'FILE_MAX_SIZE',
                         app_settings.FILE_MAX_SIZE)
 FILETYPE_IMAGE_YX_RATIO_MIN = getattr(settings, 'FILETYPE_IMAGE_YX_RATIO_MIN',
@@ -43,6 +42,17 @@ def _validate_generic_file_extension(value, allowed_filetypes):
     value.file.seek(0)
     if mimetype not in allowed_filetypes:
         raise ValidationError(f'Unsupported file extension {mimetype}')
+    _validate_file_name_extension(value.name, mimetype)
+
+
+def _validate_file_name_extension(filename, mimetype):
+    """
+    file name extension must be consistent with the detected mimetype
+    """
+    ext = os.path.splitext(filename or '')[1].lstrip('.').lower()
+    if ext not in FILETYPE_ALLOWED_EXTENSIONS.get(mimetype, ()):
+        raise ValidationError(f'File extension {ext} not consistent '
+                              f'with file type {mimetype}')
 
 
 def validate_file_extension(value):

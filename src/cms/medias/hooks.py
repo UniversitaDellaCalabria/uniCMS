@@ -3,16 +3,13 @@ import magic
 import os
 
 from cms.medias.utils import get_file_type_size
-from django.conf import settings
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-from . import settings as app_settings
+from . filetypes import FILETYPE_IMAGE
 from . utils import to_webp
 
 
 logger = logging.getLogger(__name__)
-FILETYPE_IMAGE = getattr(settings, 'FILETYPE_IMAGE',
-                         app_settings.FILETYPE_IMAGE)
 
 
 def set_file_meta(media_object):

@@ -17,12 +17,12 @@ from cms.templates.models import (ActivableModel,
 from taggit.managers import TaggableManager
 
 from . settings import *
+from . filetypes import FILETYPE_ALLOWED
 from . validators import *
 
 logger = logging.getLogger(__name__)
 
 
-FILETYPE_ALLOWED = getattr(settings, 'FILETYPE_ALLOWED', FILETYPE_ALLOWED)
 if 'makemigrations' in sys.argv or 'migrate' in sys.argv: # pragma: no cover
     FILETYPE_ALLOWED = ['']
 
