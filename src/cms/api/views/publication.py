@@ -8,6 +8,7 @@ from django.utils.decorators import method_decorator
 
 from cms.contexts.decorators import detect_language
 from cms.contexts.models import WebPath
+from cms.contexts.utils import webpath_access_granted
 
 from cms.publications.forms import PublicationEditForm, PublicationForm
 from cms.publications.models import Publication, PublicationContext
@@ -17,6 +18,7 @@ from cms.publications.serializers import (PublicationSerializer,
 from cms.publications.utils import publication_context_base_filter
 
 from rest_framework import filters, generics
+from rest_framework.exceptions import NotAuthenticated, PermissionDenied
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.schemas.openapi import AutoSchema
@@ -70,8 +72,16 @@ class ApiPublicationsByContext(generics.ListAPIView):
     # permission_classes = [permissions.IsAdminUser]
 
     def get_queryset(self):
+        webpath = get_object_or_404(WebPath,
+                                    pk=self.kwargs['webpath_id'],
+                                    is_active=True)
+        # webpath access level (public, registered users, groups)
+        if not webpath_access_granted(self.request.user, webpath):
+            if not self.request.user.is_authenticated:
+                raise NotAuthenticated()
+            raise PermissionDenied()
         query_params = publication_context_base_filter()
-        query_params.update({'webpath__pk': self.kwargs['webpath_id']})
+        query_params.update({'webpath': webpath})
         category = self.request.GET.get('category')
         if category:
             query_params['publication__category__pk'] = category

@@ -23,7 +23,7 @@ from urllib.parse import urlparse
 from . import settings as app_settings
 from . decorators import unicms_cache
 from . models import EditorialBoardEditors, WebSite, WebPath
-from . utils import append_slash, is_editor
+from . utils import append_slash, is_editor, webpath_access_granted
 
 
 logger = logging.getLogger(__name__)
@@ -50,15 +50,10 @@ def _get_site_from_host(request):
 
 def _access_level_redirect(request, webpath):
     # access level
-    access_level = webpath.get_access_level()
-    if access_level == '0':
+    if webpath_access_granted(request.user, webpath):
         return False
-    elif not request.user.is_authenticated:
+    if not request.user.is_authenticated:
         return f"{settings.LOGIN_URL}?next={request.build_absolute_uri()}"
-    elif access_level == '2' or request.user.is_superuser:
-        return False
-    elif getattr(request.user, access_level, None):
-        return False
     raise PermissionDenied
 
 

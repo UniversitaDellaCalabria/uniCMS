@@ -38,6 +38,9 @@ class SearchEntry(BaseModel):
 
 
 def page_to_entry(page_object):
+    # contents with restricted access must not be indexed
+    if page_object.webpath.get_access_level() != '0':
+        return
     app_label, model = page_object._meta.label_lower.split('.')
     sites = [page_object.webpath.site.domain]
 
@@ -66,16 +69,17 @@ def page_to_entry(page_object):
 
 def publication_to_entry(pub_object, contexts=None):
     app_label, model = pub_object._meta.label_lower.split('.')
-    contexts = pub_object.get_publication_contexts().order_by('date_start')
+    if contexts is None:
+        contexts = pub_object.get_publication_contexts().order_by('date_start')
+    # only published contexts in active and public webpaths are indexed
+    contexts = [i for i in contexts
+                if i.is_published and
+                i.webpath.is_active and
+                i.webpath.get_access_level() == '0']
     if not contexts:
         # it doesn't have any real publication
         return
-    first_context = None
-    for context in contexts:
-        if context.is_published:
-            first_context = context
-            break
-    if not first_context: return
+    first_context = contexts[0]
     urls = set([f'//{i.webpath.site.domain}{i.url}' for i in contexts])
     sites = set([f'{i.webpath.site.domain}' for i in contexts])
     data = {

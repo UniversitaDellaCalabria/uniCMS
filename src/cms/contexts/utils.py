@@ -97,6 +97,20 @@ def contextualize_template(template_fname, page):
     return ext_template_sources
 
 
+def webpath_access_granted(user, webpath) -> bool:
+    """
+    True if user can view contents of webpath, according to its access level
+    """
+    access_level = webpath.get_access_level()
+    if access_level == '0':
+        return True
+    if not user.is_authenticated:
+        return False
+    if access_level == '2' or user.is_superuser:
+        return True
+    return bool(getattr(user, access_level, None))
+
+
 def sanitize_path(path):
     return re.sub('/[/]+', '/', path)
 

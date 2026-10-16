@@ -24,7 +24,7 @@ def page_se_insert(page_object):
         collection.delete_many(doc_query)
         logger.info(f'{page_object} removed from search engine')
 
-    if page_object.is_publicable:
+    if page_object.is_publicable and search_entry:
         doc = collection.insert_one(search_entry)
 
     logger.info(f'{page_object} succesfully indexed in search engine')
