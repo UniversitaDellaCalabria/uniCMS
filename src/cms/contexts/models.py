@@ -176,6 +176,14 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         if self.parent == self:
             raise Exception("Can't set himself as parent")
 
+        # parent can't be one of its descendants (it would create a loop)
+        if self.pk and self.parent_id:
+            old_parent_id = WebPath.objects.filter(pk=self.pk)\
+                                           .values_list('parent_id', flat=True)\
+                                           .first()
+            if old_parent_id != self.parent_id and self.parent.is_descendant_of(self):
+                raise Exception("Can't set one of its descendants as parent")
+
         # alias different from self
         if self.alias == self:
             raise Exception("Can't set himself as alias")
@@ -285,11 +293,28 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         all the webpaths in the subtree (children, grandchildren...)
         """
         descendants = []
+        # visited nodes, to stop on loops in data
+        visited = {self.pk}
         children = list(WebPath.objects.filter(parent=self))
         while children:
+            children = [i for i in children if i.pk not in visited]
+            visited.update(i.pk for i in children)
             descendants.extend(children)
             children = list(WebPath.objects.filter(parent__in=children))
         return descendants
+
+    def is_descendant_of(self, webpath):
+        """
+        True if webpath is self or one of its ancestors
+        """
+        # visited nodes, to stop on loops in data
+        visited = set()
+        node = self
+        while node and node.pk not in visited:
+            if node.pk == webpath.pk: return True
+            visited.add(node.pk)
+            node = node.parent
+        return False
 
     def get_access_level(self):
         if self.access == '1':
