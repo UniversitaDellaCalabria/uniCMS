@@ -162,11 +162,14 @@ class WebpathView(UniCMSCachedRetrieveUpdateDestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         item = self.get_object()
-        has_permission = item.is_publicable_by(user=request.user)
-                                               # parent=True)
-        if not has_permission:
-            raise LoggedPermissionDenied(classname=self.__class__.__name__,
-                                         resource=request.method)
+        # user must have publish permissions on the webpath
+        # and on each descendant, deleted in cascade.
+        # Locks (delegations) allow to edit a webpath, not to delete it
+        for webpath in [item] + item.get_descendants():
+            if not webpath.is_publicable_by(user=request.user,
+                                            allow_locks=False):
+                raise LoggedPermissionDenied(classname=self.__class__.__name__,
+                                             resource=webpath)
         return super().delete(request, *args, **kwargs)
 
 

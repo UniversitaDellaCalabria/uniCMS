@@ -256,7 +256,7 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
             return EditorialBoardLockUser.check_for_locks(self, user)
         return False
 
-    def is_publicable_by(self, user=None): #, obj=None, parent=False):
+    def is_publicable_by(self, user=None, allow_locks=True): #, obj=None, parent=False):
         if not user: return False
         if user.is_superuser: return True
         # item = self if not obj else obj
@@ -272,13 +272,24 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
             # permission granted
             return True
         # if user has not permissions, check locks
-        elif perms is None:
+        elif perms is None and allow_locks:
             return EditorialBoardLockUser.check_for_locks(self, user)
         return False
 
 
     def is_lockable_by(self, user):
         return self.is_publicable_by(user) #, parent=True)
+
+    def get_descendants(self):
+        """
+        all the webpaths in the subtree (children, grandchildren...)
+        """
+        descendants = []
+        children = list(WebPath.objects.filter(parent=self))
+        while children:
+            descendants.extend(children)
+            children = list(WebPath.objects.filter(parent__in=children))
+        return descendants
 
     def get_access_level(self):
         if self.access == '1':
