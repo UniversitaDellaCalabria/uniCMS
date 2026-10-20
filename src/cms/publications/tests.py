@@ -227,14 +227,6 @@ class PublicationUnitTest(TestCase):
         # assert res['next_url'] == None
 
 
-    def test_api_pub_detail(self):
-        pub = self.enrich_pub()
-        req = Client()
-        url = reverse('unicms_api:publication-detail',
-                      kwargs={'slug': pub.slug})
-        req.get(url).json()
-
-
     def test_publication_handler_view(self):
         pub = self.enrich_pub(webpath_path='/')
         webpath=pub.related_contexts[0].webpath

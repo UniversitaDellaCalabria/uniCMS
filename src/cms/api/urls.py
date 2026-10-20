@@ -39,7 +39,6 @@ urlpatterns += re_path(r'api/$',
 urlpatterns += path('api/news/by-context/<int:webpath_id>', publication.ApiPublicationsByContext.as_view(), name='api-news-by-contexts'),
 urlpatterns += path('api/news/by-context/<int:webpath_id>/<int:category>',
                     publication.ApiPublicationsByContextCategory.as_view(), name='api-news-by-contexts-category'),
-urlpatterns += path('api/news/view/<str:slug>', publication.PublicationDetail.as_view(), name='publication-detail'),
 
 urlpatterns += path('api/menu/<int:menu_id>', menu.ApiMenuId.as_view(), name='api-menu'),
 

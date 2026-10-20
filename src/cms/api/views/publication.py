@@ -36,21 +36,6 @@ from .. utils import check_user_permission_on_object
 logger = logging.getLogger(__name__)
 
 
-# TODO - better get with filters
-class PublicationDetail(generics.RetrieveAPIView):
-    name = 'publication-detail'
-    description = 'News'
-    queryset = Publication.objects.filter(is_active=True)
-    # state='published')
-    serializer_class = PublicationSerializer
-    lookup_field = 'slug'
-
-    def get_queryset(self):
-        for pub in super(PublicationDetail, self).get_queryset():
-            # if pub.is_publicable:
-            return pub
-
-
 class ApiPublicationsByContextSchema(AutoSchema):
     def get_operation_id(self, path, method):# pragma: no cover
         return 'retrievePublicPublicationContext'
