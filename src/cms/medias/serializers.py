@@ -20,7 +20,7 @@ class MediaCollectionForeignKey(serializers.PrimaryKeyRelatedField):
         if request:
             collection_id = self.context['request'].parser_context['kwargs']['collection_id']
             return MediaCollection.objects.filter(pk=collection_id)
-        return None # pragma: no cover
+        return None
 
 
 class MediaSerializer(UniCMSCreateUpdateSerializer,
@@ -38,7 +38,7 @@ class MediaSerializer(UniCMSCreateUpdateSerializer,
                 data['file_dimensions'] = f'{w}px*{y}px'
             else:
                 data['file_dimensions'] = ''
-        except FileNotFoundError: # pragma: no cover
+        except FileNotFoundError:
             data['file_dimensions'] = ''
         return data
 

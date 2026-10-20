@@ -41,7 +41,7 @@ class PageHeadingLocalizationList(UniCMSListCreateAPIView):
                                      webpath__site__pk=site_id)
             heading = get_object_or_404(PageHeading, page=page, pk=heading_id)
             return PageHeadingLocalization.objects.filter(heading=heading)
-        return PageHeadingLocalization.objects.none() # pragma: no cover
+        return PageHeadingLocalization.objects.none()
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -126,7 +126,7 @@ class PageHeadingLocalizationFormView(UniCMSFormView):
 
 
 class PageHeadingLocalizationLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPageHeadingLocalizationLogs'
 
 

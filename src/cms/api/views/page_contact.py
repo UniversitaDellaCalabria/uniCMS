@@ -29,7 +29,7 @@ class PageContactList(PageRelatedObjectList):
         super().get_data()
         if self.page:
             return PageContact.objects.filter(page=self.page)
-        return PageContact.objects.none() # pragma: no cover
+        return PageContact.objects.none()
 
 
 class PageContactView(PageRelatedObject):
@@ -54,7 +54,7 @@ class PageContactFormView(UniCMSFormView):
 
 
 class PageContactLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPageContactLogs'
 
 

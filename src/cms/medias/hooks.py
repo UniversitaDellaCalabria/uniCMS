@@ -25,7 +25,7 @@ def webp_image_optimizer(media_object):
         if field:
             break
 
-    if not getattr(field, '_file', None): # pragma: no cover
+    if not getattr(field, '_file', None):
         return
 
     mimetype = magic.Magic(mime=True).from_buffer(field._file.file.read())
@@ -64,7 +64,7 @@ def _get_file_field(media_object):
     for field_name in ('file', 'image'):
         if hasattr(media_object, field_name):
             return field_name, getattr(media_object, field_name)
-    return None, None # pragma: no cover
+    return None, None
 
 
 def _delete_stored_file(field, name):
@@ -72,7 +72,7 @@ def _delete_stored_file(field, name):
     try:
         if field.storage.exists(name):
             field.storage.delete(name)
-    except Exception as e: # pragma: no cover
+    except Exception as e:
         _msg = 'Media Hook: {} cannot be removed: {}'
         logger.error(_msg.format(name, e))
 

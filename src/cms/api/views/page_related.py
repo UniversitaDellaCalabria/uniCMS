@@ -26,7 +26,7 @@ class PageRelatedList(PageRelatedObjectList):
         super().get_data()
         if self.page:
             return PageRelated.objects.filter(page=self.page)
-        return PageRelated.objects.none() # pragma: no cover
+        return PageRelated.objects.none()
 
 
 class PageRelatedView(PageRelatedObject):
@@ -51,7 +51,7 @@ class PageRelatedFormView(UniCMSFormView):
 
 
 class PageRelatedSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPageRelatedLogs'
 
 

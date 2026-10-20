@@ -27,7 +27,7 @@ class PageLinkList(PageRelatedObjectList):
         super().get_data()
         if self.page:
             return PageLink.objects.filter(page=self.page)
-        return PageLink.objects.none() # pragma: no cover
+        return PageLink.objects.none()
 
 
 class PageLinkView(PageRelatedObject):
@@ -52,7 +52,7 @@ class PageLinkFormView(UniCMSFormView):
 
 
 class PageLinkLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPageLinkLogs'
 
 

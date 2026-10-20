@@ -26,7 +26,7 @@ CMS_LINKS_LABELS = getattr(settings, 'CMS_LINKS_LABELS', app_settings.CMS_LINKS_
 CMS_TEMPLATE_BLOCK_SECTIONS = getattr(settings, 'CMS_TEMPLATE_BLOCK_SECTIONS', [])
 
 _lang_choices = settings.LANGUAGES
-if 'makemigrations' in sys.argv or 'migrate' in sys.argv: # pragma: no cover
+if 'makemigrations' in sys.argv or 'migrate' in sys.argv:
     _lang_choices = [('', '-')]
     CMS_TEMPLATE_BLOCK_SECTIONS = [('','-')]
     CMS_PAGE_TEMPLATES = [('', '-')]

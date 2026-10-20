@@ -52,7 +52,7 @@ class WebpathList(UniCMSListCreateAPIView):
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=site)
             return WebPath.objects.filter(site=site)
-        return WebPath.objects.none() # pragma: no cover
+        return WebPath.objects.none()
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -181,7 +181,7 @@ class WebpathFormView(UniCMSFormView):
 
 
 class EditorialBoardWebpathOptionListSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listWebPathSelectOptions'
 
 
@@ -204,11 +204,11 @@ class WebpathOptionList(UniCMSListSelectOptionsAPIView):
                 raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                              resource=site)
             return WebPath.objects.filter(site=site)
-        return WebPath.objects.none()# pragma: no cover
+        return WebPath.objects.none()
 
 
 class EditorialBoardWebpathAllOptionListSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listWebPathAllSelectOptions'
 
 
@@ -242,7 +242,7 @@ class WebpathOptionView(generics.RetrieveAPIView):
 
 
 class WebpathLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listWebPathLogs'
 
 
@@ -267,7 +267,7 @@ class WebpathLogsView(ObjectLogEntriesList):
 
 
 class EditorialBoardWebpathAllListSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listWebPathAll'
 
 
@@ -294,10 +294,10 @@ class WebpathCloneFormView(UniCMSFormView):
 
 
 class WebpathCloneSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'cloneWebPath'
 
-    def get_operation(self, path, method): # pragma: no cover
+    def get_operation(self, path, method):
         op = super().get_operation(path, method)
         op['parameters'].append(
             {
@@ -400,7 +400,7 @@ class WebpathCloneView(APIView):
                       excluded_childrens=excluded_childrens,
                       custom_values=custom_values,
                       recursive_custom_values=recursive_values)
-            except Exception as e: # pragma: no cover
+            except Exception as e:
                 raise LoggedValidationException(classname=self.__class__.__name__,
                                                 resource=request.method,
                                                 detail=e)

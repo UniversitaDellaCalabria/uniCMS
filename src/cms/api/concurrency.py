@@ -19,7 +19,7 @@ LOCK_MESSAGE = getattr(settings, 'LOCK_MESSAGE', app_settings.LOCK_MESSAGE)
 def get_lock_from_cache(content_type_id, object_id):
     key = f'{LOCKS_CACHE_KEY_PREFIX}{content_type_id}_{object_id}'
     res = cache.get(key)
-    if res: # pragma: no cover
+    if res:
         logger.debug(f'uniCMS locks timed cache - {key} succesfully taken from cache')
         return res
     return 0

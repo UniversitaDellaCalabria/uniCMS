@@ -34,7 +34,7 @@ class PublicationAttachmentList(PublicationRelatedObjectList):
         super().get_data()
         if self.publication:
             return PublicationAttachment.objects.filter(publication=self.publication)
-        return PublicationAttachment.objects.none() # pragma: no cover
+        return PublicationAttachment.objects.none()
 
 
 class PublicationAttachmentView(UniCMSCachedRetrieveUpdateDestroyAPIView):
@@ -94,7 +94,7 @@ class PublicationAttachmentFormView(UniCMSFormView):
 
 
 class PublicationAttachmentLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPublicationAttachmentLogs'
 
 

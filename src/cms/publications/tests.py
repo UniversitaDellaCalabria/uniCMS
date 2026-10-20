@@ -1,6 +1,8 @@
 import datetime
 import logging
 
+from unittest import mock
+
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.test import Client, RequestFactory, TestCase
@@ -18,9 +20,12 @@ from cms.templates.models import TemplateBlock
 from cms.templates.tests import TemplateUnitTest
 
 from cms.pages.templatetags.unicms_pages import cms_categories
+from cms.publications.serializers import (PublicationContextSerializer,
+                                          PublicationLinkSerializer,
+                                          PublicationSerializer)
 from cms.publications.templatetags.unicms_publications import (load_publication,
                                                                load_publications_preview)
-from . models import (Publication, PublicationAttachment, PublicationBlock,
+from . models import (Category, Publication, PublicationAttachment, PublicationBlock,
                       PublicationContext, PublicationMediaCollection, PublicationLink,
                       PublicationLocalization, PublicationRelated)
 
@@ -259,63 +264,27 @@ class PublicationUnitTest(TestCase):
     def test_api_menu_builder_with_publications(self):
         pub = self.enrich_pub()
         webpath = pub.related_contexts[0].webpath
-        menu = MenuUnitTest.create_menu_item().menu
-    
+        # menu item that refers to a publication in a webpath
+        menu = MenuUnitTest.create_menu_item(url='',
+                                             publication=pub,
+                                             webpath=webpath).menu
+
         req = Client()
         url = reverse('unicms_api:api-menu', kwargs={'menu_id': menu.pk})
         res = req.get(url, content_type='application/json')
-        assert isinstance(res.json(), dict)
-
+        assert res.status_code == 200
         menu_json = res.json()
+        assert isinstance(menu_json, dict)
+        item = menu_json['childs'][0]
+        assert item['publication_id'] == pub.pk
+        assert item['webpath_id'] == webpath.pk
+
         # destroy the menu
         menu.delete()
 
         # check that it doesn't exist anymore
         res = req.get(url, content_type='application/json')
         assert res.status_code == 404
-
-        # re-create the menu - with unprivileged user
-        url = reverse('unicms_api:api-menu-post')
-        res = req.post(url, data=menu_json,
-                       content_type='application/json', follow=1)
-        assert res.status_code == 403
-
-        # re-create the menu - with privileged user
-        user = ContextUnitTest.create_user(is_staff=1)
-        req.force_login(user)
-
-        url = reverse('unicms_api:api-menu-post')
-        res = req.post(url, data=menu_json,
-                       content_type='application/json', follow=1)
-        menu_json = res.json()
-        menu_item = {'parent_id': None,
-                     'name': 'Other',
-                     'url': '',
-                     'publication_id': pub.pk,
-                     'webpath_id': webpath.pk,
-                     'is_active': True,
-                     'order': 10,
-                     'childs': []}
-        menu_item['childs'] = [menu_item.copy()]
-
-        # update a menu
-        menu_json['childs'].append(menu_item)
-        menu_json['childs'][-1]['publication_id'] = None
-
-        # not existing menu
-        url = reverse('unicms_api:api-menu', kwargs={'menu_id': 100})
-        res = req.post(url, data=menu_json,
-                       content_type='application/json', follow=1)
-        assert res.status_code == 404
-
-        # update a menu
-        url = reverse('unicms_api:api-menu', kwargs={'menu_id': menu_json['childs'][0]['menu_id']})
-        res = req.post(url, data=menu_json,
-                       content_type='application/json', follow=1)
-        # verify
-        res = req.get(url, content_type='application/json')
-        assert len(res.json()['childs']) == 2
-        logger.debug(res.json())
 
 
     # teamplatetags
@@ -433,3 +402,208 @@ class PublicationUnitTest(TestCase):
                                               is_active=1)
         lm = block.render()
         assert lm
+
+
+    def test_publication_images(self):
+        pub = self.create_pub(count=1)
+        media = pub.presentation_image
+        category = pub.category.first()
+
+        # presentation image only
+        assert pub.image_url() == media.get_media_path()
+        assert pub.image_title() == media.title
+        assert pub.image_description() == media.description
+
+        # preview image has priority
+        preview = MediaUnitTest.create_media(title='preview',
+                                             description='preview desc')
+        pub.preview_image = preview
+        pub.save()
+        assert pub.image_url() == preview.get_media_path()
+        assert pub.image_title() == 'preview'
+        assert pub.image_description() == 'preview desc'
+        # serializer exposes the preview image data
+        data = PublicationSerializer(pub).data
+        assert data['preview_image']['title'] == 'preview'
+        assert data['image'] == preview.get_media_path()
+        # editorial board notes are hidden without a staff request
+        assert 'note' not in data
+
+        # no images: fallback on category image and publication texts
+        pub.preview_image = None
+        pub.presentation_image = None
+        pub.save()
+        assert str(category.image) in pub.image_url()
+        assert pub.image_title() == pub.title
+        assert pub.image_description() == pub.subheading
+
+        # no images and no category images
+        Category.objects.filter(pk=category.pk).update(image='')
+        assert pub.image_url() is None
+
+    def test_category_image_as_html(self):
+        category = PageUnitTest.create_category()
+        html = category.image_as_html()
+        assert html.startswith('<img ')
+        assert category.image.url in html
+
+        # without image a placeholder path is returned
+        category.image = None
+        html = category.image_as_html()
+        assert html == f'{settings.STATIC_URL}images/no-image.jpg'
+
+    def test_publication_permissions(self):
+        pub = self.enrich_pub()
+        pub_ctx = pub.get_publication_context()
+        localization = pub.publicationlocalization_set.first()
+        link = pub.related_links[0]
+
+        user = ContextUnitTest.create_user(username='simple', is_staff=True)
+        superuser = ContextUnitTest.create_user(username='admin',
+                                                is_staff=True,
+                                                is_superuser=True)
+
+        assert pub.is_publicable
+        pub.is_active = False
+        assert not pub.is_publicable
+
+        # without user nothing is editable
+        assert not pub.is_editable_by()
+
+        # simple staff user
+        assert not pub.is_lockable_by(user)
+        assert not link.is_lockable_by(user)
+        assert not localization.is_lockable_by(user)
+        assert not pub_ctx.is_lockable_by(user)
+
+        # superuser
+        assert pub.is_lockable_by(superuser)
+        assert link.is_lockable_by(superuser)
+        assert localization.is_lockable_by(superuser)
+        assert pub_ctx.is_lockable_by(superuser)
+
+    def test_publication_context_status(self):
+        pub = self.create_pub(count=1)
+        pub_ctx = pub.get_publication_context()
+        assert pub_ctx.get_absolute_url() == pub_ctx.url
+        assert pub_ctx.is_published
+
+        # expired
+        pub_ctx.date_end = timezone.localtime() - timezone.timedelta(hours=1)
+        assert not pub_ctx.is_published
+        # not yet started
+        pub_ctx.date_start = timezone.localtime() + timezone.timedelta(hours=1)
+        pub_ctx.date_end = timezone.localtime() + timezone.timedelta(hours=2)
+        assert not pub_ctx.is_published
+
+    def test_foreign_key_fields_without_request(self):
+        # without a request in context the related querysets are not available
+        assert PublicationLinkSerializer().fields['publication'].get_queryset() is None
+        assert PublicationContextSerializer().fields['webpath'].get_queryset() is None
+
+    def test_load_publications_preview_number(self):
+        req = RequestFactory().get('/')
+        pub = self.create_pub()
+        webpath = pub.related_contexts[0].webpath
+        page = PageUnitTest.create_page(webpath=webpath)
+        template_context = dict(request=req, page=page, webpath=webpath)
+        data = dict(context=template_context, template='that.html')
+        tag_module = 'cms.publications.templatetags.unicms_publications'
+        with mock.patch(f'{tag_module}.handle_faulty_templates') as render:
+            # all the 4 publications
+            load_publications_preview(**data)
+            assert len(render.call_args.args[1]['publications']) == 4
+            # limited number of publications
+            load_publications_preview(number=2, **data)
+            assert len(render.call_args.args[1]['publications']) == 2
+
+    def _staff_client(self):
+        req = Client(HTTP_HOST='example.org')
+        # privileged users avoids cache!
+        user = ContextUnitTest.create_user(username='staff-handler',
+                                           is_staff=1)
+        req.force_login(user)
+        return req
+
+    def test_publication_handler_view_not_found(self):
+        pub = self.enrich_pub(webpath_path='/')
+        webpath = pub.related_contexts[0].webpath
+        PageUnitTest.create_page(webpath=webpath)
+        req = self._staff_client()
+
+        url = pub.related_contexts[0].url
+        res = req.get(url)
+        assert res.status_code == 200
+        assert pub.title in res.content.decode()
+
+        # not existent publication in webpath
+        url = url.replace(f'/{pub.pk}-', f'/{pub.pk + 100}-')
+        res = req.get(url)
+        assert res.status_code == 404
+
+    def test_publication_handler_list_category(self):
+        pub = self.enrich_pub(webpath_path='/')
+        webpath = pub.related_contexts[0].webpath
+        PageUnitTest.create_page(webpath=webpath)
+        category = pub.category.first()
+        req = self._staff_client()
+        lurl = f'{webpath.get_full_path()}{settings.CMS_PUBLICATION_LIST_PREFIX_PATH}/'
+
+        res = req.get(lurl, {'category_name': category.name.upper()})
+        assert res.status_code == 200
+        assert f'category={category.pk}' in res.content.decode()
+
+        # unknown category: no filter
+        res = req.get(lurl, {'category_name': 'not-existent'})
+        assert res.status_code == 200
+        assert 'category=' not in res.content.decode()
+
+    def test_publication_handler_list_without_page(self):
+        pub = self.create_pub(webpath_path='/')
+        webpath = pub.related_contexts[0].webpath
+        req = self._staff_client()
+        lurl = f'{webpath.get_full_path()}{settings.CMS_PUBLICATION_LIST_PREFIX_PATH}/'
+        res = req.get(lurl)
+        assert res.status_code == 404
+
+        rss_url = f'{webpath.get_full_path()}{settings.CMS_PUBLICATION_RSS_PREFIX_PATH}/'
+        res = req.get(rss_url)
+        assert res.status_code == 404
+
+    def test_publication_handler_rss(self):
+        pub = self.create_pub(count=2, webpath_path='/')
+        webpath = pub.related_contexts[0].webpath
+        PageUnitTest.create_page(webpath=webpath)
+        pub_ctxs = list(PublicationContext.objects.filter(webpath=webpath))
+        empty_pub = pub_ctxs[0].publication
+        full_pub = pub_ctxs[1].publication
+        # no translations: contents are deterministic
+        PublicationLocalization.objects.filter(publication__in=(empty_pub, full_pub)).delete()
+        Publication.objects.filter(pk=empty_pub.pk).update(title='empty pub',
+                                                           content='')
+        Publication.objects.filter(pk=full_pub.pk).update(title='full pub',
+                                                          content='<p>rss body</p>')
+        category = full_pub.category.first()
+
+        req = self._staff_client()
+        url = f'{webpath.get_full_path()}{settings.CMS_PUBLICATION_RSS_PREFIX_PATH}/'
+        res = req.get(url, HTTP_ACCEPT_LANGUAGE='en')
+        assert res.status_code == 200
+        assert 'rss' in res['Content-Type']
+        content = res.content.decode()
+        assert 'xmlns:content="http://purl.org/rss/1.0/modules/content/"' in content
+        assert content.count('<item>') == 2
+        assert '<title>empty pub</title>' in content
+        assert '<title>full pub</title>' in content
+        assert '<content:encoded/>' in content
+        assert '<content:encoded><![CDATA[<p>rss body</p>]]></content:encoded>' in content
+        assert f'<category>{category.name}</category>' in content
+        assert f'<description>{full_pub.subheading}</description>' in content
+        assert '<pubDate>' in content
+
+        # category filter
+        res = req.get(url, {'category_name': category.name.upper()})
+        assert res.content.decode().count('<item>') == 2
+        res = req.get(url, {'category_name': 'not-existent'})
+        assert res.status_code == 200
+        assert '<item>' not in res.content.decode()

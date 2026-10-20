@@ -26,7 +26,7 @@ class PublicationForeignKey(serializers.PrimaryKeyRelatedField):
         if request:
             publication_id = self.context['request'].parser_context['kwargs']['publication_id']
             return Publication.objects.filter(pk=publication_id)
-        return None # pragma: no cover
+        return None
 
 
 class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
@@ -39,7 +39,7 @@ class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
             webpath_id = self.context['request'].parser_context['kwargs']['webpath_id']
             return WebPath.objects.filter(pk=webpath_id,
                                           site__id=site_id)
-        return None # pragma: no cover
+        return None
 
 
 class PublicationSerializer(TaggitSerializer,
@@ -50,7 +50,7 @@ class PublicationSerializer(TaggitSerializer,
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        if instance.preview_image: # pragma: no cover
+        if instance.preview_image:
             preview_image = MediaSerializer(instance.preview_image)
             data['preview_image'] = preview_image.data
         if instance.presentation_image:

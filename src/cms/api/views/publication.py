@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 
 
 class ApiPublicationsByContextSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'retrievePublicPublicationContext'
 
 
@@ -75,7 +75,7 @@ class ApiPublicationsByContext(generics.ListAPIView):
 
 
 class ApiPublicationsByContextCategorySchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'retrievePublicPublicationContextCategory'
 
 
@@ -85,7 +85,7 @@ class ApiPublicationsByContextCategory(ApiPublicationsByContext):
 
 
 @method_decorator(detect_language, name='dispatch')
-class ApiContext(APIView): # pragma: no cover
+class ApiContext(APIView):
     """
     """
     description = 'Get publications in Context (WebPath)'
@@ -98,7 +98,7 @@ class ApiContext(APIView): # pragma: no cover
 
 
 class EditorialBoardPublicationsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         if method == 'POST':
             return 'createEditorialBoardPublication'
         return 'listEditorialBoardPublications'
@@ -116,7 +116,7 @@ class PublicationList(UniCMSListCreateAPIView):
 
 
 class EditorialBoardPublicationSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         if method == 'GET':
             return 'retrieveEditorialBoardPublication'
         if method == 'PATCH':
@@ -176,7 +176,7 @@ class PublicationView(UniCMSCachedRetrieveUpdateDestroyAPIView):
 
 
 class EditorialBoardPublicationChangeStatusSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'updateEditorialBoardPublicationStatus'
 
 
@@ -217,7 +217,7 @@ class PublicationRelatedObjectList(UniCMSListCreateAPIView):
             self.publication = get_object_or_404(Publication,
                                                  pk=pk)
         else:
-            self.publication = None # pragma: no cover
+            self.publication = None
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -293,7 +293,7 @@ class PublicationEditFormView(UniCMSFormView):
 
 
 class EditorialBoardPublicationOptionListSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPublicationSelectOptions'
 
 
@@ -323,7 +323,7 @@ class PublicationOptionView(generics.RetrieveAPIView):
 
 
 class PublicationLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPublicationLogs'
 
 

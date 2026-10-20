@@ -24,12 +24,12 @@ FILETYPE_IMAGE_YX_RATIO_MAX = getattr(settings, 'FILETYPE_IMAGE_YX_RATIO_MAX',
 
 
 def validate_file_size(value):
-    if not hasattr(value, 'size'): # pragma: no cover
+    if not hasattr(value, 'size'):
         return
     content_size = None
     try:
         content_size = int(value.size)
-    except ValueError: # pragma: no cover
+    except ValueError:
         _msg = "Can't detect file size: {}"
         raise ValidationError(_msg.format(value.__dict__))
     if content_size > FILE_MAX_SIZE:
@@ -39,7 +39,7 @@ def validate_file_size(value):
 
 
 def _validate_generic_file_extension(value, allowed_filetypes):
-    if not hasattr(value, 'file'): # pragma: no cover
+    if not hasattr(value, 'file'):
         return
     mimetype = magic.Magic(mime=True).from_buffer(value.file.read())
     value.file.seek(0)
@@ -71,7 +71,7 @@ def validate_media_file_extension(value):
 
 
 def validate_image_size_ratio(value):
-    if not hasattr(value, 'content_type'): # pragma: no cover
+    if not hasattr(value, 'content_type'):
         return
 
     mimetype = magic.Magic(mime=True).from_buffer(value.file.read())
@@ -93,7 +93,7 @@ def validate_image_size_ratio(value):
 
 
 def validate_image_max_pixels(value):
-    if not hasattr(value, 'file'): # pragma: no cover
+    if not hasattr(value, 'file'):
         return
 
     mimetype = magic.Magic(mime=True).from_buffer(value.file.read())

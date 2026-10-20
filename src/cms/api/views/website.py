@@ -40,7 +40,7 @@ class EditorWebsiteView(APIView):
         """
         pk = self.kwargs['pk']
         site = get_object_or_404(WebSite, pk=pk, is_active=True)
-        if not site.is_managed_by(self.request.user): # pragma: no cover
+        if not site.is_managed_by(self.request.user):
             raise LoggedPermissionDenied(classname=self.__class__.__name__,
                                          resource=site)
         return site

@@ -43,7 +43,7 @@ class WebSiteForeignKey(serializers.PrimaryKeyRelatedField):
         if request:
             site_id = self.context['request'].parser_context['kwargs']['site_id']
             return WebSite.objects.filter(pk=site_id)
-        return None # pragma: no cover
+        return None
 
 
 class ParentForeignKey(serializers.PrimaryKeyRelatedField):
@@ -52,7 +52,7 @@ class ParentForeignKey(serializers.PrimaryKeyRelatedField):
         if request:
             site_id = self.context['request'].parser_context['kwargs']['site_id']
             return WebPath.objects.filter(site=site_id)
-        return None # pragma: no cover
+        return None
 
 
 class WebPathSerializer(UniCMSCreateUpdateSerializer, UniCMSContentTypeClass):

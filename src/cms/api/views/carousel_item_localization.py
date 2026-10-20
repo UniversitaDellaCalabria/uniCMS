@@ -33,7 +33,7 @@ class CarouselItemLocalizationList(UniCMSListCreateAPIView):
         if carousel_id and carousel_item_id:
             return CarouselItemLocalization.objects.filter(carousel_item__carousel__pk=carousel_id,
                                                            carousel_item__pk=carousel_item_id)
-        return CarouselItemLocalization.objects.none() # pragma: no cover
+        return CarouselItemLocalization.objects.none()
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -109,7 +109,7 @@ class CarouselItemLocalizationFormView(UniCMSFormView):
 
 
 class CarouselItemLocalizationLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listCarouselItemLocalizationLogs'
 
 

@@ -77,7 +77,7 @@ class MediaCollectionFormView(UniCMSFormView):
 
 
 class EditorialBoardMediaCollectionOptionListSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listMediaCollectionSelectOptions'
 
 
@@ -107,7 +107,7 @@ class MediaCollectionOptionView(generics.RetrieveAPIView):
 
 
 class MediaCollectionLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listMediaCollectionLogs'
 
 

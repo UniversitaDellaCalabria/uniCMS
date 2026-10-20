@@ -25,7 +25,7 @@ class MenuItemList(UniCMSListCreateAPIView):
     # search_fields = ['name', 'webpath', 'url', 'parent', 'publication']
     serializer_class = MenuItemSerializer
 
-    def get_queryset(self): # pragma: no cover
+    def get_queryset(self):
         pass
     # def get_queryset(self):
         # """
@@ -58,7 +58,7 @@ class MenuItemList(UniCMSListCreateAPIView):
 
             try:
                 return super().post(request, *args, **kwargs)
-            except Exception as e: # pragma: no cover
+            except Exception as e:
                 raise ValidationError(e)
 
 
@@ -122,7 +122,7 @@ class MenuItemView(UniCMSCachedRetrieveUpdateDestroyAPIView):
                                              resource=request.method)
             try:
                 return super().put(request, *args, **kwargs)
-            except Exception as e: # pragma: no cover
+            except Exception as e:
                 raise ValidationError(e)
 
     def delete(self, request, *args, **kwargs):
@@ -147,7 +147,7 @@ class MenuItemFormView(UniCMSFormView):
 
 
 class MenuItemLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listMenuItemLogs'
 
 

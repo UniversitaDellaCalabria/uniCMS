@@ -147,7 +147,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
             block = tuple(block)
             if block_is_active and page_block_is_active:
                 blocks_list.append((block, count))
-            elif not page_block_is_active: # pragma: no cover
+            elif not page_block_is_active:
                 excluded_blocks_list.append(block)
         # get all active template blocks
         template_blocks = self.base_template.\
@@ -165,7 +165,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         for (count, block) in enumerate(template_blocks):
             template_blocks_list.append((block, count))
 
-        for exc_block in excluded_blocks_list: # pragma: no cover
+        for exc_block in excluded_blocks_list:
             for tpl_block in template_blocks_list:
                 if tpl_block[0] == exc_block:
                     template_blocks_list.remove(tpl_block)
@@ -200,7 +200,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         return placeholders
 
     def get_publications(self):
-        if getattr(self, '_pubs', None): # pragma: no cover
+        if getattr(self, '_pubs', None):
             return self._pubs
         self._pubs = PagePublication.objects.filter(page=self,
                                                     is_active=True,
@@ -210,7 +210,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         return self._pubs
 
     def get_carousels(self):
-        if getattr(self, '_carousels', None): # pragma: no cover
+        if getattr(self, '_carousels', None):
             return self._carousels
         self._carousels = PageCarousel.objects.filter(page=self,
                                                       is_active=True,
@@ -220,7 +220,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         return self._carousels
 
     def get_contacts(self):
-        if getattr(self, '_contacts', None): # pragma: no cover
+        if getattr(self, '_contacts', None):
             return self._contacts
         self._contacts = PageContact.objects.filter(page=self,
                                                     is_active=True,
@@ -230,7 +230,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         return self._contacts
 
     def get_medias(self):
-        if getattr(self, '_medias', None): # pragma: no cover
+        if getattr(self, '_medias', None):
             return self._medias
         self._medias = PageMedia.objects.filter(page=self,
                                                 is_active=True).\
@@ -239,7 +239,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         return self._medias
 
     def get_media_collections(self):
-        if getattr(self, '_media_collections', None): # pragma: no cover
+        if getattr(self, '_media_collections', None):
             return self._media_collections
         self._media_collections = PageMediaCollection.objects.filter(page=self,
                                                                      is_active=True,
@@ -266,7 +266,7 @@ class Page(TimeStampedModel, ActivableModel, AbstractDraftable,
         return self._links
 
     def get_headings(self):
-        if getattr(self, '_headings', None): # pragma: no cover
+        if getattr(self, '_headings', None):
             return self._headings
         self._headings = PageHeading.objects.filter(page=self,
                                                     is_active=True).\

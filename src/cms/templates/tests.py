@@ -1,6 +1,8 @@
+import copy
 import logging
 
-from django.test import TestCase
+from django.conf import settings
+from django.test import TestCase, override_settings
 
 from . models import PageTemplate, PageTemplateBlock, TemplateBlock
 from . utils import get_unicms_templates
@@ -78,5 +80,10 @@ class TemplateUnitTest(TestCase):
         ptb.content
     
     def test_unicms_template(self):
-        res = get_unicms_templates()
+        # get_unicms_templates() alters the TEMPLATES dicts: use a copy
+        with override_settings(TEMPLATES=copy.deepcopy(settings.TEMPLATES)):
+            res = get_unicms_templates()
         assert isinstance(res, list) and len(res) > 1
+        for path, folder, fname in res:
+            assert folder in ('pages/', 'blocks/', 'admin/')
+            assert fname.endswith('.html')

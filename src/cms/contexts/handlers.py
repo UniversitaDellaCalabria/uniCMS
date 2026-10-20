@@ -9,7 +9,7 @@ class BaseContentHandler(object):
                  webpath:str = None,
                  template_fname:str = None,
                  **kwargs
-            ): # pragma: no cover
+            ):
         """
         Checks if a path belongs to a CMS specialized application
         :type webpath: cmscontext.model.WebPath
@@ -34,26 +34,26 @@ class BaseContentHandler(object):
         for k,v in kwargs.items():
             setattr(self, k, v)
 
-    def match(self) -> bool: # pragma: no cover
+    def match(self) -> bool:
         """
         check if settings.CMS_PUBLICATION_URLPATH_REGEXP matches
         with the given path. Return True or False
         """
         raise NotImplementedError()
 
-    def get(self): # pragma: no cover
+    def get(self):
         """
             returns a queryset with the results
         """
         raise NotImplementedError()
 
-    def url(self): # pragma: no cover
+    def url(self):
         """
             returns an absolute url to the render view
         """
         raise NotImplementedError()
 
-    def as_view(self): # pragma: no cover
+    def as_view(self):
         """
             get the template configured for this resources (self.template)
             open

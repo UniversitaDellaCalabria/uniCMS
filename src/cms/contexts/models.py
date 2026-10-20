@@ -38,7 +38,7 @@ ROBOTS_TAGS = getattr(settings, 'ROBOTS_TAGS',
 AUTH_USER_GROUPS = app_settings.AUTH_USER_GROUPS + getattr(settings, 'AUTH_USER_GROUPS', ())
 
 
-if 'makemigrations' in sys.argv or 'migrate' in sys.argv: # pragma: no cover
+if 'makemigrations' in sys.argv or 'migrate' in sys.argv:
     ROBOTS_TAGS = [('','-')]
     CMS_CONTEXT_PERMISSIONS = [(0,'-')]
     AUTH_USER_GROUPS = [('','-')]
@@ -157,7 +157,7 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         # return self.get_full_path()
         return self.get_site_path()
 
-    def get_site_path(self, request=None): # pragma: no cover
+    def get_site_path(self, request=None):
         """
         returns webpath full path with site domain
         """
@@ -209,7 +209,7 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
             # self.site = self.alias.site
 
         # alias or alias_url
-        if self.alias and self.alias_url: # pragma: no cover
+        if self.alias and self.alias_url:
             self.alias = None
 
         # store a correct fullpath
@@ -438,7 +438,7 @@ class EditorialBoardEditors(TimeStampedModel, CreatedModifiedBy, ActivableModel)
     def __str__(self):
         if self.webpath:
             return '{} {} in {}'.format(self.user, self.permission, self.webpath)
-        else: # pragma: no cover
+        else:
             return '{} {}'.format(self.user, self.permission)
 
 
@@ -457,7 +457,7 @@ class EditorialBoardLock(models.Model):
         verbose_name_plural = _("Editorial Board Locks")
         ordering = ('-locked_time',)
 
-    def __str__(self): # pragma: no cover
+    def __str__(self):
         return f'{self.content_type} {self.object_id}'
 
 
@@ -488,9 +488,9 @@ class EditorialBoardLockUser(models.Model):
         # if user is in lock user list, has permissions
         if locks.filter(user=user).exists(): return True
         # if there is not lock, return False
-        return False # pragma: no cover
+        return False
 
-    def __str__(self): # pragma: no cover
+    def __str__(self):
         return f'{self.lock} {self.user}'
 
 
@@ -519,13 +519,13 @@ class EntryUsedBy(models.Model):
         verbose_name_plural = _("Entries Used By")
 
     @property
-    def object(self): # pragma: no cover
+    def object(self):
         return self.content_object
 
     @property
-    def used_by(self): # pragma: no cover
+    def used_by(self):
         return self.used_by_content_object
 
-    def __str__(self): # pragma: no cover
+    def __str__(self):
         return (f'{self.content_type} {self.object_id} used by '
                 f'{self.used_by_content_type} {self.used_by_object_id}')

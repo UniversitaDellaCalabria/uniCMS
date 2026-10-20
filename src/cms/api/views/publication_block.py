@@ -22,7 +22,7 @@ class PublicationBlockList(PublicationRelatedObjectList):
         super().get_data()
         if self.publication:
             return PublicationBlock.objects.filter(publication=self.publication)
-        return PublicationBlock.objects.none() # pragma: no cover
+        return PublicationBlock.objects.none()
 
 
 class PublicationBlockView(PublicationRelatedObject):
@@ -41,7 +41,7 @@ class PublicationBlockView(PublicationRelatedObject):
 
 
 class PublicationBlockLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPublicationBlockLogs'
 
 

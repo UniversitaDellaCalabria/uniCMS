@@ -41,7 +41,7 @@ class PageLocalizationList(UniCMSListCreateAPIView):
                                      webpath__site__pk=site_id)
             return PageLocalization.objects.filter(page=page)
         else:
-            return PageLocalization.objects.none() # pragma: no cover
+            return PageLocalization.objects.none()
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -127,7 +127,7 @@ class PageLocalizationFormView(UniCMSFormView):
 
 
 class PageLocalizationLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPageLocalizationLogs'
 
 

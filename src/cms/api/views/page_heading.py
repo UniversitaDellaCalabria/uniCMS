@@ -26,7 +26,7 @@ class PageHeadingList(PageRelatedObjectList):
         super().get_data()
         if self.page:
             return PageHeading.objects.filter(page=self.page)
-        return PagePublication.objects.none() # pragma: no cover
+        return PagePublication.objects.none()
 
 
 class PageHeadingView(PageRelatedObject):
@@ -51,7 +51,7 @@ class PageHeadingFormView(UniCMSFormView):
 
 
 class PageHeadingLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPageHeadingLogs'
 
 

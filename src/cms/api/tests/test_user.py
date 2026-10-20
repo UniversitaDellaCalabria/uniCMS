@@ -51,3 +51,20 @@ class UserAPIUnitTest(TestCase):
         req.force_login(user)
         res = req.get(url)
         assert isinstance(res.json(), object)
+
+
+class UserDetailAPIUnitTest(TestCase):
+
+    def test_user_detail(self):
+        req = Client()
+        user = ContextUnitTest.create_user(is_staff=True)
+        req.force_login(user)
+        url = reverse('unicms_api:user-detail', kwargs={'user_id': user.pk})
+        assert req.get(url).json() == {'first_name': 'foo',
+                                       'last_name': 'bar',
+                                       'email': 'that@mail.org'}
+        # no user id
+        url = reverse('unicms_api:user-detail', kwargs={'user_id': 0})
+        res = req.get(url)
+        assert res.status_code == 200
+        assert not res.content

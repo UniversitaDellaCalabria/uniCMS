@@ -15,11 +15,12 @@ from cms.contexts.tests import ContextUnitTest
 from cms.medias.tests import MediaUnitTest
 from cms.menus.tests import MenuUnitTest
 from cms.menus.templatetags.unicms_menus import *
-from cms.pages.templatetags.unicms_pages import (load_link,
+from cms.pages.templatetags.unicms_pages import (load_blocks,
+                                                 load_link,
                                                  load_page_publications,
                                                  load_page_title)
 from cms.publications.models import Category
-from cms.templates.models import TemplateBlock
+from cms.templates.models import PageTemplate, TemplateBlock
 from cms.templates.blocks import *
 from cms.templates.placeholders import *
 from cms.templates.tests import TemplateUnitTest
@@ -28,7 +29,7 @@ from cms.templates.templatetags.unicms_templates import blocks_in_position
 from . models import (Page, PageBlock, PageCarousel, PageContact,
                       PageHeading, PageHeadingLocalization, PageLink,
                       PageLocalization, PageMedia, PageMediaCollection,
-                      PageMenu, PageRelated)
+                      PageMenu, PagePublication, PageRelated)
 from . utils import copy_page_as_draft
 
 
@@ -743,3 +744,149 @@ class PageUnitTest(TestCase):
 
         # oi = load_other_items_from_menu(**data)
         # assert oi
+
+
+class PageModelsUnitTest(TestCase):
+
+    def test_is_publicable_draft(self):
+        page = PageUnitTest.create_page(state='draft')
+        assert page.is_active
+        assert not page.is_publicable
+        page.state = 'published'
+        assert page.is_publicable
+
+    def test_get_blocks_excluded_template_block(self):
+        page = PageUnitTest.create_page()
+        tpl_block = page.base_template.pagetemplateblock_set.first()
+        assert tpl_block.block in page.get_blocks()
+        # an inactive page block with same block/section/order
+        # hides the template block
+        page_block = PageBlock.objects.get(page=page)
+        page_block.section = tpl_block.section
+        page_block.order = tpl_block.order
+        page_block.is_active = False
+        page_block.save()
+        page = Page.objects.get(pk=page.pk)
+        assert page.get_blocks() == []
+
+    def test_cached_related_items(self):
+        page = PageUnitTest.create_page()
+        # local import: cms.publications.tests imports this module
+        from cms.publications.tests import PublicationUnitTest
+        pub = PublicationUnitTest.create_pub(count=1)
+        PagePublication.objects.create(page=page, publication=pub,
+                                       is_active=True)
+        PageMedia.objects.create(page=page,
+                                 media=MediaUnitTest.create_media(),
+                                 is_active=True)
+        for getter, attr in (('get_publications', '_pubs'),
+                             ('get_contacts', '_contacts'),
+                             ('get_medias', '_medias'),
+                             ('get_media_collections', '_media_collections'),
+                             ('get_headings', '_headings')):
+            first = getattr(page, getter)()
+            assert first
+            # second call returns the cached queryset
+            assert getattr(page, getter)() is first
+            assert getattr(page, attr) is first
+
+    def test_is_lockable_by(self):
+        page = PageUnitTest.create_page()
+        user = ContextUnitTest.create_user(username='nobody', is_staff=True)
+        superuser = ContextUnitTest.create_user(username='super',
+                                                is_staff=True,
+                                                is_superuser=True)
+        page_block = PageBlock.objects.get(page=page)
+        localization = PageLocalization.objects.get(page=page)
+        heading_loc = PageHeadingLocalization.objects.get(heading__page=page)
+        for obj in (page_block, localization, heading_loc):
+            assert obj.is_lockable_by(superuser) is True
+            assert obj.is_lockable_by(user) is False
+
+
+class PageTemplateTagsUnitTest(TestCase):
+
+    def test_load_blocks_render_error(self):
+        page = PageUnitTest.create_page()
+        block = TemplateUnitTest.create_block_template(
+            content='{% load not_existent_templatetags %}'
+        )
+        block.section = 'banner'
+        req = RequestFactory().get('/')
+        req.user = ContextUnitTest.create_user()
+        req.session = {}
+        context = dict(request=req, page=page, webpath=page.webpath,
+                       page_blocks=[block])
+        # the faulty block is logged and skipped
+        with self.assertLogs('cms.pages.templatetags.unicms_pages',
+                             level='ERROR'):
+            result = load_blocks(context, section='banner')
+        assert result == ''
+
+    def test_load_page_publications_translated(self):
+        page = PageUnitTest.create_page()
+        # local import: cms.publications.tests imports this module
+        from cms.publications.tests import PublicationUnitTest
+        pub = PublicationUnitTest.create_pub(count=1)
+        PagePublication.objects.create(page=page, publication=pub,
+                                       is_active=True)
+        req = RequestFactory().get('/')
+        req.LANGUAGE_CODE = 'en'
+        context = dict(request=req, page=page, webpath=page.webpath)
+        result = load_page_publications(context=context,
+                                        template='that.html')
+        assert result
+        assert page.get_publications()[0].publication.title == 'pub eng'
+
+
+class PageAdminActionsUnitTest(TestCase):
+
+    def test_update_template(self):
+        page = PageUnitTest.create_page()
+        new_template = TemplateUnitTest.create_page_template(name='new tpl')
+        user = ContextUnitTest.create_user(username='admin',
+                                           is_staff=True,
+                                           is_superuser=True)
+        req = Client()
+        req.force_login(user)
+        url = reverse('admin:cmspages_page_changelist')
+        data = {'action': 'update_template',
+                '_selected_action': [page.pk]}
+        # first step: template choice form
+        res = req.post(url, data)
+        assert res.status_code == 200
+        assert 'form' in res.context
+        assert page in res.context['pages']
+        # invalid template: form is shown again
+        res = req.post(url, dict(data, update_template=1, template=999999))
+        assert res.status_code == 200
+        page.refresh_from_db()
+        assert page.base_template != new_template
+        # valid template
+        res = req.post(url, dict(data, update_template=1,
+                                 template=new_template.pk))
+        assert res.status_code == 302
+        page.refresh_from_db()
+        assert page.base_template == new_template
+
+
+class PageSerializersUnitTest(TestCase):
+
+    def test_foreign_keys_without_request(self):
+        from . serializers import (PageBlockSerializer,
+                                   PageHeadingLocalizationSerializer,
+                                   PageSerializer)
+        # without a request in context there is no queryset to choose from
+        assert PageBlockSerializer().fields['page'].get_queryset() is None
+        assert PageSerializer().fields['webpath'].get_queryset() is None
+        heading_field = PageHeadingLocalizationSerializer().fields['heading']
+        assert heading_field.get_queryset() is None
+
+    def test_empty_date_end(self):
+        from . serializers import PageSerializer
+        page = PageUnitTest.create_page(date_end=timezone.localtime())
+        serializer = PageSerializer(instance=page,
+                                    data={'date_end': ''},
+                                    partial=True)
+        assert serializer.is_valid(), serializer.errors
+        assert serializer.validated_data['date_end'] is None

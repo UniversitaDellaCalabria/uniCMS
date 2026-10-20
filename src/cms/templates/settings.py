@@ -41,13 +41,13 @@ CMS_PAGE_TEMPLATES = sorted(CMS_PAGE_TEMPLATES)
 if CMS_BLOCK_TEMPLATES:
     _elements = '\n  '.join([i[1] for i in CMS_BLOCK_TEMPLATES])
     logger.info('Loading block template files:{}'.format(_elements))
-else: # pragma: no cover
+else:
     logger.warning('Block template files not found')
 
 if CMS_PAGE_TEMPLATES:
     _elements = ','.join([i[1] for i in CMS_PAGE_TEMPLATES])
     logger.info('Loading page template files: {}'.format(_elements))
-else: # pragma: no cover
+else:
     logger.warning('Page template files not found')
 
 CMS_LINKS_LABELS = (('view', _('View')),

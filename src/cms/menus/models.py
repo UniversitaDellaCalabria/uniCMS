@@ -120,7 +120,7 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
     def link(self, request=None):
         if self.url:
             return self.url
-        elif self.webpath: # pragma: no cover
+        elif self.webpath:
             # does it have sense?
             # if self.publication:
             # ctx_webpath = self.publication.get_publication_context(webpath=self.webpath)
@@ -128,7 +128,7 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
             # else:
             # return self.webpath.get_full_path()
             return self.webpath.get_site_path(request)
-        else: # pragma: no cover
+        else:
             return ''
 
     def localized(self, lang=settings.LANGUAGE, **kwargs):
@@ -136,7 +136,7 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
                                                             language=lang,
                                                             is_active=True)\
                                                     .first()
-        if i18n: # pragma: no cover
+        if i18n:
             self.name = i18n.name
             self.url = i18n.url or self.url
             self.language = lang
@@ -201,7 +201,7 @@ class NavigationBarItem(TimeStampedModel, SortableModel, ActivableModel,
             return True
         for child in childs:
             if child.item_in_childs(item): return True
-        return False # pragma: no cover
+        return False
 
     def get_menu(self):
         return self.menu

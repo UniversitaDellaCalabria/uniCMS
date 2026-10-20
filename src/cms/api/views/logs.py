@@ -31,8 +31,8 @@ class ObjectLogEntriesList(generics.ListAPIView):
             # return LogEntry.objects.filter(content_type__pk=content_type_id,
             return Log.objects.filter(content_type__pk=content_type_id,
                                            object_id=object_id)
-        # return LogEntry.objects.none() # pragma: no cover
-        return Log.objects.none() # pragma: no cover
+        # return LogEntry.objects.none()
+        return Log.objects.none()
 
     class Meta:
         abstract = True

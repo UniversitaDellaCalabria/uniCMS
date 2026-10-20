@@ -29,7 +29,7 @@ class PagePublicationList(PageRelatedObjectList):
         super().get_data()
         if self.page:
             return PagePublication.objects.filter(page=self.page)
-        return PagePublication.objects.none() # pragma: no cover
+        return PagePublication.objects.none()
 
 
 class PagePublicationView(PageRelatedObject):
@@ -56,7 +56,7 @@ class PagePublicationFormView(UniCMSFormView):
 
 
 class PagePublicationSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPagePublicationLogs'
 
 

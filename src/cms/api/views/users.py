@@ -31,7 +31,7 @@ class UserDetail(APIView):
                                             values('first_name',
                                                    'last_name',
                                                    'email')
-        return get_user_model().objects.none() # pragma: no cover
+        return get_user_model().objects.none()
 
     def get(self, *args, **kwargs):
         return Response(self.get_queryset().first())

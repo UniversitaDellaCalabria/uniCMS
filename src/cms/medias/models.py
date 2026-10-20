@@ -23,11 +23,11 @@ from . validators import *
 logger = logging.getLogger(__name__)
 
 
-if 'makemigrations' in sys.argv or 'migrate' in sys.argv: # pragma: no cover
+if 'makemigrations' in sys.argv or 'migrate' in sys.argv:
     FILETYPE_ALLOWED = ['']
 
 
-def context_media_path(instance, filename): # pragma: no cover
+def context_media_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/<year>/<filename>
     return 'medias/{}/{}'.format(timezone.now().year,
                                  filename)
@@ -64,11 +64,11 @@ class MediaCollection(ActivableModel, TimeStampedModel,
         ordering = ['name']
         verbose_name_plural = _("Media Collections")
 
-    def get_items(self): # pragma: no cover
+    def get_items(self):
         return MediaCollectionItem.objects.filter(collection=self,
                                                   is_active=True)
 
-    def __str__(self): # pragma: no cover
+    def __str__(self):
         return self.name
 
 
@@ -108,10 +108,10 @@ class MediaCollectionItem(ActivableModel, SortableModel,
         ordering = ['order']
         verbose_name_plural = _("Media Collection Items")
 
-    def is_lockable_by(self, user): # pragma: no cover
+    def is_lockable_by(self, user):
         item = self.collection
         permission = check_user_permission_on_object(user=user, obj=item)
         return permission['granted']
 
-    def __str__(self): # pragma: no cover
+    def __str__(self):
         return '[{}] {}'.format(self.collection, self.media)

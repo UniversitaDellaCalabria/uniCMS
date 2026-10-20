@@ -194,3 +194,33 @@ class MenuItemAPIUnitTest(TestCase):
                       kwargs={'menu_id': menu.pk})
         res = req.get(url)
         assert isinstance(res.json(), list)
+
+
+class MenuItemPutAPIUnitTest(TestCase):
+
+    def test_put_child_as_parent(self):
+        req = Client()
+        user = ContextUnitTest.create_user(is_staff=True, is_superuser=True)
+        req.force_login(user)
+        menu_item = MenuUnitTest.create_menu_item()
+        menu = menu_item.menu
+        child = MenuUnitTest.create_menu_item(menu=menu, parent=menu_item)
+        url = reverse('unicms_api:editorial-board-menu-item',
+                      kwargs={'menu_id': menu.pk,
+                              'pk': menu_item.pk})
+        data = {'menu': menu.pk,
+                'name': 'putted',
+                'url': 'http://test.test',
+                'parent': child.pk,
+                'is_active': 1}
+        # a child can't be the parent: model save fails
+        res = req.put(url, data, content_type='application/json')
+        assert res.status_code == 400
+        menu_item.refresh_from_db()
+        assert menu_item.parent is None
+        # valid parent
+        data['parent'] = None
+        res = req.put(url, data, content_type='application/json')
+        assert res.status_code == 200
+        menu_item.refresh_from_db()
+        assert menu_item.name == 'putted'

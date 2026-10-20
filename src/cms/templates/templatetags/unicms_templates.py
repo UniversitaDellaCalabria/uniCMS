@@ -16,7 +16,7 @@ CMS_TEMPLATE_BLOCK_SECTIONS = getattr(settings, "CMS_TEMPLATE_BLOCK_SECTIONS")
 
 
 @register.simple_tag
-def supported_languages(): # pragma: no cover
+def supported_languages():
     return settings.LANGUAGES
 
 
@@ -33,7 +33,7 @@ def blocks_in_position(context, section=None):
     sections_dict = dict(CMS_TEMPLATE_BLOCK_SECTIONS)
     if type(sections_dict.get(section)) in [list, tuple]:
         sub_sections = sections_dict.get(section)
-        if not sub_sections: # pragma: no cover
+        if not sub_sections:
             logger.warning(f"Section {section} hasn't sub-sections")
             return False
         for sub_section in sub_sections:

@@ -28,7 +28,7 @@ class PageCarouselList(PageRelatedObjectList):
         super().get_data()
         if self.page:
             return PageCarousel.objects.filter(page=self.page)
-        return PageCarousel.objects.none() # pragma: no cover
+        return PageCarousel.objects.none()
 
 
 class PageCarouselView(PageRelatedObject):
@@ -53,7 +53,7 @@ class PageCarouselFormView(UniCMSFormView):
 
 
 class PageCarouselLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPageCarouselLogs'
 
 

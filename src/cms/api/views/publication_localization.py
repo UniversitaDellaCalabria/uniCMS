@@ -31,7 +31,7 @@ class PublicationLocalizationList(UniCMSListCreateAPIView):
         if pk:
             publication = get_object_or_404(Publication, pk=pk)
             return PublicationLocalization.objects.filter(publication=publication)
-        return PublicationLocalization.objects.none() # pragma: no cover
+        return PublicationLocalization.objects.none()
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -108,7 +108,7 @@ class PublicationLocalizationFormView(UniCMSFormView):
 
 
 class PublicationLocalizationLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPublicationLocalizationLogs'
 
 

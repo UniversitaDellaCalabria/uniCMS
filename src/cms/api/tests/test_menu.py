@@ -1,5 +1,7 @@
 import logging
 
+from unittest import mock
+
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
@@ -155,3 +157,22 @@ class MenuAPIUnitTest(TestCase):
         url = reverse('unicms_api:editorial-board-menu-form')
         res = req.get(url)
         assert isinstance(res.json(), list)
+
+
+class MenuCloneAPIUnitTest(TestCase):
+
+    def test_clone_failure(self):
+        req = Client()
+        user = ContextUnitTest.create_user(is_staff=True, is_superuser=True)
+        req.force_login(user)
+        menu = MenuUnitTest.create_menu()
+        menus = NavigationBar.objects.count()
+        url = reverse('unicms_api:editorial-board-menu-clone',
+                      kwargs={'pk': menu.pk})
+        # errors while cloning (eg: database errors) become a 400
+        with mock.patch('cms.api.views.menu.clone',
+                        side_effect=Exception('clone error')):
+            res = req.get(url)
+        assert res.status_code == 400
+        assert 'clone error' in str(res.json())
+        assert NavigationBar.objects.count() == menus

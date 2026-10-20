@@ -8,7 +8,8 @@ from django.utils import timezone
 
 from cms.contexts.tests import ContextUnitTest
 
-from cms.pages.models import Page
+from cms.pages.models import Page, PageBlock
+from cms.pages.tests import PageUnitTest
 
 from cms.templates.tests import TemplateUnitTest
 
@@ -294,3 +295,56 @@ class PageAPIUnitTest(TestCase):
                       kwargs={'site_id': site.pk})
         res = req.get(url)
         assert isinstance(res.json(), list)
+
+
+class PagePermissionsAPIUnitTest(TestCase):
+
+    def setUp(self):
+        # translator only (permission 1) on the page webpath
+        self.ebu = ContextUnitTest.create_editorialboard_user(permission=1)
+        self.user = self.ebu.user
+        self.user.is_staff = True
+        self.user.save()
+        self.webpath = self.ebu.webpath
+        self.site = self.webpath.site
+        self.page = PageUnitTest.create_page(webpath=self.webpath)
+        self.req = Client()
+
+    def test_put_without_edit_permission(self):
+        url = reverse('unicms_api:editorial-board-site-webpath-page',
+                      kwargs={'site_id': self.site.pk,
+                              'webpath_id': self.webpath.pk,
+                              'pk': self.page.pk})
+        data = {'name': 'test api putted',
+                'title': 'test api putted',
+                'description': 'desc',
+                'webpath': self.webpath.pk,
+                'base_template': self.page.base_template.pk,
+                'date_start': timezone.localtime(),
+                'tags': ["hi"]}
+        self.req.force_login(self.user)
+        res = self.req.put(url, data, content_type='application/json')
+        assert res.status_code == 403
+        self.page.refresh_from_db()
+        assert self.page.title != 'test api putted'
+
+    def test_logs_site_not_managed(self):
+        page_block = PageBlock.objects.get(page=self.page)
+        page_logs = reverse('unicms_api:editorial-board-site-webpath-page-logs',
+                            kwargs={'site_id': self.site.pk,
+                                    'webpath_id': self.webpath.pk,
+                                    'pk': self.page.pk})
+        block_logs = reverse('unicms_api:editorial-board-site-webpath-page-block-logs',
+                             kwargs={'site_id': self.site.pk,
+                                     'webpath_id': self.webpath.pk,
+                                     'page_id': self.page.pk,
+                                     'pk': page_block.pk})
+        self.req.force_login(self.user)
+        # site managed
+        assert self.req.get(page_logs).status_code == 200
+        assert self.req.get(block_logs).status_code == 200
+        # site not managed anymore
+        self.ebu.is_active = False
+        self.ebu.save()
+        assert self.req.get(page_logs).status_code == 403
+        assert self.req.get(block_logs).status_code == 403

@@ -124,7 +124,7 @@ class MenuFormView(UniCMSFormView):
 
 
 class MenuLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listMenuLogs'
 
 
@@ -142,7 +142,7 @@ class MenuLogsView(ObjectLogEntriesList):
 
 
 class MenuCloneSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'cloneMenu'
 
 
@@ -170,7 +170,7 @@ class MenuCloneView(APIView):
                              custom_values={'name': f'{item.name} (copy {timezone.localtime()})'},
                              recursive_custom_values={'created_by': request.user,
                                                       'modified_by': None})
-        except Exception as e: # pragma: no cover
+        except Exception as e:
             raise LoggedValidationException(classname=self.__class__.__name__,
                                             resource=request.method,
                                             detail=e)
@@ -179,7 +179,7 @@ class MenuCloneView(APIView):
 
 
 class EditorialBoardMenuOptionListSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listMenuSelectOptions'
 
 

@@ -35,7 +35,7 @@ class ObjectUserLocksList(UniCMSListCreateAPIView):
         if object_id and content_type_id:
             return EditorialBoardLockUser.get_object_locks(content_type=content_type_id,
                                                            object_id=object_id)
-        return EditorialBoardLockUser.objects.none() # pragma: no cover
+        return EditorialBoardLockUser.objects.none()
 
     def create(self, object_id, content_type, user):
         lock = EditorialBoardLock.objects.filter(content_type=content_type,
@@ -81,7 +81,7 @@ class ObjectUserLocksList(UniCMSListCreateAPIView):
 
 
 class ObjectUserLocksItemSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         if method == 'GET':
             return 'retrieveEditorialBoardLockUserItem'
         if method == 'DELETE':
@@ -137,7 +137,7 @@ class RedisLockView(APIView):
         content_type_id = self.kwargs['content_type_id']
         object_id = self.kwargs['object_id']
         user_lock = get_lock_from_cache(content_type_id, object_id)
-        if user_lock and not user_lock == request.user.pk: # pragma: no cover
+        if user_lock and not user_lock == request.user.pk:
             owner_user = get_user_model().objects.filter(pk=user_lock).first()
             return Response({'message': LOCK_MESSAGE.format(user=owner_user)})
             # raise PermissionDenied(LOCK_MESSAGE.format(user=owner_user), 403)
@@ -145,10 +145,10 @@ class RedisLockView(APIView):
 
 
 class RedisLockSetSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'setRedisLock'
 
-    def get_operation(self, path, method): # pragma: no cover
+    def get_operation(self, path, method):
         op = super().get_operation(path, method)
         op['parameters'].append(
             {
@@ -188,7 +188,7 @@ class RedisLockSetView(APIView):
         ct = get_object_or_404(ContentType, pk=content_type_id)
         obj = get_object_or_404(ct.model_class(), pk=object_id)
         user_lock = get_lock_from_cache(content_type_id, object_id)
-        if user_lock and not user_lock == request.user.pk: # pragma: no cover
+        if user_lock and not user_lock == request.user.pk:
             owner_user = get_user_model().objects.filter(pk=user_lock).first()
             # return Response({'message': LOCK_MESSAGE.format(user=owner_user)})
             raise PermissionDenied(LOCK_MESSAGE.format(user=owner_user), 403)

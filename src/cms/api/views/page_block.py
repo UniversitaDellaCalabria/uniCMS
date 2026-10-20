@@ -30,7 +30,7 @@ class PageBlockList(PageRelatedObjectList):
         super().get_data()
         if self.page:
             return PageBlock.objects.filter(page=self.page)
-        return PageBlock.objects.none() # pragma: no cover
+        return PageBlock.objects.none()
 
 
 class PageBlockView(PageRelatedObject):
@@ -55,7 +55,7 @@ class PageBlockFormView(UniCMSFormView):
 
 
 class PageBlockLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPageBlockLogs'
 
 

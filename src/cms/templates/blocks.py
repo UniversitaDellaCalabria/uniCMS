@@ -32,7 +32,7 @@ class AbstractBlock(object):
                            # 'menus': self.menus})
         return context
 
-    def render(self): # pragma: no cover
+    def render(self):
         return mark_safe(self.content) # nosec
 
 
@@ -54,7 +54,7 @@ class PlaceHolderBlock(JSONBlock):
     """
 
     def sanitize_template(self):
-        if not self.content.get('template'): # pragma: no cover
+        if not self.content.get('template'):
             self.content['template'] = SafeString('')
 
 

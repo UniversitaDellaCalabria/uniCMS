@@ -32,7 +32,7 @@ class MediaCollectionItemList(UniCMSListCreateAPIView):
         collection_id = self.kwargs.get('collection_id')
         if collection_id:
             return MediaCollectionItem.objects.filter(collection__pk=collection_id)
-        return MediaCollectionItem.objects.none() # pragma: no cover
+        return MediaCollectionItem.objects.none()
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -49,7 +49,7 @@ class MediaCollectionItemList(UniCMSListCreateAPIView):
 
 
 class MediaCollectionItemPublicListSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPublicMediaCollections'
 
 
@@ -127,7 +127,7 @@ class MediaCollectionItemFormView(UniCMSFormView):
 
 
 class MediaCollectionItemLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listMediaCollectionItemLogs'
 
 

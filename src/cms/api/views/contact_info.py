@@ -31,7 +31,7 @@ class ContactInfoList(UniCMSListCreateAPIView):
         contact_id = self.kwargs.get('contact_id')
         if contact_id:
             return ContactInfo.objects.filter(contact__pk=contact_id)
-        return ContactInfo.objects.none() # pragma: no cover
+        return ContactInfo.objects.none()
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -125,7 +125,7 @@ class ContactInfoGenericFormView(UniCMSFormView):
 
 
 class ContactInfoLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listContactInfoLogs'
 
 

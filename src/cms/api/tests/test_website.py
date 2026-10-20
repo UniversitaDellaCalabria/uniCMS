@@ -47,3 +47,16 @@ class WebsiteAPIUnitTest(TestCase):
         # accessible to staff users only
         res = req.get(url)
         assert isinstance(res.json(), dict)
+
+    def test_website_not_managed(self):
+        req = Client()
+        site = ContextUnitTest.create_website()
+        user = ContextUnitTest.create_user(username='staff', is_staff=True)
+        req.force_login(user)
+        url = reverse('unicms_api:editorial-board-site',
+                      kwargs={'pk': site.pk})
+        res = req.get(url)
+        assert res.status_code == 403
+        # not managed sites are not listed
+        url = reverse('unicms_api:editorial-board-sites')
+        assert req.get(url).json()['results'] == []

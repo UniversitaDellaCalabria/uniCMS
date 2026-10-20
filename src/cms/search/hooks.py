@@ -110,7 +110,7 @@ def webpath_se_update(webpath_object, *args, **kwargs):
                                       .distinct()
             for publication in publications:
                 publication_se_insert(publication)
-        except Exception as e: # pragma: no cover
+        except Exception as e:
             logger.exception(f'{webpath_object} search engine reindex failed with: {e}')
 
     # after commit, when the subtree is updated too

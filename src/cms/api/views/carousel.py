@@ -75,7 +75,7 @@ class CarouselFormView(UniCMSFormView):
 
 
 class CarouselLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listCarouselLogs'
 
 
@@ -93,7 +93,7 @@ class CarouselLogsView(ObjectLogEntriesList):
 
 
 class EditorialBoardCarouselOptionListSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listCarouselSelectOptions'
 
 

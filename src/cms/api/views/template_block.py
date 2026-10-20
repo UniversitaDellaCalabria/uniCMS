@@ -38,7 +38,7 @@ class TemplatesBlockView(generics.RetrieveAPIView):
 
 
 class SingleTemplateBlockListSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listSingleTemplateBlocks'
 
 
@@ -63,11 +63,11 @@ class TemplateBlockList(generics.ListAPIView):
         if template_id:
             return PageTemplateBlock.objects.filter(is_active=True,
                                                     template__pk=template_id)
-        return PageTemplateBlock.objects.none() # pragma: no cover
+        return PageTemplateBlock.objects.none()
 
 
 class SingleTemplateBlockListDetail(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'retrieveSingleTemplateBlock'
 
 

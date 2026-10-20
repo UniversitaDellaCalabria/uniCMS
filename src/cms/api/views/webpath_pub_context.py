@@ -40,7 +40,7 @@ class PublicationContextList(UniCMSListCreateAPIView):
                                         pk=webpath_id,
                                         site=site)
             return PublicationContext.objects.filter(webpath=webpath)
-        return PublicationContext.objects.none() # pragma: no cover
+        return PublicationContext.objects.none()
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -76,7 +76,7 @@ class AllPublicationContextList(UniCMSListCreateAPIView):
 
 
 class AllPublicationContextOptionListSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listAllPublicationContextSelectOptions'
 
 
@@ -196,7 +196,7 @@ class EditorialBoardLockUserFormView(UniCMSFormView):
 
 
 class PublicationContextLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'lisPublicationContextLogs'
 
 

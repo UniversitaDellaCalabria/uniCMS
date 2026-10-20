@@ -32,7 +32,7 @@ class AbstractPlaceholder(object):
         pass
 
     @property
-    def log_msg(self): # pragma: no cover
+    def log_msg(self):
         return f'Template Tag {self.iam}'
 
     def build_data_dict(self):
@@ -44,16 +44,16 @@ class AbstractPlaceholder(object):
         return entry[1]
 
     def is_runnable(self):
-        if not self.block: # pragma: no cover
+        if not self.block:
             logger.warning(f'{self.iam} cannot get a block object')
             return SafeString('')
-        if not getattr(self, self.collection_name, None):  # pragma: no cover
+        if not getattr(self, self.collection_name, None):
             return SafeString('')
 
         return self.get_placeholders()
 
     def have_valid_placeholders(self):
-        if not self.ph: # pragma: no cover
+        if not self.ph:
             _msg = f"{self.log_msg} doesn't have any page {self.collection_name}"
             logger.warning(_msg)
             return SafeString('')
@@ -68,7 +68,7 @@ class AbstractPlaceholder(object):
 
     def __call__(self):
         is_runnable = self.is_runnable()
-        if not is_runnable: # pragma: no cover
+        if not is_runnable:
             return is_runnable
 
         # call optional customizations
@@ -78,7 +78,7 @@ class AbstractPlaceholder(object):
             self.entry = self.get_entry(i)
             if self.block.__class__.__name__ == i[0].type.split('.')[-1]:
                 # already rendered
-                if getattr(self.entry, '_published', False): # pragma: no cover
+                if getattr(self.entry, '_published', False):
                     continue
 
                 data = self.build_data_dict()

@@ -14,7 +14,7 @@ class ContactForeignKey(serializers.PrimaryKeyRelatedField):
         if request:
             contact_id = self.context['request'].parser_context['kwargs']['contact_id']
             return Contact.objects.filter(pk=contact_id)
-        return None # pragma: no cover
+        return None
 
 
 class ContactInfoForeignKey(serializers.PrimaryKeyRelatedField):
@@ -25,7 +25,7 @@ class ContactInfoForeignKey(serializers.PrimaryKeyRelatedField):
             item_id = self.context['request'].parser_context['kwargs']['contact_info_id']
             return ContactInfo.objects.filter(pk=item_id,
                                               contact__pk=contact_id)
-        return None # pragma: no cover
+        return None
 
 
 class ContactSerializer(UniCMSCreateUpdateSerializer,

@@ -48,7 +48,7 @@ class PageList(UniCMSListCreateAPIView):
                                         pk=webpath_id,
                                         site=site)
             return Page.objects.filter(webpath=webpath)
-        return Page.objects.none() # pragma: no cover
+        return Page.objects.none()
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -141,7 +141,7 @@ class PageView(UniCMSCachedRetrieveUpdateDestroyAPIView):
 
 
 class PageChangeStateSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'updatePageStatus'
 
 
@@ -180,7 +180,7 @@ class PageChangeStateView(APIView):
 
 
 class PageChangePublicationStatusSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'updatePagePublicationStatus'
 
 
@@ -237,7 +237,7 @@ class PageRelatedObjectList(UniCMSListCreateAPIView):
                                           webpath__pk=webpath_id,
                                           webpath__site__pk=site_id)
         else:
-            self.page = None # pragma: no cover
+            self.page = None
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -322,7 +322,7 @@ class PageGenericFormView(UniCMSFormView):
 
 
 class PageCopyAsDraftSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'copyPageAsDraftSchema'
 
 
@@ -361,7 +361,7 @@ class PageCopyAsDraftView(APIView):
 
 
 class PageLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPageLogs'
 
 
@@ -409,7 +409,7 @@ class PageRelatedObjectLogsView(ObjectLogEntriesList):
 
 
 class EditorialBoardPageAllListSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPageAll'
 
 

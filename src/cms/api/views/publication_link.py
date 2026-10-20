@@ -27,7 +27,7 @@ class PublicationLinkList(PublicationRelatedObjectList):
         super().get_data()
         if self.publication:
             return PublicationLink.objects.filter(publication=self.publication)
-        return PublicationLink.objects.none() # pragma: no cover
+        return PublicationLink.objects.none()
 
 
 class PublicationLinkView(PublicationRelatedObject):
@@ -54,7 +54,7 @@ class PublicationLinkFormView(UniCMSFormView):
 
 
 class PublicationLinkLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPublicationLinkLogs'
 
 

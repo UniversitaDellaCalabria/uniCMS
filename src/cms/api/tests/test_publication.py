@@ -1,11 +1,14 @@
 import logging
 
+from unittest import mock
+
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
 from django.urls import reverse
 
+from cms.contexts.models import AUTH_USER_GROUPS
 from cms.contexts.tests import ContextUnitTest
 
 from cms.pages.tests import PageUnitTest
@@ -186,3 +189,73 @@ class PublicationAPIUnitTest(TestCase):
         assert isinstance(res.json(), list)
 
 
+
+    def test_publications_by_context_category(self):
+        pub = PublicationUnitTest.create_pub()
+        webpath = pub.get_publication_context().webpath
+        category = pub.category.first()
+        url = reverse('unicms_api:api-news-by-contexts',
+                      kwargs={'webpath_id': webpath.pk})
+        req = Client()
+        res = req.get(url, {'category': category.pk})
+        assert res.status_code == 200
+        assert res.json()['count'] == 4
+        other_category = PageUnitTest.create_category(name='other')
+        res = req.get(url, {'category': other_category.pk})
+        assert res.json()['count'] == 0
+
+    def test_publications_by_context_access_level(self):
+        pub = PublicationUnitTest.create_pub()
+        webpath = pub.get_publication_context().webpath
+        url = reverse('unicms_api:api-news-by-contexts',
+                      kwargs={'webpath_id': webpath.pk})
+        req = Client()
+
+        # registered users only
+        webpath.access = '2'
+        webpath.save()
+        res = req.get(url)
+        assert res.status_code in (401, 403)
+        user = ContextUnitTest.create_user()
+        req.force_login(user)
+        res = req.get(url)
+        assert res.status_code == 200
+        assert res.json()['count'] == 4
+
+        # custom access level (user attribute) configured in settings
+        groups = AUTH_USER_GROUPS + (('is_staff', 'Staff users'),)
+        with mock.patch('cms.contexts.models.AUTH_USER_GROUPS', groups):
+            webpath.access = 'is_staff'
+            webpath.save()
+            res = req.get(url)
+            assert res.status_code == 403
+            user.is_staff = True
+            user.save()
+            res = req.get(url)
+            assert res.status_code == 200
+
+    def test_publication_patch_status(self):
+        """
+        an editor with change permission can also change
+        the status of the publication
+        """
+        req = Client()
+        user = ContextUnitTest.create_user(username='editor',
+                                           is_staff=True)
+        pub = PublicationUnitTest.create_pub(count=1)
+        # owner of the publication
+        pub.created_by = user
+        pub.save()
+        content_type = ContentType.objects.get_for_model(Publication)
+        edit_perm = Permission.objects.get(content_type=content_type,
+                                           codename='change_publication')
+        user.user_permissions.add(edit_perm)
+        req.force_login(user)
+        url = reverse('unicms_api:editorial-board-publication',
+                      kwargs={'pk': pub.pk})
+        assert pub.is_active
+        res = req.patch(url, {'is_active': False},
+                        content_type='application/json')
+        assert res.status_code == 200
+        pub.refresh_from_db()
+        assert not pub.is_active

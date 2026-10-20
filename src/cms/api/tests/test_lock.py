@@ -1,9 +1,12 @@
 import logging
 
 from django.contrib.contenttypes.models import ContentType
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client, TestCase
 from django.urls import reverse
+
+from cms.api.concurrency import LOCKS_CACHE_KEY_PREFIX, get_lock_from_cache
 
 from cms.carousels.tests import CarouselUnitTest
 
@@ -152,3 +155,71 @@ class EditorialBoardLockAPIUnitTest(TestCase):
                                                      lock__object_id=publication.pk,
                                                      user=user).first()
         assert lock
+
+
+class RedisLockAPIUnitTest(TestCase):
+
+    def setUp(self):
+        self.req = Client()
+        self.webpath = ContextUnitTest.create_webpath()
+        self.ct = ContentType.objects.get_for_model(self.webpath)
+        self.owner = ContextUnitTest.create_user(username='owner',
+                                                 is_staff=True,
+                                                 is_superuser=True)
+        self.user = ContextUnitTest.create_user(username='other',
+                                                is_staff=True)
+        self.addCleanup(cache.clear)
+
+    def _set_owner_lock(self):
+        # tests settings use LOCKS_CACHE_TTL = 0, store the lock directly
+        key = f'{LOCKS_CACHE_KEY_PREFIX}{self.ct.pk}_{self.webpath.pk}'
+        cache.set(key, self.owner.pk, 60)
+
+    def test_get_lock_of_another_user(self):
+        url = reverse('unicms_api:editorial-board-redis-lock',
+                      kwargs={'content_type_id': self.ct.pk,
+                              'object_id': self.webpath.pk})
+        self.req.force_login(self.user)
+        assert self.req.get(url).json() == {}
+        self._set_owner_lock()
+        res = self.req.get(url)
+        assert str(self.owner) in res.json()['message']
+        # lock owner gets no message
+        self.req.force_login(self.owner)
+        assert self.req.get(url).json() == {}
+
+    def test_set_lock(self):
+        url = reverse('unicms_api:editorial-board-redis-lock-set')
+        data = {'content_type_id': self.ct.pk,
+                'object_id': self.webpath.pk}
+        self.req.force_login(self.user)
+        # missing params
+        res = self.req.post(url, {'content_type_id': self.ct.pk},
+                            content_type='application/json')
+        assert res.status_code == 404
+        # user can't lock the object
+        res = self.req.post(url, data, content_type='application/json')
+        assert res.status_code == 403
+        assert get_lock_from_cache(self.ct.pk, self.webpath.pk) == 0
+        # object locked by another user
+        self._set_owner_lock()
+        res = self.req.post(url, data, content_type='application/json')
+        assert res.status_code == 403
+        assert str(self.owner) in res.json()['detail']
+        assert get_lock_from_cache(self.ct.pk, self.webpath.pk) == self.owner.pk
+
+    def test_edit_locked_object(self):
+        # generic views refuse changes on objects locked by others
+        carousel = CarouselUnitTest.create_carousel()
+        ct = ContentType.objects.get_for_model(carousel)
+        cache.set(f'{LOCKS_CACHE_KEY_PREFIX}{ct.pk}_{carousel.pk}',
+                  self.owner.pk, 60)
+        self.user.is_superuser = True
+        self.user.save()
+        self.req.force_login(self.user)
+        url = reverse('unicms_api:carousel', kwargs={'pk': carousel.pk})
+        res = self.req.patch(url, {'name': 'changed'},
+                             content_type='application/json')
+        assert res.status_code == 403
+        carousel.refresh_from_db()
+        assert carousel.name != 'changed'

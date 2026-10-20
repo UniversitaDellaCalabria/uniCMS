@@ -92,7 +92,7 @@ def cms_dispatch(request):
         handler = cls(**params)
         try:
             return handler.as_view()
-        except Exception as e: # pragma: no cover
+        except Exception as e:
             logger.exception(f'{path}:{e}')
             raise Http404(_("CMS Page not found"))
 

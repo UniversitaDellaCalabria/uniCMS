@@ -28,7 +28,7 @@ class PageMediaList(PageRelatedObjectList):
         super().get_data()
         if self.page:
             return PageMedia.objects.filter(page=self.page)
-        return PageMedia.objects.none() # pragma: no cover
+        return PageMedia.objects.none()
 
 
 class PageMediaView(PageRelatedObject):
@@ -53,7 +53,7 @@ class PageMediaFormView(UniCMSFormView):
 
 
 class PageMediaLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPageMediaLogs'
 
 

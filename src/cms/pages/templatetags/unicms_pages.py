@@ -47,7 +47,7 @@ def load_blocks(context, section=None):
                                       # menus=menus)
             try:
                 result += obj.render() or SafeString('')
-            except Exception as e: # pragma: no cover
+            except Exception as e:
                 logger.exception(('Block {} failed rendering '
                                   '({}): {}').format(block, obj, e))
     return result

@@ -30,7 +30,7 @@ ALLOW_SEARCH_IN_SITES = getattr(settings,
                                 ALLOW_SEARCH_IN_SITES)
 
 
-class ServiceUnavailable(APIException): # pragma: no cover
+class ServiceUnavailable(APIException):
     status_code = 503
     default_detail = 'Service temporarily unavailable, try again later.'
     default_code = 'service_unavailable'
@@ -127,14 +127,14 @@ class ApiSearchEngine(APIView):
             try:
                 tags = [i.strip() for i in tags.split(',')]
                 query['tags'] = {'$all': tags}
-            except ValueError: # pragma: no cover
+            except ValueError:
                 logger.debug(f'API Search: Bad tags: {tags}')
 
         # web site
 
         # allowed sites
         if '*' in ALLOW_SEARCH_IN_SITES: pass
-        else: # pragma: no cover
+        else:
             query['sites'] = {}
             query['sites']['$elemMatch'] = {'$in': ALLOW_SEARCH_IN_SITES}
 
@@ -144,7 +144,7 @@ class ApiSearchEngine(APIView):
                 if not 'sites' in query: query['sites'] = {}
                 sites = [i.strip() for i in sites.split(',')]
                 query['sites']['$all'] = sites
-            except ValueError: # pragma: no cover
+            except ValueError:
                 logger.debug(f'API Search: Bad sites: {sites}')
 
         # categories
@@ -153,7 +153,7 @@ class ApiSearchEngine(APIView):
             try:
                 categories = [i.strip() for i in categories.split(',')]
                 query['categories'] = {'$all': categories}
-            except ValueError: # pragma: no cover
+            except ValueError:
                 logger.debug(f'API Search: Bad categories: {categories}')
 
         # run query
@@ -165,7 +165,7 @@ class ApiSearchEngine(APIView):
             else:
                 res = collection.find(query).sort('published',
                                                   pymongo.DESCENDING)
-        except ServerSelectionTimeoutError as e: # pragma: no cover
+        except ServerSelectionTimeoutError as e:
             logger.critical(e)
             raise ServiceUnavailable()
 
@@ -180,9 +180,9 @@ class ApiSearchEngine(APIView):
 
         try:
             page = int(request.GET.get('page', 1)) or 1
-        except ValueError: # pragma: no cover
+        except ValueError:
             page = 1
-        if page > total_pages: # pragma: no cover
+        if page > total_pages:
             msg = PageNumberPagination.invalid_page_message.format(
                 page=page
             )

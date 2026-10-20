@@ -26,7 +26,7 @@ class PageForeignKey(serializers.PrimaryKeyRelatedField):
         if request:
             page_id = self.context['request'].parser_context['kwargs']['page_id']
             return Page.objects.filter(pk=page_id)
-        return None # pragma: no cover
+        return None
 
 
 class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
@@ -39,7 +39,7 @@ class WebPathForeignKey(serializers.PrimaryKeyRelatedField):
             webpath_id = self.context['request'].parser_context['kwargs']['webpath_id']
             return WebPath.objects.filter(pk=webpath_id,
                                           site__id=site_id)
-        return None # pragma: no cover
+        return None
 
 
 class PageSerializer(TaggitSerializer,
@@ -51,7 +51,7 @@ class PageSerializer(TaggitSerializer,
 
     def to_internal_value(self, data):
         if data.get('date_end') == '':
-            data['date_end'] = None # pragma: no cover
+            data['date_end'] = None
         return super().to_internal_value(data)
 
     def to_representation(self, instance):
@@ -233,7 +233,7 @@ class HeadingForeignKey(serializers.PrimaryKeyRelatedField):
             heading_id = self.context['request'].parser_context['kwargs']['heading_id']
             return PageHeading.objects.filter(pk=heading_id,
                                               page__pk=page_id)
-        return None # pragma: no cover
+        return None
 
 
 class PageHeadingLocalizationSerializer(UniCMSContentTypeClass):

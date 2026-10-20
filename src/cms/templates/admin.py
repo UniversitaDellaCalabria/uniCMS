@@ -6,7 +6,7 @@ from cms.contexts.utils import fill_created_modified_by
 
 class AbstractCreatedModifiedBySave(object):
 
-    def save_model(self, request, obj, form, change): # pragma: no cover
+    def save_model(self, request, obj, form, change):
         fill_created_modified_by(request, obj)
         super().save_model(request, obj, form, change)
 

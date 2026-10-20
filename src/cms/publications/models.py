@@ -57,7 +57,7 @@ class Category(TimeStampedModel, CreatedModifiedBy):
         res = ""
         try:
             res = f'<img width={CMS_IMAGE_CATEGORY_SIZE} src="{self.image.url}"/>'
-        except ValueError:  # pragma: no cover
+        except ValueError:
             # *** ValueError: The 'image' attribute has no file associated with it.
             res = f"{settings.STATIC_URL}images/no-image.jpg"
         return mark_safe(res) # nosec
@@ -129,18 +129,18 @@ class Publication(AbstractPublication, CreatedModifiedBy, AbstractLockable):
             return self.preview_image.get_media_path()
         elif self.presentation_image:
             return self.presentation_image.get_media_path()
-        else: # pragma: no cover
+        else:
             categories = self.category.all()
             for category in categories:
                 if category.image:
                     return sanitize_path(f'{settings.MEDIA_URL}/{category.image}')
 
-    def image_title(self): # pragma: no cover
+    def image_title(self):
         if self.preview_image: return self.preview_image.title
         if self.presentation_image: return self.presentation_image.title
         return self.title
 
-    def image_description(self): # pragma: no cover
+    def image_description(self):
         if self.preview_image: return self.preview_image.description
         if self.presentation_image: return self.presentation_image.description
         return self.subheading
@@ -475,7 +475,7 @@ class PublicationMediaCollection(TimeStampedModel, ActivableModel,
         return '{} {}'.format(self.publication, self.collection)
 
 
-def publication_attachment_path(instance, filename): # pragma: no cover
+def publication_attachment_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     return 'publications_attachments/{}/{}'.format(instance.publication.pk,
                                                    filename)

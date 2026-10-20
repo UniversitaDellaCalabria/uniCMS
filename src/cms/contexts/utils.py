@@ -70,7 +70,7 @@ def detect_user_language(request):
     return lang
 
 
-def handle_faulty_templates(template: str, data: dict, name='', ): # pragma: no cover
+def handle_faulty_templates(template: str, data: dict, name='', ):
     _error_msg = 'ERROR: {} template tags: {}'
     _error_msg_pub = '<!-- Error {} template tags. See log file. -->'
 
@@ -152,7 +152,7 @@ def load_hooks(obj, flow_type, *args, **kwargs):
     for hook in flow_hooks:
         try:
             hook(obj)
-        except Exception as e: # pragma: no cover
+        except Exception as e:
             logger.exception(_msg_hook_exp.format(flow_type, hook, e))
 
 
@@ -161,7 +161,7 @@ def fill_created_modified_by(request, obj):
         return False
 
     for field_name in ('created_by', 'modified_by'):
-        if not hasattr(obj, field_name):# pragma: no cover
+        if not hasattr(obj, field_name):
             continue
 
         if (field_name == 'modified_by' or not getattr(obj, field_name, None)):
@@ -219,7 +219,7 @@ def log_obj_event(user, obj, data={}, action_flag=CHANGE):
     try:
         data = deepcopy(data)
         data = dict(data)
-    except Exception: # pragma: no cover
+    except Exception:
         data = {}
 
     # pop readonly fields from logged dict
@@ -260,5 +260,5 @@ def clone(obj,
         new_obj = isi.save(custom_values=custom_values,
                            recursive_custom_values=recursive_custom_values)
         return new_obj
-    except Exception as e: # pragma: no cover
+    except Exception as e:
         raise e

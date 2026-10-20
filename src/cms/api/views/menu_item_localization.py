@@ -33,7 +33,7 @@ class MenuItemLocalizationList(UniCMSListCreateAPIView):
         if menu_id and menu_item_id:
             return NavigationBarItemLocalization.objects.filter(item__menu__pk=menu_id,
                                                                 item__pk=menu_item_id)
-        return NavigationBarItemLocalization.objects.none() # pragma: no cover
+        return NavigationBarItemLocalization.objects.none()
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -109,7 +109,7 @@ class MenuItemLocalizationFormView(UniCMSFormView):
 
 
 class MenuItemLocalizationLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listMenuItemLocalizationLogs'
 
 

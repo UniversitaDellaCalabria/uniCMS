@@ -590,3 +590,96 @@ class WebpathAPIUnitTest(TestCase):
                               'pk': webpath.pk})
         res = req.get(url)
         assert isinstance(res.json(), list)
+
+
+class WebpathBranchesAPIUnitTest(TestCase):
+
+    def setUp(self):
+        self.req = Client()
+        self.site = ContextUnitTest.create_website()
+        self.parent = ContextUnitTest.create_webpath(site=self.site,
+                                                     path='parent')
+        self.webpath = ContextUnitTest.create_webpath(site=self.site,
+                                                      parent=self.parent,
+                                                      path='child')
+        self.superuser = ContextUnitTest.create_user(username='super',
+                                                     is_staff=True,
+                                                     is_superuser=True)
+        self.url = reverse('unicms_api:editorial-board-site-webpath',
+                           kwargs={'site_id': self.site.pk,
+                                   'pk': self.webpath.pk})
+
+    def _data(self, **kwargs):
+        data = {'site': self.site.pk,
+                'parent': self.parent.pk,
+                'name': 'child',
+                'path': 'child',
+                'is_active': 1}
+        data.update(kwargs)
+        return data
+
+    def test_post_superuser_existent_path(self):
+        url = reverse('unicms_api:editorial-board-site-webpaths',
+                      kwargs={'site_id': self.site.pk})
+        self.req.force_login(self.superuser)
+        # same fullpath of an existent webpath: model save fails
+        res = self.req.post(url, data=self._data(),
+                            content_type='application/json')
+        assert res.status_code == 400
+        assert WebPath.objects.filter(site=self.site,
+                                      fullpath=self.webpath.fullpath).count() == 1
+        # superuser doesn't need EditorialBoard permissions
+        res = self.req.post(url, data=self._data(path='new-child'),
+                            content_type='application/json')
+        assert res.status_code == 302
+        assert WebPath.objects.filter(parent=self.parent,
+                                      path='new-child/').exists()
+
+    def test_patch_put_model_error(self):
+        self.req.force_login(self.superuser)
+        # a webpath can't be alias of itself: model save fails
+        res = self.req.patch(self.url, data={'alias': self.webpath.pk},
+                             content_type='application/json')
+        assert res.status_code == 400
+        res = self.req.put(self.url, data=self._data(alias=self.webpath.pk),
+                           content_type='application/json')
+        assert res.status_code == 400
+        self.webpath.refresh_from_db()
+        assert self.webpath.alias is None
+
+    def test_delete(self):
+        ebu = ContextUnitTest.create_editorialboard_user(webpath=self.webpath,
+                                                         permission=7)
+        user = ebu.user
+        user.is_staff = True
+        user.save()
+        self.req.force_login(user)
+        res = self.req.delete(self.url)
+        assert res.status_code == 204
+        assert not WebPath.objects.filter(pk=self.webpath.pk).exists()
+
+    def test_logs_site_not_managed(self):
+        user = ContextUnitTest.create_user(username='staff', is_staff=True)
+        self.req.force_login(user)
+        url = reverse('unicms_api:editorial-board-site-webpath-logs',
+                      kwargs={'site_id': self.site.pk,
+                              'pk': self.webpath.pk})
+        res = self.req.get(url)
+        assert res.status_code == 403
+
+    def test_clone_branches(self):
+        url = reverse('unicms_api:editorial-board-site-webpath-clone',
+                      kwargs={'site_id': self.site.pk,
+                              'pk': self.webpath.pk})
+        # no publisher permissions on target parent
+        user = ContextUnitTest.create_user(username='staff', is_staff=True)
+        self.req.force_login(user)
+        res = self.req.post(url, data={'parent': self.parent.pk},
+                            content_type='application/json')
+        assert res.status_code == 403
+        # cloning a webpath in its own parent duplicates its fullpath
+        self.req.force_login(self.superuser)
+        res = self.req.post(url, data={'parent': self.parent.pk},
+                            content_type='application/json')
+        assert res.status_code == 400
+        assert WebPath.objects.filter(parent=self.parent).count() == 1

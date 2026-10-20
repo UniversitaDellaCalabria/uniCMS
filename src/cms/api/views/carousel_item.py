@@ -30,7 +30,7 @@ class CarouselItemList(UniCMSListCreateAPIView):
         carousel_id = self.kwargs.get('carousel_id')
         if carousel_id:
             return CarouselItem.objects.filter(carousel__pk=carousel_id)
-        return CarouselItem.objects.none() # pragma: no cover
+        return CarouselItem.objects.none()
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -124,7 +124,7 @@ class CarouselItemGenericFormView(UniCMSFormView):
 
 
 class CarouselItemLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listCarouselItemLogs'
 
 

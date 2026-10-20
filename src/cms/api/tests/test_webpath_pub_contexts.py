@@ -215,3 +215,87 @@ class WebpathPubContextAPIUnitTest(TestCase):
         url = reverse('unicms_api:users-form')
         res = req.get(url)
         assert isinstance(res.json(), list)
+
+    def _publisher_setup(self):
+        user = ContextUnitTest.create_user(username='publisher',
+                                           is_staff=True)
+        pub = PublicationUnitTest.create_pub(count=1)
+        pub_cxt = PublicationContext.objects.get(publication=pub)
+        webpath = pub_cxt.webpath
+        # user can publish in webpath
+        EditorialBoardEditors.objects.create(webpath=webpath,
+                                             user=user,
+                                             permission=6,
+                                             is_active=True)
+        # another webpath of the same site
+        new_webpath = ContextUnitTest.create_webpath(path='other-webpath')
+        return user, pub, pub_cxt, webpath, new_webpath
+
+    def test_publication_context_move_to_webpath(self):
+        user, pub, pub_cxt, webpath, new_webpath = self._publisher_setup()
+        site = webpath.site
+        req = Client()
+        req.force_login(user)
+        url = reverse('unicms_api:editorial-board-site-webpath-publication-context',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': webpath.pk,
+                              'pk': pub_cxt.pk})
+        patch_data = {'webpath': new_webpath.pk}
+        put_data = {'publication': pub.pk,
+                    'webpath': new_webpath.pk,
+                    'date_start': timezone.localtime(),
+                    'date_end': timezone.localtime() + timezone.timedelta(hours=1),
+                    'is_active': 1}
+
+        # user can't publish in the new webpath
+        res = req.patch(url, patch_data, content_type='application/json')
+        assert res.status_code == 403
+        res = req.put(url, put_data, content_type='application/json')
+        assert res.status_code == 403
+        pub_cxt.refresh_from_db()
+        assert pub_cxt.webpath == webpath
+
+        # user can publish in the new webpath
+        EditorialBoardEditors.objects.create(webpath=new_webpath,
+                                             user=user,
+                                             permission=6,
+                                             is_active=True)
+        res = req.put(url, put_data, content_type='application/json')
+        assert res.status_code == 200
+        pub_cxt.refresh_from_db()
+        assert pub_cxt.webpath == new_webpath
+
+        # move it back with PATCH
+        url = reverse('unicms_api:editorial-board-site-webpath-publication-context',
+                      kwargs={'site_id': site.pk,
+                              'webpath_id': new_webpath.pk,
+                              'pk': pub_cxt.pk})
+        res = req.patch(url, {'webpath': webpath.pk},
+                        content_type='application/json')
+        assert res.status_code == 200
+        pub_cxt.refresh_from_db()
+        assert pub_cxt.webpath == webpath
+
+    def test_publication_context_logs_site_not_managed(self):
+        user = ContextUnitTest.create_user(username='staff-only',
+                                           is_staff=True)
+        pub = PublicationUnitTest.create_pub(count=1)
+        pub_cxt = PublicationContext.objects.get(publication=pub)
+        webpath = pub_cxt.webpath
+        req = Client()
+        req.force_login(user)
+        url = reverse('unicms_api:editorial-board-site-webpath-publication-context-logs',
+                      kwargs={'site_id': webpath.site.pk,
+                              'webpath_id': webpath.pk,
+                              'pk': pub_cxt.pk})
+        # user doesn't manage the website
+        res = req.get(url)
+        assert res.status_code == 403
+        # editorial board user manages the website
+        EditorialBoardEditors.objects.create(webpath=webpath,
+                                             user=user,
+                                             permission=6,
+                                             is_active=True)
+        res = req.get(url)
+        assert res.status_code == 200
+        assert isinstance(res.json(), dict)

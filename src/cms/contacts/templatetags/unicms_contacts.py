@@ -48,7 +48,7 @@ def load_contact(context, section, template, contact_id=None):
 
         page_contact = page.get_contacts().first()
 
-        if not page_contact: # pragma: no cover
+        if not page_contact:
             _msg = '{} cannot find contact in page {} and section {}'\
                    .format(_func_name, page, section)
             logger.error(_msg)

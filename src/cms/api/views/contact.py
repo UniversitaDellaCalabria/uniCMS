@@ -77,7 +77,7 @@ class ContactFormView(UniCMSFormView):
 
 
 class ContactLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listContactLogs'
 
 
@@ -95,7 +95,7 @@ class ContactLogsView(ObjectLogEntriesList):
 
 
 class EditorialBoardContactOptionListSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listContactSelectOptions'
 
 

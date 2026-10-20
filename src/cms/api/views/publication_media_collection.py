@@ -28,7 +28,7 @@ class PublicationMediaCollectionList(PublicationRelatedObjectList):
         super().get_data()
         if self.publication:
             return PublicationMediaCollection.objects.filter(publication=self.publication)
-        return PublicationMediaCollection.objects.none() # pragma: no cover
+        return PublicationMediaCollection.objects.none()
 
 
 class PublicationMediaCollectionView(PublicationRelatedObject):
@@ -55,7 +55,7 @@ class PublicationMediaCollectionFormView(UniCMSFormView):
 
 
 class PublicationMediaCollectionLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPublicationMediaCollectionLogs'
 
 

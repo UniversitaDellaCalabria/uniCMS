@@ -22,7 +22,7 @@ class MenuForeignKey(serializers.PrimaryKeyRelatedField):
         if request:
             menu_id = self.context['request'].parser_context['kwargs']['menu_id']
             return NavigationBar.objects.filter(pk=menu_id)
-        return None # pragma: no cover
+        return None
 
 
 class MenuItemsForeignKey(serializers.PrimaryKeyRelatedField):
@@ -31,7 +31,7 @@ class MenuItemsForeignKey(serializers.PrimaryKeyRelatedField):
         if request:
             menu_id = self.context['request'].parser_context['kwargs']['menu_id']
             return NavigationBarItem.objects.filter(menu__pk=menu_id)
-        return None # pragma: no cover
+        return None
 
 
 class MenuItemSerializer(UniCMSCreateUpdateSerializer,
@@ -66,7 +66,7 @@ class MenuItemForeignKey(serializers.PrimaryKeyRelatedField):
             menu_item_id = self.context['request'].parser_context['kwargs']['menu_item_id']
             return NavigationBarItem.objects.filter(menu__pk=menu_id,
                                                     pk=menu_item_id)
-        return None # pragma: no cover
+        return None
 
 
 class MenuItemLocalizationSerializer(UniCMSCreateUpdateSerializer,

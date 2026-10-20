@@ -27,7 +27,7 @@ class PageMenuList(PageRelatedObjectList):
         super().get_data()
         if self.page:
             return PageMenu.objects.filter(page=self.page)
-        return PageMenu.objects.none() # pragma: no cover
+        return PageMenu.objects.none()
 
 
 class PageMenuView(PageRelatedObject):
@@ -52,7 +52,7 @@ class PageMenuFormView(UniCMSFormView):
 
 
 class PageMenuLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listPageMenuLogs'
 
 

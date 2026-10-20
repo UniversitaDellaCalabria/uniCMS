@@ -36,7 +36,7 @@ def get_image_width_height(fopen):
     if mimetype in FILETYPE_IMAGE:
         try:
             pil = Image.open(fopen)
-        except Exception as e: # pragma: no cover
+        except Exception as e:
             logger.warning(f'Image size detection failed: {e}')
             return
         return pil.size
@@ -71,7 +71,7 @@ def to_webp(fobj):
         im.save(byte_io, format = "WebP",
                 optimize=True, quality=66,
                 save_all=animated)
-    except Exception as e: # pragma: no cover
+    except Exception as e:
         logger.exception(f'Media Hook image_optimized failed: {e}')
         return
     byte_io.seek(0)

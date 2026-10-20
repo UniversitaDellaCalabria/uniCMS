@@ -31,7 +31,7 @@ class ContactLocalizationList(UniCMSListCreateAPIView):
         contact_id = self.kwargs.get('contact_id')
         if contact_id:
             return ContactLocalization.objects.filter(contact__pk=contact_id)
-        return ContactLocalization.objects.none() # pragma: no cover
+        return ContactLocalization.objects.none()
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -104,7 +104,7 @@ class ContactLocalizationFormView(UniCMSFormView):
 
 
 class ContactLocalizationLogsSchema(AutoSchema):
-    def get_operation_id(self, path, method):# pragma: no cover
+    def get_operation_id(self, path, method):
         return 'listContactLocalizationLogs'
 
 
