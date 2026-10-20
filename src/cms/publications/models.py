@@ -43,7 +43,8 @@ class Category(TimeStampedModel, CreatedModifiedBy):
                               null=True, blank=True,
                               max_length=512,
                               validators=[validate_image_file_extension,
-                                          validate_file_size])
+                                          validate_file_size,
+                                          validate_image_max_pixels])
 
     class Meta:
         ordering = ['name']

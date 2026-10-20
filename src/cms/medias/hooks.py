@@ -32,6 +32,10 @@ def webp_image_optimizer(media_object):
     if mimetype in FILETYPE_IMAGE:
         field._file.seek(0)
         byte_io = to_webp(field._file)
+        # conversion failed: the original image is stored
+        if not byte_io:
+            field._file.seek(0)
+            return
         byte_io.seek(0, os.SEEK_END)
         content_size = byte_io.tell()
         byte_io.seek(0)

@@ -79,6 +79,7 @@ class Media(TimeStampedModel, AbstractMedia,
     file = models.FileField(upload_to=context_media_path,
                             validators=[validate_file_extension,
                                         validate_file_size,
+                                        validate_image_max_pixels,
                                         validate_image_size_ratio])
     description = models.TextField()
     uuid = models.UUIDField(default=uuid.uuid4,

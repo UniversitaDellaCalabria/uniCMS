@@ -185,6 +185,10 @@ FILETYPE_ALLOWED_EXTENSIONS = {
 FILE_NAME_MAX_LEN = 128
 
 FILE_MAX_SIZE = 5242880
+
+# maximum number of pixels (width * height * frames) of uploaded images.
+# Pillow decodes the whole image in memory: it prevents decompression bombs
+CMS_IMAGE_MAX_PIXELS = 40000000
 ````
 
 ###### Publications

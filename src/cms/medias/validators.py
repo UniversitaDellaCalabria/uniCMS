@@ -3,13 +3,16 @@ import os
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from PIL import Image
 
 from . import settings as app_settings
 from . filetypes import (FILETYPE_ALLOWED,
                          FILETYPE_ALLOWED_EXTENSIONS,
                          FILETYPE_IMAGE,
                          FILETYPE_MEDIA)
-from . utils import get_image_width_height
+from . utils import (CMS_IMAGE_MAX_PIXELS,
+                     get_image_width_height,
+                     image_exceeds_max_pixels)
 
 
 FILE_MAX_SIZE = getattr(settings, 'FILE_MAX_SIZE',
@@ -75,7 +78,11 @@ def validate_image_size_ratio(value):
     value.file.seek(0)
 
     if mimetype in FILETYPE_IMAGE:
-        w, y = get_image_width_height(value.file)
+        size = get_image_width_height(value.file)
+        value.file.seek(0)
+        # invalid image: validate_image_max_pixels raises the error
+        if not size: return
+        w, y = size
         ratio = y / w
         if ratio < FILETYPE_IMAGE_YX_RATIO_MIN or \
            ratio > FILETYPE_IMAGE_YX_RATIO_MAX:
@@ -83,3 +90,26 @@ def validate_image_size_ratio(value):
             raise ValidationError(f'Image have invalid y / w ratio {rratio}. \
                                     Min {FILETYPE_IMAGE_YX_RATIO_MIN} - \
                                     Max {FILETYPE_IMAGE_YX_RATIO_MAX}')
+
+
+def validate_image_max_pixels(value):
+    if not hasattr(value, 'file'): # pragma: no cover
+        return
+
+    mimetype = magic.Magic(mime=True).from_buffer(value.file.read())
+    value.file.seek(0)
+    if mimetype not in FILETYPE_IMAGE:
+        return
+
+    try:
+        exceeds = image_exceeds_max_pixels(Image.open(value.file))
+    except Image.DecompressionBombError:
+        exceeds = True
+    except Exception:
+        raise ValidationError('Invalid image file')
+    finally:
+        value.file.seek(0)
+
+    if exceeds:
+        raise ValidationError(f'Image exceeds the maximum size '
+                              f'of {CMS_IMAGE_MAX_PIXELS} pixels')
