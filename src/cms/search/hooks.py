@@ -1,6 +1,8 @@
 import logging
 
+from django.apps import apps
 from django.conf import settings as global_settings
+from django.db import transaction
 from django.utils import timezone
 
 from . import mongo_collection
@@ -83,3 +85,33 @@ def searchengine_entry_remove(obj):
                  "content_id": str(obj.pk)}
     collection.delete_many(doc_query)
     logger.info(f'{obj} removed from search engine')
+
+
+def webpath_se_update(webpath_object, *args, **kwargs):
+    """
+    reindex pages and publications of the webpath subtree
+    if the webpath changes affect their entries (urls, access...)
+    """
+    old = getattr(webpath_object, '_previous_values', None)
+    # new webpath: no contents to reindex
+    if not old: return
+    if all(old[field] == getattr(webpath_object, field) for field in old):
+        return
+
+    def reindex():
+        try:
+            webpaths = [webpath_object] + webpath_object.get_descendants()
+            Page = apps.get_model('cmspages', 'Page')
+            Publication = apps.get_model('cmspublications', 'Publication')
+            for page in Page.objects.filter(webpath__in=webpaths):
+                page_se_insert(page)
+            publications = Publication.objects\
+                                      .filter(publicationcontext__webpath__in=webpaths)\
+                                      .distinct()
+            for publication in publications:
+                publication_se_insert(publication)
+        except Exception as e: # pragma: no cover
+            logger.exception(f'{webpath_object} search engine reindex failed with: {e}')
+
+    # after commit, when the subtree is updated too
+    transaction.on_commit(reindex)

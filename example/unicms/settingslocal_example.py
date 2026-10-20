@@ -316,6 +316,12 @@ MODEL_TO_MONGO_MAP = {
 }
 
 CMS_HOOKS = {
+    'WebPath': {
+        'PRESAVE': [],
+        'POSTSAVE': ['cms.search.hooks.webpath_se_update',],
+        'PREDELETE': [],
+        'POSTDELETE': []
+    },
     'Publication': {
         'PRESAVE': [],
         'POSTSAVE': ['cms.search.hooks.publication_se_insert',

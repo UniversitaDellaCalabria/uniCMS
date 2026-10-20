@@ -35,6 +35,12 @@ By default Pages and Publication calls pre and post save hooks. Django signals a
 
 ````
 CMS_HOOKS = {
+    'WebPath': {
+        'PRESAVE': [],
+        'POSTSAVE': ['cms.search.hooks.webpath_se_update',],
+        'PREDELETE': [],
+        'POSTDELETE': []
+    },
     'Publication': {
         'PRESAVE': [],
         'POSTSAVE': ['cms.search.hooks.publication_se_insert',],

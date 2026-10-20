@@ -1,7 +1,7 @@
 import logging
 import sys
 
-from django.db import models
+from django.db import models, transaction
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -120,6 +120,10 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         verbose_name_plural = _("Site Contexts (WebPaths)")
         ordering = ['fullpath']
 
+    # fields whose previous values are stored on save
+    TRACKED_FIELDS = ('parent_id', 'site_id', 'fullpath', 'is_active',
+                      'access', 'alias_id', 'alias_url')
+
     def split(self) -> list:
         """
         return splitted nodes in a list
@@ -170,17 +174,29 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         url = f'//{path}'
         return url
 
+    def check_fullpath(self, fullpath):
+        for reserved_word in settings.CMS_HANDLERS_PATHS:
+            if reserved_word in fullpath:
+                _msg = f'{fullpath} matches with the reserved word: {reserved_word}'
+                raise ReservedWordException(_msg)
+
     def save(self, *args, **kwargs):
 
         # parent different from self
         if self.parent == self:
             raise Exception("Can't set himself as parent")
 
+        # previous values, used to update the subtree
+        # and by the hooks (eg: search engine)
+        self._previous_values = None
+        if self.pk:
+            self._previous_values = WebPath.objects.filter(pk=self.pk)\
+                                                   .values(*self.TRACKED_FIELDS)\
+                                                   .first()
+
         # parent can't be one of its descendants (it would create a loop)
         if self.pk and self.parent_id:
-            old_parent_id = WebPath.objects.filter(pk=self.pk)\
-                                           .values_list('parent_id', flat=True)\
-                                           .first()
+            old_parent_id = (self._previous_values or {}).get('parent_id')
             if old_parent_id != self.parent_id and self.parent.is_descendant_of(self):
                 raise Exception("Can't set one of its descendants as parent")
 
@@ -208,10 +224,7 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         else:
             fullpath = self.path
 
-        for reserved_word in settings.CMS_HANDLERS_PATHS:
-            if reserved_word in fullpath:
-                _msg = f'{fullpath} matches with the reserved word: {reserved_word}'
-                raise ReservedWordException(_msg)
+        self.check_fullpath(fullpath)
 
         if fullpath != self.fullpath:
             self.fullpath = fullpath
@@ -222,10 +235,40 @@ class WebPath(ActivableModel, TimeStampedModel, CreatedModifiedBy):
         if existent:
             raise Exception(f'Existent path "{self.fullpath}". Change it')
 
-        super(WebPath, self).save(*args, **kwargs)
-        # update also its childs
-        for child_path in WebPath.objects.filter(parent=self):
-            child_path.save()
+        with transaction.atomic():
+            super(WebPath, self).save(*args, **kwargs)
+            # update also its descendants, only if needed
+            old = self._previous_values
+            if old and (old['fullpath'] != self.fullpath or
+                        old['site_id'] != self.site_id):
+                self.update_descendants()
+
+    def update_descendants(self):
+        """
+        updates site and fullpath of all the subtree
+        """
+        descendants = self.get_descendants()
+        if not descendants: return
+
+        # get_descendants() returns the nodes level by level,
+        # so each parent is processed before its children
+        nodes = {self.pk: self}
+        for node in descendants:
+            parent = nodes[node.parent_id]
+            node.site_id = parent.site_id
+            node.fullpath = sanitize_path(f'{parent.fullpath}/{node.path}')
+            self.check_fullpath(node.fullpath)
+            nodes[node.pk] = node
+
+        existent = WebPath.objects.filter(site_id=self.site_id,
+                                          fullpath__in=[i.fullpath for i in descendants])\
+                                  .exclude(pk__in=list(nodes))\
+                                  .first()
+        if existent:
+            raise Exception(f'Existent path "{existent.fullpath}". Change it')
+
+        WebPath.objects.bulk_update(descendants, ['site', 'fullpath'],
+                                    batch_size=500)
 
     def get_parent_fullpath(self):
         return self.parent.get_full_path() if self.parent else ''
