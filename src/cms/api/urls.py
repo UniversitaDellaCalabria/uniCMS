@@ -280,7 +280,6 @@ urlpatterns += path(f'{pap_prefix}/', page_publication.PagePublicationList.as_vi
 urlpatterns += path(f'{pap_prefix}/<int:pk>/', page_publication.PagePublicationView.as_view(), name='editorial-board-site-webpath-page-publication'),
 urlpatterns += path(f'{pap_prefix}/<int:pk>/logs/', page_publication.PagePublicationLogsView.as_view(), name='editorial-board-site-webpath-page-publication-logs'),
 urlpatterns += path(f'{pap_prefix}/form/', page_publication.PagePublicationFormView.as_view(), name='editorial-board-site-webpath-page-publication-form'),
-urlpatterns += path('api/publications/<int:pk>/', publication.PublicationReadOnlyView.as_view(), name='api-publication-detail'),
 
 # page related
 par_prefix = f'{pa_prefix}/<int:page_id>/related'
