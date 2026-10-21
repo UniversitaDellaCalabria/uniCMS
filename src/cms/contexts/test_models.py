@@ -254,30 +254,30 @@ class WebPathModelTest(TestCase):
 
     def test_descendant_reserved_word_rollback(self):
         contents = self._child(self.root, 'contents')
-        tmp = self._child(self.root, 'tmp')
-        tmp_view = self._child(tmp, 'view')
-        tmp_view_leaf = self._child(tmp_view, 'leaf')
+        section = self._child(self.root, 'section')
+        section_view = self._child(section, 'view')
+        section_view_leaf = self._child(section_view, 'leaf')
 
         # reserved word on the node itself
-        tmp.path = 'contents/news/view'
+        section.path = 'contents/news/view'
         with self.assertRaises(ReservedWordException):
-            tmp.save()
+            section.save()
 
         # /contents/news/ is allowed, but its descendant would become
         # /contents/news/view/ (reserved)
-        tmp.refresh_from_db()
-        tmp.parent = contents
-        tmp.path = 'news'
+        section.refresh_from_db()
+        section.parent = contents
+        section.path = 'news'
         with self.assertRaises(ReservedWordException):
-            tmp.save()
+            section.save()
 
         # atomic rollback
-        tmp.refresh_from_db()
-        self.assertEqual(tmp.fullpath, '/tmp/')
-        self.assertEqual(tmp.parent, self.root)
-        self.assertEqual(WebPath.objects.get(pk=tmp_view.pk).fullpath, '/tmp/view/')
-        self.assertEqual(WebPath.objects.get(pk=tmp_view_leaf.pk).fullpath,
-                         '/tmp/view/leaf/')
+        section.refresh_from_db()
+        self.assertEqual(section.fullpath, '/section/')
+        self.assertEqual(section.parent, self.root)
+        self.assertEqual(WebPath.objects.get(pk=section_view.pk).fullpath, '/section/view/')
+        self.assertEqual(WebPath.objects.get(pk=section_view_leaf.pk).fullpath,
+                         '/section/view/leaf/')
 
     def test_loops_in_data(self):
         a = self._child(self.root, 'a')
