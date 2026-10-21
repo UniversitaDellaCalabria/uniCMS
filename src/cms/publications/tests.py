@@ -9,6 +9,7 @@ from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
+from cms.contexts import views as context_views
 from cms.contexts.tests import ContextUnitTest
 from cms.contexts.utils import fill_created_modified_by
 from cms.medias.tests import MediaUnitTest
@@ -25,6 +26,8 @@ from cms.publications.serializers import (PublicationContextSerializer,
                                           PublicationSerializer)
 from cms.publications.templatetags.unicms_publications import (load_publication,
                                                                load_publications_preview)
+from . import settings as app_settings
+from . handlers import PublicationRssHandler
 from . models import (Category, Publication, PublicationAttachment, PublicationBlock,
                       PublicationContext, PublicationMediaCollection, PublicationLink,
                       PublicationLocalization, PublicationRelated)
@@ -517,6 +520,18 @@ class PublicationUnitTest(TestCase):
             load_publications_preview(number=2, **data)
             assert len(render.call_args.args[1]['publications']) == 2
 
+    @staticmethod
+    def _rss_handler():
+        """
+        RSS handler is not registered in every settings.CMS_APP_REGEXP_URLPATHS
+        (eg: settingslocal_example.py): register it with its default regexp
+        """
+        handlers = dict(context_views.CMS_APP_REGEXP_URLPATHS_LOADED)
+        handlers[PublicationRssHandler] = app_settings.CMS_PUBLICATION_URL_RSS_REGEXP
+        return mock.patch.object(context_views,
+                                 'CMS_APP_REGEXP_URLPATHS_LOADED',
+                                 handlers)
+
     def _staff_client(self):
         req = Client(HTTP_HOST='example.org')
         # privileged users avoids cache!
@@ -566,8 +581,9 @@ class PublicationUnitTest(TestCase):
         res = req.get(lurl)
         assert res.status_code == 404
 
-        rss_url = f'{webpath.get_full_path()}{settings.CMS_PUBLICATION_RSS_PREFIX_PATH}/'
-        res = req.get(rss_url)
+        rss_url = f'{webpath.get_full_path()}{app_settings.CMS_PUBLICATION_RSS_PREFIX_PATH}/'
+        with self._rss_handler():
+            res = req.get(rss_url)
         assert res.status_code == 404
 
     def test_publication_handler_rss(self):
@@ -586,7 +602,10 @@ class PublicationUnitTest(TestCase):
         category = full_pub.category.first()
 
         req = self._staff_client()
-        url = f'{webpath.get_full_path()}{settings.CMS_PUBLICATION_RSS_PREFIX_PATH}/'
+        patcher = self._rss_handler()
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        url = f'{webpath.get_full_path()}{app_settings.CMS_PUBLICATION_RSS_PREFIX_PATH}/'
         res = req.get(url, HTTP_ACCEPT_LANGUAGE='en')
         assert res.status_code == 200
         assert 'rss' in res['Content-Type']

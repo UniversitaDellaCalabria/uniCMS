@@ -1,6 +1,8 @@
 import datetime
 import logging
 
+from unittest import mock
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase
@@ -13,6 +15,29 @@ from . utils import sanitize_path
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+
+def cms_path(path='/'):
+    """
+    path as served by uniCMS, prefixed with settings.CMS_PATH_PREFIX
+    """
+    prefix = getattr(settings, 'CMS_PATH_PREFIX', '')
+    return sanitize_path(f'/{prefix}/{path}')
+
+
+# access level based on a user attribute (see settings.AUTH_USER_GROUPS)
+CUSTOM_ACCESS_GROUP = 'matricola_studente'
+
+
+def custom_access_group():
+    """
+    adds CUSTOM_ACCESS_GROUP to the available access levels,
+    whatever settings.AUTH_USER_GROUPS contains
+    """
+    from . import models as context_models
+    groups = list(context_models.AUTH_USER_GROUPS)
+    groups.append((CUSTOM_ACCESS_GROUP, 'custom group'))
+    return mock.patch.object(context_models, 'AUTH_USER_GROUPS', groups)
 
 
 class ContextUnitTest(TestCase):

@@ -143,12 +143,13 @@ class AccessAndPathUtilsTest(TestCase):
         self.assertTrue(utils.webpath_access_granted(user, webpath))
 
         # user attribute
-        webpath.access = 'matricola_studente'
-        self.assertFalse(utils.webpath_access_granted(anonymous, webpath))
-        self.assertFalse(utils.webpath_access_granted(user, webpath))
-        self.assertTrue(utils.webpath_access_granted(superuser, webpath))
-        user.matricola_studente = '12345'
-        self.assertTrue(utils.webpath_access_granted(user, webpath))
+        webpath.access = context_tests.CUSTOM_ACCESS_GROUP
+        with context_tests.custom_access_group():
+            self.assertFalse(utils.webpath_access_granted(anonymous, webpath))
+            self.assertFalse(utils.webpath_access_granted(user, webpath))
+            self.assertTrue(utils.webpath_access_granted(superuser, webpath))
+            setattr(user, context_tests.CUSTOM_ACCESS_GROUP, '12345')
+            self.assertTrue(utils.webpath_access_granted(user, webpath))
 
     def test_paths(self):
         self.assertEqual(utils.sanitize_path('//a///b/c//'), '/a/b/c/')
@@ -507,7 +508,7 @@ class SerializersTest(TestCase):
         self.assertEqual(data['parent']['id'], root.pk)
         self.assertEqual(data['alias']['id'], child.pk)
         self.assertEqual(data['alias']['parent']['id'], root.pk)
-        self.assertEqual(data['get_full_path'], '/child/')
+        self.assertEqual(data['get_full_path'], context_tests.cms_path('/child/'))
 
         self.assertEqual(WebPathSerializer().validate_path('My Path/x'),
                          'my-pathx')
@@ -576,7 +577,7 @@ class TemplateTagsTest(SessionRequestMixin, TestCase):
         webpath = context_tests.ContextUnitTest.create_webpath(path='/')
         request = RequestFactory().get('/', SERVER_PORT='8080')
         self.assertEqual(get_site_path({'request': request}, webpath),
-                         '//example.org:8080/')
+                         f"//example.org:8080{context_tests.cms_path('/')}")
 
 
 class UrlsTest(TestCase):
@@ -592,4 +593,7 @@ class UrlsTest(TestCase):
             self.assertEqual(response.url, '/portale/')
         finally:
             importlib.reload(urls)
-        self.assertEqual(urls.urlpatterns[0].name, 'page-preview')
+        # urls restored according to the real settings
+        names = [i.name for i in urls.urlpatterns]
+        self.assertIn('page-preview', names)
+        self.assertIn('cms_dispatch', names)

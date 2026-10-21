@@ -1,5 +1,6 @@
 from unittest import mock
 
+from django.conf import settings
 from django.http import HttpResponse
 from django.test import Client, TestCase
 from django.urls import reverse
@@ -10,6 +11,9 @@ from . import views
 from . handlers import BaseContentHandler
 from . models import WebPath
 from . import tests as context_tests
+
+
+ROOT = context_tests.cms_path('/')
 
 
 class FakeHandler(BaseContentHandler):
@@ -37,6 +41,12 @@ class BaseViewTest(TestCase):
         patcher = mock.patch('cms.search.hooks.mongo_collection')
         patcher.start()
         self.addCleanup(patcher.stop)
+        # no uniCMS cache: anonymous responses of previous tests
+        # on the same urls must not be served
+        patcher = mock.patch('cms.contexts.decorators.is_cache_available',
+                             return_value=False)
+        patcher.start()
+        self.addCleanup(patcher.stop)
         self.client = Client(HTTP_HOST='example.org')
 
     def create_page(self, **kwargs):
@@ -47,7 +57,7 @@ class CmsDispatchTest(BaseViewTest):
 
     def test_published_page(self):
         page = self.create_page(webpath_path='/')
-        response = self.client.get('/')
+        response = self.client.get(ROOT)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['page'], page)
         self.assertEqual(response.context['webpath'], page.webpath)
@@ -55,42 +65,43 @@ class CmsDispatchTest(BaseViewTest):
 
     def test_unknown_website(self):
         self.create_page(webpath_path='/')
-        response = Client(HTTP_HOST='unknown.org').get('/')
+        response = Client(HTTP_HOST='unknown.org').get(ROOT)
         self.assertEqual(response.status_code, 404)
 
     def test_unknown_webpath(self):
         self.create_page(webpath_path='/')
-        self.assertEqual(self.client.get('/not-existent/').status_code, 404)
+        url = context_tests.cms_path('/not-existent/')
+        self.assertEqual(self.client.get(url).status_code, 404)
 
     def test_webpath_without_page(self):
         context_tests.ContextUnitTest.create_webpath(path='/')
-        self.assertEqual(self.client.get('/').status_code, 404)
+        self.assertEqual(self.client.get(ROOT).status_code, 404)
 
     def test_draft_page(self):
         page = self.create_page(webpath_path='/')
         draft = self.create_page(webpath=page.webpath, state='draft',
                                  name='draft page')
         # anonymous users get the published one
-        response = self.client.get('/')
+        response = self.client.get(ROOT)
         self.assertEqual(response.context['page'], page)
 
         # staff users in draft mode get the draft one
         user = context_tests.ContextUnitTest.create_user(is_staff=True)
         self.client.force_login(user)
-        response = self.client.get('/?draft_view_mode=1')
+        response = self.client.get(f'{ROOT}?draft_view_mode=1')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['page'], draft)
 
         # without drafts the published one is shown
         draft.delete()
-        response = self.client.get('/')
+        response = self.client.get(ROOT)
         self.assertEqual(response.context['page'], page)
 
     def test_alias(self):
         root = context_tests.ContextUnitTest.create_webpath(path='/')
         WebPath.objects.create(name='alias', path='alias', parent=root,
                                alias_url='https://other.org/', is_active=True)
-        response = self.client.get('/alias/')
+        response = self.client.get(context_tests.cms_path('/alias/'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, 'https://other.org/')
 
@@ -101,19 +112,21 @@ class CmsDispatchTest(BaseViewTest):
         webpath.save()
 
         # anonymous users are redirected to login
-        response = self.client.get('/')
+        response = self.client.get(ROOT)
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, '/local/login/?next=http://example.org/')
+        self.assertEqual(response.url,
+                         f'{settings.LOGIN_URL}?next=http://example.org{ROOT}')
 
         # registered users
         user = context_tests.ContextUnitTest.create_user()
         self.client.force_login(user)
-        self.assertEqual(self.client.get('/').status_code, 200)
+        self.assertEqual(self.client.get(ROOT).status_code, 200)
 
         # users without the required attribute
-        webpath.access = 'matricola_studente'
-        webpath.save()
-        self.assertEqual(self.client.get('/').status_code, 403)
+        with context_tests.custom_access_group():
+            webpath.access = context_tests.CUSTOM_ACCESS_GROUP
+            webpath.save()
+            self.assertEqual(self.client.get(ROOT).status_code, 403)
 
 
 @mock.patch.object(views, 'CMS_APP_REGEXP_URLPATHS_LOADED', FAKE_HANDLERS)
@@ -124,25 +137,26 @@ class CmsDispatchHandlersTest(BaseViewTest):
         self.root = context_tests.ContextUnitTest.create_webpath(path='/')
 
     def test_handler(self):
-        response = self.client.get('/fake/handler/')
+        response = self.client.get(context_tests.cms_path('/fake/handler/'))
         self.assertEqual(response.status_code, 200)
         # webpath is the regexp named group
         self.assertIn('handled / /fake/handler/', response.content.decode())
 
     def test_handler_unknown_webpath(self):
-        self.assertEqual(self.client.get('/other/fake/handler/').status_code, 404)
+        url = context_tests.cms_path('/other/fake/handler/')
+        self.assertEqual(self.client.get(url).status_code, 404)
 
     def test_handler_error(self):
         with self.assertLogs('cms.contexts.views', level='ERROR'):
-            response = self.client.get('/fake/failing/')
+            response = self.client.get(context_tests.cms_path('/fake/failing/'))
         self.assertEqual(response.status_code, 404)
 
     def test_handler_access_level(self):
         self.root.access = '2'
         self.root.save()
-        response = self.client.get('/fake/handler/')
+        response = self.client.get(context_tests.cms_path('/fake/handler/'))
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(response.url.startswith('/local/login/?next='))
+        self.assertTrue(response.url.startswith(f'{settings.LOGIN_URL}?next='))
 
 
 class PagePreviewTest(BaseViewTest):
@@ -218,7 +232,7 @@ class SitemapRobotsTest(BaseViewTest):
         self.assertEqual(response['Content-Type'], 'text/plain')
         self.assertEqual(response.content.decode(),
                          'User-agent: *\nAllow: /\n\n'
-                         'Sitemap: http://example.org/sitemap.xml')
+                         f"Sitemap: http://example.org{reverse('unicms_sitemap')}")
 
     def test_robots_site_settings(self):
         context_tests.ContextUnitTest.create_website()
@@ -231,4 +245,4 @@ class SitemapRobotsTest(BaseViewTest):
         self.assertEqual(response.content.decode(),
                          'User-agent: bot1\nUser-agent: bot2\n'
                          'Allow: /a\nDisallow: /b\nDisallow: /c\n\n'
-                         'Sitemap: http://example.org/sitemap.xml')
+                         f"Sitemap: http://example.org{reverse('unicms_sitemap')}")

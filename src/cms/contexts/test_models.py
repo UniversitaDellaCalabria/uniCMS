@@ -75,9 +75,10 @@ class WebPathModelTest(TestCase):
         self.assertEqual(child.fullpath, '/a/b/')
         self.assertEqual(child.site, self.site)
         self.assertEqual(child.split(), ['a', 'b', ''])
-        self.assertEqual(child.get_parent_fullpath(), '/')
+        self.assertEqual(child.get_parent_fullpath(), context_tests.cms_path('/'))
         self.assertEqual(self.root.get_parent_fullpath(), '')
-        self.assertEqual(str(child), 'a//b @ example.org/a/b/')
+        self.assertEqual(str(child),
+                         f"a//b @ example.org{context_tests.cms_path('/a/b/')}")
 
         # empty path becomes '/'
         empty = WebPath(name='empty', path='', site=self.site, parent=self.root)
@@ -86,19 +87,20 @@ class WebPathModelTest(TestCase):
 
     def test_get_site_path(self):
         child = self._child(self.root, 'news')
-        self.assertEqual(child.get_absolute_url(), '//example.org/news/')
+        news_path = context_tests.cms_path('/news/')
+        self.assertEqual(child.get_absolute_url(), f'//example.org{news_path}')
 
         request = RequestFactory().get('/', SERVER_PORT='8000')
         self.assertEqual(child.get_site_path(request),
-                         '//example.org:8000/news/')
+                         f'//example.org:8000{news_path}')
         for port in ('80', '443'):
             request = RequestFactory().get('/', SERVER_PORT=port)
             self.assertEqual(child.get_site_path(request),
-                             '//example.org/news/')
+                             f'//example.org{news_path}')
 
         # aliases return their redirect url
         alias = self._child(self.root, 'alias', alias=child)
-        self.assertEqual(alias.get_site_path(), '/news/')
+        self.assertEqual(alias.get_site_path(), news_path)
         alias.alias = None
         alias.alias_url = 'https://other.org'
         self.assertEqual(alias.get_site_path(), 'https://other.org')
@@ -301,8 +303,10 @@ class WebPathModelTest(TestCase):
         a1.refresh_from_db()
         self.assertEqual(a1.get_access_level(), '2')
         # custom group (from settings.AUTH_USER_GROUPS)
-        a1.access = 'matricola_studente'
-        self.assertEqual(a1.get_access_level(), 'matricola_studente')
+        a1.access = context_tests.CUSTOM_ACCESS_GROUP
+        with context_tests.custom_access_group():
+            self.assertEqual(a1.get_access_level(),
+                             context_tests.CUSTOM_ACCESS_GROUP)
         # unknown values are public
         a1.access = 'unknown'
         self.assertEqual(a1.get_access_level(), '0')
